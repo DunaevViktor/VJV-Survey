@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Group_Answer__c</fullName>
+    <externalId>false</externalId>
+    <label>Group Answer</label>
+    <referenceTo>Group_Answer__c</referenceTo>
+    <relationshipLabel>Anwers</relationshipLabel>
+    <relationshipName>Anwers</relationshipName>
+    <relationshipOrder>1</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>
