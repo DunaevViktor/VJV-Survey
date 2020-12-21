@@ -40,5 +40,16 @@
         <members>Survey_Permission_Set</members>
         <name>PermissionSet</name>
     </types>
+    <types>
+        <members>Answer__c-Answer Layout</members>
+        <members>Question__c-Question Layout</members>
+        <members>Question_Option__c-Question Option Layout</members>
+        <members>Survey__c-Survey Layout</members>
+        <members>Survey_Email_Log__c-Survey Email Log Layout</members>
+        <members>Related_Object__c-Related Object Layout</members>
+        <members>Validation__c-Validation Layout</members>
+        <members>Group_Answer__c-Group Answer Layout</members>
+        <name>Layout</name>
+    </types>
     <version>50.0</version>
 </Package>
