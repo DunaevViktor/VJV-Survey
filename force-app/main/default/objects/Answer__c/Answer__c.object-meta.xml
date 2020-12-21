@@ -160,7 +160,7 @@
         <label>Answer Name</label>
         <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>Anwers</pluralLabel>
+    <pluralLabel>Answers</pluralLabel>
     <searchLayouts/>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
