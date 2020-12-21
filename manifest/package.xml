@@ -36,5 +36,9 @@
         <members>*</members>
         <name>CustomObject</name>
     </types>
+    <types>
+        <members>Survey_Permission_Set</members>
+        <name>PermissionSet</name>
+    </types>
     <version>50.0</version>
 </Package>
