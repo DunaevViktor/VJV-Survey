@@ -143,8 +143,8 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Объект Validation необходим для реализации связки вопросов и логики отображения некоторых. Имеет ссылку на вопрос поставщика зависимости SurveyQuestion, ссылку на зависимый вопрос того же типа и условие в виде строки.
-Объект Answer содержит ответ пользователя на определенный вопрос. Связан с Survey Question и ссылается на GroupAnswer.</description>
+    <description>Объект Validation необходим для реализации связки вопросов и логики отображения некоторых. Имеет ссылку на вопрос поставщика зависимости Question, ссылку на зависимый вопрос того же типа и условие в виде строки.
+Объект Answer содержит ответ пользователя на определенный вопрос. Связан с Question и ссылается на GroupAnswer.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
