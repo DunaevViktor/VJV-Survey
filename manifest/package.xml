@@ -41,6 +41,10 @@
         <name>PermissionSet</name>
     </types>
     <types>
+        <members>EditIcon</members>
+        <name>StaticResource</name>
+    </types>
+    <types>
         <members>Answer__c-Answer Layout</members>
         <members>Question__c-Question Layout</members>
         <members>Question_Option__c-Question Option Layout</members>

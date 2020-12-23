@@ -1,0 +1,34 @@
+<template>
+  <div class="slds-grid slds-wrap">
+    <div class="slds-size_1-of-3">
+      <div class="slds-box slds-box_x-small slds-m-around_x-small">
+        <lightning-combobox
+          name="template"
+          label="Selected Survey Template"
+          value={value}
+          placeholder="Selected Survey Template"
+          options={options}
+          onchange={handleChange}
+        >
+        </lightning-combobox>
+      </div>
+
+      <div class="slds-box slds-box_x-small slds-m-around_x-small">
+        <c-question-search></c-question-search>
+      </div>
+    </div>
+
+    <div class="slds-size_2-of-3">
+      <c-question-form></c-question-form>
+
+      <div class="slds-box slds-box_x-small slds-m-around_x-small">
+        <template for:each={questions} for:item="question">
+          <c-question-card
+            question={question}
+            key={question.Id}
+          ></c-question-card>
+        </template>
+      </div>
+    </div>
+  </div>
+</template>
