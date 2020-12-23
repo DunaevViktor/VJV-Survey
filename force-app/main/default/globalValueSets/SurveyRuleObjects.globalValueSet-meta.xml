@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Case</fullName>
+        <default>false</default>
+        <label>Case</label>
+    </customValue>
+    <customValue>
+        <fullName>Contact</fullName>
+        <default>false</default>
+        <label>Contact</label>
+    </customValue>
+    <customValue>
+        <fullName>Lead</fullName>
+        <default>false</default>
+        <label>Lead</label>
+    </customValue>
+    <description
+  >Objects which are available for choosing in survey trigger rules.</description>
+    <masterLabel>Survey Rule Objects</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>
