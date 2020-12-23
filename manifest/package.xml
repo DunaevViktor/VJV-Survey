@@ -49,6 +49,7 @@
         <members>Related_Object__c-Related Object Layout</members>
         <members>Validation__c-Validation Layout</members>
         <members>Group_Answer__c-Group Answer Layout</members>
+        <members>Trigger_Rule__c-Trigger Rule Layout</members>
         <name>Layout</name>
     </types>
     <types>
