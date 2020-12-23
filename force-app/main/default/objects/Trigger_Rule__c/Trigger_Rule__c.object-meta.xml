@@ -143,7 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Объект RelatedObject нужен для привязки определенного стандартного объекта Lead/Contact/Case.</description>
+    <description>Определяет для какого объекта и при выполнении каких критериев будет производиться дальнейшее действие.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -153,15 +153,15 @@
     <enableSearch>false</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
-    <externalSharingModel>Private</externalSharingModel>
-    <label>Related Object</label>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
+    <label>Trigger Rule</label>
     <nameField>
-        <displayFormat>RO-{00000}</displayFormat>
-        <label>Related Object Name</label>
+        <displayFormat>TR-{00000}</displayFormat>
+        <label>Trigger Rule Name</label>
         <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>Related Objects</pluralLabel>
+    <pluralLabel>Trigger Rules</pluralLabel>
     <searchLayouts/>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>
