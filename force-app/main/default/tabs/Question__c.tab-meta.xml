@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customObject>true</customObject>
+    <description>Объект Question олицетворяет вопрос. Содержит ссылку на survey, общую позицию вопроса в списке и флажок видимости (True по дефолту). Видимость вопроса важна, если у нас связанные вопрос, и зависимый вопрос не должен быть виден по достижении условий. Содержит сам текст вопроса, флажок переиспользования вопроса, и его тип(picklist, radiobutton, checkbox и т.д.).</description>
+    <motif>Custom43: Jewel</motif>
+</CustomTab>
