@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customObject>true</customObject>
+    <description>Объект Validation необходим для реализации связки вопросов и логики отображения некоторых. Имеет ссылку на вопрос поставщика зависимости Question, ссылку на зависимый вопрос того же типа и условие в виде строки.</description>
+    <motif>Custom37: Bridge</motif>
+</CustomTab>
