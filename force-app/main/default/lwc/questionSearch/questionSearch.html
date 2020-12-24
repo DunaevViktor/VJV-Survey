@@ -1,31 +1,46 @@
 <template>
   <h2>Select standard question</h2>
-  <lightning-input type="text" label="Specify Question"></lightning-input>
+  <lightning-input
+    type="text"
+    label="Specify Question"
+    onchange={onSearchTermChange}
+  ></lightning-input>
 
   <div role="listbox">
-    <ul class="slds-listbox slds-listbox_vertical" role="presentation">
-      <template for:each={searchResults} for:item="result">
-        <li role="presentation" class="slds-listbox__item" key={result.id}>
-          <div
-            class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta slds-p-left_none"
-          >
-            <span class="slds-media__figure">
-              <lightning-button
-                variant="brand-outline"
-                label="+"
-                title="Add question"
-                class="slds-m-left_none"
-              ></lightning-button>
-            </span>
-            <span class="slds-media__body">
-              <span
-                class="slds-listbox__option-text slds-listbox__option-text_entity"
-                >{result.name}</span
-              >
-            </span>
-          </div>
-        </li>
-      </template>
-    </ul>
+    <template if:false={standardQuestions.length}>
+      Don't have standard questions
+    </template>
+
+    <template if:true={standardQuestions.length}>
+      <ul
+        class="slds-listbox slds-listbox_vertical result_block"
+        role="presentation"
+      >
+        <template if:false={searchResults.length}>
+          Don't have relevant questions
+        </template>
+
+        <template for:each={searchResults} for:item="result">
+          <li role="presentation" class="slds-listbox__item" key={result.Id}>
+            <div
+              class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta slds-p-left_none"
+            >
+              <span class="slds-media__figure">
+                <lightning-button
+                  variant="brand-outline"
+                  label="+"
+                  title="Add question"
+                  class="slds-m-left_none"
+                >
+                </lightning-button>
+              </span>
+              <div class="slds-media__body">
+                <p>{result.Label__c}</p>
+              </div>
+            </div>
+          </li>
+        </template>
+      </ul>
+    </template>
   </div>
 </template>

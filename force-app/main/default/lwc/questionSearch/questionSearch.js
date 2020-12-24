@@ -1,10 +1,39 @@
-import { LightningElement } from "lwc";
+import { LightningElement, api, track } from "lwc";
 
 export default class QuestionSearch extends LightningElement {
-  searchResults = [
-    { name: "asd1", id: 1 },
-    { name: "asd2", id: 2 },
-    { name: "asd3", id: 3 },
-    { name: "asd4", id: 4 }
-  ];
+  EMPTY_STRING = "";
+
+  @api standardQuestions;
+
+  @track searchResults;
+  searchTerm;
+
+  connectedCallback() {
+    this.searchTerm = this.EMPTY_STRING;
+    this.setAllQuestions();
+  }
+
+  onSearchTermChange(event) {
+    this.searchTerm = event.target.value;
+
+    if (this.searchTerm.localeCompare(this.EMPTY_STRING) == 0) {
+      console.log("All");
+      this.setAllQuestions();
+    } else {
+      console.log("Filter");
+      this.filterQuestions();
+    }
+  }
+
+  setAllQuestions() {
+    this.searchResults = this.standardQuestions;
+  }
+
+  filterQuestions() {
+    this.searchResults = this.standardQuestions.filter((question) => {
+      return question.Label__c.toLowerCase().includes(
+        this.searchTerm.toLowerCase()
+      );
+    });
+  }
 }

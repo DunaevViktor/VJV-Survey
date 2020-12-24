@@ -1,26 +1,197 @@
-import { LightningElement } from "lwc";
-import EDIT_ICON from "@salesforce/resourceUrl/EditIcon";
-import DELETE_ICON from "@salesforce/resourceUrl/DeleteIcon";
+import { LightningElement, wire, track, api } from "lwc";
+import QUESTION_OBJECT from "@salesforce/schema/Question__c";
+import TYPE_FIELD from "@salesforce/schema/Question__c.Type__c";
+import { getPicklistValues } from "lightning/uiObjectInfoApi";
+import { getObjectInfo } from "lightning/uiObjectInfoApi";
+
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 export default class QuestionForm extends LightningElement {
-  editIcon = EDIT_ICON;
-  deleteIcon = DELETE_ICON;
+  SUCCESS_TITLE = "Success";
+  SUCCESS_VARIANT = "success";
 
-  value = "inProgress";
-  valueO = "";
+  ERROR_TITLE = "Error";
+  ERROR_VARIANT = "error";
 
-  get options() {
+  @api editedQuestion;
+  @track question;
+
+  @wire(getObjectInfo, { objectApiName: QUESTION_OBJECT })
+  surveyObjectInfo;
+
+  @track isOptionsEnabled;
+
+  displayedTypes;
+  @track selectedType;
+
+  @track selectedSettings = [];
+
+  @track isEditOption = false;
+  @track editOptionValue = "";
+
+  connectedCallback() {
+    this.isOptionsEnabled = false;
+    if (!this.editIcon) {
+      this.question = {};
+    } else {
+      this.question = { ...this.editedQuestion };
+    }
+    this.question.Options = [];
+  }
+
+  @wire(getPicklistValues, {
+    recordTypeId: "$surveyObjectInfo.data.defaultRecordTypeId",
+    fieldApiName: TYPE_FIELD
+  })
+  initTypes({ error, data: types }) {
+    if (types) {
+      this.displayedTypes = types.values.map((item) => {
+        return {
+          label: item.label,
+          value: item.value
+        };
+      });
+      this.selectedType = this.displayedTypes[0].value;
+      this.setOptionsEnabling();
+    }
+  }
+
+  handleLabel(event) {
+    this.question.Label__c = event.detail.value;
+  }
+
+  handleTypeChange(event) {
+    this.selectedType = event.detail.value;
+    this.question.Type__c = event.detail.value;
+    this.setOptionsEnabling();
+  }
+
+  handleSettingChange(event) {
+    this.question[event.detail.value] = !this.question[event.detail.value];
+  }
+
+  setOptionsEnabling() {
+    this.isOptionsEnabled =
+      this.selectedType.toLowerCase().localeCompare("checkbox") == 0 ||
+      this.selectedType.toLowerCase().localeCompare("radiobutton") == 0 ||
+      this.selectedType.toLowerCase().localeCompare("picklist") == 0;
+  }
+
+  get questionSettingList() {
     return [
-      { label: "New", value: "new" },
-      { label: "In Progress", value: "inProgress" },
-      { label: "Finished", value: "finished" }
+      { label: "Is required", value: "Required__c" },
+      { label: "Is reusable", value: "IsReusable__c" }
     ];
   }
 
-  get optionsO() {
-    return [
-      { label: "Is required", value: "Is_Required__c" },
-      { label: "Is reusable", value: "Is_Reusable__c" }
-    ];
+  @api
+  setQuestion(updatedQuestion) {
+    this.question = updatedQuestion;
+    this.question.Options = [];
+  }
+
+  addOption() {
+    const input = this.template.querySelector(".option-input");
+    if (!input.validity.valid) return;
+
+    const filteredOptions = this.question.Options.filter((option) => {
+      console.log("1");
+      return option.Value__c.localeCompare(input.value) == 0;
+    });
+
+    if (filteredOptions.length > 0) {
+      this.showToastMessage(
+        this.ERROR_TITLE,
+        "Option with such value already exists!",
+        this.ERROR_VARIANT
+      );
+      return;
+    }
+
+    const option = {
+      Value__c: input.value
+    };
+
+    this.question.Options.push(option);
+    input.value = "";
+  }
+
+  editOption(event) {
+    const input = this.template.querySelector(".option-input");
+    input.value = event.detail;
+    this.editOptionValue = event.detail;
+    this.isEditOption = true;
+  }
+
+  cancelOptionEdit() {
+    const input = this.template.querySelector(".option-input");
+    input.value = "";
+    this.editOptionValue = "";
+    this.isEditOption = false;
+  }
+
+  saveOptionChanges() {
+    const input = this.template.querySelector(".option-input");
+    this.question.Options = this.question.Options.map((option) => {
+      if (option.Value__c.localeCompare(this.editOptionValue) == 0) {
+        option.Value__c = input.value;
+      }
+      return option;
+    });
+    input.value = "";
+    this.editOptionValue = "";
+    this.isEditOption = false;
+  }
+
+  deleteOption(event) {
+    this.question.Options = this.question.Options.filter((option) => {
+      return option.Value__c.localeCompare(event.detail) != 0;
+    });
+  }
+
+  addQuestion() {
+    const input = this.template.querySelector(".input");
+    if (!input.validity.valid) {
+      return;
+    } else if (this.isOptionsEnabled && this.question.Options < 2) {
+      this.showToastMessage(
+        this.ERROR_TITLE,
+        "The number of options must be at least two",
+        this.ERROR_VARIANT
+      );
+      return;
+    }
+
+    if (
+      !this.isOptionsEnabled ||
+      (this.isOptionsEnabled && this.question.Options.length == 0)
+    ) {
+      this.question.Options = null;
+    }
+    this.question.Type__c = this.selectedType;
+
+    const addEvent = new CustomEvent("add", {
+      detail: { ...this.question }
+    });
+    this.dispatchEvent(addEvent);
+
+    this.resetForm();
+  }
+
+  resetForm() {
+    const input = this.template.querySelector(".input");
+    input.value = "";
+    this.selectedType = this.displayedTypes[0].value;
+    this.selectedSettings = [];
+    this.setOptionsEnabling();
+  }
+
+  showToastMessage(title, message, variant) {
+    const event = new ShowToastEvent({
+      title,
+      message,
+      variant
+    });
+    this.dispatchEvent(event);
   }
 }

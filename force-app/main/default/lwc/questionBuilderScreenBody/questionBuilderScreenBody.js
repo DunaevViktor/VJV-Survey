@@ -1,51 +1,100 @@
-import { LightningElement } from "lwc";
+import { LightningElement, api, track } from "lwc";
+import createQuestionList from "@salesforce/apex/QuestionController.createQuestionList";
+import createQuestion from "@salesforce/apex/QuestionController.createQuestion";
 
 export default class QuestionBuilderScreenBody extends LightningElement {
-  value = "inProgress";
+  @api templates;
+  @api standardQuestions;
+  @api questions;
 
-  get options() {
-    return [
-      { label: "New", value: "new" },
-      { label: "In Progress", value: "inProgress" },
-      { label: "Finished", value: "finished" }
-    ];
+  @track question;
+  @track displayedQuestions;
+
+  noTemplate;
+  templateOptionsValue;
+
+  @track hasQuestions = false;
+
+  connectedCallback() {
+    this.initQuestions();
+    this.initQuestion();
+
+    this.noTemplate = {
+      label: "No Template",
+      value: "0"
+    };
+
+    this.templateOptionsValue = this.noTemplate.value;
   }
 
-  get questionOptions() {
-    return [
-      { Id: 1, name: "Test 1" },
-      { Id: 2, name: "Test 2" },
-      { Id: 3, name: "Test 3" }
-    ];
+  get templateOptions() {
+    let templateOptions = this.templates.map((template) => {
+      return {
+        label: template.Name,
+        value: template.Id
+      };
+    });
+    templateOptions.push(this.noTemplate);
+    return templateOptions;
   }
 
-  get questions() {
-    return [
-      {
-        Id: 1,
-        Label: "Happy Christmas",
-        Type: "Type",
-        Is_Required__c: false,
-        options: [
-          { Id: 1, Label: "Option 1" },
-          { Id: 1, Label: "Option 2" },
-          { Id: 1, Label: "Option 3" }
-        ]
-      },
-      {
-        Id: 2,
-        Label: "Happy New Year",
-        Type: "Type",
-        Is_Required__c: true,
-        options: []
-      },
-      {
-        Id: 3,
-        Label: "Happy Womens Day",
-        Type: "Type",
-        Is_Required__c: false,
-        options: []
-      }
-    ];
+  initQuestions() {
+    if (!this.questions) {
+      this.questions = [];
+
+      createQuestionList()
+        .then((result) => {
+          this.questions = result;
+
+          this.updateDisplayedQuestions();
+          this.hasQuestions = this.questions.length > 0;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }
+
+  initQuestion() {
+    createQuestion()
+      .then((result) => {
+        this.question = result;
+        this.question.Label__c = "alder";
+
+        this.template
+          .querySelectorAll("c-question-form")[0]
+          .setQuestion(this.question);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  addQuestion(event) {
+    const question = event.detail;
+    question.Position__c = this.questions.length + 1;
+    this.questions.push(question);
+
+    this.hasQuestions = this.questions.length > 0;
+    this.updateDisplayedQuestions();
+    this.initQuestion();
+  }
+
+  deleteQuestion(event) {
+    let position = +event.detail;
+    position--;
+
+    this.questions.splice(position, 1);
+
+    for (let i = position; i < this.questions.length; i++) {
+      this.questions[i].Position__c = i + 1;
+    }
+
+    this.updateDisplayedQuestions();
+    this.hasQuestions = this.questions.length > 0;
+  }
+
+  updateDisplayedQuestions() {
+    this.displayedQuestions = [...this.questions];
   }
 }

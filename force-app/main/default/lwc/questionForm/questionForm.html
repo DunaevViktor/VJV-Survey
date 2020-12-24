@@ -1,70 +1,90 @@
 <template>
   <div class="slds-box slds-box_x-small slds-m-around_x-small">
-    <lightning-input type="text" label="Specify question"></lightning-input>
+    <h2>Question creating form</h2>
+
+    <lightning-input
+      class="input"
+      type="text"
+      label="Specify question"
+      onchange={handleLabel}
+      required="true"
+    ></lightning-input>
 
     <div class="slds-grid slds-wrap">
       <div class="slds-size_1-of-2">
         <lightning-radio-group
           name="radioGroup"
           label="Type"
-          options={options}
-          value={value}
+          options={displayedTypes}
+          value={selectedType}
           type="radio"
+          onchange={handleTypeChange}
         >
         </lightning-radio-group>
       </div>
+
       <div class="slds-size_1-of-2">
         <lightning-checkbox-group
           name="settings"
           label="Question Setting"
-          options={optionsO}
-          value={valueO}
+          options={questionSettingList}
+          value={selectedSettings}
+          onchange={handleSettingChange}
         >
         </lightning-checkbox-group>
       </div>
     </div>
 
-    <div class="slds-m-top_xx-small">
-      <h2>Specify Question Options</h2>
-      <ul class="slds-listbox slds-listbox_vertical" role="presentation">
-        <template for:each={questionOptions} for:item="option">
-          <li key={option.Id} role="presentation" class="slds-listbox__item">
-            <div
-              class="slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
-            >
-              <span>{option.name}</span>
-              <span
-                class="slds-icon_container slds-icon-utility-announcement slds-float_right"
-                title="Delete"
-              >
-                <img
-                  class="slds-icon slds-icon-text-default slds-icon_x-small"
-                  src={deleteIcon}
-                />
-              </span>
-              <span
-                class="slds-icon_container slds-icon-utility-announcement slds-float_right"
-                title="Edit"
-              >
-                <img
-                  class="slds-icon slds-icon-text-default slds-icon_x-small"
-                  src={editIcon}
-                />
-              </span>
-            </div>
-          </li>
-        </template>
-      </ul>
+    <template if:true={isOptionsEnabled}>
+      <div class="slds-m-top_xx-small">
+        <h2>Specify Question Options</h2>
+        <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+          <template for:each={question.Options} for:item="option">
+            <li key={option.Id} role="presentation" class="slds-listbox__item">
+              <c-option-list-element
+                option={option}
+                ondelete={deleteOption}
+                onedit={editOption}
+              ></c-option-list-element>
+            </li>
+          </template>
+        </ul>
 
-      <div class="lgc-bg slds-wrap">
-        <lightning-input type="text" label="Enter option"></lightning-input>
-        <lightning-button
-          label="Add Option"
-          title="Add Option"
-          class="slds-m-top_x-small slds-m-bottom_x-small slds-float_right"
-        ></lightning-button>
+        <div class="lgc-bg slds-wrap">
+          <lightning-input
+            class="option-input"
+            type="text"
+            label="Enter option value"
+            required
+          ></lightning-input>
+
+          <template if:true={isEditOption}>
+            <lightning-button
+              label="Save changes"
+              title="Save changes"
+              class="slds-m-top_x-small slds-m-bottom_x-small slds-float_right"
+              onclick={saveOptionChanges}
+            ></lightning-button>
+            <lightning-button
+              variant="destructive-text"
+              label="Cancel edit"
+              title="Cancel edit"
+              onclick={cancelOptionEdit}
+              class="slds-m-top_x-small slds-m-bottom_x-small slds-float_right slds-m-right_small"
+            ></lightning-button>
+          </template>
+
+          <template if:false={isEditOption}>
+            <lightning-button
+              label="Add Option"
+              title="Add Option"
+              class="slds-m-top_x-small slds-m-bottom_x-small slds-float_right"
+              onclick={addOption}
+            ></lightning-button>
+          </template>
+        </div>
       </div>
-    </div>
+    </template>
 
     <hr class="slds-clearfix slds-m-bottom_x-small" />
 
@@ -73,6 +93,7 @@
         variant="brand"
         label="Add Question"
         title="Add Question"
+        onclick={addQuestion}
       ></lightning-button>
     </div>
   </div>

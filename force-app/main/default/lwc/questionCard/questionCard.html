@@ -2,6 +2,16 @@
   <div class="slds-box slds-box_x-small slds-m-around_x-small">
     <span
       class="slds-icon_container slds-icon-utility-announcement slds-float_right"
+      title="Delete"
+    >
+      <img
+        class="slds-icon slds-icon-text-default slds-icon_x-small"
+        src={deleteIcon}
+        onclick={deleteQuestion}
+      />
+    </span>
+    <span
+      class="slds-icon_container slds-icon-utility-announcement slds-float_right"
       title="Edit"
     >
       <img
@@ -10,26 +20,26 @@
       />
     </span>
 
-    <template if:true={question.Is_Required__c}>
+    <template if:true={question.Required__c}>
       <span class="required">*</span>
     </template>
 
     <span class="slds-listbox__option-text slds-listbox__option-text_entity"
-      >{question.Label}</span
+      >{question.Label__c}</span
     >
-    <lightning-badge label={question.Type}></lightning-badge>
+    <lightning-badge label={question.Type__c}></lightning-badge>
 
-    <template if:true={question.options.length}>
+    <template if:true={question.Options}>
       <br />
       <div class="slds-m-top_x-small">
         Options:
         <ul class="slds-listbox slds-listbox_vertical" role="presentation">
-          <template for:each={question.options} for:item="option">
+          <template for:each={question.Options} for:item="option">
             <li key={option.Id} role="presentation" class="slds-listbox__item">
               <div
                 class="slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
               >
-                {option.Label}
+                {option.Value__c}
               </div>
             </li>
           </template>

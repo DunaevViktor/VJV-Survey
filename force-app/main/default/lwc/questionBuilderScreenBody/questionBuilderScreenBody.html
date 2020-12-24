@@ -5,28 +5,33 @@
         <lightning-combobox
           name="template"
           label="Selected Survey Template"
-          value={value}
-          placeholder="Selected Survey Template"
-          options={options}
-          onchange={handleChange}
+          value={templateOptionsValue}
+          options={templateOptions}
         >
         </lightning-combobox>
       </div>
 
       <div class="slds-box slds-box_x-small slds-m-around_x-small">
-        <c-question-search></c-question-search>
+        <c-question-search
+          standard-questions={standardQuestions}
+        ></c-question-search>
       </div>
     </div>
 
     <div class="slds-size_2-of-3">
-      <c-question-form></c-question-form>
+      <c-question-form onadd={addQuestion}></c-question-form>
 
       <div class="slds-box slds-box_x-small slds-m-around_x-small">
-        <template for:each={questions} for:item="question">
-          <c-question-card
-            question={question}
-            key={question.Id}
-          ></c-question-card>
+        <template if:false={hasQuestions}> Don't have questions yet </template>
+
+        <template if:true={hasQuestions}>
+          <template for:each={displayedQuestions} for:item="displayedQuestion">
+            <c-question-card
+              question={displayedQuestion}
+              key={displayedQuestion.Position__c}
+              ondelete={deleteQuestion}
+            ></c-question-card>
+          </template>
         </template>
       </div>
     </div>
