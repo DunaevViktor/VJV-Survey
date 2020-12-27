@@ -20,6 +20,26 @@
         onclick={editQuestion}
       />
     </span>
+    <span
+      class="slds-icon_container slds-icon-utility-announcement slds-float_right"
+      title="Down"
+    >
+      <img
+        class="slds-icon slds-icon-text-default slds-icon_x-small"
+        src={arrowDownIcon}
+        onclick={downQuestion}
+      />
+    </span>
+    <span
+      class="slds-icon_container slds-icon-utility-announcement slds-float_right"
+      title="Up"
+      onclick={upQuestion}
+    >
+      <img
+        class="slds-icon slds-icon-text-default slds-icon_x-small"
+        src={arrowUpIcon}
+      />
+    </span>
 
     <template if:true={question.Required__c}>
       <span class="required">*</span>

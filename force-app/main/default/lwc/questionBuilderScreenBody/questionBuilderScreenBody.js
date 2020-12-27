@@ -130,6 +130,76 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     this.updateDisplayedQuestions();
   }
 
+  downQuestion(event) {
+    const position = +event.detail;
+
+    if (position == this.questions.length) return;
+
+    console.log(1);
+
+    let relocatableQuestion = {},
+      lowerQuestion = {};
+    let relocatableIndex, lowerIndex;
+
+    this.questions.forEach((question, index) => {
+      if (question.Position__c == position) {
+        relocatableQuestion = question;
+        relocatableIndex = index;
+      } else if (question.Position__c == position + 1) {
+        lowerQuestion = question;
+        lowerIndex = index;
+      }
+    });
+
+    if (this.editQuestionPosition == lowerQuestion.Position__c) {
+      this.editQuestionPosition = relocatableQuestion.Position__c;
+    } else if (this.editQuestionPosition == relocatableQuestion.Position__c) {
+      this.editQuestionPosition = lowerQuestion.Position__c;
+    }
+
+    lowerQuestion.Position__c--;
+    relocatableQuestion.Position__c++;
+
+    this.questions[relocatableIndex] = lowerQuestion;
+    this.questions[lowerIndex] = relocatableQuestion;
+
+    this.updateDisplayedQuestions();
+  }
+
+  upQuestion(event) {
+    const position = +event.detail;
+
+    if (position == 1) return;
+
+    let relocatableQuestion = {},
+      upperQuestion = {};
+    let relocatableIndex, upperIndex;
+
+    this.questions.forEach((question, index) => {
+      if (question.Position__c == position) {
+        relocatableQuestion = question;
+        relocatableIndex = index;
+      } else if (question.Position__c == position - 1) {
+        upperQuestion = question;
+        upperIndex = index;
+      }
+    });
+
+    if (this.editQuestionPosition == upperQuestion.Position__c) {
+      this.editQuestionPosition = relocatableQuestion.Position__c;
+    } else if (this.editQuestionPosition == relocatableQuestion.Position__c) {
+      this.editQuestionPosition = upperQuestion.Position__c;
+    }
+
+    upperQuestion.Position__c++;
+    relocatableQuestion.Position__c--;
+
+    this.questions[relocatableIndex] = upperQuestion;
+    this.questions[upperIndex] = relocatableQuestion;
+
+    this.updateDisplayedQuestions();
+  }
+
   updateDisplayedQuestions() {
     this.displayedQuestions = [...this.questions];
   }
