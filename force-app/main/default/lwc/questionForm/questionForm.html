@@ -1,6 +1,12 @@
 <template>
   <div class="slds-box slds-box_x-small slds-m-around_x-small">
-    <h2>Question creating form</h2>
+    <template if:true={isEditMode}>
+      <h2>Edit question form</h2>
+    </template>
+
+    <template if:false={isEditMode}>
+      <h2>Question creating form</h2>
+    </template>
 
     <lightning-input
       class="input"
@@ -89,12 +95,33 @@
     <hr class="slds-clearfix slds-m-bottom_x-small" />
 
     <div class="slds-text-align_center modal_buttons">
-      <lightning-button
-        variant="brand"
-        label="Add Question"
-        title="Add Question"
-        onclick={addQuestion}
-      ></lightning-button>
+      <template if:true={isEditMode}>
+        <lightning-button
+          variant="brand"
+          label="Save changes"
+          title="Save changes"
+          class="slds-m-left_x-small"
+          onclick={editQuestion}
+        >
+        </lightning-button>
+        <lightning-button
+          variant="destructive"
+          label="Cancel changes"
+          title="Cancel changes"
+          class="slds-m-left_x-small"
+          onclick={cancelQuestionEdit}
+        >
+        </lightning-button>
+      </template>
+
+      <template if:false={isEditMode}>
+        <lightning-button
+          variant="brand"
+          label="Add Question"
+          title="Add Question"
+          onclick={addQuestion}
+        ></lightning-button>
+      </template>
     </div>
   </div>
 </template>

@@ -14,6 +14,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
   templateOptionsValue;
 
   @track hasQuestions = false;
+  @track editQuestionPosition;
 
   connectedCallback() {
     this.initQuestions();
@@ -80,6 +81,24 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     this.initQuestion();
   }
 
+  editQuestion(event) {
+    let position = +event.detail;
+    this.editQuestionPosition = position;
+
+    const question = this.questions.filter((question) => {
+      return question.Position__c == position;
+    })[0];
+
+    this.template
+      .querySelectorAll("c-question-form")[0]
+      .setQuestionForEdit(question);
+  }
+
+  cancelEditQuestion() {
+    this.editQuestionPosition = null;
+    this.initQuestion();
+  }
+
   deleteQuestion(event) {
     let position = +event.detail;
     position--;
@@ -92,6 +111,23 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
     this.updateDisplayedQuestions();
     this.hasQuestions = this.questions.length > 0;
+  }
+
+  updateQuestion(event) {
+    const updatedQuestion = event.detail;
+
+    this.questions = this.questions.map((question) => {
+      if (question.Position__c == this.editQuestionPosition) {
+        return {
+          ...updatedQuestion,
+          Position__c: this.editQuestionPosition
+        };
+      }
+      return question;
+    });
+
+    this.editQuestionPosition = null;
+    this.updateDisplayedQuestions();
   }
 
   updateDisplayedQuestions() {

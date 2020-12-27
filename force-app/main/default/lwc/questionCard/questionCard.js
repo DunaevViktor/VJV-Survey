@@ -14,4 +14,11 @@ export default class QuestionCard extends LightningElement {
     });
     this.dispatchEvent(deleteEvent);
   }
+
+  editQuestion() {
+    const editEvent = new CustomEvent("edit", {
+      detail: this.question.Position__c
+    });
+    this.dispatchEvent(editEvent);
+  }
 }

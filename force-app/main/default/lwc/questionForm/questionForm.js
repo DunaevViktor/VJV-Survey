@@ -29,14 +29,16 @@ export default class QuestionForm extends LightningElement {
   @track isEditOption = false;
   @track editOptionValue = "";
 
+  @track isEditMode = false;
+
   connectedCallback() {
     this.isOptionsEnabled = false;
-    if (!this.editIcon) {
+    if (!this.editedQuestion) {
       this.question = {};
+      this.question.Options = [];
     } else {
       this.question = { ...this.editedQuestion };
     }
-    this.question.Options = [];
   }
 
   @wire(getPicklistValues, {
@@ -85,9 +87,29 @@ export default class QuestionForm extends LightningElement {
   }
 
   @api
-  setQuestion(updatedQuestion) {
-    this.question = updatedQuestion;
+  setQuestion(clearQuestion) {
+    this.question = clearQuestion;
     this.question.Options = [];
+  }
+
+  @api
+  setQuestionForEdit(editQuestion) {
+    this.question = JSON.parse(JSON.stringify(editQuestion));
+
+    const input = this.template.querySelector(".input");
+    input.value = this.question.Label__c;
+
+    this.selectedType = this.question.Type__c;
+
+    this.selectedSettings = [];
+
+    if (this.question.Required__c) this.selectedSettings.push("Required__c");
+    if (this.question.IsReusable__c)
+      this.selectedSettings.push("IsReusable__c");
+
+    this.setOptionsEnabling();
+
+    this.isEditMode = true;
   }
 
   addOption() {
@@ -95,7 +117,6 @@ export default class QuestionForm extends LightningElement {
     if (!input.validity.valid) return;
 
     const filteredOptions = this.question.Options.filter((option) => {
-      console.log("1");
       return option.Value__c.localeCompare(input.value) == 0;
     });
 
@@ -153,7 +174,7 @@ export default class QuestionForm extends LightningElement {
     const input = this.template.querySelector(".input");
     if (!input.validity.valid) {
       return;
-    } else if (this.isOptionsEnabled && this.question.Options < 2) {
+    } else if (this.isOptionsEnabled && this.question.Options.length < 2) {
       this.showToastMessage(
         this.ERROR_TITLE,
         "The number of options must be at least two",
@@ -176,6 +197,44 @@ export default class QuestionForm extends LightningElement {
     this.dispatchEvent(addEvent);
 
     this.resetForm();
+  }
+
+  cancelQuestionEdit() {
+    const cancelEvent = new CustomEvent("canseledit");
+    this.dispatchEvent(cancelEvent);
+
+    this.isEditMode = false;
+    this.resetForm();
+  }
+
+  editQuestion() {
+    const input = this.template.querySelector(".input");
+    if (!input.validity.valid) {
+      return;
+    } else if (this.isOptionsEnabled && this.question.Options.length < 2) {
+      this.showToastMessage(
+        this.ERROR_TITLE,
+        "The number of options must be at least two",
+        this.ERROR_VARIANT
+      );
+      return;
+    }
+
+    if (
+      !this.isOptionsEnabled ||
+      (this.isOptionsEnabled && this.question.Options.length == 0)
+    ) {
+      this.question.Options = null;
+    }
+    this.question.Type__c = this.selectedType;
+
+    const editEvent = new CustomEvent("edit", {
+      detail: { ...this.question }
+    });
+    this.dispatchEvent(editEvent);
+
+    this.resetForm();
+    this.isEditMode = false;
   }
 
   resetForm() {

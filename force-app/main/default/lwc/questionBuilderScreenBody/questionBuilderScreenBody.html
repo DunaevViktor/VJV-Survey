@@ -19,18 +19,27 @@
     </div>
 
     <div class="slds-size_2-of-3">
-      <c-question-form onadd={addQuestion}></c-question-form>
+      <c-question-form
+        onadd={addQuestion}
+        oncancelevent={cancelEditQuestion}
+        onedit={updateQuestion}
+      ></c-question-form>
 
       <div class="slds-box slds-box_x-small slds-m-around_x-small">
         <template if:false={hasQuestions}> Don't have questions yet </template>
 
         <template if:true={hasQuestions}>
           <template for:each={displayedQuestions} for:item="displayedQuestion">
-            <c-question-card
-              question={displayedQuestion}
-              key={displayedQuestion.Position__c}
-              ondelete={deleteQuestion}
-            ></c-question-card>
+            <div key={displayedQuestion.Position__c}>
+              <c-question-card
+                question={displayedQuestion}
+                ondelete={deleteQuestion}
+                onedit={editQuestion}
+                class={displayedQuestion.Position__c}
+              >
+                ></c-question-card
+              >
+            </div>
           </template>
         </template>
       </div>

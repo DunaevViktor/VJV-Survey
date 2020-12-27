@@ -8,10 +8,6 @@ export default class OptionListElement extends LightningElement {
   editIcon = EDIT_ICON;
   deleteIcon = DELETE_ICON;
 
-  connectedCallback() {
-    console.log(this.option.Value__c);
-  }
-
   deleteOption() {
     const deleteEvent = new CustomEvent("delete", {
       detail: this.option.Value__c
