@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customObject>true</customObject>
+    <description>Объект Survey олицетворяет сам опросник. Хранит в себе название, описание, лого опросника, и ссылку на следующий опрос в цепочке, а также ссылку на свою форму. Дополнительным полем является флажок отвечающим за то, не является ли опрос стандартным.</description>
+    <motif>Custom20: Airplane</motif>
+</CustomTab>
