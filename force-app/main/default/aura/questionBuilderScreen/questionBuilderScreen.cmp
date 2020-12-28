@@ -1,4 +1,8 @@
-<aura:component access="global" implements="lightning:availableForFlowScreens">
+<aura:component
+  access="global"
+  implements="lightning:availableForFlowScreens"
+  controller="QuestionController"
+>
   <aura:attribute
     name="templates"
     type="Survey__c[]"
@@ -17,10 +21,12 @@
     default=""
     access="global"
   />
+
   <c:questionBuilderScreenBody
     templates="{!v.templates}"
     standardQuestions="{!v.standardQuestions}"
     questions="{!v.questions}"
+    onquestionschange="{!c.changeQuestions}"
   >
   </c:questionBuilderScreenBody>
 </aura:component>

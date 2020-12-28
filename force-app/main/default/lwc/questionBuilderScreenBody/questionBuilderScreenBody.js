@@ -17,6 +17,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
   @track editQuestionPosition;
 
   connectedCallback() {
+    this.questions = JSON.parse(JSON.stringify(this.questions));
     this.initQuestions();
     this.initQuestion();
 
@@ -53,6 +54,9 @@ export default class QuestionBuilderScreenBody extends LightningElement {
         .catch((error) => {
           console.log(error);
         });
+    } else {
+      this.updateDisplayedQuestions();
+      this.hasQuestions = this.questions.length > 0;
     }
   }
 
@@ -60,7 +64,6 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     createQuestion()
       .then((result) => {
         this.question = result;
-        this.question.Label__c = "alder";
 
         this.template
           .querySelectorAll("c-question-form")[0]
@@ -74,11 +77,13 @@ export default class QuestionBuilderScreenBody extends LightningElement {
   addQuestion(event) {
     const question = event.detail;
     question.Position__c = this.questions.length + 1;
+    this.questions = JSON.parse(JSON.stringify(this.questions));
     this.questions.push(question);
 
     this.hasQuestions = this.questions.length > 0;
-    this.updateDisplayedQuestions();
     this.initQuestion();
+    this.updateDisplayedQuestions();
+    this.sendQuestionsChangeEvent();
   }
 
   editQuestion(event) {
@@ -103,6 +108,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     let position = +event.detail;
     position--;
 
+    this.questions = JSON.parse(JSON.stringify(this.questions));
     this.questions.splice(position, 1);
 
     for (let i = position; i < this.questions.length; i++) {
@@ -111,6 +117,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
     this.updateDisplayedQuestions();
     this.hasQuestions = this.questions.length > 0;
+    this.sendQuestionsChangeEvent();
   }
 
   updateQuestion(event) {
@@ -128,6 +135,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
     this.editQuestionPosition = null;
     this.updateDisplayedQuestions();
+    this.sendQuestionsChangeEvent();
   }
 
   downQuestion(event) {
@@ -135,12 +143,11 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
     if (position == this.questions.length) return;
 
-    console.log(1);
-
     let relocatableQuestion = {},
       lowerQuestion = {};
     let relocatableIndex, lowerIndex;
 
+    this.questions = JSON.parse(JSON.stringify(this.questions));
     this.questions.forEach((question, index) => {
       if (question.Position__c == position) {
         relocatableQuestion = question;
@@ -164,6 +171,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     this.questions[lowerIndex] = relocatableQuestion;
 
     this.updateDisplayedQuestions();
+    this.sendQuestionsChangeEvent();
   }
 
   upQuestion(event) {
@@ -175,6 +183,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
       upperQuestion = {};
     let relocatableIndex, upperIndex;
 
+    this.questions = JSON.parse(JSON.stringify(this.questions));
     this.questions.forEach((question, index) => {
       if (question.Position__c == position) {
         relocatableQuestion = question;
@@ -198,9 +207,17 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     this.questions[upperIndex] = relocatableQuestion;
 
     this.updateDisplayedQuestions();
+    this.sendQuestionsChangeEvent();
   }
 
   updateDisplayedQuestions() {
     this.displayedQuestions = [...this.questions];
+  }
+
+  sendQuestionsChangeEvent() {
+    const questionsChangeEvent = new CustomEvent("questionschange", {
+      detail: { questions: [...this.questions] }
+    });
+    this.dispatchEvent(questionsChangeEvent);
   }
 }

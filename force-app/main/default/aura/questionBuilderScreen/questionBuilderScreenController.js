@@ -1,6 +1,5 @@
 ({
-  init: function (cmp, event, helper) {
-    const templates = cmp.get("v.templates");
-    console.log(templates);
+  changeQuestions: function (cmp, event, helper) {
+    cmp.set("v.questions", event.getParam("questions"));
   }
 });
