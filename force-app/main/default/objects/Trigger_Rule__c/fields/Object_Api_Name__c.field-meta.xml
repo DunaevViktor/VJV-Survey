@@ -3,9 +3,11 @@
     <fullName>Object_Api_Name__c</fullName>
     <externalId>false</externalId>
     <label>Object Api Name</label>
-    <length>255</length>
     <required>true</required>
     <trackTrending>false</trackTrending>
-    <type>Text</type>
-    <unique>false</unique>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetName>Object_Api_Names</valueSetName>
+    </valueSet>
 </CustomField>
