@@ -1,3 +1,4 @@
+/* eslint-disable @lwc/lwc/no-api-reassignments */
 import { LightningElement, api, track } from "lwc";
 import createQuestionList from "@salesforce/apex/QuestionController.createQuestionList";
 import createQuestion from "@salesforce/apex/QuestionController.createQuestion";
@@ -9,12 +10,11 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
   @track question;
   @track displayedQuestions;
+  @track hasQuestions = false;
+  @track editQuestionPosition;
 
   noTemplate;
   templateOptionsValue;
-
-  @track hasQuestions = false;
-  @track editQuestionPosition;
 
   connectedCallback() {
     this.questions = JSON.parse(JSON.stringify(this.questions));
@@ -42,8 +42,6 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
   initQuestions() {
     if (!this.questions) {
-      this.questions = [];
-
       createQuestionList()
         .then((result) => {
           this.questions = result;
@@ -77,26 +75,27 @@ export default class QuestionBuilderScreenBody extends LightningElement {
   addQuestion(event) {
     const question = event.detail;
     question.Position__c = this.questions.length + 1;
+
     this.questions = JSON.parse(JSON.stringify(this.questions));
     this.questions.push(question);
 
     this.hasQuestions = this.questions.length > 0;
-    this.initQuestion();
     this.updateDisplayedQuestions();
     this.sendQuestionsChangeEvent();
+    this.initQuestion();
   }
 
   editQuestion(event) {
     let position = +event.detail;
     this.editQuestionPosition = position;
 
-    const question = this.questions.filter((question) => {
-      return question.Position__c == position;
+    const questionForEdit = this.questions.filter((question) => {
+      return +question.Position__c === +position;
     })[0];
 
     this.template
       .querySelectorAll("c-question-form")[0]
-      .setQuestionForEdit(question);
+      .setQuestionForEdit(questionForEdit);
   }
 
   cancelEditQuestion() {
@@ -124,7 +123,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     const updatedQuestion = event.detail;
 
     this.questions = this.questions.map((question) => {
-      if (question.Position__c == this.editQuestionPosition) {
+      if (+question.Position__c === +this.editQuestionPosition) {
         return {
           ...updatedQuestion,
           Position__c: this.editQuestionPosition
@@ -141,7 +140,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
   downQuestion(event) {
     const position = +event.detail;
 
-    if (position == this.questions.length) return;
+    if (position === this.questions.length) return;
 
     let relocatableQuestion = {},
       lowerQuestion = {};
@@ -149,18 +148,20 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
     this.questions = JSON.parse(JSON.stringify(this.questions));
     this.questions.forEach((question, index) => {
-      if (question.Position__c == position) {
+      if (+question.Position__c === position) {
         relocatableQuestion = question;
         relocatableIndex = index;
-      } else if (question.Position__c == position + 1) {
+      } else if (+question.Position__c === position + 1) {
         lowerQuestion = question;
         lowerIndex = index;
       }
     });
 
-    if (this.editQuestionPosition == lowerQuestion.Position__c) {
+    if (+this.editQuestionPosition === +lowerQuestion.Position__c) {
       this.editQuestionPosition = relocatableQuestion.Position__c;
-    } else if (this.editQuestionPosition == relocatableQuestion.Position__c) {
+    } else if (
+      +this.editQuestionPosition === +relocatableQuestion.Position__c
+    ) {
       this.editQuestionPosition = lowerQuestion.Position__c;
     }
 
@@ -177,7 +178,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
   upQuestion(event) {
     const position = +event.detail;
 
-    if (position == 1) return;
+    if (position === 1) return;
 
     let relocatableQuestion = {},
       upperQuestion = {};
@@ -185,18 +186,20 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
     this.questions = JSON.parse(JSON.stringify(this.questions));
     this.questions.forEach((question, index) => {
-      if (question.Position__c == position) {
+      if (+question.Position__c === position) {
         relocatableQuestion = question;
         relocatableIndex = index;
-      } else if (question.Position__c == position - 1) {
+      } else if (+question.Position__c === position - 1) {
         upperQuestion = question;
         upperIndex = index;
       }
     });
 
-    if (this.editQuestionPosition == upperQuestion.Position__c) {
+    if (+this.editQuestionPosition === +upperQuestion.Position__c) {
       this.editQuestionPosition = relocatableQuestion.Position__c;
-    } else if (this.editQuestionPosition == relocatableQuestion.Position__c) {
+    } else if (
+      +this.editQuestionPosition === +relocatableQuestion.Position__c
+    ) {
       this.editQuestionPosition = upperQuestion.Position__c;
     }
 

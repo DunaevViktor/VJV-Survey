@@ -19,17 +19,15 @@ export default class QuestionForm extends LightningElement {
   @wire(getObjectInfo, { objectApiName: QUESTION_OBJECT })
   surveyObjectInfo;
 
-  @track isOptionsEnabled;
-
-  displayedTypes;
   @track selectedType;
-
   @track selectedSettings = [];
 
+  @track isOptionsEnabled;
   @track isEditOption = false;
+  @track isEditMode = false;
   @track editOptionValue = "";
 
-  @track isEditMode = false;
+  displayedTypes;
 
   connectedCallback() {
     this.isOptionsEnabled = false;
@@ -55,6 +53,8 @@ export default class QuestionForm extends LightningElement {
       });
       this.selectedType = this.displayedTypes[0].value;
       this.setOptionsEnabling();
+    } else if (error) {
+      console.log(error);
     }
   }
 
@@ -74,9 +74,9 @@ export default class QuestionForm extends LightningElement {
 
   setOptionsEnabling() {
     this.isOptionsEnabled =
-      this.selectedType.toLowerCase().localeCompare("checkbox") == 0 ||
-      this.selectedType.toLowerCase().localeCompare("radiobutton") == 0 ||
-      this.selectedType.toLowerCase().localeCompare("picklist") == 0;
+      this.selectedType.toLowerCase().localeCompare("checkbox") === 0 ||
+      this.selectedType.toLowerCase().localeCompare("radiobutton") === 0 ||
+      this.selectedType.toLowerCase().localeCompare("picklist") === 0;
   }
 
   get questionSettingList() {
@@ -100,7 +100,6 @@ export default class QuestionForm extends LightningElement {
     input.value = this.question.Label__c;
 
     this.selectedType = this.question.Type__c;
-
     this.selectedSettings = [];
 
     if (this.question.Required__c) this.selectedSettings.push("Required__c");
@@ -117,7 +116,7 @@ export default class QuestionForm extends LightningElement {
     if (!input.validity.valid) return;
 
     const filteredOptions = this.question.Options.filter((option) => {
-      return option.Value__c.localeCompare(input.value) == 0;
+      return option.Value__c.localeCompare(input.value) === 0;
     });
 
     if (filteredOptions.length > 0) {
@@ -153,12 +152,31 @@ export default class QuestionForm extends LightningElement {
 
   saveOptionChanges() {
     const input = this.template.querySelector(".option-input");
+    if (!input.validity.valid) return;
+
+    const filteredOptions = this.question.Options.filter((option) => {
+      return (
+        option.Value__c.localeCompare(input.value) === 0 &&
+        this.editOptionValue.localeCompare(input.value) !== 0
+      );
+    });
+
+    if (filteredOptions.length > 0) {
+      this.showToastMessage(
+        this.ERROR_TITLE,
+        "Option with such value already exists!",
+        this.ERROR_VARIANT
+      );
+      return;
+    }
+
     this.question.Options = this.question.Options.map((option) => {
-      if (option.Value__c.localeCompare(this.editOptionValue) == 0) {
+      if (option.Value__c.localeCompare(this.editOptionValue) === 0) {
         option.Value__c = input.value;
       }
       return option;
     });
+
     input.value = "";
     this.editOptionValue = "";
     this.isEditOption = false;
@@ -166,7 +184,7 @@ export default class QuestionForm extends LightningElement {
 
   deleteOption(event) {
     this.question.Options = this.question.Options.filter((option) => {
-      return option.Value__c.localeCompare(event.detail) != 0;
+      return option.Value__c.localeCompare(event.detail) !== 0;
     });
   }
 
@@ -183,13 +201,7 @@ export default class QuestionForm extends LightningElement {
       return;
     }
 
-    if (
-      !this.isOptionsEnabled ||
-      (this.isOptionsEnabled && this.question.Options.length == 0)
-    ) {
-      this.question.Options = null;
-    }
-    this.question.Type__c = this.selectedType;
+    this.getQuestionAttributes();
 
     const addEvent = new CustomEvent("add", {
       detail: { ...this.question }
@@ -220,13 +232,7 @@ export default class QuestionForm extends LightningElement {
       return;
     }
 
-    if (
-      !this.isOptionsEnabled ||
-      (this.isOptionsEnabled && this.question.Options.length == 0)
-    ) {
-      this.question.Options = null;
-    }
-    this.question.Type__c = this.selectedType;
+    this.getQuestionAttributes();
 
     const editEvent = new CustomEvent("edit", {
       detail: { ...this.question }
@@ -235,6 +241,16 @@ export default class QuestionForm extends LightningElement {
 
     this.resetForm();
     this.isEditMode = false;
+  }
+
+  getQuestionAttributes() {
+    if (
+      !this.isOptionsEnabled ||
+      (this.isOptionsEnabled && this.question.Options.length === 0)
+    ) {
+      this.question.Options = null;
+    }
+    this.question.Type__c = this.selectedType;
   }
 
   resetForm() {

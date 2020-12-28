@@ -6,6 +6,7 @@ export default class QuestionSearch extends LightningElement {
   @api standardQuestions;
 
   @track searchResults;
+
   searchTerm;
 
   connectedCallback() {
@@ -16,11 +17,9 @@ export default class QuestionSearch extends LightningElement {
   onSearchTermChange(event) {
     this.searchTerm = event.target.value;
 
-    if (this.searchTerm.localeCompare(this.EMPTY_STRING) == 0) {
-      console.log("All");
+    if (this.searchTerm.localeCompare(this.EMPTY_STRING) === 0) {
       this.setAllQuestions();
     } else {
-      console.log("Filter");
       this.filterQuestions();
     }
   }
