@@ -3,9 +3,42 @@
     <fullName>Operator__c</fullName>
     <externalId>false</externalId>
     <label>Operator</label>
-    <length>20</length>
     <required>true</required>
     <trackTrending>false</trackTrending>
-    <type>Text</type>
-    <unique>false</unique>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>NULL</fullName>
+                <default>false</default>
+                <label>NULL</label>
+            </value>
+            <value>
+                <fullName>NOT NULL</fullName>
+                <default>false</default>
+                <label>NOT NULL</label>
+            </value>
+            <value>
+                <fullName>EQUALS</fullName>
+                <default>false</default>
+                <label>EQUALS</label>
+            </value>
+            <value>
+                <fullName>NOT EQUALS</fullName>
+                <default>false</default>
+                <label>NOT EQUALS</label>
+            </value>
+            <value>
+                <fullName>GREATER THEN</fullName>
+                <default>false</default>
+                <label>GREATER THEN</label>
+            </value>
+            <value>
+                <fullName>LESS THEN</fullName>
+                <default>false</default>
+                <label>LESS THEN</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
 </CustomField>

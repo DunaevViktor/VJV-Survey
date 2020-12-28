@@ -73,7 +73,7 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <relatedList>Survey_Email_Log__c.Survey__c</relatedList>
+        <relatedList>Email_Receiver__c.Survey__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>

@@ -12,10 +12,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>Object_Api_Name__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
                 <field>Survey__c</field>
             </layoutItems>
             <layoutItems>
@@ -29,6 +25,10 @@
             <layoutItems>
                 <behavior>Required</behavior>
                 <field>Operator__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>Object_Api_Name__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns/>
