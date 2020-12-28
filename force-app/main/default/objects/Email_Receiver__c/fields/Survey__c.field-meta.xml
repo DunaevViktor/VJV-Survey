@@ -4,7 +4,8 @@
     <externalId>false</externalId>
     <label>Survey</label>
     <referenceTo>Survey__c</referenceTo>
-    <relationshipName>Survey_Email_Logs</relationshipName>
+    <relationshipLabel>Email Receivers</relationshipLabel>
+    <relationshipName>Email_Receivers_Logs</relationshipName>
     <relationshipOrder>0</relationshipOrder>
     <reparentableMasterDetail>false</reparentableMasterDetail>
     <trackTrending>false</trackTrending>
