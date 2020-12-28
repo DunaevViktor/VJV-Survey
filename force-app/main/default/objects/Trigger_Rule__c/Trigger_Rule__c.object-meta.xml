@@ -143,7 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Объект Survey олицетворяет сам опросник. Хранит в себе название, описание, лого опросника, и ссылку на следующий опрос в цепочке, а также ссылку на свою форму. Дополнительным полем является флажок отвечающим за то, не является ли опрос стандартным.</description>
+    <description>Определяет для какого объекта и при выполнении каких критериев будет производиться дальнейшее действие.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -153,14 +153,15 @@
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
-    <externalSharingModel>Private</externalSharingModel>
-    <label>Survey</label>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
+    <label>Trigger Rule</label>
     <nameField>
-        <label>Survey Name</label>
-        <type>Text</type>
+        <displayFormat>TR-{00000}</displayFormat>
+        <label>Trigger Rule Name</label>
+        <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>Surveys</pluralLabel>
+    <pluralLabel>Trigger Rules</pluralLabel>
     <searchLayouts/>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

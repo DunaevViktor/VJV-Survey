@@ -143,7 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Объект Survey олицетворяет сам опросник. Хранит в себе название, описание, лого опросника, и ссылку на следующий опрос в цепочке, а также ссылку на свою форму. Дополнительным полем является флажок отвечающим за то, не является ли опрос стандартным.</description>
+    <description>Объект Email Receiver необходим для хранения информации о получателе email-ов. С помощью него будет проверяться не отправлялось ли уже приглашение на данный Survey на какой-то конкретный email.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -153,14 +153,15 @@
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
-    <externalSharingModel>Private</externalSharingModel>
-    <label>Survey</label>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
+    <label>Email Receiver</label>
     <nameField>
-        <label>Survey Name</label>
-        <type>Text</type>
+        <displayFormat>ER-{00000}</displayFormat>
+        <label>Email Receiver Name</label>
+        <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>Surveys</pluralLabel>
+    <pluralLabel>Email Receivers</pluralLabel>
     <searchLayouts/>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>
