@@ -1,8 +1,4 @@
-<aura:component
-  access="global"
-  implements="lightning:availableForFlowScreens"
-  controller="QuestionController"
->
+<aura:component access="global" implements="lightning:availableForFlowScreens">
   <aura:attribute
     name="templates"
     type="Survey__c[]"

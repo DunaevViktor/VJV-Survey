@@ -8,4 +8,32 @@ public with sharing class QuestionController {
   public static Question__c createQuestion() {
     return new Question__c();
   }
+
+  @AuraEnabled(cacheable=false)
+  public static List<Question__c> getStandardQuestions() {
+    return [
+      SELECT
+        Id,
+        Label__c,
+        Type__c,
+        Required__c,
+        (SELECT Value__c FROM Question_Options__r)
+      FROM Question__c
+      WHERE IsReusable__c = TRUE
+    ];
+  }
+
+  @AuraEnabled(cacheable=false)
+  public static List<Question__c> getTemplatesQuestions(List<Id> surveyIds) {
+    return [
+      SELECT
+        Id,
+        Label__c,
+        Type__c,
+        Required__c,
+        (SELECT Value__c FROM Question_Options__r)
+      FROM Question__c
+      WHERE Survey__c IN :surveyIds
+    ];
+  }
 }
