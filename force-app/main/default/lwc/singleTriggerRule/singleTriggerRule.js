@@ -2,9 +2,9 @@ import { LightningElement, wire, track, api } from "lwc";
 import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
 import getObjectApiNamePickListValues from "@salesforce/apex/MetadataFetcher.getObjectApiNamePickListValues";
 import getTriggerRuleOpearatorPickListValues from "@salesforce/apex/MetadataFetcher.getTriggerRuleOpearatorPickListValues";
-import getObjectFields from "@salesforce/apex/MetadataFetcher.getObjectFields";
+import getObjectFieldsDescriptionList from "@salesforce/apex/MetadataFetcher.getObjectFieldsDescriptionList";
 import getFieldPicklistValues from "@salesforce/apex/MetadataFetcher.getFieldPicklistValues";
-import { createPicklistOption, getFieldAttributes } from "./helper";
+import { setReferencedObjectNames, getFieldAttributes } from "./helper";
 import { reduceErrors } from "c/loadDataUtils";
 
 const booleanPicklistOptions = [
@@ -78,30 +78,28 @@ export default class SingleTriggerRule extends LightningElement {
       });
   }
 
-  renderedCallback() {
-    console.log(this.number);
-  }
-
   handleObjectChange(event) {
     console.log("Object combo change");
     console.log(event.detail);
     this.objectApiName = event.detail.value;
     this.objectValue = event.detail.value;
-    getObjectFields({ objectApiName: this.objectApiName })
+    getObjectFieldsDescriptionList({ objectApiName: this.objectApiName })
       .then((result) => {
         console.log(result);
         let comboboxFieldsOptions = [];
-        for (let key in result) {
+        result.forEach((fieldDescriptionList) => {
           // Preventing unexcepted data
-          if (Object.prototype.hasOwnProperty.call(result, key)) {
-            // Filtering the data in the loop
-            comboboxFieldsOptions.push({
-              label: key,
-              value: key,
-              datatype: result[key]
-            });
-          }
-        }
+
+          // Filtering the data in the loop
+          console.log(fieldDescriptionList);
+          let fieldObject = {
+            label: fieldDescriptionList[1],
+            value: fieldDescriptionList[0],
+            datatype: fieldDescriptionList[2]
+          };
+          setReferencedObjectNames(fieldDescriptionList, fieldObject);
+          comboboxFieldsOptions.push(fieldObject);
+        });
         this.fieldNames = comboboxFieldsOptions;
         console.log("fieeld options");
         console.log(comboboxFieldsOptions);
@@ -113,7 +111,6 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   handleFieldChange(event) {
-    console.log("field ev det");
     console.log(JSON.stringify(event.detail));
     let chosenFieldObject = this.fieldNames.find(
       (field) => field.value === event.detail.value
@@ -155,8 +152,8 @@ export default class SingleTriggerRule extends LightningElement {
     console.log("res combo optins");
     console.log(picklistOptions);
     this.field = getFieldAttributes(chosenFieldObject, picklistOptions);
-
-    console.log(this.field);
+    console.log("Fielddd chosen object!");
+    console.log(JSON.stringify(this.field));
   }
 
   handleOperatorChange(event) {
@@ -164,11 +161,21 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   handleDeleteRuleClick() {
+    this.clearChosenData();
+
     const deleteEvent = new CustomEvent("deletetriggerrule", {
       detail: this.number
     });
 
     this.dispatchEvent(deleteEvent);
+  }
+
+  clearChosenData() {
+    this.value = "";
+    this.opearatorValue = "";
+    this.fieldValue = "";
+    this.fieldType = "";
+    this.objectValue = "";
   }
 
   handleValueChange(event) {

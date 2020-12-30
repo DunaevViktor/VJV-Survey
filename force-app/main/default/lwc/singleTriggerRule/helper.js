@@ -1,3 +1,5 @@
+import getObjectFieldsDescriptionList from "@salesforce/apex/MetadataFetcher.getObjectFieldsDescriptionList";
+
 const booleanPicklistOptions = [
   {
     label: "TRUE",
@@ -35,7 +37,11 @@ const getFieldAttributes = (field, picklistOptions) => {
       fieldObject.picklistValues = picklistOptions;
       fieldObject.isInput = false;
       break;
-    case "phone":
+    case "ID":
+      fieldObject.isInput = true;
+      fieldObject.type = "text";
+      break;
+    case "PHONE":
       fieldObject.isInput = true;
       fieldObject.pattern = "[0-9]+";
       break;
@@ -43,7 +49,7 @@ const getFieldAttributes = (field, picklistOptions) => {
       fieldObject.isInput = true;
       fieldObject.type = "email";
       break;
-    case "currency":
+    case "CURRENCY":
       fieldObject.isInput = true;
       fieldObject.type = "number";
       fieldObject.formatter = "currency";
@@ -53,31 +59,47 @@ const getFieldAttributes = (field, picklistOptions) => {
       fieldObject.isInput = true;
       fieldObject.type = "date";
       break;
+    case "DATE":
+      fieldObject.isInput = true;
+      fieldObject.type = "date";
+      break;
+    case "URL":
+      fieldObject.isInput = true;
+      fieldObject.type = "url";
+      break;
     case "BOOLEAN":
       fieldObject.isCombobox = true;
       fieldObject.type = "boolean";
       fieldObject.picklistValues = booleanPicklistOptions;
       fieldObject.isInput = false;
       break;
-    case "int":
+    case "INTEGER":
       fieldObject.isInput = true;
       fieldObject.type = "number";
       fieldObject.min = "0";
       fieldObject.max = "99999999999999";
       fieldObject.step = "1";
       break;
-    case "string":
+    case "DOUBLE":
+      fieldObject.isInput = true;
+      fieldObject.type = "number";
+      break;
+    case "STRING":
       fieldObject.isInput = true;
       fieldObject.type = "text";
       break;
-    case "textarea":
+    case "ADDRESS":
+      fieldObject.isInput = true;
+      fieldObject.type = "text";
+      break;
+    case "TEXTAREA":
       fieldObject.isInput = true;
       fieldObject.type = "text";
       break;
     case "REFERENCE":
       fieldObject.isLookup = true;
       fieldObject.type = "REFERENCE";
-      fieldObject.objectApiName = retrieveObjectApiName(field.value);
+      fieldObject.objectsApiNames = field.referencedObjects;
       break;
     default:
       fieldObject.isInput = true;
@@ -90,4 +112,14 @@ const getFieldAttributes = (field, picklistOptions) => {
   return fieldObject;
 };
 
-export { createPicklistOption, getFieldAttributes };
+const setReferencedObjectNames = (objectFieldsDescriptionList, fieldObject) => {
+  if (fieldObject.datatype === "REFERENCE") {
+    let referencedObjectsNames = [];
+    for (let i = 3; i < objectFieldsDescriptionList.length; i++) {
+      referencedObjectsNames.push(objectFieldsDescriptionList[i]);
+    }
+    fieldObject.referencedObjects = referencedObjectsNames;
+  }
+};
+
+export { createPicklistOption, getFieldAttributes, setReferencedObjectNames };

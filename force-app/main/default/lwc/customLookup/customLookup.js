@@ -5,10 +5,16 @@ export default class LwcLookup extends LightningElement {
   @track searchKey = "";
   @api selectedValue;
   @api selectedRecordId;
-  @api objectApiName;
+  @api objectsApiNames;
   @api iconName;
   @api lookupLabel;
   @track message;
+
+  connectedCallback() {
+    console.log("callback");
+    this.objectsApiNames = JSON.parse(JSON.stringify(this.objectsApiNames));
+    console.log(this.objectsApiNames);
+  }
 
   onLeave(event) {
     setTimeout(() => {
@@ -39,7 +45,10 @@ export default class LwcLookup extends LightningElement {
   }
 
   getLookupResult() {
-    findRecords({ searchKey: this.searchKey, objectName: this.objectApiName })
+    findRecords({
+      searchKey: this.searchKey,
+      objectsApiNames: this.objectsApiNames
+    })
       .then((result) => {
         if (result.length === 0) {
           this.recordsList = [];

@@ -66,8 +66,8 @@
 
       <c-custom-lookup
         if:true={field.isLookup}
-        lookup-label="Account"
-        object-api-name={field.objectApiName}
+        lookup-label={field.objectApiName}
+        objects-api-names={field.objectsApiNames}
         icon-name="standard:account"
         onrecordselection={onAccountSelection}
       ></c-custom-lookup>
