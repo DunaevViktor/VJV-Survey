@@ -4,7 +4,6 @@ export default class QuestionSearch extends LightningElement {
   EMPTY_STRING = "";
 
   @api standardQuestions;
-
   @track searchResults;
 
   searchTerm;
@@ -25,6 +24,10 @@ export default class QuestionSearch extends LightningElement {
   }
 
   setAllQuestions() {
+    if (!this.standardQuestions) {
+      this.searchResults = [];
+      return;
+    }
     this.searchResults = this.standardQuestions;
   }
 

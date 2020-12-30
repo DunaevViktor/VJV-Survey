@@ -17,12 +17,22 @@
     default=""
     access="global"
   />
+  <aura:attribute
+    name="templateQuestions"
+    type="Question__c[]"
+    default=""
+    access="global"
+  />
 
   <c:questionBuilderScreenBody
     templates="{!v.templates}"
+    templateQuestions="{!v.templateQuestions}"
     standardQuestions="{!v.standardQuestions}"
     questions="{!v.questions}"
     onquestionschange="{!c.changeQuestions}"
+    ontemplateschange="{!c.changeTemplates}"
+    ontquestionschange="{!c.changeTemplateQuestions}"
+    onstquestionschange="{!c.changeStandardQuestions}"
   >
   </c:questionBuilderScreenBody>
 </aura:component>
