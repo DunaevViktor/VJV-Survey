@@ -33,7 +33,7 @@ export default class QuestionForm extends LightningElement {
     this.isOptionsEnabled = false;
     if (!this.editedQuestion) {
       this.question = {};
-      this.question.Options = [];
+      this.question.Question_Options__r = [];
     } else {
       this.question = { ...this.editedQuestion };
     }
@@ -89,7 +89,8 @@ export default class QuestionForm extends LightningElement {
   @api
   setQuestion(clearQuestion) {
     this.question = clearQuestion;
-    this.question.Options = [];
+    this.question.Question_Options__r = [];
+    this.cancelQuestionEdit();
   }
 
   @api
@@ -115,9 +116,11 @@ export default class QuestionForm extends LightningElement {
     const input = this.template.querySelector(".option-input");
     if (!input.validity.valid) return;
 
-    const filteredOptions = this.question.Options.filter((option) => {
-      return option.Value__c.localeCompare(input.value) === 0;
-    });
+    const filteredOptions = this.question.Question_Options__r.filter(
+      (option) => {
+        return option.Value__c.localeCompare(input.value) === 0;
+      }
+    );
 
     if (filteredOptions.length > 0) {
       this.showToastMessage(
@@ -132,7 +135,7 @@ export default class QuestionForm extends LightningElement {
       Value__c: input.value
     };
 
-    this.question.Options.push(option);
+    this.question.Question_Options__r.push(option);
     input.value = "";
   }
 
@@ -154,12 +157,14 @@ export default class QuestionForm extends LightningElement {
     const input = this.template.querySelector(".option-input");
     if (!input.validity.valid) return;
 
-    const filteredOptions = this.question.Options.filter((option) => {
-      return (
-        option.Value__c.localeCompare(input.value) === 0 &&
-        this.editOptionValue.localeCompare(input.value) !== 0
-      );
-    });
+    const filteredOptions = this.question.Question_Options__r.filter(
+      (option) => {
+        return (
+          option.Value__c.localeCompare(input.value) === 0 &&
+          this.editOptionValue.localeCompare(input.value) !== 0
+        );
+      }
+    );
 
     if (filteredOptions.length > 0) {
       this.showToastMessage(
@@ -170,12 +175,14 @@ export default class QuestionForm extends LightningElement {
       return;
     }
 
-    this.question.Options = this.question.Options.map((option) => {
-      if (option.Value__c.localeCompare(this.editOptionValue) === 0) {
-        option.Value__c = input.value;
+    this.question.Question_Options__r = this.question.Question_Options__r.map(
+      (option) => {
+        if (option.Value__c.localeCompare(this.editOptionValue) === 0) {
+          option.Value__c = input.value;
+        }
+        return option;
       }
-      return option;
-    });
+    );
 
     input.value = "";
     this.editOptionValue = "";
@@ -183,16 +190,21 @@ export default class QuestionForm extends LightningElement {
   }
 
   deleteOption(event) {
-    this.question.Options = this.question.Options.filter((option) => {
-      return option.Value__c.localeCompare(event.detail) !== 0;
-    });
+    this.question.Question_Options__r = this.question.Question_Options__r.filter(
+      (option) => {
+        return option.Value__c.localeCompare(event.detail) !== 0;
+      }
+    );
   }
 
   addQuestion() {
     const input = this.template.querySelector(".input");
     if (!input.validity.valid) {
       return;
-    } else if (this.isOptionsEnabled && this.question.Options.length < 2) {
+    } else if (
+      this.isOptionsEnabled &&
+      this.question.Question_Options__r.length < 2
+    ) {
       this.showToastMessage(
         this.ERROR_TITLE,
         "The number of options must be at least two",
@@ -223,7 +235,10 @@ export default class QuestionForm extends LightningElement {
     const input = this.template.querySelector(".input");
     if (!input.validity.valid) {
       return;
-    } else if (this.isOptionsEnabled && this.question.Options.length < 2) {
+    } else if (
+      this.isOptionsEnabled &&
+      this.question.Question_Options__r.length < 2
+    ) {
       this.showToastMessage(
         this.ERROR_TITLE,
         "The number of options must be at least two",
@@ -246,9 +261,9 @@ export default class QuestionForm extends LightningElement {
   getQuestionAttributes() {
     if (
       !this.isOptionsEnabled ||
-      (this.isOptionsEnabled && this.question.Options.length === 0)
+      (this.isOptionsEnabled && this.question.Question_Options__r.length === 0)
     ) {
-      this.question.Options = null;
+      this.question.Question_Options__r = null;
     }
     this.question.Type__c = this.selectedType;
   }

@@ -7,15 +7,19 @@
           label="Selected Survey Template"
           value={templateOptionsValue}
           options={templateOptions}
+          onchange={handleTemplateChange}
         >
         </lightning-combobox>
       </div>
 
-      <div class="slds-box slds-box_x-small slds-m-around_x-small">
-        <c-question-search
-          standard-questions={standardQuestions}
-        ></c-question-search>
-      </div>
+      <template if:true={displayedStandardQuestions}>
+        <div class="slds-box slds-box_x-small slds-m-around_x-small">
+          <c-question-search
+            standard-questions={displayedStandardQuestions}
+            onselect={selectQuestion}
+          ></c-question-search>
+        </div>
+      </template>
     </div>
 
     <div class="slds-size_2-of-3">
