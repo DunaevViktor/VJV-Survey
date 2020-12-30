@@ -13,7 +13,7 @@
     </div>
 
     <!--Field-->
-    <div class="slds-col slds-size_1-of-6">
+    <div class="slds-col slds-size_1-of-6 slds-align-middle">
       <lightning-combobox
         name="Field"
         label="Field"
@@ -24,19 +24,53 @@
       </lightning-combobox>
     </div>
 
-    <!--Condition-->
-    <div class="slds-col slds-size_1-of-6">
+    <!--Operator-->
+    <div class="slds-col slds-size_1-of-6 slds-align-middle">
       <lightning-combobox
-        name="Condition"
-        label="Condition"
-        options={conditions}
+        name="Operator"
+        label="Operator"
+        options={operators}
+        value={opearatorValue}
+        onchange={handleOperatorChange}
       >
       </lightning-combobox>
     </div>
 
     <!--Value-->
-    <div class="slds-col slds-size_1-of-6" data-id="valueDiv">
-      <!--Generated dynamically-->
+    <div class="slds-col slds-size_1-of-6">
+      <lightning-input
+        if:true={field.isInput}
+        name={field.name}
+        label={field.label}
+        value={field.value}
+        type={field.type}
+        pattern={field.pattern}
+        formatter={field.formatter}
+        step={field.step}
+        min={field.min}
+        max={field.max}
+        checked={field.value}
+        onchange={handleValueChange}
+      >
+      </lightning-input>
+
+      <lightning-combobox
+        if:true={field.isCombobox}
+        name={field.label}
+        label={field.label}
+        value={value}
+        onchange={handleValueChange}
+        options={picklistFieldOptions}
+      >
+      </lightning-combobox>
+
+      <c-custom-lookup
+        if:true={field.isLookup}
+        lookup-label="Account"
+        object-api-name={field.objectApiName}
+        icon-name="standard:account"
+        onrecordselection={onAccountSelection}
+      ></c-custom-lookup>
     </div>
 
     <!--Delete button-->
@@ -44,9 +78,9 @@
       <template if:true={isDeleteAvailable}>
         <lightning-button
           variant="destructive"
-          label="-"
+          label="Remove"
           title="Delete trigger rule"
-          onclick={handlePlusClick}
+          onclick={handleDeleteRuleClick}
         ></lightning-button>
       </template>
     </div>

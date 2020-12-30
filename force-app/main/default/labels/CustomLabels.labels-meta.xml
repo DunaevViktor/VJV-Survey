@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>TriggerRulesPrompt</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription
+    >Подсказка о выполнении триггер рулов</shortDescription>
+        <value
+    >*Survey polling actions will occur when any of the created trigger rules work.</value>
+    </labels>
+</CustomLabels>

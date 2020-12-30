@@ -4,18 +4,33 @@
     <template if:true={condition.cond}>
       <c-single-trigger-rule
         key={condition.id}
+        number={condition.id}
         is-delete-available={condition.isDeleteAvailable}
+        ondeletetriggerrule={handleDeleteTriggerRule}
+        data-my-id={condition.id}
       ></c-single-trigger-rule>
     </template>
   </template>
 
   <!-- PLUS BUTTON (must be visible only 1-4 els!)-->
-  <lightning-layout horizontal-align="space">
-    <lightning-button
-      variant="brand-outline"
-      label="+"
-      title="Add trigger rule"
-      onclick={handlePlusClick}
-    ></lightning-button>
-  </lightning-layout>
+  <template if:true={isPlusVisible}>
+    <lightning-layout
+      horizontal-align="space"
+      vertical-align="centre"
+      class="slds-p-top_x-small"
+    >
+      <lightning-button
+        variant="brand-outline"
+        label="+"
+        title="Add trigger rule"
+        onclick={handlePlusClick}
+      ></lightning-button>
+    </lightning-layout>
+  </template>
+
+  <p>{prompt}</p>
+
+  <c-trigger-rules-footer-navigation
+    onnavigatenext={handleNavigateNext}
+  ></c-trigger-rules-footer-navigation>
 </template>
