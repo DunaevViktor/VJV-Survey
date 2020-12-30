@@ -20,6 +20,7 @@ public with sharing class QuestionController {
         (SELECT Value__c FROM Question_Options__r)
       FROM Question__c
       WHERE IsReusable__c = TRUE
+      WITH SECURITY_ENFORCED
     ];
   }
 
@@ -35,6 +36,7 @@ public with sharing class QuestionController {
         (SELECT Value__c FROM Question_Options__r)
       FROM Question__c
       WHERE Survey__c IN :surveyIds
+      WITH SECURITY_ENFORCED
     ];
   }
 }
