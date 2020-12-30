@@ -22,22 +22,10 @@
 
         <template for:each={searchResults} for:item="result">
           <li role="presentation" class="slds-listbox__item" key={result.Id}>
-            <div
-              class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta slds-p-left_none"
-            >
-              <span class="slds-media__figure">
-                <lightning-button
-                  variant="brand-outline"
-                  label="+"
-                  title="Add question"
-                  class="slds-m-left_none"
-                >
-                </lightning-button>
-              </span>
-              <div class="slds-media__body">
-                <p>{result.Label__c}</p>
-              </div>
-            </div>
+            <c-question-search-item
+              question={result}
+              onselect={selectQuestion}
+            ></c-question-search-item>
           </li>
         </template>
       </ul>

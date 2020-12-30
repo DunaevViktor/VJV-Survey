@@ -38,4 +38,11 @@ export default class QuestionSearch extends LightningElement {
       );
     });
   }
+
+  selectQuestion(event) {
+    const selectEvent = new CustomEvent("select", {
+      detail: event.detail
+    });
+    this.dispatchEvent(selectEvent);
+  }
 }

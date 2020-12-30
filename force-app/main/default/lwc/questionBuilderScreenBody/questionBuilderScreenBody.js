@@ -139,9 +139,6 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     const question = event.detail;
     question.Position__c = this.displayedQuestions.length + 1;
 
-    this.displayedQuestions = JSON.parse(
-      JSON.stringify(this.displayedQuestions)
-    );
     this.displayedQuestions.push(question);
 
     this.hasQuestions = this.displayedQuestions.length > 0;
@@ -171,9 +168,6 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     let position = +event.detail;
     position--;
 
-    this.displayedQuestions = JSON.parse(
-      JSON.stringify(this.displayedQuestions)
-    );
     this.displayedQuestions.splice(position, 1);
 
     for (let i = position; i < this.displayedQuestions.length; i++) {
@@ -210,9 +204,6 @@ export default class QuestionBuilderScreenBody extends LightningElement {
       lowerQuestion = {};
     let relocatableIndex, lowerIndex;
 
-    this.displayedQuestions = JSON.parse(
-      JSON.stringify(this.displayedQuestions)
-    );
     this.displayedQuestions.forEach((question, index) => {
       if (+question.Position__c === position) {
         relocatableQuestion = question;
@@ -249,9 +240,6 @@ export default class QuestionBuilderScreenBody extends LightningElement {
       upperQuestion = {};
     let relocatableIndex, upperIndex;
 
-    this.displayedQuestions = JSON.parse(
-      JSON.stringify(this.displayedQuestions)
-    );
     this.displayedQuestions.forEach((question, index) => {
       if (+question.Position__c === position) {
         relocatableQuestion = question;
@@ -276,6 +264,17 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     this.displayedQuestions[relocatableIndex] = upperQuestion;
     this.displayedQuestions[upperIndex] = relocatableQuestion;
 
+    this.sendQuestionsChangeEvent();
+  }
+
+  selectQuestion(event) {
+    const question = JSON.parse(JSON.stringify(event.detail));
+    question.Position__c = this.displayedQuestions.length + 1;
+    question.Id = null;
+
+    this.displayedQuestions.push(question);
+
+    this.hasQuestions = this.displayedQuestions.length > 0;
     this.sendQuestionsChangeEvent();
   }
 
