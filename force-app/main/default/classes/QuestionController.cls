@@ -31,6 +31,7 @@ public with sharing class QuestionController {
         Label__c,
         Type__c,
         Required__c,
+        Survey__c,
         (SELECT Value__c FROM Question_Options__r)
       FROM Question__c
       WHERE Survey__c IN :surveyIds

@@ -6,6 +6,8 @@ import getStandardQuestions from "@salesforce/apex/QuestionController.getStandar
 import getTemplatesQuestions from "@salesforce/apex/QuestionController.getTemplatesQuestions";
 
 export default class QuestionBuilderScreenBody extends LightningElement {
+  NO_TEMPLATE_VALUE = "0";
+
   @api templates;
   @api standardQuestions;
   @api templateQuestions;
@@ -20,8 +22,8 @@ export default class QuestionBuilderScreenBody extends LightningElement {
   @track hasQuestions = false;
   @track editQuestionPosition;
 
+  @track templateOptionsValue;
   noTemplate;
-  templateOptionsValue;
 
   connectedCallback() {
     this.displayedQuestions = JSON.parse(JSON.stringify(this.questions));
@@ -40,7 +42,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
     this.noTemplate = {
       label: "No Template",
-      value: "0"
+      value: this.NO_TEMPLATE_VALUE
     };
 
     this.templateOptionsValue = this.noTemplate.value;
@@ -135,6 +137,41 @@ export default class QuestionBuilderScreenBody extends LightningElement {
       });
   }
 
+  handleTemplateChange(event) {
+    if (this.templateOptionsValue.localeCompare(event.detail.value) === 0) {
+      return;
+    }
+
+    this.templateOptionsValue = event.detail.value;
+
+    if (this.templateOptionsValue.localeCompare(this.NO_TEMPLATE_VALUE) === 0) {
+      this.displayedQuestions = [];
+    } else {
+      this.displayedQuestions = this.displayedTemplateQuestions.filter(
+        (question) => {
+          return (
+            question.Survey__c.localeCompare(this.templateOptionsValue) === 0
+          );
+        }
+      );
+      this.displayedQuestions = this.displayedQuestions.map(
+        (question, index) => {
+          question.Id = null;
+          question.Position__c = index + 1;
+          return JSON.parse(JSON.stringify(question));
+        }
+      );
+    }
+
+    this.hasQuestions = this.displayedQuestions.length > 0;
+    this.sendQuestionsChangeEvent();
+
+    if (this.editQuestionPosition) {
+      this.initQuestion();
+      this.editQuestionPosition = null;
+    }
+  }
+
   addQuestion(event) {
     const question = event.detail;
     question.Position__c = this.displayedQuestions.length + 1;
@@ -166,6 +203,11 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
   deleteQuestion(event) {
     let position = +event.detail;
+
+    if (position === this.editQuestionPosition) {
+      this.initQuestion();
+    }
+
     position--;
 
     this.displayedQuestions.splice(position, 1);

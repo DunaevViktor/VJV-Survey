@@ -90,6 +90,7 @@ export default class QuestionForm extends LightningElement {
   setQuestion(clearQuestion) {
     this.question = clearQuestion;
     this.question.Question_Options__r = [];
+    this.cancelQuestionEdit();
   }
 
   @api
