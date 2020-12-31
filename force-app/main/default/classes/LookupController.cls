@@ -21,21 +21,4 @@ public with sharing class LookupController {
     }
     return result;
   }
-
-  @AuraEnabled(cacheable=true)
-  public static String findNameByRecordId(String objectApiName, String id) {
-    System.debug(objectApiName);
-    SObject res = Database.query(
-      'SELECT Name FROM ' +
-      objectApiName +
-      ' WHERE Id = ' +
-      id +
-      ' WITH SECURITY_ENFORCED'
-    );
-    String name = '';
-    if (res != null) {
-      name = res.get('Name') + '';
-    }
-    return name;
-  }
 }

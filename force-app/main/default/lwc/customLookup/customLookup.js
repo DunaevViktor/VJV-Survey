@@ -1,6 +1,5 @@
 import { LightningElement, track, api } from "lwc";
 import findRecords from "@salesforce/apex/LookupController.findRecords";
-import findNameByRecordId from "@salesforce/apex/LookupController.findNameByRecordId";
 
 export default class LwcLookup extends LightningElement {
   @track recordsList;
