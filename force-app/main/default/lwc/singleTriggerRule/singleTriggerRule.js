@@ -101,8 +101,6 @@ export default class SingleTriggerRule extends LightningElement {
         console.log(result);
         let comboboxFieldsOptions = [];
         result.forEach((fieldDescriptionList) => {
-          // Preventing unexcepted data
-
           // Filtering the data in the loop
           console.log(fieldDescriptionList);
           let fieldObject = {
@@ -148,8 +146,6 @@ export default class SingleTriggerRule extends LightningElement {
     );
     this.value = "";
     let picklistOptions = [];
-    console.log("chosen field obj");
-    console.log(JSON.stringify(chosenFieldObject));
 
     if (chosenFieldObject.datatype === "PICKLIST") {
       getFieldPicklistValues({
@@ -201,8 +197,6 @@ export default class SingleTriggerRule extends LightningElement {
       settedValue
     );
     this.value = this.field.value;
-    console.log("Fielddd chosen object!");
-    console.log(JSON.stringify(this.field));
   }
 
   handleOperatorChange(event) {

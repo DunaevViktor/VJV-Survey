@@ -19,11 +19,6 @@ const createPicklistOption = (label, value, datatype) => {
   return objectForPicklist;
 };
 
-const retrieveObjectApiName = (fieldName) => {
-  let objectApiName = fieldName.replace("Id", "");
-  return objectApiName;
-};
-
 const getFieldAttributes = (field, picklistOptions, settedValue) => {
   let fieldObject = {};
   switch (field.datatype) {
@@ -112,8 +107,6 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
       fieldObject.isLookup = true;
       fieldObject.type = "REFERENCE";
       let value = JSON.parse(JSON.stringify(settedValue));
-      console.log("val");
-      console.log(value);
       fieldObject.objectsApiNames = field.referencedObjects;
       fieldObject.value = value.selectedRecordId;
       fieldObject.name = value.selectedValue;
