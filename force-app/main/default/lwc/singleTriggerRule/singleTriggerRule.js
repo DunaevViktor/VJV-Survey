@@ -192,6 +192,8 @@ export default class SingleTriggerRule extends LightningElement {
     let settedValue = "";
     if (this.rule) {
       settedValue = this.rule.Field_Value__c;
+      console.log("setted val");
+      console.log(settedValue);
     }
     this.field = getFieldAttributes(
       chosenFieldObject,
@@ -232,7 +234,7 @@ export default class SingleTriggerRule extends LightningElement {
   handleRecordSelection(event) {
     console.log("record selection");
     console.log(JSON.stringify(event.detail));
-    this.value = event.detail.selectedRecordId;
+    this.value = event.detail;
   }
 
   @api getTriggerRule() {

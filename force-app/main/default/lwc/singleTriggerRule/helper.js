@@ -49,24 +49,29 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
     case "EMAIL":
       fieldObject.isInput = true;
       fieldObject.type = "email";
+      fieldObject.value = settedValue;
       break;
     case "CURRENCY":
       fieldObject.isInput = true;
       fieldObject.type = "number";
       fieldObject.formatter = "currency";
       fieldObject.step = "0.5";
+      fieldObject.value = settedValue;
       break;
     case "DATETIME":
       fieldObject.isInput = true;
       fieldObject.type = "date";
+      fieldObject.value = settedValue;
       break;
     case "DATE":
       fieldObject.isInput = true;
       fieldObject.type = "date";
+      fieldObject.value = settedValue;
       break;
     case "URL":
       fieldObject.isInput = true;
       fieldObject.type = "url";
+      fieldObject.value = settedValue;
       break;
     case "BOOLEAN":
       fieldObject.isCombobox = true;
@@ -81,36 +86,48 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
       fieldObject.min = "0";
       fieldObject.max = "99999999999999";
       fieldObject.step = "1";
+      fieldObject.value = settedValue;
       break;
     case "DOUBLE":
       fieldObject.isInput = true;
       fieldObject.type = "number";
+      fieldObject.value = settedValue;
       break;
     case "STRING":
       fieldObject.isInput = true;
       fieldObject.type = "text";
+      fieldObject.value = settedValue;
       break;
     case "ADDRESS":
       fieldObject.isInput = true;
       fieldObject.type = "text";
+      fieldObject.value = settedValue;
       break;
     case "TEXTAREA":
       fieldObject.isInput = true;
       fieldObject.type = "text";
+      fieldObject.value = settedValue;
       break;
     case "REFERENCE":
       fieldObject.isLookup = true;
       fieldObject.type = "REFERENCE";
+      let value = JSON.parse(JSON.stringify(settedValue));
+      console.log("val");
+      console.log(value);
       fieldObject.objectsApiNames = field.referencedObjects;
+      fieldObject.value = value.selectedRecordId;
+      fieldObject.name = value.selectedValue;
       break;
     default:
       fieldObject.isInput = true;
       fieldObject.type = "text";
+      fieldObject.value = settedValue;
       break;
   }
-  fieldObject.name = field.name;
   fieldObject.label = field.label;
   field.dataMyId = field.name;
+  console.log("ret obj");
+  console.log(fieldObject);
   return fieldObject;
 };
 
