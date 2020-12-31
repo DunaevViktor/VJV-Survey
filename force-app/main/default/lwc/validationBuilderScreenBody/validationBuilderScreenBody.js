@@ -8,7 +8,16 @@ export default class ValidationBuilderScreenBody extends LightningElement {
   @track displayedValidations;
   @track validation;
 
+  @track isHaveQuestions;
+  @track isSelectable = false;
+  @track error = false;
+
   connectedCallback() {
+    if (this.questions) {
+      this.isHaveQuestions = this.questions.length > 0;
+    } else {
+      this.isHaveQuestions = false;
+    }
     this.displayedValidations = JSON.parse(JSON.stringify(this.validations));
     this.initValidations();
   }
@@ -18,11 +27,11 @@ export default class ValidationBuilderScreenBody extends LightningElement {
       createValidationList()
         .then((result) => {
           this.displayedValidations = result;
-          console.log("loaded validations");
           this.sendValidationsChange();
         })
         .catch((error) => {
           console.log(error);
+          this.error = true;
         });
     }
   }
