@@ -135,11 +135,17 @@ export default class ValidationBuilderScreenBody extends LightningElement {
     this.resetForm();
   }
 
+  deleteValidation(event) {
+    this.displayedValidations.splice(event.detail, 1);
+  }
+
   resetForm() {
     this.firstQuestion = this.questions[0].Position__c;
     this.secondQuestion = this.questions[1].Position__c;
-    this.selectedOperator = this.displayedOperators[0].value;
+
     const input = this.template.querySelector(".input");
     input.value = "";
+
+    this.setDisplayedOperators();
   }
 }

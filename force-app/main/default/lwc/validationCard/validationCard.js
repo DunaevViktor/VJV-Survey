@@ -5,6 +5,12 @@ export default class ValidationCard extends LightningElement {
   deleteIcon = DELETE_ICON;
 
   @api validation;
+  @api index;
 
-  deleteValidation() {}
+  deleteValidation() {
+    const deleteEvent = new CustomEvent("delete", {
+      detail: this.index
+    });
+    this.dispatchEvent(deleteEvent);
+  }
 }

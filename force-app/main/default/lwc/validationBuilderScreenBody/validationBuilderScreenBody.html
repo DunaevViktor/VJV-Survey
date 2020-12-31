@@ -70,10 +70,12 @@
       </div>
 
       <div class="slds-box slds-box_x-small slds-m-around_x-small">
-        <template for:each={displayedValidations} for:item="validation">
+        <template iterator:it={displayedValidations}>
           <c-validation-card
-            validation={validation}
-            key={validation}
+            validation={it.value}
+            index={it.index}
+            key={it.value}
+            ondelete={deleteValidation}
           ></c-validation-card>
         </template>
       </div>
