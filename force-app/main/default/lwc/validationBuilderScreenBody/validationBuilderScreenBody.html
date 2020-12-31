@@ -1,0 +1,69 @@
+<template>
+  <div class="slds-box slds-box_x-small slds-m-around_x-small">
+    <div class="slds-grid slds-wrap">
+      <div class="slds-size_1-of-5">
+        <div class="slds-m-around_x-small">
+          <lightning-combobox
+            label="Question"
+            value={value}
+            placeholder="Select Question"
+            options={questionOptions}
+            onchange={handleChange}
+          >
+          </lightning-combobox>
+        </div>
+      </div>
+      <div class="slds-size_1-of-5">
+        <div class="slds-m-around_x-small">
+          <lightning-combobox
+            label="Dependent question"
+            value={value}
+            placeholder="Select Dependent question"
+            options={questionOptions}
+            onchange={handleChange}
+            class="slds-m-around_x-small"
+          >
+          </lightning-combobox>
+        </div>
+      </div>
+      <div class="slds-size_1-of-5">
+        <div class="slds-m-around_x-small">
+          <lightning-combobox
+            label="Operator"
+            value={value}
+            placeholder="Select Operator"
+            options={options}
+            onchange={handleChange}
+            class="slds-m-around_x-small"
+          >
+          </lightning-combobox>
+        </div>
+      </div>
+      <div class="slds-size_1-of-5">
+        <div class="slds-m-around_x-small">
+          <lightning-input
+            type="text"
+            label="Enter Сompared text"
+          ></lightning-input>
+        </div>
+      </div>
+      <div class="slds-size_1-of-5">
+        <div class="slds-m-top_x-large">
+          <div class="slds-m-left_x-small">
+            <lightning-button
+              variant="brand"
+              label="Brand"
+              title="Primary action"
+            ></lightning-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slds-box slds-box_x-small slds-m-around_x-small">
+    <c-validation-card></c-validation-card>
+    <c-validation-card></c-validation-card>
+    <c-validation-card></c-validation-card>
+  </div>
+</template>

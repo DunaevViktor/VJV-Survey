@@ -90,7 +90,8 @@ export default class QuestionForm extends LightningElement {
   setQuestion(clearQuestion) {
     this.question = clearQuestion;
     this.question.Question_Options__r = [];
-    this.cancelQuestionEdit();
+    this.isEditMode = false;
+    this.resetForm();
   }
 
   @api
@@ -271,7 +272,9 @@ export default class QuestionForm extends LightningElement {
   resetForm() {
     const input = this.template.querySelector(".input");
     input.value = "";
-    this.selectedType = this.displayedTypes[0].value;
+    this.selectedType = this.displayedTypes
+      ? this.displayedTypes[0].value
+      : "Text";
     this.selectedSettings = [];
     this.setOptionsEnabling();
   }
