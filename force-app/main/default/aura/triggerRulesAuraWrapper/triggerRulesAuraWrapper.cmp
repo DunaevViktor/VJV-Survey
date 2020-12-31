@@ -5,7 +5,7 @@
     access="global"
   />
   <c:triggerRulesWrapper
-    triggerrules="{!v.triggerRules}"
+    rules="{!v.triggerRules}"
     onnavigatenext="{!c.setTriggerRules}"
   ></c:triggerRulesWrapper>
 </aura:component>

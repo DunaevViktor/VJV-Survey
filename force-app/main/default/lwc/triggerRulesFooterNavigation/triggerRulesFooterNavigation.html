@@ -1,7 +1,14 @@
 <template>
-  <lightning-button
-    label="Navigate to Next"
-    variant="brand"
-    onclick={handleNext}
-  ></lightning-button>
+  <lightning-layout horizontal-align="right" vertical-align="center">
+    <lightning-button
+      label="Previous"
+      variant="brand"
+      onclick={handlePrev}
+    ></lightning-button>
+    <lightning-button
+      label="Next"
+      variant="brand"
+      onclick={handleNext}
+    ></lightning-button>
+  </lightning-layout>
 </template>

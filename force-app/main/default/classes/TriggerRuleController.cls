@@ -20,8 +20,7 @@ public with sharing class TriggerRuleController {
     rule.Object_Api_Name__c = objApiName;
     rule.Field_Name__c = fieldName;
     rule.Field_Value__c = fieldValue;
-    rule.Operator__c = 'EQUALS';
-    rule.Survey__c = null;
+    rule.Operator__c = operator;
     return rule;
   }
 }

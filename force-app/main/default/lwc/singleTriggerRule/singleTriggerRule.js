@@ -33,6 +33,8 @@ export default class SingleTriggerRule extends LightningElement {
   @track error = "";
   @track field = {};
 
+  @api rule;
+
   @api isDeleteAvailable;
   @api number;
 
@@ -41,7 +43,6 @@ export default class SingleTriggerRule extends LightningElement {
 
   constructor() {
     super();
-
     getObjectApiNamePickListValues()
       .then((result) => {
         let comboboxObjectOptions = [];
@@ -53,6 +54,10 @@ export default class SingleTriggerRule extends LightningElement {
           comboboxObjectOptions.push(object);
         });
         this.objectNames = comboboxObjectOptions;
+        if (this.rule) {
+          this.objectValue = this.rule.Object_Api_Name__c;
+          this.getObjectFields(this.objectValue);
+        }
       })
       .catch((error) => {
         this.error = error;
@@ -71,6 +76,9 @@ export default class SingleTriggerRule extends LightningElement {
         });
         console.log(comboboxOperatorOptions.length);
         this.operators = comboboxOperatorOptions;
+        if (this.rule) {
+          this.opearatorValue = this.rule.Operator__c;
+        }
       })
       .catch((error) => {
         this.error = error;
@@ -81,9 +89,14 @@ export default class SingleTriggerRule extends LightningElement {
   handleObjectChange(event) {
     console.log("Object combo change");
     console.log(event.detail);
+    this.clearChosenData();
     this.objectApiName = event.detail.value;
     this.objectValue = event.detail.value;
-    getObjectFieldsDescriptionList({ objectApiName: this.objectApiName })
+    this.getObjectFields(this.objectApiName);
+  }
+
+  getObjectFields(objectApiName) {
+    getObjectFieldsDescriptionList({ objectApiName: objectApiName })
       .then((result) => {
         console.log(result);
         let comboboxFieldsOptions = [];
@@ -103,6 +116,19 @@ export default class SingleTriggerRule extends LightningElement {
         this.fieldNames = comboboxFieldsOptions;
         console.log("fieeld options");
         console.log(comboboxFieldsOptions);
+        if (this.rule) {
+          console.log("setting field");
+          let receivedFieldObject = this.fieldNames.find(
+            (field) => field.value === this.rule.Field_Name__c
+          );
+          console.log("receivedFieldObject");
+          console.log(JSON.stringify(receivedFieldObject));
+          this.fieldValue = JSON.parse(
+            JSON.stringify(receivedFieldObject)
+          ).value;
+
+          this.provideValueInput(receivedFieldObject);
+        }
       })
       .catch((error) => {
         this.error = error;
@@ -112,17 +138,22 @@ export default class SingleTriggerRule extends LightningElement {
 
   handleFieldChange(event) {
     console.log(JSON.stringify(event.detail));
-    let chosenFieldObject = this.fieldNames.find(
-      (field) => field.value === event.detail.value
-    );
     this.fieldValue = event.detail.value;
+    this.provideValueInput(event.detail);
+  }
+
+  provideValueInput(fieldObject) {
+    let chosenFieldObject = this.fieldNames.find(
+      (field) => field.value === fieldObject.value
+    );
+    this.value = "";
     let picklistOptions = [];
     console.log("chosen field obj");
     console.log(JSON.stringify(chosenFieldObject));
 
     if (chosenFieldObject.datatype === "PICKLIST") {
       getFieldPicklistValues({
-        objApiName: this.objectApiName,
+        objApiName: this.objectValue,
         field: chosenFieldObject.value
       })
         .then((result) => {
@@ -140,6 +171,7 @@ export default class SingleTriggerRule extends LightningElement {
           this.picklistFieldOptions = comboboxOptions;
           console.log("Picklist optins");
           console.log(comboboxOptions);
+          this.setField(chosenFieldObject, this.picklistFieldOptions);
         })
         .catch((error) => {
           this.error = error;
@@ -147,11 +179,26 @@ export default class SingleTriggerRule extends LightningElement {
         });
     } else if (chosenFieldObject.datatype === "BOOLEAN") {
       this.picklistFieldOptions = booleanPicklistOptions;
+      this.setField(chosenFieldObject, this.picklistFieldOptions);
+    } else {
+      this.setField(chosenFieldObject);
     }
     //this.options = picklistOptions;
     console.log("res combo optins");
     console.log(picklistOptions);
-    this.field = getFieldAttributes(chosenFieldObject, picklistOptions);
+  }
+
+  setField(chosenFieldObject, picklistOptions) {
+    let settedValue = "";
+    if (this.rule) {
+      settedValue = this.rule.Field_Value__c;
+    }
+    this.field = getFieldAttributes(
+      chosenFieldObject,
+      picklistOptions,
+      settedValue
+    );
+    this.value = this.field.value;
     console.log("Fielddd chosen object!");
     console.log(JSON.stringify(this.field));
   }
@@ -182,27 +229,19 @@ export default class SingleTriggerRule extends LightningElement {
     this.value = event.detail.value;
   }
 
+  handleRecordSelection(event) {
+    console.log("record selection");
+    console.log(JSON.stringify(event.detail));
+    this.value = event.detail.selectedRecordId;
+  }
+
   @api getTriggerRule() {
-    /*let triggerRule = {
+    let triggerRule = {
       Object_Api_Name__c: this.objectValue,
       Field_Name__c: this.fieldValue,
-      Operator__c: this.operator,
+      Operator__c: this.opearatorValue,
       Field_Value__c: this.value
-    }*/
-
-    /*let triggerRule = {
-      Object_Api_Name__c: "Case",
-      Field_Name__c: "Origin",
-      Operator__c: "EQUALS",
-      Field_Value__c: ""
-
-    }*/
-
-    let triggerRule = {};
-    triggerRule.Object_Api_Name__c = "Lead";
-    triggerRule.Field_Name__c = "Company";
-    triggerRule.Operator__c = "EQUALS";
-    triggerRule.Field_Value__c = "Test";
+    };
 
     return triggerRule;
   }

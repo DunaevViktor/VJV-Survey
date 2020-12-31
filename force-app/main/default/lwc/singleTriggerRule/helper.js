@@ -1,13 +1,11 @@
-import getObjectFieldsDescriptionList from "@salesforce/apex/MetadataFetcher.getObjectFieldsDescriptionList";
-
 const booleanPicklistOptions = [
   {
     label: "TRUE",
-    value: true
+    value: "true"
   },
   {
     label: "FALSE",
-    value: false
+    value: "false"
   }
 ];
 
@@ -26,7 +24,7 @@ const retrieveObjectApiName = (fieldName) => {
   return objectApiName;
 };
 
-const getFieldAttributes = (field, picklistOptions) => {
+const getFieldAttributes = (field, picklistOptions, settedValue) => {
   let fieldObject = {};
   switch (field.datatype) {
     case "PICKLIST":
@@ -36,14 +34,17 @@ const getFieldAttributes = (field, picklistOptions) => {
       console.log(picklistOptions);
       fieldObject.picklistValues = picklistOptions;
       fieldObject.isInput = false;
+      fieldObject.value = settedValue;
       break;
     case "ID":
       fieldObject.isInput = true;
       fieldObject.type = "text";
+      fieldObject.value = settedValue;
       break;
     case "PHONE":
       fieldObject.isInput = true;
       fieldObject.pattern = "[0-9]+";
+      fieldObject.value = settedValue;
       break;
     case "EMAIL":
       fieldObject.isInput = true;
@@ -71,6 +72,7 @@ const getFieldAttributes = (field, picklistOptions) => {
       fieldObject.isCombobox = true;
       fieldObject.type = "boolean";
       fieldObject.picklistValues = booleanPicklistOptions;
+      fieldObject.value = settedValue;
       fieldObject.isInput = false;
       break;
     case "INTEGER":

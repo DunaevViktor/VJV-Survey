@@ -10,12 +10,6 @@ export default class LwcLookup extends LightningElement {
   @api lookupLabel;
   @track message;
 
-  connectedCallback() {
-    console.log("callback");
-    this.objectsApiNames = JSON.parse(JSON.stringify(this.objectsApiNames));
-    console.log(this.objectsApiNames);
-  }
-
   onLeave(event) {
     setTimeout(() => {
       this.searchKey = "";
