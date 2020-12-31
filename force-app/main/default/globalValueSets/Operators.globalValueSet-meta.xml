@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <customValue>
-        <fullName>CONTAINS</fullName>
-        <default>false</default>
-        <label>CONTAINS</label>
-    </customValue>
-    <customValue>
-        <fullName>IS NULL</fullName>
-        <default>false</default>
-        <label>IS NULL</label>
+        <fullName>NULL</fullName>
+        <default>true</default>
+        <label>NULL</label>
     </customValue>
     <customValue>
         <fullName>NOT NULL</fullName>
@@ -26,24 +21,14 @@
         <label>NOT EQUALS</label>
     </customValue>
     <customValue>
-        <fullName>GREATER THAN</fullName>
+        <fullName>GREATER THEN</fullName>
         <default>false</default>
-        <label>GREATER THAN</label>
+        <label>GREATER THEN</label>
     </customValue>
     <customValue>
-        <fullName>LESS THAN</fullName>
+        <fullName>LESS THEN</fullName>
         <default>false</default>
-        <label>LESS THAN</label>
-    </customValue>
-    <customValue>
-        <fullName>GREATER OR EQUALS TO</fullName>
-        <default>false</default>
-        <label>GREATER OR EQUALS TO</label>
-    </customValue>
-    <customValue>
-        <fullName>LESS OR EQUALS TO</fullName>
-        <default>false</default>
-        <label>LESS OR EQUALS TO</label>
+        <label>LESS THEN</label>
     </customValue>
     <masterLabel>Operators</masterLabel>
     <sorted>false</sorted>

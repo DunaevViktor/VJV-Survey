@@ -1,0 +1,34 @@
+<template>
+  <h2>Select standard question</h2>
+  <lightning-input
+    type="text"
+    label="Specify Question"
+    onchange={onSearchTermChange}
+  ></lightning-input>
+
+  <div role="listbox">
+    <template if:false={standardQuestions.length}>
+      Don't have standard questions
+    </template>
+
+    <template if:true={standardQuestions.length}>
+      <ul
+        class="slds-listbox slds-listbox_vertical result_block"
+        role="presentation"
+      >
+        <template if:false={searchResults.length}>
+          Don't have relevant questions
+        </template>
+
+        <template for:each={searchResults} for:item="result">
+          <li role="presentation" class="slds-listbox__item" key={result.Id}>
+            <c-question-search-item
+              question={result}
+              onselect={selectQuestion}
+            ></c-question-search-item>
+          </li>
+        </template>
+      </ul>
+    </template>
+  </div>
+</template>

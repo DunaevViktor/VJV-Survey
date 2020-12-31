@@ -40,5 +40,33 @@
         <members>Survey_Permission_Set</members>
         <name>PermissionSet</name>
     </types>
+    <types>
+        <members>Answer__c-Answer Layout</members>
+        <members>Question__c-Question Layout</members>
+        <members>Question_Option__c-Question Option Layout</members>
+        <members>Survey__c-Survey Layout</members>
+        <members>Email_Receiver__c-Email Receiver Layout</members>
+        <members>Related_Object__c-Related Object Layout</members>
+        <members>Validation__c-Validation Layout</members>
+        <members>Group_Answer__c-Group Answer Layout</members>
+        <members>Trigger_Rule__c-Trigger Rule Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>Flow</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>FlowDefinition</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>GlobalValueSet</name>
+    </types>
     <version>50.0</version>
 </Package>

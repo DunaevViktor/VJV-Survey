@@ -143,14 +143,14 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Объект SurveyQuestion олицетворяет вопрос. Содержит ссылку на вопрос, ссылку на survey, общую позицию вопроса в списке и флажок видимости (True по дефолту). Видимость вопроса важна, если у нас связанные вопрос, и зависимый вопрос не должен быть виден по достижении условий.  Содержит сам текст вопроса, флажок переиспользования вопроса, и его тип(пиклист: радиобатон, чекбокс и т.д.)</description>
+    <description>Объект Question олицетворяет вопрос. Содержит ссылку на survey, общую позицию вопроса в списке и флажок видимости (True по дефолту). Видимость вопроса важна, если у нас связанные вопрос, и зависимый вопрос не должен быть виден по достижении условий. Содержит сам текст вопроса, флажок переиспользования вопроса, и его тип(picklist, radiobutton, checkbox и т.д.).</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
     <enableHistory>false</enableHistory>
     <enableLicensing>false</enableLicensing>
     <enableReports>false</enableReports>
-    <enableSearch>false</enableSearch>
+    <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>ControlledByParent</externalSharingModel>

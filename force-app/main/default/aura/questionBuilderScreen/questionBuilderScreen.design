@@ -1,0 +1,6 @@
+<design:component >
+  <design:attribute name="templates" label="Survey Templates" />
+  <design:attribute name="templateQuestions" label="Template Questions" />
+  <design:attribute name="standardQuestions" label="Standard Questions" />
+  <design:attribute name="questions" label="Questions" />
+</design:component>
