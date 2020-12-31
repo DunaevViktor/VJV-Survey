@@ -13,10 +13,9 @@
             <div class="slds-m-around_x-small">
               <lightning-combobox
                 label="Question"
-                value={value}
-                placeholder="Select Question"
+                value={secondQuestion}
                 options={questionOptions}
-                onchange={handleChange}
+                onchange={selectFirstQuestion}
               >
               </lightning-combobox>
             </div>
@@ -25,10 +24,9 @@
             <div class="slds-m-around_x-small">
               <lightning-combobox
                 label="Dependent question"
-                value={value}
-                placeholder="Select Dependent question"
+                value={firstQuestion}
                 options={questionOptions}
-                onchange={handleChange}
+                onchange={selectSecondQuestion}
                 class="slds-m-around_x-small"
               >
               </lightning-combobox>
@@ -38,10 +36,9 @@
             <div class="slds-m-around_x-small">
               <lightning-combobox
                 label="Operator"
-                value={value}
+                value={selectedOperator}
                 placeholder="Select Operator"
-                options={options}
-                onchange={handleChange}
+                options={displayedOperators}
                 class="slds-m-around_x-small"
               >
               </lightning-combobox>
@@ -52,6 +49,8 @@
               <lightning-input
                 type="text"
                 label="Enter Сompared text"
+                class="input"
+                required
               ></lightning-input>
             </div>
           </div>
@@ -62,6 +61,7 @@
                   variant="brand"
                   label="Brand"
                   title="Primary action"
+                  onclick={addValidation}
                 ></lightning-button>
               </div>
             </div>
@@ -70,9 +70,12 @@
       </div>
 
       <div class="slds-box slds-box_x-small slds-m-around_x-small">
-        <c-validation-card></c-validation-card>
-        <c-validation-card></c-validation-card>
-        <c-validation-card></c-validation-card>
+        <template for:each={displayedValidations} for:item="validation">
+          <c-validation-card
+            validation={validation}
+            key={validation}
+          ></c-validation-card>
+        </template>
       </div>
     </template>
   </template>

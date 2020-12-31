@@ -11,10 +11,12 @@
       />
     </span>
     <span class="gray">Main Question: </span
-    ><span>Какой-то тестовый вопрос не понятно даже о чем</span><br />
-    <span class="gray">Dependent Question: </span><span>Вопрос-наркоман</span
+    ><span>{validation.Related_Question__c.Label__c}</span><br />
+    <span class="gray">Dependent Question: </span
+    ><span>{validation.Dependent_Question__c.Label__c}</span><br />
+    <span class="gray">Operator: </span><span>{validation.Operator__c}</span
     ><br />
-    <span class="gray">Operator: </span><span>CONTAIN</span><br />
-    <span class="gray">Compared Value: </span><span>Бдыщ</span><br />
+    <span class="gray">Compared Value: </span><span>{validation.Value__c}</span
+    ><br />
   </div>
 </template>
