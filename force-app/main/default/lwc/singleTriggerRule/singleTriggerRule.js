@@ -1,11 +1,9 @@
-import { LightningElement, wire, track, api } from "lwc";
-import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
+import { LightningElement, track, api } from "lwc";
 import getObjectApiNamePickListValues from "@salesforce/apex/MetadataFetcher.getObjectApiNamePickListValues";
 import getTriggerRuleOpearatorPickListValues from "@salesforce/apex/MetadataFetcher.getTriggerRuleOpearatorPickListValues";
 import getObjectFieldsDescriptionList from "@salesforce/apex/MetadataFetcher.getObjectFieldsDescriptionList";
 import getFieldPicklistValues from "@salesforce/apex/MetadataFetcher.getFieldPicklistValues";
 import { setReferencedObjectNames, getFieldAttributes } from "./helper";
-import { reduceErrors } from "c/loadDataUtils";
 
 const booleanPicklistOptions = [
   {
