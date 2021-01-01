@@ -33,12 +33,7 @@ public with sharing class MetadataFetcher {
     for (String s : sobjectfields.keySet()) {
       List<String> extraInfo = new List<String>();
       Schema.SObjectField field = sobjectfields.get(s);
-      //extraInfo.add(field.getDescribe().getValue());
       populateListWithReferencedObjectNames(field.getDescribe(), extraInfo);
-      /*sObjectFieldMap.put(
-        String.valueOf(sobjectfields.get(s).getDescribe().getLabel()),
-        String.valueOf(sobjectfields.get(s).getDescribe().getType())
-      );*/
     }
     return sObjectFieldMap;
   }

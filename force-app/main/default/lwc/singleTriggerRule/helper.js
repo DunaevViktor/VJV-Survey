@@ -30,21 +30,25 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
       fieldObject.picklistValues = picklistOptions;
       fieldObject.isInput = false;
       fieldObject.value = settedValue;
+      fieldObject.operatorType = 1;
       break;
     case "ID":
       fieldObject.isInput = true;
       fieldObject.type = "text";
       fieldObject.value = settedValue;
+      fieldObject.operatorType = 1;
       break;
     case "PHONE":
       fieldObject.isInput = true;
       fieldObject.pattern = "[0-9]+";
       fieldObject.value = settedValue;
+      fieldObject.operatorType = 1;
       break;
     case "EMAIL":
       fieldObject.isInput = true;
       fieldObject.type = "email";
       fieldObject.value = settedValue;
+      fieldObject.operatorType = 1;
       break;
     case "CURRENCY":
       fieldObject.isInput = true;
@@ -52,21 +56,25 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
       fieldObject.formatter = "currency";
       fieldObject.step = "0.5";
       fieldObject.value = settedValue;
+      fieldObject.operatorType = 0;
       break;
     case "DATETIME":
       fieldObject.isInput = true;
       fieldObject.type = "date";
       fieldObject.value = settedValue;
+      fieldObject.operatorType = 0;
       break;
     case "DATE":
       fieldObject.isInput = true;
       fieldObject.type = "date";
       fieldObject.value = settedValue;
+      fieldObject.operatorType = 0;
       break;
     case "URL":
       fieldObject.isInput = true;
       fieldObject.type = "url";
       fieldObject.value = settedValue;
+      fieldObject.operatorType = 1;
       break;
     case "BOOLEAN":
       fieldObject.isCombobox = true;
@@ -74,6 +82,7 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
       fieldObject.picklistValues = booleanPicklistOptions;
       fieldObject.value = settedValue;
       fieldObject.isInput = false;
+      fieldObject.operatorType = 1;
       break;
     case "INTEGER":
       fieldObject.isInput = true;
@@ -82,26 +91,31 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
       fieldObject.max = "99999999999999";
       fieldObject.step = "1";
       fieldObject.value = settedValue;
+      fieldObject.operatorType = 0;
       break;
     case "DOUBLE":
       fieldObject.isInput = true;
       fieldObject.type = "number";
       fieldObject.value = settedValue;
+      fieldObject.operatorType = 0;
       break;
     case "STRING":
       fieldObject.isInput = true;
       fieldObject.type = "text";
       fieldObject.value = settedValue;
+      fieldObject.operatorType = 1;
       break;
     case "ADDRESS":
       fieldObject.isInput = true;
       fieldObject.type = "text";
       fieldObject.value = settedValue;
+      fieldObject.operatorType = 1;
       break;
     case "TEXTAREA":
       fieldObject.isInput = true;
       fieldObject.type = "text";
       fieldObject.value = settedValue;
+      fieldObject.operatorType = 1;
       break;
     case "REFERENCE":
       fieldObject.isLookup = true;
@@ -110,11 +124,13 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
       fieldObject.objectsApiNames = field.referencedObjects;
       fieldObject.value = value.selectedRecordId;
       fieldObject.name = value.selectedValue;
+      fieldObject.operatorType = 1;
       break;
     default:
       fieldObject.isInput = true;
       fieldObject.type = "text";
       fieldObject.value = settedValue;
+      fieldObject.operatorType = 1;
       break;
   }
   fieldObject.label = field.label;

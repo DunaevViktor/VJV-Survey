@@ -26,6 +26,8 @@ export default class SingleTriggerRule extends LightningElement {
   @track objectNames = [];
   @track fieldNames = [];
   @track operators = [];
+  fullOperatorList = [];
+  reducedOperatorList = []; // for fields except number, date and currency
   @track picklistFieldOptions = [];
 
   @track error = "";
@@ -73,7 +75,11 @@ export default class SingleTriggerRule extends LightningElement {
           comboboxOperatorOptions.push(operator);
         });
         console.log(comboboxOperatorOptions.length);
-        this.operators = comboboxOperatorOptions;
+        this.fullOperatorList = comboboxOperatorOptions;
+        this.reducedOperatorList = comboboxOperatorOptions.filter(
+          (operator) =>
+            operator.value !== "GREATER THEN" && operator.value !== "LESS THEN"
+        );
         if (this.rule) {
           this.opearatorValue = this.rule.Operator__c;
         }
@@ -195,6 +201,11 @@ export default class SingleTriggerRule extends LightningElement {
       settedValue
     );
     this.value = this.field.value;
+    if (this.field.operatorType === 0) {
+      this.operators = this.fullOperatorList;
+    } else {
+      this.operators = this.reducedOperatorList;
+    }
   }
 
   handleOperatorChange(event) {
@@ -214,9 +225,11 @@ export default class SingleTriggerRule extends LightningElement {
   clearChosenData() {
     this.value = "";
     this.opearatorValue = "";
+    this.operators = [];
     this.fieldValue = "";
     this.fieldType = "";
     this.objectValue = "";
+    this.field = {};
   }
 
   handleValueChange(event) {
