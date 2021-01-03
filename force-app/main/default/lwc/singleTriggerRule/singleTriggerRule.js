@@ -3,7 +3,12 @@ import getObjectApiNamePickListValues from "@salesforce/apex/MetadataFetcher.get
 import getTriggerRuleOpearatorPickListValues from "@salesforce/apex/MetadataFetcher.getTriggerRuleOpearatorPickListValues";
 import getObjectFieldsDescriptionList from "@salesforce/apex/MetadataFetcher.getObjectFieldsDescriptionList";
 import getFieldPicklistValues from "@salesforce/apex/MetadataFetcher.getFieldPicklistValues";
-import { setReferencedObjectNames, getFieldAttributes } from "./helper";
+import {
+  setReferencedObjectNames,
+  getFieldAttributes,
+  generateBooleanField,
+  checkForNullOperators
+} from "./helper";
 
 const booleanPicklistOptions = [
   {
@@ -17,6 +22,8 @@ const booleanPicklistOptions = [
 ];
 
 export default class SingleTriggerRule extends LightningElement {
+  initialRender = true;
+
   @track objectValue = "";
   @track fieldType = "";
   @track fieldValue = "";
@@ -141,7 +148,9 @@ export default class SingleTriggerRule extends LightningElement {
   handleFieldChange(event) {
     console.log(JSON.stringify(event.detail));
     this.fieldValue = event.detail.value;
+    this.opearatorValue = "";
     this.provideValueInput(event.detail);
+    this.value = "";
   }
 
   provideValueInput(fieldObject) {
@@ -195,21 +204,56 @@ export default class SingleTriggerRule extends LightningElement {
       console.log("setted val");
       console.log(settedValue);
     }
-    this.field = getFieldAttributes(
-      chosenFieldObject,
-      picklistOptions,
-      settedValue
-    );
+    if (this.opearatorValue === "NULL" || this.opearatorValue === "NOT NULL") {
+      if (this.rule) {
+        settedValue = this.rule.Field_Value__c;
+        console.log("setted val");
+        console.log(settedValue);
+      }
+      let chosenFieldObj = this.fieldNames.find(
+        (field) => field.value === this.fieldValue
+      );
+      this.field = generateBooleanField(chosenFieldObj.label, settedValue);
+      this.picklistFieldOptions = this.field.picklistValues;
+    } else {
+      this.field = getFieldAttributes(
+        chosenFieldObject,
+        picklistOptions,
+        settedValue
+      );
+    }
     this.value = this.field.value;
     if (this.field.operatorType === 0) {
       this.operators = this.fullOperatorList;
     } else {
       this.operators = this.reducedOperatorList;
     }
+    if (this.rule) {
+      console.log("CLEAR received value!!!");
+      this.rule = undefined;
+    }
   }
 
   handleOperatorChange(event) {
     this.opearatorValue = event.detail.value;
+    if (checkForNullOperators(this.opearatorValue)) {
+      let settedValue = "";
+      if (this.rule) {
+        settedValue = this.rule.Field_Value__c;
+        console.log("setted val");
+        console.log(settedValue);
+      }
+      let chosenFieldObject = this.fieldNames.find(
+        (field) => field.value === this.fieldValue
+      );
+      this.field = generateBooleanField(chosenFieldObject.label, settedValue);
+      this.picklistFieldOptions = this.field.picklistValues;
+    } else {
+      let selectedFieldObject = this.fieldNames.find(
+        (field) => field.value === this.fieldValue
+      );
+      this.provideValueInput(selectedFieldObject);
+    }
   }
 
   handleDeleteRuleClick() {

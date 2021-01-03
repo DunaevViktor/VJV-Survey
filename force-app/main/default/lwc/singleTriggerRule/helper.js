@@ -120,11 +120,13 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
     case "REFERENCE":
       fieldObject.isLookup = true;
       fieldObject.type = "REFERENCE";
-      let value = JSON.parse(JSON.stringify(settedValue));
       fieldObject.objectsApiNames = field.referencedObjects;
-      fieldObject.value = value.selectedRecordId;
-      fieldObject.name = value.selectedValue;
       fieldObject.operatorType = 1;
+      if (settedValue) {
+        let value = JSON.parse(JSON.stringify(settedValue));
+        fieldObject.value = value.selectedRecordId;
+        fieldObject.name = value.selectedValue;
+      }
       break;
     default:
       fieldObject.isInput = true;
@@ -134,7 +136,6 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
       break;
   }
   fieldObject.label = field.label;
-  field.dataMyId = field.name;
   console.log("ret obj");
   console.log(fieldObject);
   return fieldObject;
@@ -150,4 +151,28 @@ const setReferencedObjectNames = (objectFieldsDescriptionList, fieldObject) => {
   }
 };
 
-export { createPicklistOption, getFieldAttributes, setReferencedObjectNames };
+const generateBooleanField = (fieldName, settedValue) => {
+  let fieldObject = {};
+  fieldObject.isCombobox = true;
+  fieldObject.type = "boolean";
+  fieldObject.picklistValues = booleanPicklistOptions;
+  fieldObject.value = settedValue;
+  fieldObject.isInput = false;
+  fieldObject.label = fieldName;
+  return fieldObject;
+};
+
+const checkForNullOperators = (chosenValue) => {
+  if (chosenValue === "NULL" || chosenValue === "NOT NULL") {
+    return true;
+  }
+  return false;
+};
+
+export {
+  createPicklistOption,
+  getFieldAttributes,
+  setReferencedObjectNames,
+  generateBooleanField,
+  checkForNullOperators
+};
