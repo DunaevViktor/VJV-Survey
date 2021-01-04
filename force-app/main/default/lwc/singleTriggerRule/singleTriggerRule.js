@@ -7,7 +7,9 @@ import {
   setReferencedObjectNames,
   getFieldAttributes,
   generateBooleanField,
-  checkForNullOperators
+  checkForNullOperators,
+  generateComboboxOptions,
+  filterComparisonOperators
 } from "./helper";
 
 const booleanPicklistOptions = [
@@ -34,7 +36,7 @@ export default class SingleTriggerRule extends LightningElement {
   @track fieldNames = [];
   @track operators = [];
   fullOperatorList = [];
-  reducedOperatorList = []; // for fields except number, date and currency
+  reducedOperatorList = [];
   @track picklistFieldOptions = [];
 
   @track error = "";
@@ -52,14 +54,7 @@ export default class SingleTriggerRule extends LightningElement {
     super();
     getObjectApiNamePickListValues()
       .then((result) => {
-        let comboboxObjectOptions = [];
-        result.forEach((objectLabel) => {
-          let object = {
-            label: objectLabel,
-            value: objectLabel
-          };
-          comboboxObjectOptions.push(object);
-        });
+        let comboboxObjectOptions = generateComboboxOptions(result);
         this.objectNames = comboboxObjectOptions;
         if (this.rule) {
           this.objectValue = this.rule.Object_Api_Name__c;
@@ -73,19 +68,10 @@ export default class SingleTriggerRule extends LightningElement {
     getTriggerRuleOpearatorPickListValues()
       .then((result) => {
         console.log(result);
-        let comboboxOperatorOptions = [];
-        result.forEach((operatorLabel) => {
-          let operator = {
-            label: operatorLabel,
-            value: operatorLabel
-          };
-          comboboxOperatorOptions.push(operator);
-        });
-        console.log(comboboxOperatorOptions.length);
+        let comboboxOperatorOptions = generateComboboxOptions(result);
         this.fullOperatorList = comboboxOperatorOptions;
-        this.reducedOperatorList = comboboxOperatorOptions.filter(
-          (operator) =>
-            operator.value !== "GREATER THEN" && operator.value !== "LESS THEN"
+        this.reducedOperatorList = filterComparisonOperators(
+          this.fullOperatorList
         );
         if (this.rule) {
           this.opearatorValue = this.rule.Operator__c;

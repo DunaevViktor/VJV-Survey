@@ -9,14 +9,21 @@ const booleanPicklistOptions = [
   }
 ];
 
-const createPicklistOption = (label, value, datatype) => {
-  let objectForPicklist = {
-    label: label,
-    value: value,
-    datatype: datatype
-  };
+const NULL = "NULL";
+const NOT_NULL = "NOT NULL";
+const GREATER_THAN = "GREATER THAN";
+const LESS_THAN = "LESS THAN";
 
-  return objectForPicklist;
+const generateComboboxOptions = (result) => {
+  let comboboxOptions = [];
+  result.forEach((objectLabel) => {
+    let comboboxObject = {
+      label: objectLabel,
+      value: objectLabel
+    };
+    comboboxObjectOptions.push(comboboxObject);
+  });
+  return comboboxOptions;
 };
 
 const getFieldAttributes = (field, picklistOptions, settedValue) => {
@@ -169,10 +176,19 @@ const checkForNullOperators = (chosenValue) => {
   return false;
 };
 
+const filterComparisonOperators = (fullOperatorList) => {
+  const reducedOperatorList = fullOperatorList.filter(
+    (operator) =>
+      operator.value !== GREATER_THAN && operator.value !== LESS_THAN
+  );
+  return reducedOperatorList;
+};
+
 export {
-  createPicklistOption,
+  generateComboboxOptions,
   getFieldAttributes,
   setReferencedObjectNames,
   generateBooleanField,
-  checkForNullOperators
+  checkForNullOperators,
+  filterComparisonOperators
 };
