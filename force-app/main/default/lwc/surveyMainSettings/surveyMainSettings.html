@@ -1,0 +1,32 @@
+<template>
+  <template if:true={error}> {error} </template>
+  <template if:false={error}>
+    <lightning-input
+      type="text"
+      label="Survey Name"
+      placeholder="Enter name of your survey"
+      value={surveyName}
+      onchange={handleNameChange}
+      required
+    >
+    </lightning-input>
+
+    <lightning-input
+      type="file"
+      label="Logo"
+      accept={logoType}
+      onchange={handleLogoChange}
+    >
+    </lightning-input>
+
+    <lightning-input
+      type="color"
+      label="Survey Background Color"
+      placeholder="#..."
+      value={surveyColor}
+      onchange={handleColorChange}
+    >
+    </lightning-input>
+    <lightning-button label="Next" onclick={openNextScreen}> </lightning-button>
+  </template>
+</template>
