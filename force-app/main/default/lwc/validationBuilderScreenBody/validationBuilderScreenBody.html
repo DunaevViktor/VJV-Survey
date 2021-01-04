@@ -1,7 +1,9 @@
 <template>
-  <template if:true={error}> Error occured this page during to work. </template>
+  <template if:true={isError}>
+    Error occured this page during to work.
+  </template>
 
-  <template if:false={error}>
+  <template if:false={isError}>
     <template if:false={isHaveQuestions}>
       Don't have questions to create visibility validation
     </template>
@@ -41,15 +43,27 @@
                 placeholder="Select Operator"
                 options={displayedOperators}
                 class="slds-m-around_x-small"
+                onchange={setSelectedOperator}
               >
               </lightning-combobox>
             </div>
           </div>
           <div class="slds-size_1-of-5">
             <div class="slds-m-around_x-small">
+              <lightning-combobox
+                label="Value"
+                if:true={isFirstQuestionPicklist}
+                placeholder="Select value"
+                options={questionsOptions}
+                class="input"
+                required
+              >
+              </lightning-combobox>
+
               <lightning-input
-                type="text"
-                label="Enter Сompared text"
+                if:false={isFirstQuestionPicklist}
+                type={inputType}
+                label="Enter Сompared Value"
                 class="input"
                 required
               ></lightning-input>

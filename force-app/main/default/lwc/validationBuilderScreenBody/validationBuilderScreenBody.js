@@ -26,7 +26,7 @@ export default class ValidationBuilderScreenBody extends LightningElement {
 
   @track isHaveQuestions;
   @track isSelectable = false;
-  @track error = false;
+  @track isError = false;
 
   connectedCallback() {
     if (this.questions) {
@@ -68,7 +68,7 @@ export default class ValidationBuilderScreenBody extends LightningElement {
       this.selectedOperator = this.displayedOperators[0].value;
     } else if (error) {
       console.log(error);
-      this.error = true;
+      this.isError = true;
     }
   }
 
@@ -81,7 +81,7 @@ export default class ValidationBuilderScreenBody extends LightningElement {
         })
         .catch((error) => {
           console.log(error);
-          this.error = true;
+          this.isError = true;
         });
     }
   }
@@ -95,12 +95,76 @@ export default class ValidationBuilderScreenBody extends LightningElement {
     });
   }
 
+  get isFirstQuestionPicklist() {
+    return (
+      this.firstQuestion.Type__c === "Picklist" ||
+      this.firstQuestion.Type__c === "RadioButton" ||
+      this.firstQuestion.Type__c === "Checkbox"
+    );
+  }
+
+  get inputType() {
+    return this.firstQuestion.Type__c === "Rating" ? "number" : "text";
+  }
+
+  get questionsOptions() {
+    if (this.selectedOperator === "IS NULL") {
+      return [
+        {
+          label: "TRUE",
+          value: "TRUE"
+        },
+        {
+          label: "FALSE",
+          value: "FALSE"
+        }
+      ];
+    }
+
+    return this.firstQuestion.Question_Options__r.map((option) => {
+      return {
+        label: option.Value__c,
+        value: option.Value__c
+      };
+    });
+  }
+
   setDisplayedOperators() {
     let resolvedOperators = [...this.operators];
 
     if (this.firstQuestion.Required__c) {
       resolvedOperators = resolvedOperators.filter((operator) => {
         return !operator.label.toLowerCase().includes("null");
+      });
+    }
+
+    if (
+      this.firstQuestion.Type__c === "Picklist" ||
+      this.firstQuestion.Type__c === "RadioButton"
+    ) {
+      resolvedOperators = resolvedOperators.filter((operator) => {
+        return (
+          !operator.label.toLowerCase().includes("CONTAINS".toLowerCase()) &&
+          !operator.label.toLowerCase().includes("THAN".toLowerCase())
+        );
+      });
+    }
+
+    if (
+      this.firstQuestion.Type__c === "Text" ||
+      this.firstQuestion.Type__c === "Checkbox"
+    ) {
+      resolvedOperators = resolvedOperators.filter((operator) => {
+        return (
+          !operator.label.toLowerCase().includes("EQUALS".toLowerCase()) &&
+          !operator.label.toLowerCase().includes("THAN".toLowerCase())
+        );
+      });
+    }
+
+    if (this.firstQuestion.Type__c === "Rating") {
+      resolvedOperators = resolvedOperators.filter((operator) => {
+        return !operator.label.toLowerCase().includes("CONTAINS".toLowerCase());
       });
     }
 
@@ -161,6 +225,10 @@ export default class ValidationBuilderScreenBody extends LightningElement {
     this.secondQuestion = this.questions.filter((question) => {
       return question.Position__c === this.secondPosition;
     })[0];
+  }
+
+  setSelectedOperator(event) {
+    this.selectedOperator = event.detail.value;
   }
 
   addValidation() {
