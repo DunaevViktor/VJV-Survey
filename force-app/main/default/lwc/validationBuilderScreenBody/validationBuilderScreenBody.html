@@ -13,9 +13,10 @@
             <div class="slds-m-around_x-small">
               <lightning-combobox
                 label="Question"
-                value={secondQuestion}
+                value={firstPosition}
                 options={questionOptions}
                 onchange={selectFirstQuestion}
+                class="firstCombobox"
               >
               </lightning-combobox>
             </div>
@@ -24,10 +25,10 @@
             <div class="slds-m-around_x-small">
               <lightning-combobox
                 label="Dependent question"
-                value={firstQuestion}
+                value={secondPosition}
                 options={questionOptions}
                 onchange={selectSecondQuestion}
-                class="slds-m-around_x-small"
+                class="secondCombobox"
               >
               </lightning-combobox>
             </div>
@@ -59,7 +60,7 @@
               <div class="slds-m-left_x-small">
                 <lightning-button
                   variant="brand"
-                  label="Brand"
+                  label="Add"
                   title="Primary action"
                   onclick={addValidation}
                 ></lightning-button>

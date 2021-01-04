@@ -12,8 +12,10 @@ export default class ValidationBuilderScreenBody extends LightningElement {
   @wire(getObjectInfo, { objectApiName: VALIDATION_OBJECT })
   validationObjectInfo;
 
-  @track secondQuestion;
+  @track firstPosition;
+  @track secondPosition;
   @track firstQuestion;
+  @track secondQuestion;
 
   operators;
   @track displayedOperators;
@@ -34,8 +36,16 @@ export default class ValidationBuilderScreenBody extends LightningElement {
     }
 
     if (this.isHaveQuestions) {
-      this.firstQuestion = this.questions[0].Position__c;
-      this.secondQuestion = this.questions[1].Position__c;
+      this.firstPosition = this.questions[0].Position__c;
+      this.secondPosition = this.questions[1].Position__c;
+
+      this.firstQuestion = this.questions.filter((question) => {
+        return question.Position__c === this.firstPosition;
+      })[0];
+
+      this.secondQuestion = this.questions.filter((question) => {
+        return question.Position__c === this.secondPosition;
+      })[0];
     }
 
     this.displayedValidations = JSON.parse(JSON.stringify(this.validations));
@@ -87,33 +97,69 @@ export default class ValidationBuilderScreenBody extends LightningElement {
 
   setDisplayedOperators() {
     let resolvedOperators = [...this.operators];
-    console.log(this.firstQuestion.Required__c);
+
     if (this.firstQuestion.Required__c) {
       resolvedOperators = resolvedOperators.filter((operator) => {
         return !operator.label.toLowerCase().includes("null");
       });
     }
+
     this.displayedOperators = [...resolvedOperators];
     this.selectedOperator = this.displayedOperators[0].value;
   }
 
-  sendValidationsChange() {
-    const changeEvent = new CustomEvent("validationschange", {
-      detail: { validations: [...this.displayedValidations] }
-    });
-    this.dispatchEvent(changeEvent);
-  }
-
   selectFirstQuestion(event) {
+    if (this.firstPosition === +event.detail.value) {
+      const input = this.template.querySelector(".firstCombobox");
+      input.value = this.firstPosition;
+      return;
+    }
+
+    this.firstPosition = +event.detail.value;
+
+    if (this.firstPosition === this.secondPosition) {
+      if (this.secondPosition === this.questions[1].Position__c) {
+        this.firstPosition = this.questions[0].Position__c;
+      } else {
+        this.firstPosition = this.questions[1].Position__c;
+      }
+    }
+
+    const input = this.template.querySelector(".firstCombobox");
+    input.value = this.firstPosition;
+
     this.firstQuestion = this.questions.filter((question) => {
-      return question.Position__c === +event.detail.value;
+      return question.Position__c === this.firstPosition;
     })[0];
+
     this.setDisplayedOperators();
   }
 
   selectSecondQuestion(event) {
+    if (this.secondPosition === +event.detail.value) {
+      const input = this.template.querySelector(".secondCombobox");
+      input.value = this.secondPosition;
+      return;
+    }
+
+    this.secondPosition = +event.detail.value;
+
+    console.log(this.secondPosition);
+    console.log(this.firstPosition);
+
+    if (this.secondPosition === this.firstPosition) {
+      if (this.firstPosition === this.questions[1].Position__c) {
+        this.secondPosition = this.questions[0].Position__c;
+      } else {
+        this.secondPosition = this.questions[1].Position__c;
+      }
+    }
+
+    const input = this.template.querySelector(".secondCombobox");
+    input.value = this.secondPosition;
+
     this.secondQuestion = this.questions.filter((question) => {
-      return question.Position__c === +event.detail.value;
+      return question.Position__c === this.secondPosition;
     })[0];
   }
 
@@ -132,16 +178,33 @@ export default class ValidationBuilderScreenBody extends LightningElement {
     };
 
     this.displayedValidations.push(validation);
+    this.sendValidationsChange();
     this.resetForm();
   }
 
   deleteValidation(event) {
     this.displayedValidations.splice(event.detail, 1);
+    this.sendValidationsChange();
+  }
+
+  sendValidationsChange() {
+    const changeEvent = new CustomEvent("validationschange", {
+      detail: { validations: [...this.displayedValidations] }
+    });
+    this.dispatchEvent(changeEvent);
   }
 
   resetForm() {
-    this.firstQuestion = this.questions[0].Position__c;
-    this.secondQuestion = this.questions[1].Position__c;
+    this.firstPosition = this.questions[0].Position__c;
+    this.secondPosition = this.questions[1].Position__c;
+
+    this.firstQuestion = this.questions.filter((question) => {
+      return question.Position__c === this.firstPosition;
+    })[0];
+
+    this.secondQuestion = this.questions.filter((question) => {
+      return question.Position__c === this.secondPosition;
+    })[0];
 
     const input = this.template.querySelector(".input");
     input.value = "";
