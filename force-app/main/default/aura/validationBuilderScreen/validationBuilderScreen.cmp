@@ -16,6 +16,8 @@
     questions="{!v.questions}"
     validations="{!v.validations}"
     onvalidationschange="{!c.changeValidations}"
+    onprevious="{!c.onPrevious}"
+    onnext="{!c.onNext}"
   >
   </c:validationBuilderScreenBody>
 </aura:component>

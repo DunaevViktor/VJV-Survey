@@ -1,11 +1,9 @@
 <template>
-  <template if:true={isError}>
-    Error occured this page during to work.
-  </template>
+  <template if:true={isError}>{label.errorMessage}</template>
 
   <template if:false={isError}>
     <template if:false={isHaveQuestions}>
-      Don't have questions to create visibility validation
+      {label.no_questions_to_validation}
     </template>
 
     <template if:true={isHaveQuestions}>
@@ -14,7 +12,7 @@
           <div class="slds-size_1-of-5">
             <div class="slds-m-around_x-small">
               <lightning-combobox
-                label="Question"
+                label={label.question}
                 value={firstPosition}
                 options={questionOptions}
                 onchange={selectFirstQuestion}
@@ -26,7 +24,7 @@
           <div class="slds-size_1-of-5">
             <div class="slds-m-around_x-small">
               <lightning-combobox
-                label="Dependent question"
+                label={label.dependent_question}
                 value={secondPosition}
                 options={questionOptions}
                 onchange={selectSecondQuestion}
@@ -38,9 +36,9 @@
           <div class="slds-size_1-of-5">
             <div class="slds-m-around_x-small">
               <lightning-combobox
-                label="Operator"
+                label={label.operator}
                 value={selectedOperator}
-                placeholder="Select Operator"
+                placeholder={label.select_operator}
                 options={displayedOperators}
                 class="slds-m-around_x-small"
                 onchange={setSelectedOperator}
@@ -51,9 +49,9 @@
           <div class="slds-size_1-of-5">
             <div class="slds-m-around_x-small">
               <lightning-combobox
-                label="Value"
+                label={label.value}
                 if:true={isFirstQuestionPicklist}
-                placeholder="Select value"
+                placeholder={label.select_value}
                 options={questionsOptions}
                 class="input"
                 required
@@ -63,7 +61,7 @@
               <lightning-input
                 if:false={isFirstQuestionPicklist}
                 type={inputType}
-                label="Enter Сompared Value"
+                label={label.enter_compared_value}
                 class="input"
                 required
               ></lightning-input>
@@ -74,8 +72,7 @@
               <div class="slds-m-left_x-small">
                 <lightning-button
                   variant="brand"
-                  label="Add"
-                  title="Primary action"
+                  label={label.add}
                   onclick={addValidation}
                 ></lightning-button>
               </div>
@@ -95,5 +92,22 @@
         </template>
       </div>
     </template>
+
+    <hr class="slds-m-bottom_small" />
+
+    <div class="slds-text-align_right">
+      <lightning-button
+        variant="destructive-text"
+        label={label.previous}
+        title={label.previous_button_message}
+        onclick={clickPreviousButton}
+      ></lightning-button>
+      <lightning-button
+        variant="brand"
+        label={label.next}
+        onclick={clickNextButton}
+        class="slds-m-left_x-small"
+      ></lightning-button>
+    </div>
   </template>
 </template>

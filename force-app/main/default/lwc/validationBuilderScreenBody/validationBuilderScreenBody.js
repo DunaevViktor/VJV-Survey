@@ -3,7 +3,22 @@ import VALIDATION_OBJECT from "@salesforce/schema/Validation__c";
 import OPERATOR_FIELD from "@salesforce/schema/Validation__c.Operator__c";
 import { getPicklistValues } from "lightning/uiObjectInfoApi";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
+
 import createValidationList from "@salesforce/apex/ValidationController.createValidationList";
+
+import question from "@salesforce/label/c.question";
+import dependent_question from "@salesforce/label/c.dependent_question";
+import operator from "@salesforce/label/c.operator";
+import previous from "@salesforce/label/c.previous";
+import enter_compared_value from "@salesforce/label/c.enter_compared_value";
+import add from "@salesforce/label/c.add";
+import no_questions_to_validation from "@salesforce/label/c.no_questions_to_validation";
+import errorMessage from "@salesforce/label/c.errorMessage";
+import select_operator from "@salesforce/label/c.select_operator";
+import select_value from "@salesforce/label/c.select_value";
+import previous_button_message from "@salesforce/label/c.previous_button_message";
+import value from "@salesforce/label/c.value";
+import next from "@salesforce/label/c.next";
 
 export default class ValidationBuilderScreenBody extends LightningElement {
   @api questions;
@@ -28,6 +43,45 @@ export default class ValidationBuilderScreenBody extends LightningElement {
   @track isSelectable = false;
   @track isError = false;
 
+  label = {
+    question,
+    dependent_question,
+    operator,
+    enter_compared_value,
+    value,
+    add,
+    no_questions_to_validation,
+    errorMessage,
+    select_operator,
+    select_value,
+    previous_button_message,
+    previous,
+    next
+  };
+
+  questionsTypes = [
+    {
+      label: "Picklist",
+      deprecatedOperators: ["CONTAINS", "THAN"]
+    },
+    {
+      label: "RadioButton",
+      deprecatedOperators: ["CONTAINS", "THAN"]
+    },
+    {
+      label: "Text",
+      deprecatedOperators: ["EQUALS", "THAN"]
+    },
+    {
+      label: "Checkbox",
+      deprecatedOperators: ["EQUALS", "THAN"]
+    },
+    {
+      label: "Rating",
+      deprecatedOperators: ["CONTAINS"]
+    }
+  ];
+
   connectedCallback() {
     if (this.questions) {
       this.isHaveQuestions = this.questions.length > 2;
@@ -39,12 +93,12 @@ export default class ValidationBuilderScreenBody extends LightningElement {
       this.firstPosition = this.questions[0].Position__c;
       this.secondPosition = this.questions[1].Position__c;
 
-      this.firstQuestion = this.questions.filter((question) => {
-        return question.Position__c === this.firstPosition;
+      this.firstQuestion = this.questions.filter((item) => {
+        return item.Position__c === this.firstPosition;
       })[0];
 
-      this.secondQuestion = this.questions.filter((question) => {
-        return question.Position__c === this.secondPosition;
+      this.secondQuestion = this.questions.filter((item) => {
+        return item.Position__c === this.secondPosition;
       })[0];
     }
 
@@ -87,10 +141,10 @@ export default class ValidationBuilderScreenBody extends LightningElement {
   }
 
   get questionOptions() {
-    return this.questions.map((question) => {
+    return this.questions.map((item) => {
       return {
-        label: question.Label__c,
-        value: question.Position__c
+        label: item.Label__c,
+        value: item.Position__c
       };
     });
   }
@@ -99,7 +153,8 @@ export default class ValidationBuilderScreenBody extends LightningElement {
     return (
       this.firstQuestion.Type__c === "Picklist" ||
       this.firstQuestion.Type__c === "RadioButton" ||
-      this.firstQuestion.Type__c === "Checkbox"
+      this.firstQuestion.Type__c === "Checkbox" ||
+      this.selectedOperator === "IS NULL"
     );
   }
 
@@ -133,38 +188,30 @@ export default class ValidationBuilderScreenBody extends LightningElement {
     let resolvedOperators = [...this.operators];
 
     if (this.firstQuestion.Required__c) {
-      resolvedOperators = resolvedOperators.filter((operator) => {
-        return !operator.label.toLowerCase().includes("null");
+      resolvedOperators = resolvedOperators.filter((item) => {
+        return !item.label.toLowerCase().includes("null");
       });
     }
 
-    if (
-      this.firstQuestion.Type__c === "Picklist" ||
-      this.firstQuestion.Type__c === "RadioButton"
-    ) {
-      resolvedOperators = resolvedOperators.filter((operator) => {
-        return (
-          !operator.label.toLowerCase().includes("CONTAINS".toLowerCase()) &&
-          !operator.label.toLowerCase().includes("THAN".toLowerCase())
+    for (let i = 0; i < this.questionsTypes.length; i++) {
+      const questionType = this.questionsTypes[i];
+
+      if (this.firstQuestion.Type__c !== questionType.label) {
+        continue;
+      }
+
+      resolvedOperators = resolvedOperators.filter((item) => {
+        return questionType.deprecatedOperators.reduce(
+          (accumulator, deprecatedOperator) => {
+            return (
+              accumulator &&
+              !item.label
+                .toLowerCase()
+                .includes(deprecatedOperator.toLowerCase())
+            );
+          },
+          true
         );
-      });
-    }
-
-    if (
-      this.firstQuestion.Type__c === "Text" ||
-      this.firstQuestion.Type__c === "Checkbox"
-    ) {
-      resolvedOperators = resolvedOperators.filter((operator) => {
-        return (
-          !operator.label.toLowerCase().includes("EQUALS".toLowerCase()) &&
-          !operator.label.toLowerCase().includes("THAN".toLowerCase())
-        );
-      });
-    }
-
-    if (this.firstQuestion.Type__c === "Rating") {
-      resolvedOperators = resolvedOperators.filter((operator) => {
-        return !operator.label.toLowerCase().includes("CONTAINS".toLowerCase());
       });
     }
 
@@ -192,8 +239,8 @@ export default class ValidationBuilderScreenBody extends LightningElement {
     const input = this.template.querySelector(".firstCombobox");
     input.value = this.firstPosition;
 
-    this.firstQuestion = this.questions.filter((question) => {
-      return question.Position__c === this.firstPosition;
+    this.firstQuestion = this.questions.filter((item) => {
+      return item.Position__c === this.firstPosition;
     })[0];
 
     this.setDisplayedOperators();
@@ -222,8 +269,8 @@ export default class ValidationBuilderScreenBody extends LightningElement {
     const input = this.template.querySelector(".secondCombobox");
     input.value = this.secondPosition;
 
-    this.secondQuestion = this.questions.filter((question) => {
-      return question.Position__c === this.secondPosition;
+    this.secondQuestion = this.questions.filter((item) => {
+      return item.Position__c === this.secondPosition;
     })[0];
   }
 
@@ -266,17 +313,27 @@ export default class ValidationBuilderScreenBody extends LightningElement {
     this.firstPosition = this.questions[0].Position__c;
     this.secondPosition = this.questions[1].Position__c;
 
-    this.firstQuestion = this.questions.filter((question) => {
-      return question.Position__c === this.firstPosition;
+    this.firstQuestion = this.questions.filter((item) => {
+      return item.Position__c === this.firstPosition;
     })[0];
 
-    this.secondQuestion = this.questions.filter((question) => {
-      return question.Position__c === this.secondPosition;
+    this.secondQuestion = this.questions.filter((item) => {
+      return item.Position__c === this.secondPosition;
     })[0];
 
     const input = this.template.querySelector(".input");
     input.value = "";
 
     this.setDisplayedOperators();
+  }
+
+  clickPreviousButton() {
+    const previousEvent = new CustomEvent("previous", {});
+    this.dispatchEvent(previousEvent);
+  }
+
+  clickNextButton() {
+    const nextEvent = new CustomEvent("next", {});
+    this.dispatchEvent(nextEvent);
   }
 }

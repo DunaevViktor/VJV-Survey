@@ -2,7 +2,7 @@
   <div class="slds-box slds-box_x-small slds-m-around_x-small">
     <span
       class="slds-icon_container slds-icon-utility-announcement slds-float_right"
-      title="Delete"
+      title={label.deleteTitle}
     >
       <img
         class="slds-icon slds-icon-text-default slds-icon_x-small"
@@ -10,13 +10,13 @@
         onclick={deleteValidation}
       />
     </span>
-    <span class="gray">Main Question: </span
+    <span class="gray">{label.question}: </span
     ><span>{validation.Related_Question__c.Label__c}</span><br />
-    <span class="gray">Dependent Question: </span
+    <span class="gray">{label.dependent_question}: </span
     ><span>{validation.Dependent_Question__c.Label__c}</span><br />
-    <span class="gray">Operator: </span><span>{validation.Operator__c}</span
-    ><br />
-    <span class="gray">Compared Value: </span><span>{validation.Value__c}</span
-    ><br />
+    <span class="gray">{label.operator}: </span
+    ><span>{validation.Operator__c}</span><br />
+    <span class="gray">{label.compared_value}: </span
+    ><span>{validation.Value__c}</span><br />
   </div>
 </template>
