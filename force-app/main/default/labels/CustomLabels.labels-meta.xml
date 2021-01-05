@@ -4,9 +4,148 @@
         <fullName>TriggerRulesPrompt</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription
-    >Подсказка о выполнении триггер рулов</shortDescription>
+        <shortDescription>Подсказка о выполнении триггер рулов</shortDescription>
+        <value>*Survey polling actions will occur when any of the created trigger rules work.</value>
+    </labels>
+    <labels>
+        <fullName>add</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>add</shortDescription>
+        <value>Add</value>
+    </labels>
+    <labels>
+        <fullName>compared_value</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>compared value</shortDescription>
+        <value>Compared Value</value>
+    </labels>
+    <labels>
+        <fullName>delete</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>delete</shortDescription>
+        <value>Delete</value>
+    </labels>
+    <labels>
+        <fullName>dependent_question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>dependent question</shortDescription>
+        <value>Dependent question</value>
+    </labels>
+    <labels>
+        <fullName>enter_compared_value</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>enter compared value</shortDescription>
+        <value>Enter Сompared Value</value>
+    </labels>
+    <labels>
+        <fullName>errorMessage</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>errorMessage</shortDescription>
+        <value>Error occured this page during to work</value>
+    </labels>
+    <labels>
+        <fullName>false</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>false</shortDescription>
+        <value>False</value>
+    </labels>
+    <labels>
+        <fullName>next</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>next</shortDescription>
+        <value>Next</value>
+    </labels>
+    <labels>
+        <fullName>no_questions_to_validation</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>no questions to validation</shortDescription>
+        <value>Don&apos;t have questions to create visibility validation</value>
+    </labels>
+    <labels>
+        <fullName>no_validations</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>no validations</shortDescription>
+        <value>Don&apos;t have validations to display</value>
+    </labels>
+    <labels>
+        <fullName>number</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>number</shortDescription>
+        <value>number</value>
+    </labels>
+    <labels>
+        <fullName>operator</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>operator</shortDescription>
+        <value>Operator</value>
+    </labels>
+    <labels>
+        <fullName>previous</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>previous</shortDescription>
+        <value>Previous</value>
+    </labels>
+    <labels>
+        <fullName>previous_button_message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>previous button message</shortDescription>
         <value
-    >*Survey polling actions will occur when any of the created trigger rules work.</value>
+    >If you will click this button you will lost all validations variables</value>
+    </labels>
+    <labels>
+        <fullName>question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>question</shortDescription>
+        <value>Question</value>
+    </labels>
+    <labels>
+        <fullName>select_operator</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>select operator</shortDescription>
+        <value>Select Operator</value>
+    </labels>
+    <labels>
+        <fullName>select_value</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>select value</shortDescription>
+        <value>Select value</value>
+    </labels>
+    <labels>
+        <fullName>text</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>text</shortDescription>
+        <value>text</value>
+    </labels>
+    <labels>
+        <fullName>true</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>true</shortDescription>
+        <value>True</value>
+    </labels>
+    <labels>
+        <fullName>value</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>value</shortDescription>
+        <value>Value</value>
     </labels>
 </CustomLabels>
