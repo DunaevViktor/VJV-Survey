@@ -7,90 +7,28 @@
     </template>
 
     <template if:true={isHaveQuestions}>
-      <div class="slds-box slds-box_x-small slds-m-around_x-small">
-        <div class="slds-grid slds-wrap">
-          <div class="slds-size_1-of-5">
-            <div class="slds-m-around_x-small">
-              <lightning-combobox
-                label={label.question}
-                value={firstPosition}
-                options={questionOptions}
-                onchange={selectFirstQuestion}
-                class="firstCombobox"
-              >
-              </lightning-combobox>
-            </div>
-          </div>
-          <div class="slds-size_1-of-5">
-            <div class="slds-m-around_x-small">
-              <lightning-combobox
-                label={label.dependent_question}
-                value={secondPosition}
-                options={questionOptions}
-                onchange={selectSecondQuestion}
-                class="secondCombobox"
-              >
-              </lightning-combobox>
-            </div>
-          </div>
-          <div class="slds-size_1-of-5">
-            <div class="slds-m-around_x-small">
-              <lightning-combobox
-                label={label.operator}
-                value={selectedOperator}
-                placeholder={label.select_operator}
-                options={displayedOperators}
-                class="slds-m-around_x-small"
-                onchange={setSelectedOperator}
-              >
-              </lightning-combobox>
-            </div>
-          </div>
-          <div class="slds-size_1-of-5">
-            <div class="slds-m-around_x-small">
-              <lightning-combobox
-                label={label.value}
-                if:true={isFirstQuestionPicklist}
-                placeholder={label.select_value}
-                options={questionsOptions}
-                class="input"
-                required
-              >
-              </lightning-combobox>
+      <c-validation-form
+        questions={questions}
+        onadd={addValidation}
+        onerror={serError}
+      ></c-validation-form>
 
-              <lightning-input
-                if:false={isFirstQuestionPicklist}
-                type={inputType}
-                label={label.enter_compared_value}
-                class="input"
-                required
-              ></lightning-input>
-            </div>
-          </div>
-          <div class="slds-size_1-of-5">
-            <div class="slds-m-top_x-large">
-              <div class="slds-m-left_x-small">
-                <lightning-button
-                  variant="brand"
-                  label={label.add}
-                  onclick={addValidation}
-                ></lightning-button>
-              </div>
-            </div>
-          </div>
+      <template if:true={isHaveValidations}>
+        <div class="slds-box slds-box_x-small slds-m-around_x-small">
+          <template iterator:it={displayedValidations}>
+            <c-validation-card
+              validation={it.value}
+              index={it.index}
+              key={it.value}
+              ondelete={deleteValidation}
+            ></c-validation-card>
+          </template>
         </div>
-      </div>
+      </template>
 
-      <div class="slds-box slds-box_x-small slds-m-around_x-small">
-        <template iterator:it={displayedValidations}>
-          <c-validation-card
-            validation={it.value}
-            index={it.index}
-            key={it.value}
-            ondelete={deleteValidation}
-          ></c-validation-card>
-        </template>
-      </div>
+      <template if:false={isHaveValidations}>
+        <div class="slds-box_x-small">{label.no_validations}</div>
+      </template>
     </template>
 
     <hr class="slds-m-bottom_small" />

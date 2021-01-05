@@ -64,6 +64,20 @@
         <value>Don&apos;t have questions to create visibility validation</value>
     </labels>
     <labels>
+        <fullName>no_validations</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>no validations</shortDescription>
+        <value>Don&apos;t have validations to display</value>
+    </labels>
+    <labels>
+        <fullName>number</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>number</shortDescription>
+        <value>number</value>
+    </labels>
+    <labels>
         <fullName>operator</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -105,6 +119,13 @@
         <protected>true</protected>
         <shortDescription>select value</shortDescription>
         <value>Select value</value>
+    </labels>
+    <labels>
+        <fullName>text</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>text</shortDescription>
+        <value>text</value>
     </labels>
     <labels>
         <fullName>true</fullName>
