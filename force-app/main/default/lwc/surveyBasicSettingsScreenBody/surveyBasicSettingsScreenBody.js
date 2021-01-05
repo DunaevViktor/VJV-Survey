@@ -6,10 +6,11 @@ export default class SurveyMainSettings extends LightningElement {
 
   @track surveyName;
   @track surveyLogoData;
-  @track surveyColor;
+  @track surveyColor = "#5679c0";
 
-  @track logoType = "image/png";
-  @track error;
+  @track displayLogoPreview;
+  @track logoSrc;
+  @track logoTypes = "image/png, image/jpeg";
 
   connectedCallback() {
     this.loadSurveyData();
@@ -18,12 +19,17 @@ export default class SurveyMainSettings extends LightningElement {
   loadSurveyData() {
     getSurveyData({
       surveyId: this.surveyId
-    }).then((result) => {
-      if (result) {
-        this.surveyName = result.Name;
-        this.surveyColor = result.Background_Color__c;
-      }
-    });
+    })
+      .then((result) => {
+        if (result) {
+          this.surveyName = result.Name;
+          this.logoSrc = result.Logo__c;
+          this.surveyColor = result.Background_Color__c;
+        }
+      })
+      .then(() => {
+        this.updateLogoPreviewStatus();
+      });
   }
 
   handleNameChange(event) {
@@ -42,14 +48,24 @@ export default class SurveyMainSettings extends LightningElement {
     this.dispatchEvent(changeColorEvent);
   }
 
+  updateLogoPreviewStatus() {
+    if (this.logoSrc) {
+      this.displayLogoPreview = true;
+    } else {
+      this.displayLogoPreview = false;
+    }
+  }
+
   handleLogoChange(event) {
     const file = event.target.files[0];
     let reader = new FileReader();
     reader.onloadend = () => {
-      let fileBlobContent = reader.result;
+      let logoBlob = reader.result;
+      this.logoSrc = logoBlob;
+      this.updateLogoPreviewStatus();
       let base64 = "base64,";
-      let base64Content = fileBlobContent.substring(
-        fileBlobContent.indexOf(base64) + base64.length
+      let base64Content = logoBlob.substring(
+        logoBlob.indexOf(base64) + base64.length
       );
       this.surveyLogoData = encodeURIComponent(base64Content);
     };

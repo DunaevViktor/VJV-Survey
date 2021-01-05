@@ -1,3 +1,0 @@
-<design:component >
-  <design:attribute name="survey" Label="Existing Survey"/>
-</design:component>

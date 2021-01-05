@@ -1,0 +1,50 @@
+<template>
+  <div class="slds-grid slds-m-horizontal_medium">
+    <div class="slds-size_2-of-3 slds-p-around_x-small survey-info-form">
+      <div class="slds-box">
+        <lightning-input
+          class="slds-m-vertical_medium"
+          type="text"
+          label="Survey Name"
+          placeholder="Enter name of your survey"
+          value={surveyName}
+          onchange={handleNameChange}
+          required
+        >
+        </lightning-input>
+
+        <lightning-input
+          class="slds-m-vertical_medium"
+          type="file"
+          label="Survey Logo"
+          accept={logoTypes}
+          onchange={handleLogoChange}
+        >
+        </lightning-input>
+
+        <lightning-input
+          class="slds-m-vertical_medium"
+          type="color"
+          label="Survey Background Color"
+          value={surveyColor}
+          onchange={handleColorChange}
+        >
+        </lightning-input>
+      </div>
+    </div>
+
+    <div class="slds-p-around_x-small logo-container">
+      <div class="slds-box slds-align_absolute-center image-box">
+        <template if:true={displayLogoPreview}>
+          <img class="image-box__image" src={logoSrc} title="Logo preview" />
+        </template>
+
+        <template if:false={displayLogoPreview}>
+          <div class="slds-text-heading_small">
+            You need to upload your logo first to preview it.
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+</template>
