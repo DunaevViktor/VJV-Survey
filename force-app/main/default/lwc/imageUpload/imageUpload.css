@@ -1,0 +1,45 @@
+.image-upload-wrapper {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  background-color: rgba(172, 172, 172, 0.4);
+}
+
+.image-upload-hidden {
+  visibility: hidden;
+}
+
+.image-upload-component {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.image-upload-component__hidden {
+  visibility: hidden;
+}
+
+.logo-image {
+  max-width: 250px;
+  max-height: 250px;
+}
+
+.remove-button {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 3px;
+}
+
+.remove-button:hover {
+  background-color: rgba(172, 172, 172, 0.8);
+  transition: ease-in 0.2s;
+}

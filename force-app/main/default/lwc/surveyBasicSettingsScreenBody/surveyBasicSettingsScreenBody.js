@@ -1,5 +1,6 @@
 import { LightningElement, api, track } from "lwc";
 import getSurveyData from "@salesforce/apex/SurveySettingsController.getSurveyData";
+import { createRecord } from "lightning/uiRecordApi";
 
 export default class SurveyMainSettings extends LightningElement {
   @api surveyId;
@@ -75,4 +76,6 @@ export default class SurveyMainSettings extends LightningElement {
     });
     this.dispatchEvent(changeLogoEvent);
   }
+
+  getFileBase64Data() {}
 }

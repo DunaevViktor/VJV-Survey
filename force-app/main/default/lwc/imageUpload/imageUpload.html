@@ -1,0 +1,33 @@
+<template>
+  <div class="slds-box slds-align_absolute-center image-upload-wrapper">
+    <template if:false={displayImage}>
+      <input
+        id="uploading-image"
+        class="image-upload-hidden"
+        type="file"
+        accept={acceptedFormats}
+        onchange={uploadImage}
+      />
+      <label
+        for="uploading-image"
+        class="slds-align_absolute-center image-upload-component"
+        ondrop={handleDropFile}
+        ondragover={allowDropFile}
+      >
+        <span class="slds-text-heading_small">
+          Choose survey logo file or drag it here
+        </span>
+      </label>
+    </template>
+
+    <template if:true={displayImage}>
+      <img
+        class="remove-button"
+        src={removeIconUrl}
+        title="Remove Image"
+        onclick={clearFile}
+      />
+      <img class="logo-image" src={imageBlobUrl} title="Logo Image" />
+    </template>
+  </div>
+</template>
