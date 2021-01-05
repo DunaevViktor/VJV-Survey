@@ -1,12 +1,12 @@
 const booleanPicklistOptions = [
   {
     label: "TRUE",
-    value: "true"
+    value: "true",
   },
   {
     label: "FALSE",
-    value: "false"
-  }
+    value: "false",
+  },
 ];
 
 const NULL = "IS NULL";
@@ -21,7 +21,7 @@ const generateComboboxOptions = (result) => {
     if (Object.prototype.hasOwnProperty.call(result, key)) {
       let comboboxObject = {
         label: result[key],
-        value: key
+        value: key,
       };
       comboboxOptions.push(comboboxObject);
     }
@@ -35,8 +35,6 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
     case "PICKLIST":
       fieldObject.isCombobox = true;
       fieldObject.type = "picklist";
-      console.log("picklist values");
-      console.log(picklistOptions);
       fieldObject.picklistValues = picklistOptions;
       fieldObject.isInput = false;
       fieldObject.value = settedValue;
@@ -146,8 +144,6 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
       break;
   }
   fieldObject.label = field.label;
-  console.log("ret obj");
-  console.log(fieldObject);
   return fieldObject;
 };
 
@@ -212,11 +208,10 @@ const getBooleanPicklistOptions = () => {
 const generateFieldsDescriptionsList = (result) => {
   let comboboxFieldsOptions = [];
   result.forEach((fieldDescriptionList) => {
-    console.log(fieldDescriptionList);
     let fieldObject = {
       label: fieldDescriptionList[1],
       value: fieldDescriptionList[0],
-      datatype: fieldDescriptionList[2]
+      datatype: fieldDescriptionList[2],
     };
     setReferencedObjectNames(fieldDescriptionList, fieldObject);
     comboboxFieldsOptions.push(fieldObject);
@@ -234,5 +229,5 @@ export {
   getBooleanPicklistOptions,
   generateFieldsDescriptionsList,
   generateContaintmentOperatorList,
-  generateReducedOperatorList
+  generateReducedOperatorList,
 };

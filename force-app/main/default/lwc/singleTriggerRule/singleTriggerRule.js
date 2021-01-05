@@ -12,7 +12,7 @@ import {
   generateContaintmentOperatorList,
   getBooleanPicklistOptions,
   generateFieldsDescriptionsList,
-  generateReducedOperatorList
+  generateReducedOperatorList,
 } from "./helper";
 
 export default class SingleTriggerRule extends LightningElement {
@@ -33,7 +33,7 @@ export default class SingleTriggerRule extends LightningElement {
   containmentOperatorList = [];
   @track picklistFieldOptions = [];
 
-  @track error = "";
+  @track error;
   @track field = {};
 
   @api rule;
@@ -111,7 +111,6 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   handleFieldChange(event) {
-    console.log(JSON.stringify(event.detail));
     this.fieldValue = event.detail.value;
     this.operatorValue = "";
     this.provideValueInput(event.detail);
@@ -123,7 +122,6 @@ export default class SingleTriggerRule extends LightningElement {
       (field) => field.value === fieldObject.value
     );
     this.value = "";
-    let picklistOptions = [];
 
     if (chosenFieldObject.datatype === "PICKLIST") {
       this.generateFieldPicklistOptions(chosenFieldObject);
@@ -133,20 +131,16 @@ export default class SingleTriggerRule extends LightningElement {
     } else {
       this.setField(chosenFieldObject);
     }
-    console.log("res combo optins");
-    console.log(picklistOptions);
   }
 
   generateFieldPicklistOptions(chosenFieldObject) {
     getFieldPicklistValues({
       objApiName: this.objectValue,
-      field: chosenFieldObject.value
+      field: chosenFieldObject.value,
     })
       .then((result) => {
         let comboboxOptions = generateComboboxOptions(result);
         this.picklistFieldOptions = comboboxOptions;
-        console.log("Picklist optins");
-        console.log(comboboxOptions);
         this.setField(chosenFieldObject, this.picklistFieldOptions);
       })
       .catch((error) => {
@@ -220,7 +214,7 @@ export default class SingleTriggerRule extends LightningElement {
     this.clearChosenData();
 
     const deleteEvent = new CustomEvent("deletetriggerrule", {
-      detail: this.number
+      detail: this.number,
     });
 
     this.dispatchEvent(deleteEvent);
@@ -241,8 +235,6 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   handleRecordSelection(event) {
-    console.log("record selection");
-    console.log(JSON.stringify(event.detail));
     this.value = event.detail;
   }
 
@@ -251,7 +243,7 @@ export default class SingleTriggerRule extends LightningElement {
       Object_Api_Name__c: this.objectValue,
       Field_Name__c: this.fieldValue,
       Operator__c: this.operatorValue,
-      Field_Value__c: this.value
+      Field_Value__c: this.value,
     };
 
     return triggerRule;
