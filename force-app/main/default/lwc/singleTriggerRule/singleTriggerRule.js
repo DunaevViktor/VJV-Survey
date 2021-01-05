@@ -1,27 +1,19 @@
 import { LightningElement, track, api } from "lwc";
 import getObjectApiNamePickListValues from "@salesforce/apex/MetadataFetcher.getObjectApiNamePickListValues";
-import getTriggerRuleOpearatorPickListValues from "@salesforce/apex/MetadataFetcher.getTriggerRuleOpearatorPickListValues";
+import getTriggerRuleOperatorPickListValues from "@salesforce/apex/MetadataFetcher.getTriggerRuleOperatorPickListValues";
 import getObjectFieldsDescriptionList from "@salesforce/apex/MetadataFetcher.getObjectFieldsDescriptionList";
 import getFieldPicklistValues from "@salesforce/apex/MetadataFetcher.getFieldPicklistValues";
 import {
-  setReferencedObjectNames,
   getFieldAttributes,
   generateBooleanField,
-  checkForNullOperators,
+  checkForNullOperator,
   generateComboboxOptions,
-  filterComparisonOperators
+  generateComparisonOperatorList,
+  generateContaintmentOperatorList,
+  getBooleanPicklistOptions,
+  generateFieldsDescriptionsList,
+  generateReducedOperatorList
 } from "./helper";
-
-const booleanPicklistOptions = [
-  {
-    label: "TRUE",
-    value: "true"
-  },
-  {
-    label: "FALSE",
-    value: "false"
-  }
-];
 
 export default class SingleTriggerRule extends LightningElement {
   initialRender = true;
@@ -29,7 +21,7 @@ export default class SingleTriggerRule extends LightningElement {
   @track objectValue = "";
   @track fieldType = "";
   @track fieldValue = "";
-  @track opearatorValue = "";
+  @track operatorValue = "";
   @track value = "";
 
   @track objectNames = [];
@@ -37,6 +29,8 @@ export default class SingleTriggerRule extends LightningElement {
   @track operators = [];
   fullOperatorList = [];
   reducedOperatorList = [];
+  comparisonOperatorList = [];
+  containmentOperatorList = [];
   @track picklistFieldOptions = [];
 
   @track error = "";
@@ -65,16 +59,21 @@ export default class SingleTriggerRule extends LightningElement {
         this.error = error;
       });
 
-    getTriggerRuleOpearatorPickListValues()
+    getTriggerRuleOperatorPickListValues()
       .then((result) => {
-        console.log(result);
         let comboboxOperatorOptions = generateComboboxOptions(result);
         this.fullOperatorList = comboboxOperatorOptions;
-        this.reducedOperatorList = filterComparisonOperators(
+        this.reducedOperatorList = generateReducedOperatorList(
+          this.fullOperatorList
+        );
+        this.comparisonOperatorList = generateComparisonOperatorList(
+          this.fullOperatorList
+        );
+        this.containmentOperatorList = generateContaintmentOperatorList(
           this.fullOperatorList
         );
         if (this.rule) {
-          this.opearatorValue = this.rule.Operator__c;
+          this.operatorValue = this.rule.Operator__c;
         }
       })
       .catch((error) => {
@@ -84,8 +83,6 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   handleObjectChange(event) {
-    console.log("Object combo change");
-    console.log(event.detail);
     this.clearChosenData();
     this.objectApiName = event.detail.value;
     this.objectValue = event.detail.value;
@@ -95,29 +92,11 @@ export default class SingleTriggerRule extends LightningElement {
   getObjectFields(objectApiName) {
     getObjectFieldsDescriptionList({ objectApiName: objectApiName })
       .then((result) => {
-        console.log(result);
-        let comboboxFieldsOptions = [];
-        result.forEach((fieldDescriptionList) => {
-          // Filtering the data in the loop
-          console.log(fieldDescriptionList);
-          let fieldObject = {
-            label: fieldDescriptionList[1],
-            value: fieldDescriptionList[0],
-            datatype: fieldDescriptionList[2]
-          };
-          setReferencedObjectNames(fieldDescriptionList, fieldObject);
-          comboboxFieldsOptions.push(fieldObject);
-        });
-        this.fieldNames = comboboxFieldsOptions;
-        console.log("fieeld options");
-        console.log(comboboxFieldsOptions);
+        this.fieldNames = generateFieldsDescriptionsList(result);
         if (this.rule) {
-          console.log("setting field");
           let receivedFieldObject = this.fieldNames.find(
             (field) => field.value === this.rule.Field_Name__c
           );
-          console.log("receivedFieldObject");
-          console.log(JSON.stringify(receivedFieldObject));
           this.fieldValue = JSON.parse(
             JSON.stringify(receivedFieldObject)
           ).value;
@@ -134,7 +113,7 @@ export default class SingleTriggerRule extends LightningElement {
   handleFieldChange(event) {
     console.log(JSON.stringify(event.detail));
     this.fieldValue = event.detail.value;
-    this.opearatorValue = "";
+    this.operatorValue = "";
     this.provideValueInput(event.detail);
     this.value = "";
   }
@@ -147,55 +126,41 @@ export default class SingleTriggerRule extends LightningElement {
     let picklistOptions = [];
 
     if (chosenFieldObject.datatype === "PICKLIST") {
-      getFieldPicklistValues({
-        objApiName: this.objectValue,
-        field: chosenFieldObject.value
-      })
-        .then((result) => {
-          let comboboxOptions = [];
-          for (let key in result) {
-            // Preventing unexcepted data
-            if (Object.prototype.hasOwnProperty.call(result, key)) {
-              // Filtering the data in the loop
-              comboboxOptions.push({
-                label: key,
-                value: result[key]
-              });
-            }
-          }
-          this.picklistFieldOptions = comboboxOptions;
-          console.log("Picklist optins");
-          console.log(comboboxOptions);
-          this.setField(chosenFieldObject, this.picklistFieldOptions);
-        })
-        .catch((error) => {
-          this.error = error;
-          console.log(error);
-        });
+      this.generateFieldPicklistOptions(chosenFieldObject);
     } else if (chosenFieldObject.datatype === "BOOLEAN") {
-      this.picklistFieldOptions = booleanPicklistOptions;
+      this.picklistFieldOptions = getBooleanPicklistOptions();
       this.setField(chosenFieldObject, this.picklistFieldOptions);
     } else {
       this.setField(chosenFieldObject);
     }
-    //this.options = picklistOptions;
     console.log("res combo optins");
     console.log(picklistOptions);
+  }
+
+  generateFieldPicklistOptions(chosenFieldObject) {
+    getFieldPicklistValues({
+      objApiName: this.objectValue,
+      field: chosenFieldObject.value
+    })
+      .then((result) => {
+        let comboboxOptions = generateComboboxOptions(result);
+        this.picklistFieldOptions = comboboxOptions;
+        console.log("Picklist optins");
+        console.log(comboboxOptions);
+        this.setField(chosenFieldObject, this.picklistFieldOptions);
+      })
+      .catch((error) => {
+        this.error = error;
+        console.log(error);
+      });
   }
 
   setField(chosenFieldObject, picklistOptions) {
     let settedValue = "";
     if (this.rule) {
       settedValue = this.rule.Field_Value__c;
-      console.log("setted val");
-      console.log(settedValue);
     }
-    if (this.opearatorValue === "NULL" || this.opearatorValue === "NOT NULL") {
-      if (this.rule) {
-        settedValue = this.rule.Field_Value__c;
-        console.log("setted val");
-        console.log(settedValue);
-      }
+    if (checkForNullOperator(this.operatorValue)) {
       let chosenFieldObj = this.fieldNames.find(
         (field) => field.value === this.fieldValue
       );
@@ -209,25 +174,34 @@ export default class SingleTriggerRule extends LightningElement {
       );
     }
     this.value = this.field.value;
-    if (this.field.operatorType === 0) {
-      this.operators = this.fullOperatorList;
-    } else {
-      this.operators = this.reducedOperatorList;
-    }
+    this.setOperatorsByType();
     if (this.rule) {
-      console.log("CLEAR received value!!!");
       this.rule = undefined;
     }
   }
 
+  setOperatorsByType() {
+    switch (this.field.operatorType) {
+      case 1:
+        this.operators = this.reducedOperatorList;
+        break;
+      case 2:
+        this.operators = this.comparisonOperatorList;
+        break;
+      case 3:
+        this.operators = this.containmentOperatorList;
+        break;
+      default:
+        this.operators = this.reducedOperatorList;
+    }
+  }
+
   handleOperatorChange(event) {
-    this.opearatorValue = event.detail.value;
-    if (checkForNullOperators(this.opearatorValue)) {
+    this.operatorValue = event.detail.value;
+    if (checkForNullOperator(this.operatorValue)) {
       let settedValue = "";
       if (this.rule) {
         settedValue = this.rule.Field_Value__c;
-        console.log("setted val");
-        console.log(settedValue);
       }
       let chosenFieldObject = this.fieldNames.find(
         (field) => field.value === this.fieldValue
@@ -254,7 +228,7 @@ export default class SingleTriggerRule extends LightningElement {
 
   clearChosenData() {
     this.value = "";
-    this.opearatorValue = "";
+    this.operatorValue = "";
     this.operators = [];
     this.fieldValue = "";
     this.fieldType = "";
@@ -276,7 +250,7 @@ export default class SingleTriggerRule extends LightningElement {
     let triggerRule = {
       Object_Api_Name__c: this.objectValue,
       Field_Name__c: this.fieldValue,
-      Operator__c: this.opearatorValue,
+      Operator__c: this.operatorValue,
       Field_Value__c: this.value
     };
 

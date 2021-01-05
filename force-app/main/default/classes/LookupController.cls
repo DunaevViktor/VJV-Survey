@@ -21,10 +21,10 @@ public with sharing class LookupController {
         }
       }
     } catch (DmlException e) {
-      system.debug('Records retrieve exception');
+      system.debug('Records retrieve exception.');
       system.debug(e);
     } catch (QueryException q) {
-      system.debug('Query exc');
+      system.debug('Query exception.');
       system.debug(q);
     }
     return result;

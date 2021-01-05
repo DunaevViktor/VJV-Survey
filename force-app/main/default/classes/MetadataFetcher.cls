@@ -1,41 +1,24 @@
 public with sharing class MetadataFetcher {
   @AuraEnabled(cacheable=true)
-  public static List<String> getObjectApiNamePickListValues() {
-    List<String> pickListValuesList = new List<String>();
+  public static Map<String, String> getObjectApiNamePickListValues() {
+    Map<String, String> pickListValuesMap = new Map<String, String>();
     Schema.DescribeFieldResult fieldResult = Trigger_Rule__c.Object_Api_Name__c.getDescribe();
     List<Schema.PicklistEntry> ple = fieldResult.getPicklistValues();
     for (Schema.PicklistEntry pickListVal : ple) {
-      pickListValuesList.add(pickListVal.getLabel());
+      pickListValuesMap.put(pickListVal.getValue(), pickListVal.getLabel());
     }
-    return pickListValuesList;
+    return pickListValuesMap;
   }
 
   @AuraEnabled(cacheable=true)
-  public static List<String> getTriggerRuleOpearatorPickListValues() {
-    List<String> pickListValuesList = new List<String>();
+  public static Map<String, String> getTriggerRuleOperatorPickListValues() {
+    Map<String, String> pickListValuesMap = new Map<String, String>();
     Schema.DescribeFieldResult fieldResult = Trigger_Rule__c.Operator__c.getDescribe();
     List<Schema.PicklistEntry> ple = fieldResult.getPicklistValues();
     for (Schema.PicklistEntry pickListVal : ple) {
-      pickListValuesList.add(pickListVal.getLabel());
+      pickListValuesMap.put(pickListVal.getValue(), pickListVal.getLabel());
     }
-    return pickListValuesList;
-  }
-
-  @AuraEnabled(cacheable=true)
-  public static Map<String, List<String>> getObjectFields(
-    String objectApiName
-  ) {
-    SObjectType sobjectType = Schema.getGlobalDescribe().get(objectApiName);
-    Map<String, Schema.SObjectField> sobjectfields = sobjectType.getDescribe()
-      .fields.getMap();
-
-    Map<String, List<String>> sObjectFieldMap = new Map<String, List<String>>();
-    for (String s : sobjectfields.keySet()) {
-      List<String> extraInfo = new List<String>();
-      Schema.SObjectField field = sobjectfields.get(s);
-      populateListWithReferencedObjectNames(field.getDescribe(), extraInfo);
-    }
-    return sObjectFieldMap;
+    return pickListValuesMap;
   }
 
   @AuraEnabled(cacheable=true)
@@ -77,9 +60,6 @@ public with sharing class MetadataFetcher {
     }
 
     for (Schema.SObjectType reference : result.getReferenceTo()) {
-      System.debug(
-        'Lookup reference object name: ' + reference.getDescribe().getName()
-      );
       destination.add(reference.getDescribe().getName());
     }
   }
@@ -90,22 +70,12 @@ public with sharing class MetadataFetcher {
     String field
   ) {
     Map<String, String> options = new Map<String, String>();
-
-    // Get the object type of the SObject.
     Schema.sObjectType objType = Schema.getGlobalDescribe().get(objApiName);
-
-    // Describe the SObject using its object type.
     Schema.DescribeSObjectResult objDescribe = objType.getDescribe();
-
-    // Get a map of fields for the SObject
     Map<String, Schema.SObjectField> fieldMap = objDescribe.fields.getMap();
-
-    // Get the list of picklist values for this field.
     list<Schema.PicklistEntry> values = fieldMap.get(field)
       .getDescribe()
       .getPickListValues();
-
-    // Add these values to the selectoption list.
     for (Schema.PicklistEntry a : values) {
       options.put(a.getLabel(), a.getValue());
     }

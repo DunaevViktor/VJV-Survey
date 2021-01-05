@@ -1,6 +1,6 @@
 public with sharing class TriggerRuleController {
   @AuraEnabled(cacheable=false)
-  public static List<Trigger_Rule__c> createTrigerRuleList() {
+  public static List<Trigger_Rule__c> createTriggerRuleList() {
     return new List<Trigger_Rule__c>();
   }
 

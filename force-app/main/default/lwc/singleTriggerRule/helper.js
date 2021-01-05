@@ -9,20 +9,23 @@ const booleanPicklistOptions = [
   }
 ];
 
-const NULL = "NULL";
-const NOT_NULL = "NOT NULL";
+const NULL = "IS NULL";
 const GREATER_THAN = "GREATER THAN";
 const LESS_THAN = "LESS THAN";
+const CONTAINS = "CONTAINS";
+const NOT_CONTAINS = "NOT CONTAINS";
 
 const generateComboboxOptions = (result) => {
   let comboboxOptions = [];
-  result.forEach((objectLabel) => {
-    let comboboxObject = {
-      label: objectLabel,
-      value: objectLabel
-    };
-    comboboxObjectOptions.push(comboboxObject);
-  });
+  for (let key in result) {
+    if (Object.prototype.hasOwnProperty.call(result, key)) {
+      let comboboxObject = {
+        label: result[key],
+        value: key
+      };
+      comboboxOptions.push(comboboxObject);
+    }
+  }
   return comboboxOptions;
 };
 
@@ -43,19 +46,19 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
       fieldObject.isInput = true;
       fieldObject.type = "text";
       fieldObject.value = settedValue;
-      fieldObject.operatorType = 1;
+      fieldObject.operatorType = 3;
       break;
     case "PHONE":
       fieldObject.isInput = true;
       fieldObject.pattern = "[0-9]+";
       fieldObject.value = settedValue;
-      fieldObject.operatorType = 1;
+      fieldObject.operatorType = 3;
       break;
     case "EMAIL":
       fieldObject.isInput = true;
       fieldObject.type = "email";
       fieldObject.value = settedValue;
-      fieldObject.operatorType = 1;
+      fieldObject.operatorType = 3;
       break;
     case "CURRENCY":
       fieldObject.isInput = true;
@@ -63,19 +66,19 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
       fieldObject.formatter = "currency";
       fieldObject.step = "0.5";
       fieldObject.value = settedValue;
-      fieldObject.operatorType = 0;
+      fieldObject.operatorType = 2;
       break;
     case "DATETIME":
       fieldObject.isInput = true;
       fieldObject.type = "date";
       fieldObject.value = settedValue;
-      fieldObject.operatorType = 0;
+      fieldObject.operatorType = 2;
       break;
     case "DATE":
       fieldObject.isInput = true;
       fieldObject.type = "date";
       fieldObject.value = settedValue;
-      fieldObject.operatorType = 0;
+      fieldObject.operatorType = 2;
       break;
     case "URL":
       fieldObject.isInput = true;
@@ -98,31 +101,31 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
       fieldObject.max = "99999999999999";
       fieldObject.step = "1";
       fieldObject.value = settedValue;
-      fieldObject.operatorType = 0;
+      fieldObject.operatorType = 2;
       break;
     case "DOUBLE":
       fieldObject.isInput = true;
       fieldObject.type = "number";
       fieldObject.value = settedValue;
-      fieldObject.operatorType = 0;
+      fieldObject.operatorType = 2;
       break;
     case "STRING":
       fieldObject.isInput = true;
       fieldObject.type = "text";
       fieldObject.value = settedValue;
-      fieldObject.operatorType = 1;
+      fieldObject.operatorType = 3;
       break;
     case "ADDRESS":
       fieldObject.isInput = true;
       fieldObject.type = "text";
       fieldObject.value = settedValue;
-      fieldObject.operatorType = 1;
+      fieldObject.operatorType = 3;
       break;
     case "TEXTAREA":
       fieldObject.isInput = true;
       fieldObject.type = "text";
       fieldObject.value = settedValue;
-      fieldObject.operatorType = 1;
+      fieldObject.operatorType = 3;
       break;
     case "REFERENCE":
       fieldObject.isLookup = true;
@@ -169,19 +172,56 @@ const generateBooleanField = (fieldName, settedValue) => {
   return fieldObject;
 };
 
-const checkForNullOperators = (chosenValue) => {
-  if (chosenValue === "NULL" || chosenValue === "NOT NULL") {
+const checkForNullOperator = (chosenValue) => {
+  if (chosenValue === NULL) {
     return true;
   }
   return false;
 };
 
-const filterComparisonOperators = (fullOperatorList) => {
-  const reducedOperatorList = fullOperatorList.filter(
+const generateComparisonOperatorList = (fullOperatorList) => {
+  const comparisonOperatorList = fullOperatorList.filter(
+    (operator) => operator.value !== CONTAINS && operator.value !== NOT_CONTAINS
+  );
+  return comparisonOperatorList;
+};
+
+const generateContaintmentOperatorList = (fullOperatorList) => {
+  const containtmentOperatorList = fullOperatorList.filter(
     (operator) =>
       operator.value !== GREATER_THAN && operator.value !== LESS_THAN
   );
+  return containtmentOperatorList;
+};
+
+const generateReducedOperatorList = (fullOperatorList) => {
+  const reducedOperatorList = fullOperatorList.filter(
+    (operator) =>
+      operator.value !== CONTAINS &&
+      operator.value !== NOT_CONTAINS &&
+      operator.value !== GREATER_THAN &&
+      operator.value !== LESS_THAN
+  );
   return reducedOperatorList;
+};
+
+const getBooleanPicklistOptions = () => {
+  return booleanPicklistOptions;
+};
+
+const generateFieldsDescriptionsList = (result) => {
+  let comboboxFieldsOptions = [];
+  result.forEach((fieldDescriptionList) => {
+    console.log(fieldDescriptionList);
+    let fieldObject = {
+      label: fieldDescriptionList[1],
+      value: fieldDescriptionList[0],
+      datatype: fieldDescriptionList[2]
+    };
+    setReferencedObjectNames(fieldDescriptionList, fieldObject);
+    comboboxFieldsOptions.push(fieldObject);
+  });
+  return comboboxFieldsOptions;
 };
 
 export {
@@ -189,6 +229,10 @@ export {
   getFieldAttributes,
   setReferencedObjectNames,
   generateBooleanField,
-  checkForNullOperators,
-  filterComparisonOperators
+  checkForNullOperator,
+  generateComparisonOperatorList,
+  getBooleanPicklistOptions,
+  generateFieldsDescriptionsList,
+  generateContaintmentOperatorList,
+  generateReducedOperatorList
 };
