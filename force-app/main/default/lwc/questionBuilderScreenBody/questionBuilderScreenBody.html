@@ -50,4 +50,20 @@
       </div>
     </div>
   </div>
+
+  <hr class="slds-m-bottom_small" />
+
+  <div class="slds-text-align_right">
+    <lightning-button
+      label={label.previous}
+      onclick={clickPreviousButton}
+    ></lightning-button>
+    <lightning-button
+      variant="brand"
+      label={label.next}
+      onclick={clickNextButton}
+      class="slds-m-left_x-small"
+    ></lightning-button>
+  </div>
+
 </template>

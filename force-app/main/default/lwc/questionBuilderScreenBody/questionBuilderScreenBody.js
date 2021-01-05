@@ -5,6 +5,11 @@ import createQuestion from "@salesforce/apex/QuestionController.createQuestion";
 import getStandardQuestions from "@salesforce/apex/QuestionController.getStandardQuestions";
 import getTemplatesQuestions from "@salesforce/apex/QuestionController.getTemplatesQuestions";
 
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
+import previous from "@salesforce/label/c.previous";
+import next from "@salesforce/label/c.next";
+
 export default class QuestionBuilderScreenBody extends LightningElement {
   NO_TEMPLATE_VALUE = "0";
 
@@ -24,6 +29,11 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
   @track templateOptionsValue;
   noTemplate;
+
+  label = {
+    previous,
+    next
+  };
 
   connectedCallback() {
     this.displayedQuestions = JSON.parse(JSON.stringify(this.questions));
@@ -346,5 +356,26 @@ export default class QuestionBuilderScreenBody extends LightningElement {
       detail: { standardQuestions: [...this.displayedStandardQuestions] }
     });
     this.dispatchEvent(changeEvent);
+  }
+
+  clickPreviousButton() {
+    const previousEvent = new CustomEvent("previous", {});
+    this.dispatchEvent(previousEvent);
+  }
+
+  clickNextButton() {
+    if(this.displayedQuestions.length < 2) {
+      const event = new ShowToastEvent({
+        title: "Unable to continue",
+        message: "Your survey should have at least two questions",
+        variant: "error",
+      });
+      this.dispatchEvent(event);
+
+      return;
+    } 
+
+    const nextEvent = new CustomEvent("next", {});
+    this.dispatchEvent(nextEvent);
   }
 }

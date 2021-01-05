@@ -69,7 +69,12 @@ export default class QuestionForm extends LightningElement {
   }
 
   handleSettingChange(event) {
-    this.question[event.detail.value] = !this.question[event.detail.value];
+    this.question.Required__c = false;
+    this.question.IsReusable__c = false;
+
+    for (const value of event.detail.value) {
+      this.question[value] = !this.question[value];
+    }
   }
 
   setOptionsEnabling() {
@@ -249,6 +254,8 @@ export default class QuestionForm extends LightningElement {
     }
 
     this.getQuestionAttributes();
+
+    console.log(JSON.parse(JSON.stringify(this.question)));
 
     const editEvent = new CustomEvent("edit", {
       detail: { ...this.question }
