@@ -4,7 +4,7 @@
   },
 
   changeSurveyLogo: function (component, event) {
-    component.set("v.surveyLogo", event.getParam("logoData"));
+    component.set("v.surveyLogo", event.getParam("logoUrl"));
   },
 
   changeSurveyColor: function (component, event) {

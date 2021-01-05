@@ -7,7 +7,7 @@ export default class SurveyMainSettings extends LightningElement {
 
   @track surveyName;
   @track logoSrc;
-  @track surveyColor = "#5679c0";
+  @track surveyColor;
 
   connectedCallback() {
     this.loadSurveyData();
@@ -24,6 +24,9 @@ export default class SurveyMainSettings extends LightningElement {
           .querySelector("c-image-upload")
           .updateImageUrl(this.logoSrc);
         this.surveyColor = result.Background_Color__c;
+        this.handleNameChange();
+        this.handleColorChange();
+        this.handleImageUpdate();
       }
     });
   }
@@ -46,5 +49,9 @@ export default class SurveyMainSettings extends LightningElement {
 
   handleImageUpdate(event) {
     this.logoSrc = event.detail.imageUrl;
+    const changeLogoEvent = new CustomEvent("logochange", {
+      detail: { logoUrl: this.logoSrc }
+    });
+    this.dispatchEvent(changeLogoEvent);
   }
 }
