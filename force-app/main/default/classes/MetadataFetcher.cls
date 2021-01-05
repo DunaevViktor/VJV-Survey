@@ -26,9 +26,7 @@ public with sharing class MetadataFetcher {
     String objectApiName
   ) {
     SObjectType sobjectType = Schema.getGlobalDescribe().get(objectApiName);
-    Map<String, Schema.SObjectField> sobjectfields = sobjectType.getDescribe()
-      .fields.getMap();
-
+    Map<String, Schema.SObjectField> sobjectfields = sobjectType.getDescribe().fields.getMap();
     List<List<String>> sObjectFieldList = new List<List<String>>();
     for (String s : sobjectfields.keySet()) {
       List<String> fieldDescriptionList = new List<String>(); // [0] - field api name; [1] - field label; [2] - datatype; [3...] - referenced objects api names (if it is lookup field)
@@ -73,9 +71,7 @@ public with sharing class MetadataFetcher {
     Schema.sObjectType objType = Schema.getGlobalDescribe().get(objApiName);
     Schema.DescribeSObjectResult objDescribe = objType.getDescribe();
     Map<String, Schema.SObjectField> fieldMap = objDescribe.fields.getMap();
-    list<Schema.PicklistEntry> values = fieldMap.get(field)
-      .getDescribe()
-      .getPickListValues();
+    list<Schema.PicklistEntry> values = fieldMap.get(field).getDescribe().getPickListValues();
     for (Schema.PicklistEntry a : values) {
       options.put(a.getLabel(), a.getValue());
     }
