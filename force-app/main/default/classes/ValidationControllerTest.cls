@@ -8,10 +8,6 @@ public with sharing class ValidationControllerTest {
     System.assertEquals(validations.size(), 0, INVALID_VALIDATIONS_AMOUNT);
 
     List<Validation__c> validationsDatabase = [SELECT Id FROM Validation__c];
-    System.assertEquals(
-      validationsDatabase.size(),
-      0,
-      INVALID_VALIDATIONS_AMOUNT
-    );
+    System.assertEquals(validationsDatabase.size(),0,INVALID_VALIDATIONS_AMOUNT);
   }
 }
