@@ -6,12 +6,8 @@ export default class SurveyMainSettings extends LightningElement {
   @api surveyId;
 
   @track surveyName;
-  @track surveyLogoData;
-  @track surveyColor = "#5679c0";
-
-  @track displayLogoPreview;
   @track logoSrc;
-  @track logoTypes = "image/png, image/jpeg";
+  @track surveyColor = "#5679c0";
 
   connectedCallback() {
     this.loadSurveyData();
@@ -20,17 +16,16 @@ export default class SurveyMainSettings extends LightningElement {
   loadSurveyData() {
     getSurveyData({
       surveyId: this.surveyId
-    })
-      .then((result) => {
-        if (result) {
-          this.surveyName = result.Name;
-          this.logoSrc = result.Logo__c;
-          this.surveyColor = result.Background_Color__c;
-        }
-      })
-      .then(() => {
-        this.updateLogoPreviewStatus();
-      });
+    }).then((result) => {
+      if (result) {
+        this.surveyName = result.Name;
+        this.logoSrc = result.Logo__c;
+        this.template
+          .querySelector("c-image-upload")
+          .updateImageUrl(this.logoSrc);
+        this.surveyColor = result.Background_Color__c;
+      }
+    });
   }
 
   handleNameChange(event) {
@@ -49,33 +44,7 @@ export default class SurveyMainSettings extends LightningElement {
     this.dispatchEvent(changeColorEvent);
   }
 
-  updateLogoPreviewStatus() {
-    if (this.logoSrc) {
-      this.displayLogoPreview = true;
-    } else {
-      this.displayLogoPreview = false;
-    }
+  handleImageUpdate(event) {
+    this.logoSrc = event.detail.imageUrl;
   }
-
-  handleLogoChange(event) {
-    const file = event.target.files[0];
-    let reader = new FileReader();
-    reader.onloadend = () => {
-      let logoBlob = reader.result;
-      this.logoSrc = logoBlob;
-      this.updateLogoPreviewStatus();
-      let base64 = "base64,";
-      let base64Content = logoBlob.substring(
-        logoBlob.indexOf(base64) + base64.length
-      );
-      this.surveyLogoData = encodeURIComponent(base64Content);
-    };
-    reader.readAsDataURL(file);
-    const changeLogoEvent = new CustomEvent("logochange", {
-      detail: { logoData: this.surveyLogoData }
-    });
-    this.dispatchEvent(changeLogoEvent);
-  }
-
-  getFileBase64Data() {}
 }

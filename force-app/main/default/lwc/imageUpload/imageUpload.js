@@ -1,13 +1,20 @@
-import { LightningElement, track } from "lwc";
+import { LightningElement, api, track } from "lwc";
 import DELETE_ICON from "@salesforce/resourceUrl/DeleteIcon";
 
 export default class ImageUpload extends LightningElement {
   @track imageFile;
   @track displayImage = false;
   @track imageBlobUrl;
+  @track imageUrl;
 
   acceptedFormats = "image/png, image/jpeg";
   removeIconUrl = DELETE_ICON;
+
+  @api
+  updateImageUrl(imageUrl) {
+    this.imageUrl = imageUrl;
+    this.updateImageArea();
+  }
 
   uploadImage(event) {
     this.imageFile = event.target.files[0];
@@ -26,6 +33,7 @@ export default class ImageUpload extends LightningElement {
 
   clearFile() {
     this.imageFile = undefined;
+    this.imageUrl = undefined;
     this.imageBlobUrl = undefined;
     this.updateImageArea();
   }
@@ -42,10 +50,21 @@ export default class ImageUpload extends LightningElement {
   }
 
   updateImageArea() {
-    if (this.imageBlobUrl) {
+    if (this.imageUrl) {
       this.displayImage = true;
+    } else if (this.imageBlobUrl) {
+      this.imageUrl = this.imageBlobUrl;
+      this.displayImage = true;
+      this.dispatchImageUrl();
     } else {
       this.displayImage = false;
     }
+  }
+
+  dispatchImageUrl() {
+    const imageUrlUpdateEvent = new CustomEvent("updateimageurl", {
+      detail: { imageUrl: this.imageUrl }
+    });
+    this.dispatchEvent(imageUrlUpdateEvent);
   }
 }
