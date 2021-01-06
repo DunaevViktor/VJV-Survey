@@ -1,12 +1,27 @@
-import { LightningElement, api, track } from "lwc";
+import { LightningElement, api, track, wire } from "lwc";
 import getTemplateSurveys from "@salesforce/apex/SurveyController.getTemplateSurveys";
 import createQuestionList from "@salesforce/apex/QuestionController.createQuestionList";
 import createQuestion from "@salesforce/apex/QuestionController.createQuestion";
 import getStandardQuestions from "@salesforce/apex/QuestionController.getStandardQuestions";
 import getTemplatesQuestions from "@salesforce/apex/QuestionController.getTemplatesQuestions";
 
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
+import selected_survey_template from "@salesforce/label/c.selected_survey_template";
+import no_questions from "@salesforce/label/c.no_questions";
+import previous from "@salesforce/label/c.previous";
+import next from "@salesforce/label/c.next";
+import no_template from "@salesforce/label/c.no_template";
+import unable_to_continue from "@salesforce/label/c.unable_to_continue";
+import should_have_two_questions from "@salesforce/label/c.should_have_two_questions";
+import limit_question_sexceeded from "@salesforce/label/c.limit_question_sexceeded";
+import errorMessage from "@salesforce/label/c.errorMessage";
+
 export default class QuestionBuilderScreenBody extends LightningElement {
+
+  ERROR_VARIANT = "error";
   NO_TEMPLATE_VALUE = "0";
+  MAX_QUESTION_AMOUNT = 20;
 
   @api templates;
   @api standardQuestions;
@@ -25,6 +40,16 @@ export default class QuestionBuilderScreenBody extends LightningElement {
   @track templateOptionsValue;
   noTemplate;
 
+  @track isError = false;
+  
+  label = {
+    selected_survey_template,
+    no_questions,
+    errorMessage,
+    previous,
+    next
+  };
+
   connectedCallback() {
     this.displayedQuestions = JSON.parse(JSON.stringify(this.questions));
     this.displayedTemplates = JSON.parse(JSON.stringify(this.templates));
@@ -41,7 +66,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     this.initStandardQuestions();
 
     this.noTemplate = {
-      label: "No Template",
+      label: no_template,
       value: this.NO_TEMPLATE_VALUE
     };
 
@@ -76,6 +101,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
         })
         .catch((error) => {
           console.log(error);
+          this.setError();
         });
     }
   }
@@ -92,6 +118,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
       })
       .catch((error) => {
         console.log(error);
+        this.setError();
       });
   }
 
@@ -104,6 +131,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
         })
         .catch((error) => {
           console.log(error);
+          this.setError();
         });
     }
   }
@@ -117,6 +145,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
         })
         .catch((error) => {
           console.log(error);
+          this.setError();
         });
     } else {
       this.hasQuestions = this.displayedQuestions.length > 0;
@@ -134,6 +163,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
       })
       .catch((error) => {
         console.log(error);
+        this.setError();
       });
   }
 
@@ -176,6 +206,10 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     const question = event.detail;
     question.Position__c = this.displayedQuestions.length + 1;
 
+    if(this.displayedQuestions.length === this.MAX_QUESTION_AMOUNT) {
+      this.showToastMessage(unable_to_continue, limit_question_sexceeded, this.ERROR_VARIANT);
+      return;
+    }
     this.displayedQuestions.push(question);
 
     this.hasQuestions = this.displayedQuestions.length > 0;
@@ -320,6 +354,10 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     this.sendQuestionsChangeEvent();
   }
 
+  setError() {
+    this.isError = true;
+  }
+
   sendQuestionsChangeEvent() {
     const changeEvent = new CustomEvent("questionschange", {
       detail: { questions: [...this.displayedQuestions] }
@@ -346,5 +384,29 @@ export default class QuestionBuilderScreenBody extends LightningElement {
       detail: { standardQuestions: [...this.displayedStandardQuestions] }
     });
     this.dispatchEvent(changeEvent);
+  }
+
+  clickPreviousButton() {
+    const previousEvent = new CustomEvent("previous", {});
+    this.dispatchEvent(previousEvent);
+  }
+
+  clickNextButton() {
+    if(this.displayedQuestions.length < 2) {
+      this.showToastMessage(unable_to_continue, should_have_two_questions, this.ERROR_VARIANT);
+      return;
+    } 
+
+    const nextEvent = new CustomEvent("next", {});
+    this.dispatchEvent(nextEvent);
+  }
+
+  showToastMessage(title, message, variant) {
+    const event = new ShowToastEvent({
+      title,
+      message,
+      variant
+    });
+    this.dispatchEvent(event);
   }
 }

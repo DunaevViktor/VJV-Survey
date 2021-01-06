@@ -33,6 +33,8 @@
     ontemplateschange="{!c.changeTemplates}"
     ontquestionschange="{!c.changeTemplateQuestions}"
     onstquestionschange="{!c.changeStandardQuestions}"
+    onprevious="{!c.onPrevious}"
+    onnext="{!c.onNext}"
   >
   </c:questionBuilderScreenBody>
 </aura:component>

@@ -2,13 +2,13 @@
   <h2>Select standard question</h2>
   <lightning-input
     type="text"
-    label="Specify Question"
+    label={label.specify_question}
     onchange={onSearchTermChange}
   ></lightning-input>
 
   <div role="listbox">
     <template if:false={standardQuestions.length}>
-      Don't have standard questions
+      {label.no_standard_questions}
     </template>
 
     <template if:true={standardQuestions.length}>
@@ -17,7 +17,7 @@
         role="presentation"
       >
         <template if:false={searchResults.length}>
-          Don't have relevant questions
+          {label.no_relevant_questions}
         </template>
 
         <template for:each={searchResults} for:item="result">

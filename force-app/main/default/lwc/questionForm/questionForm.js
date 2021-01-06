@@ -6,11 +6,30 @@ import { getObjectInfo } from "lightning/uiObjectInfoApi";
 
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
+import {questionTypes} from "c/formUtil";
+
+import edit_question_form_title from "@salesforce/label/c.edit_question_form_title";
+import create_question_form_title from "@salesforce/label/c.create_question_form_title";
+import specify_question from "@salesforce/label/c.specify_question";
+import type from "@salesforce/label/c.type";
+import question_settings from "@salesforce/label/c.question_settings";
+import enter_option_value from "@salesforce/label/c.enter_option_value";
+import save_changes from "@salesforce/label/c.save_changes";
+import cancel_edit from "@salesforce/label/c.cancel_edit";
+import add_option from "@salesforce/label/c.add_option";
+import add_question from "@salesforce/label/c.add_question";
+import is_required from "@salesforce/label/c.is_required";
+import is_reusable from "@salesforce/label/c.is_reusable";
+import option_already_exists from "@salesforce/label/c.option_already_exists";
+import error_few_options from "@salesforce/label/c.error_few_options";
+import errorTitle from "@salesforce/label/c.error";
+import success from "@salesforce/label/c.success";
+
 export default class QuestionForm extends LightningElement {
-  SUCCESS_TITLE = "Success";
+  SUCCESS_TITLE = success;
   SUCCESS_VARIANT = "success";
 
-  ERROR_TITLE = "Error";
+  ERROR_TITLE = errorTitle;
   ERROR_VARIANT = "error";
 
   @api editedQuestion;
@@ -28,6 +47,22 @@ export default class QuestionForm extends LightningElement {
   @track editOptionValue = "";
 
   displayedTypes;
+
+  requiredFieldName = "Required__c";
+  reusableFieldName = "IsReusable__c";
+
+  label = {
+    edit_question_form_title,
+    create_question_form_title,
+    specify_question,
+    type,
+    question_settings,
+    enter_option_value,
+    save_changes,
+    cancel_edit,
+    add_option,
+    add_question
+  }
 
   connectedCallback() {
     this.isOptionsEnabled = false;
@@ -51,10 +86,12 @@ export default class QuestionForm extends LightningElement {
           value: item.value
         };
       });
+
       this.selectedType = this.displayedTypes[0].value;
       this.setOptionsEnabling();
     } else if (error) {
       console.log(error);
+      this.sendErrorNotification();
     }
   }
 
@@ -69,20 +106,29 @@ export default class QuestionForm extends LightningElement {
   }
 
   handleSettingChange(event) {
-    this.question[event.detail.value] = !this.question[event.detail.value];
+    this.question[this.requiredFieldName] = false;
+    this.question[this.reusableFieldName] = false;
+
+    for (const value of event.detail.value) {
+      this.question[value] = !this.question[value];
+    }
   }
 
   setOptionsEnabling() {
     this.isOptionsEnabled =
-      this.selectedType.toLowerCase().localeCompare("checkbox") === 0 ||
-      this.selectedType.toLowerCase().localeCompare("radiobutton") === 0 ||
-      this.selectedType.toLowerCase().localeCompare("picklist") === 0;
+      this.selectedType.toLowerCase().localeCompare(questionTypes.CHECKBOX.toLowerCase()) === 0 ||
+      this.selectedType.toLowerCase().localeCompare(questionTypes.RADIOBUTTON.toLowerCase()) === 0 ||
+      this.selectedType.toLowerCase().localeCompare(questionTypes.PICKLIST.toLowerCase()) === 0;
+
+    if(this.isOptionsEnabled && !this.question.Question_Options__r) {
+      this.question.Question_Options__r = [];
+    }
   }
 
   get questionSettingList() {
     return [
-      { label: "Is required", value: "Required__c" },
-      { label: "Is reusable", value: "IsReusable__c" }
+      { label: is_required, value: this.requiredFieldName },
+      { label: is_reusable, value: this.reusableFieldName }
     ];
   }
 
@@ -104,9 +150,9 @@ export default class QuestionForm extends LightningElement {
     this.selectedType = this.question.Type__c;
     this.selectedSettings = [];
 
-    if (this.question.Required__c) this.selectedSettings.push("Required__c");
-    if (this.question.IsReusable__c)
-      this.selectedSettings.push("IsReusable__c");
+    if (this.question[this.requiredFieldName]) this.selectedSettings.push(this.requiredFieldName);
+    if (this.question[this.reusableFieldName])
+      this.selectedSettings.push(this.reusableFieldName);
 
     this.setOptionsEnabling();
 
@@ -117,16 +163,20 @@ export default class QuestionForm extends LightningElement {
     const input = this.template.querySelector(".option-input");
     if (!input.validity.valid) return;
 
+    console.log(1);
+
     const filteredOptions = this.question.Question_Options__r.filter(
       (option) => {
         return option.Value__c.localeCompare(input.value) === 0;
       }
     );
 
+    console.log(2);
+
     if (filteredOptions.length > 0) {
       this.showToastMessage(
         this.ERROR_TITLE,
-        "Option with such value already exists!",
+        option_already_exists,
         this.ERROR_VARIANT
       );
       return;
@@ -170,7 +220,7 @@ export default class QuestionForm extends LightningElement {
     if (filteredOptions.length > 0) {
       this.showToastMessage(
         this.ERROR_TITLE,
-        "Option with such value already exists!",
+        option_already_exists,
         this.ERROR_VARIANT
       );
       return;
@@ -208,7 +258,7 @@ export default class QuestionForm extends LightningElement {
     ) {
       this.showToastMessage(
         this.ERROR_TITLE,
-        "The number of options must be at least two",
+        error_few_options,
         this.ERROR_VARIANT
       );
       return;
@@ -220,8 +270,6 @@ export default class QuestionForm extends LightningElement {
       detail: { ...this.question }
     });
     this.dispatchEvent(addEvent);
-
-    this.resetForm();
   }
 
   cancelQuestionEdit() {
@@ -242,7 +290,7 @@ export default class QuestionForm extends LightningElement {
     ) {
       this.showToastMessage(
         this.ERROR_TITLE,
-        "The number of options must be at least two",
+        option_already_exists,
         this.ERROR_VARIANT
       );
       return;
@@ -267,6 +315,11 @@ export default class QuestionForm extends LightningElement {
       this.question.Question_Options__r = null;
     }
     this.question.Type__c = this.selectedType;
+  }
+
+  sendErrorNotification() {
+    const errorEvent = new CustomEvent("error", {});
+    this.dispatchEvent(errorEvent);
   }
 
   resetForm() {
