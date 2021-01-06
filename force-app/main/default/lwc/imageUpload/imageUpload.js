@@ -1,12 +1,14 @@
 import { LightningElement, api, track } from "lwc";
 import DELETE_ICON from "@salesforce/resourceUrl/DeleteIcon";
+import getLogoURL from "@salesforce/apex/SurveySettingsController.getLogoURL";
 
 export default class ImageUpload extends LightningElement {
   @track imageFile;
   @track displayImage = false;
-  @track imageBlobUrl;
   @track imageUrl;
+  @track errorMessage;
 
+  logoName;
   acceptedFormats = "image/png, image/jpeg";
   removeIconUrl = DELETE_ICON;
 
@@ -18,13 +20,14 @@ export default class ImageUpload extends LightningElement {
 
   uploadImage(event) {
     this.imageFile = event.target.files[0];
-    this.generateImageBlobUrl();
+    this.logoName = this.imageFile.name;
+    this.generateImageData();
   }
 
   handleDropFile(event) {
     event.preventDefault();
     this.imageFile = event.dataTransfer.files[0];
-    this.generateImageBlobUrl();
+    this.generateImageData();
   }
 
   allowDropFile(event) {
@@ -34,17 +37,31 @@ export default class ImageUpload extends LightningElement {
   clearFile() {
     this.imageFile = undefined;
     this.imageUrl = undefined;
-    this.imageBlobUrl = undefined;
     this.updateImageArea();
   }
 
-  generateImageBlobUrl() {
+  generateImageData() {
     let reader = new FileReader();
 
     reader.onload = () => {
       let blob = reader.result;
-      this.imageBlobUrl = blob;
-      this.updateImageArea();
+      let base64 = "base64,";
+      let imageBase64 = blob.substr(blob.indexOf(base64) + base64.length);
+      getLogoURL({
+        logoName: this.logoName,
+        logoBlobData: imageBase64
+      })
+        .then((result) => {
+          this.imageUrl = result;
+        })
+        .then(() => {
+          console.log("q " + this.imageUrl);
+          this.updateImageArea();
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log(this.imageUrl);
+        });
     };
     reader.readAsDataURL(this.imageFile);
   }
@@ -52,10 +69,6 @@ export default class ImageUpload extends LightningElement {
   updateImageArea() {
     if (this.imageUrl) {
       this.displayImage = true;
-    } else if (this.imageBlobUrl) {
-      this.imageUrl = this.imageBlobUrl;
-      this.displayImage = true;
-      this.dispatchImageUrl();
     } else {
       this.displayImage = false;
     }
