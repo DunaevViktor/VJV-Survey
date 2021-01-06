@@ -92,6 +92,13 @@
         <value>Enter option value</value>
     </labels>
     <labels>
+        <fullName>error</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error</shortDescription>
+        <value>Error</value>
+    </labels>
+    <labels>
         <fullName>errorMessage</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -99,11 +106,32 @@
         <value>Error occured this page during to work</value>
     </labels>
     <labels>
+        <fullName>error_few_options</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error few options</shortDescription>
+        <value>The number of options must be at least two</value>
+    </labels>
+    <labels>
         <fullName>false</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>false</shortDescription>
         <value>False</value>
+    </labels>
+    <labels>
+        <fullName>is_required</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>is_required</shortDescription>
+        <value>Is required</value>
+    </labels>
+    <labels>
+        <fullName>is_reusable</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>is reusable</shortDescription>
+        <value>Is reusable</value>
     </labels>
     <labels>
         <fullName>next</fullName>
@@ -141,6 +169,13 @@
         <value>Don&apos;t have standard questions</value>
     </labels>
     <labels>
+        <fullName>no_template</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>no template</shortDescription>
+        <value>No Template</value>
+    </labels>
+    <labels>
         <fullName>no_validations</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -160,6 +195,13 @@
         <protected>true</protected>
         <shortDescription>operator</shortDescription>
         <value>Operator</value>
+    </labels>
+    <labels>
+        <fullName>option_already_exists</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>option already exists</shortDescription>
+        <value>Option with such value already exists</value>
     </labels>
     <labels>
         <fullName>options</fullName>
@@ -225,11 +267,25 @@
         <value>Selected Survey Template</value>
     </labels>
     <labels>
+        <fullName>should_have_two_questions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>should have two questions</shortDescription>
+        <value>Your survey should have at least two questions</value>
+    </labels>
+    <labels>
         <fullName>specify_question</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>specify question</shortDescription>
         <value>Specify question</value>
+    </labels>
+    <labels>
+        <fullName>success</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>success</shortDescription>
+        <value>Success</value>
     </labels>
     <labels>
         <fullName>text</fullName>
@@ -251,6 +307,13 @@
         <protected>true</protected>
         <shortDescription>type</shortDescription>
         <value>Type</value>
+    </labels>
+    <labels>
+        <fullName>unable_to_continue</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>unable to continue</shortDescription>
+        <value>Unable to continue</value>
     </labels>
     <labels>
         <fullName>up</fullName>
