@@ -27,6 +27,7 @@ export default class ImageUpload extends LightningElement {
   handleDropFile(event) {
     event.preventDefault();
     this.imageFile = event.dataTransfer.files[0];
+    this.logoName = this.imageFile.name;
     this.generateImageData();
   }
 
@@ -53,14 +54,10 @@ export default class ImageUpload extends LightningElement {
       })
         .then((result) => {
           this.imageUrl = result;
+          this.dispatchImageUrl();
         })
         .then(() => {
-          console.log("q " + this.imageUrl);
           this.updateImageArea();
-        })
-        .catch((error) => {
-          console.log(error);
-          console.log(this.imageUrl);
         });
     };
     reader.readAsDataURL(this.imageFile);

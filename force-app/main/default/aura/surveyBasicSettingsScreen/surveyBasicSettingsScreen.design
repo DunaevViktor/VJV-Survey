@@ -1,6 +1,6 @@
 <design:component >
   <design:attribute name="survey" Label="Existing Survey"/>
   <design:attribute name="surveyName" Label="Survey Name"/>
-  <design:attribute name="surveyLogo" Label="Survey Logo Data"/>
+  <design:attribute name="surveyLogo" Label="Survey Logo URL"/>
   <design:attribute name="surveyColor" Label="Survey Color"/>
 </design:component>

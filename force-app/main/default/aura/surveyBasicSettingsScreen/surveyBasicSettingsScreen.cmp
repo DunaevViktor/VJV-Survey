@@ -1,6 +1,11 @@
 <aura:component implements="lightning:availableForFlowScreens" access="global">
   <aura:attribute name="survey" type="Survey__c" default="" access="global" />
-  <aura:attribute name="surveyName" type="String" default="" access="global" />
+  <aura:attribute
+    name="surveyName"
+    type="String"
+    default="New Survey"
+    access="global"
+  />
   <aura:attribute name="surveyLogo" type="String" default="" access="global" />
   <aura:attribute
     name="surveyColor"
@@ -8,6 +13,7 @@
     default="#82bbed"
     access="global"
   />
+
   <c:surveyBasicSettingsScreenBody
     surveyId="{!v.survey.Id}"
     onnamechange="{!c.changeSurveyName}"
