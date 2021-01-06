@@ -38,6 +38,7 @@ export default class ImageUpload extends LightningElement {
   clearFile() {
     this.imageFile = undefined;
     this.imageUrl = undefined;
+    this.dispatchImageUrl();
     this.updateImageArea();
   }
 
