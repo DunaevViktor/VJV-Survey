@@ -1,5 +1,5 @@
 <template>
-  <!--trigger rules-->
+  
   <template for:each={renderConditions} for:item="condition">
     <template if:true={condition.cond}>
       <c-single-trigger-rule
@@ -13,7 +13,6 @@
     </template>
   </template>
 
-  <!-- PLUS BUTTON (must be visible only 1-4 els!)-->
   <template if:true={isPlusVisible}>
     <lightning-layout
       horizontal-align="space"
