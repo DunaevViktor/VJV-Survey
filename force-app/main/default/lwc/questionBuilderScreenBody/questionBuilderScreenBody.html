@@ -4,7 +4,7 @@
       <div class="slds-box slds-box_x-small slds-m-around_x-small">
         <lightning-combobox
           name="template"
-          label="Selected Survey Template"
+          label={label.selected_survey_template}
           value={templateOptionsValue}
           options={templateOptions}
           onchange={handleTemplateChange}
@@ -30,7 +30,7 @@
       ></c-question-form>
 
       <div class="slds-box slds-box_x-small slds-m-around_x-small">
-        <template if:false={hasQuestions}> Don't have questions yet </template>
+        <template if:false={hasQuestions}>{label.no_questions}</template>
 
         <template if:true={hasQuestions}>
           <template for:each={displayedQuestions} for:item="displayedQuestion">
@@ -42,8 +42,7 @@
                 ondown={downQuestion}
                 onup={upQuestion}
               >
-                ></c-question-card
-              >
+              </c-question-card>
             </div>
           </template>
         </template>

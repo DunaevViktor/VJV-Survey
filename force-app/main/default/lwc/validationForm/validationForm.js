@@ -9,7 +9,7 @@ import {
   questionTypes,
   operatorTypes,
   typesDescription
-} from "./validationFormHelper";
+} from "c/formUtil";
 
 import question from "@salesforce/label/c.question";
 import dependent_question from "@salesforce/label/c.dependent_question";

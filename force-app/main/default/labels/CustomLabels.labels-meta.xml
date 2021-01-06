@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
         <fullName>add</fullName>
@@ -8,11 +8,39 @@
         <value>Add</value>
     </labels>
     <labels>
+        <fullName>add_option</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>add option</shortDescription>
+        <value>Add Option</value>
+    </labels>
+    <labels>
+        <fullName>add_question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>add question</shortDescription>
+        <value>Add Question</value>
+    </labels>
+    <labels>
+        <fullName>cancel_edit</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>cancel edit</shortDescription>
+        <value>Cancel edit</value>
+    </labels>
+    <labels>
         <fullName>compared_value</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>compared value</shortDescription>
         <value>Compared Value</value>
+    </labels>
+    <labels>
+        <fullName>create_question_form_title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>create question form title</shortDescription>
+        <value>Question creating form</value>
     </labels>
     <labels>
         <fullName>delete</fullName>
@@ -29,11 +57,39 @@
         <value>Dependent question</value>
     </labels>
     <labels>
+        <fullName>down</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>down</shortDescription>
+        <value>Down</value>
+    </labels>
+    <labels>
+        <fullName>edit</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>edit</shortDescription>
+        <value>Edit</value>
+    </labels>
+    <labels>
+        <fullName>edit_question_form_title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>edit question form title</shortDescription>
+        <value>Edit question form</value>
+    </labels>
+    <labels>
         <fullName>enter_compared_value</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>enter compared value</shortDescription>
         <value>Enter Сompared Value</value>
+    </labels>
+    <labels>
+        <fullName>enter_option_value</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>enter option value</shortDescription>
+        <value>Enter option value</value>
     </labels>
     <labels>
         <fullName>errorMessage</fullName>
@@ -57,11 +113,32 @@
         <value>Next</value>
     </labels>
     <labels>
+        <fullName>no_questions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>no questions</shortDescription>
+        <value>Don&apos;t have questions yet</value>
+    </labels>
+    <labels>
         <fullName>no_questions_to_validation</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>no questions to validation</shortDescription>
         <value>Don&apos;t have questions to create visibility validation</value>
+    </labels>
+    <labels>
+        <fullName>no_relevant_questions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>no relevant questions</shortDescription>
+        <value>Don&apos;t have relevant questions</value>
+    </labels>
+    <labels>
+        <fullName>no_standard_questions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>no standard questions</shortDescription>
+        <value>Don&apos;t have standard questions</value>
     </labels>
     <labels>
         <fullName>no_validations</fullName>
@@ -85,6 +162,13 @@
         <value>Operator</value>
     </labels>
     <labels>
+        <fullName>options</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>options</shortDescription>
+        <value>Options</value>
+    </labels>
+    <labels>
         <fullName>previous</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -96,8 +180,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>previous button message</shortDescription>
-        <value
-    >If you will click this button you will lost all validations variables</value>
+        <value>If you will click this button you will lost all validations variables</value>
     </labels>
     <labels>
         <fullName>question</fullName>
@@ -105,6 +188,20 @@
         <protected>true</protected>
         <shortDescription>question</shortDescription>
         <value>Question</value>
+    </labels>
+    <labels>
+        <fullName>question_settings</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>question settings</shortDescription>
+        <value>Question Setting</value>
+    </labels>
+    <labels>
+        <fullName>save_changes</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>save changes</shortDescription>
+        <value>Save changes</value>
     </labels>
     <labels>
         <fullName>select_operator</fullName>
@@ -121,6 +218,20 @@
         <value>Select value</value>
     </labels>
     <labels>
+        <fullName>selected_survey_template</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>selected survey template</shortDescription>
+        <value>Selected Survey Template</value>
+    </labels>
+    <labels>
+        <fullName>specify_question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>specify question</shortDescription>
+        <value>Specify question</value>
+    </labels>
+    <labels>
         <fullName>text</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -133,6 +244,20 @@
         <protected>true</protected>
         <shortDescription>true</shortDescription>
         <value>True</value>
+    </labels>
+    <labels>
+        <fullName>type</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>type</shortDescription>
+        <value>Type</value>
+    </labels>
+    <labels>
+        <fullName>up</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>up</shortDescription>
+        <value>Up</value>
     </labels>
     <labels>
         <fullName>value</fullName>

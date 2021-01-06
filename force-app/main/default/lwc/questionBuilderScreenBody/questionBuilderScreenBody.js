@@ -7,10 +7,17 @@ import getTemplatesQuestions from "@salesforce/apex/QuestionController.getTempla
 
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
+import selected_survey_template from "@salesforce/label/c.selected_survey_template";
+import no_questions from "@salesforce/label/c.no_questions";
 import previous from "@salesforce/label/c.previous";
 import next from "@salesforce/label/c.next";
+import no_template from "@salesforce/label/c.no_template";
+import unable_to_continue from "@salesforce/label/c.unable_to_continue";
+import should_have_two_questions from "@salesforce/label/c.should_have_two_questions";
 
 export default class QuestionBuilderScreenBody extends LightningElement {
+
+  ERROR_VARIANT = "error";
   NO_TEMPLATE_VALUE = "0";
 
   @api templates;
@@ -31,6 +38,8 @@ export default class QuestionBuilderScreenBody extends LightningElement {
   noTemplate;
 
   label = {
+    selected_survey_template,
+    no_questions,
     previous,
     next
   };
@@ -51,7 +60,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     this.initStandardQuestions();
 
     this.noTemplate = {
-      label: "No Template",
+      label: no_template,
       value: this.NO_TEMPLATE_VALUE
     };
 
@@ -366,9 +375,9 @@ export default class QuestionBuilderScreenBody extends LightningElement {
   clickNextButton() {
     if(this.displayedQuestions.length < 2) {
       const event = new ShowToastEvent({
-        title: "Unable to continue",
-        message: "Your survey should have at least two questions",
-        variant: "error",
+        title: unable_to_continue,
+        message: should_have_two_questions,
+        variant: this.ERROR_VARIANT,
       });
       this.dispatchEvent(event);
 
