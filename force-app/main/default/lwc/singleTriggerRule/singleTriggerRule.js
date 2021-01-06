@@ -258,7 +258,7 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   @api getTriggerRule() {
-    let triggerRule = {
+    const triggerRule = {
       Object_Api_Name__c: this.objectValue,
       Field_Name__c: this.fieldValue,
       Operator__c: this.operatorValue,
