@@ -27,6 +27,8 @@
     }
   },
   "lint-staged": {
+    "**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}": [
+    ],
     "**/{aura|lwc}/**": [
       "eslint"
     ]

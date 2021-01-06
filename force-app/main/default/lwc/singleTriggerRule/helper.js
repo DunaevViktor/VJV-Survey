@@ -1,10 +1,13 @@
+import trueLabel from "@salesforce/label/c.true";
+import falseLabel from "@salesforce/label/c.false";
+
 const booleanPicklistOptions = [
   {
-    label: "TRUE",
+    label: trueLabel,
     value: "true",
   },
   {
-    label: "FALSE",
+    label: falseLabel,
     value: "false",
   },
 ];

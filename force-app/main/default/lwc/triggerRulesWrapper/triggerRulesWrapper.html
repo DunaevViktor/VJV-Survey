@@ -1,5 +1,5 @@
 <template>
-  
+
   <template for:each={renderConditions} for:item="condition">
     <template if:true={condition.cond}>
       <c-single-trigger-rule
@@ -21,14 +21,14 @@
     >
       <lightning-button
         variant="brand-outline"
-        label="+"
+        label={plus}
         title="Add trigger rule"
         onclick={handlePlusClick}
       ></lightning-button>
     </lightning-layout>
   </template>
 
-  <p>{prompt}</p>
+  <p>{tip_for_user}</p>
   <hr />
 
   <c-trigger-rules-footer-navigation

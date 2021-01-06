@@ -1,10 +1,18 @@
 import { LightningElement, track, api } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import createTriggerRuleList from "@salesforce/apex/TriggerRuleController.createTriggerRuleList";
-import promptForUser from "@salesforce/label/c.TriggerRulesPrompt";
+import tip_for_user from "@salesforce/label/c.tip_for_user";
+import trigger_rule_required from "@salesforce/label/c.trigger_rule_required";
+
 
 export default class TriggerRulesWrapper extends LightningElement {
-  prompt = promptForUser;
+
+  plus = "+";
+
+  labels = {
+    tip_for_user,
+    trigger_rule_required
+  }
 
   @track renderConditions = [
     { cond: true, id: 0, isDeleteAvailable: false },
@@ -82,7 +90,7 @@ export default class TriggerRulesWrapper extends LightningElement {
       this.rules[0].Field_Value__c === "" ||
       this.rules[0].Operator__c === ""
     ) {
-      this.showToast("", "At least one trigger rule must be filled.", "error");
+      this.showToast("", this.labels.tip_for_user, "error");
     } else {
       const navigateNextEvent = new CustomEvent("navigatenext", {
         detail: { triggerRules: [...this.rules] },

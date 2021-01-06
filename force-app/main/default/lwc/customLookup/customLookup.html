@@ -35,14 +35,14 @@
                 id="combobox-id-5"
                 aria-controls="listbox-id-5"
                 role="textbox"
-                placeholder="Select an Option"
+                placeholder={labels.select_an_option}
                 readonly
                 value={selectedValue}
               />
               <button
                 class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
                 onclick={removeRecordOnLookup}
-                title="Remove selected option"
+                title={remove_selected_option}
               >
                 <span class="slds-button__icon" aria-hidden="true">
                   <lightning-icon
@@ -52,7 +52,7 @@
                     aria-hidden="true"
                   ></lightning-icon>
                 </span>
-                <span class="slds-assistive-text">Remove selected record</span>
+                <span class="slds-assistive-text">{labels.remove_selected_option}</span>
               </button>
             </div>
           </template>
@@ -74,7 +74,7 @@
                 aria-autocomplete="list"
                 aria-controls="listbox-id-2"
                 role="textbox"
-                placeholder="Search..."
+                placeholder={labels.search}
               />
               <span
                 class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right"

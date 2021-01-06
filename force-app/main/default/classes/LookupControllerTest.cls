@@ -4,11 +4,11 @@ public with sharing class LookupControllerTest {
 
   @testSetup
   static void setup() {
-    Contact testContact = new Contact(LastName = 'Happy New Year');
+    Contact testContact = new Contact(LastName = 'Happy Contact');
     insert testContact;
 
     Lead testLead = new Lead(
-      LastName = 'Happy New Year',
+      LastName = 'Happy Lead',
       Company = 'Test Company'
     );
     insert testLead;
