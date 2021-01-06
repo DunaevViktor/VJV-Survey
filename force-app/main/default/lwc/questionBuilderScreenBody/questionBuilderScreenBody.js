@@ -206,7 +206,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     const question = event.detail;
     question.Position__c = this.displayedQuestions.length + 1;
 
-    if(this.displayedQuestions.length === this.maxQuestionsAmount) {
+    if(this.displayedQuestions.length === this.MAX_QUESTION_AMOUNT) {
       this.showToastMessage(unable_to_continue, limit_question_sexceeded, this.ERROR_VARIANT);
       return;
     }

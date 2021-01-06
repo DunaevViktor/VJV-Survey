@@ -127,7 +127,6 @@
         <value>False</value>
     </labels>
     <labels>
-<<<<<<< HEAD
         <fullName>is_required</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -147,13 +146,13 @@
         <protected>true</protected>
         <shortDescription>limit question sexceeded</shortDescription>
         <value>Limit of questions is exceeded</value>
-=======
+    </labels>
+    <labels>
         <fullName>field</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Field</shortDescription>
         <value>Field</value>
->>>>>>> develop
     </labels>
     <labels>
         <fullName>next</fullName>
@@ -177,7 +176,6 @@
         <value>Don&apos;t have questions to create visibility validation</value>
     </labels>
     <labels>
-<<<<<<< HEAD
         <fullName>no_relevant_questions</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -197,13 +195,13 @@
         <protected>true</protected>
         <shortDescription>no template</shortDescription>
         <value>No Template</value>
-=======
+    </labels>
+    <labels>
         <fullName>no_records_found</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>No records found</shortDescription>
         <value>No records found</value>
->>>>>>> develop
     </labels>
     <labels>
         <fullName>no_validations</fullName>
@@ -269,7 +267,6 @@
         <value>Question</value>
     </labels>
     <labels>
-<<<<<<< HEAD
         <fullName>question_settings</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -282,7 +279,8 @@
         <protected>true</protected>
         <shortDescription>save changes</shortDescription>
         <value>Save changes</value>
-=======
+    </labels>
+    <labels>
         <fullName>remove_selected_option</fullName>
         <language>en_US</language>
         <protected>true</protected>

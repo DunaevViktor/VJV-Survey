@@ -270,8 +270,6 @@ export default class QuestionForm extends LightningElement {
       detail: { ...this.question }
     });
     this.dispatchEvent(addEvent);
-
-    this.resetForm();
   }
 
   cancelQuestionEdit() {
