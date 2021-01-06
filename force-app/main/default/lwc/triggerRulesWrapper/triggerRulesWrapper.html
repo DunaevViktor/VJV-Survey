@@ -1,0 +1,37 @@
+<template>
+
+  <template for:each={renderConditions} for:item="condition">
+    <template if:true={condition.cond}>
+      <c-single-trigger-rule
+        key={condition.id}
+        number={condition.id}
+        is-delete-available={condition.isDeleteAvailable}
+        ondeletetriggerrule={handleDeleteTriggerRule}
+        data-my-id={condition.id}
+        rule={condition.rule}
+      ></c-single-trigger-rule>
+    </template>
+  </template>
+
+  <template if:true={isPlusVisible}>
+    <lightning-layout
+      horizontal-align="space"
+      vertical-align="centre"
+      class="slds-p-top_x-small"
+    >
+      <lightning-button
+        variant="brand-outline"
+        label={plus}
+        title="Add trigger rule"
+        onclick={handlePlusClick}
+      ></lightning-button>
+    </lightning-layout>
+  </template>
+
+  <p>{tip_for_user}</p>
+  <hr />
+
+  <c-trigger-rules-footer-navigation
+    onnavigatenext={handleNavigateNext}
+  ></c-trigger-rules-footer-navigation>
+</template>

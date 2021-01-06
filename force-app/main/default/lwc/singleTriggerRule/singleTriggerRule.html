@@ -1,0 +1,94 @@
+<template>
+  <template if:true={error}>{labels.errorMessage}</template>
+
+  <template if:false={error}>
+    <div class="slds-grid slds-grid_align-spread">
+      <!--Object-->
+      <div class="slds-col slds-size_1-of-6 slds-align-middle">
+        <lightning-combobox
+          name="Object"
+          label={labels.objectLabel}
+          options={objectNames}
+          value={objectValue}
+          onchange={handleObjectChange}
+        >
+        </lightning-combobox>
+      </div>
+
+      <!--Field-->
+      <div class="slds-col slds-size_1-of-6 slds-align-middle">
+        <lightning-combobox
+          name="Field"
+          label={labels.fieldLabel}
+          options={fieldNames}
+          value={fieldValue}
+          onchange={handleFieldChange}
+        >
+        </lightning-combobox>
+      </div>
+
+      <!--Operator-->
+      <div class="slds-col slds-size_1-of-6 slds-align-middle">
+        <lightning-combobox
+          name="Operator"
+          label={labels.operatorLabel}
+          options={operators}
+          value={operatorValue}
+          onchange={handleOperatorChange}
+        >
+        </lightning-combobox>
+      </div>
+
+      <!--Value-->
+      <div class="slds-col slds-size_1-of-6">
+        <lightning-input
+          if:true={field.isInput}
+          name={field.name}
+          label={field.label}
+          value={field.value}
+          type={field.type}
+          pattern={field.pattern}
+          formatter={field.formatter}
+          step={field.step}
+          min={field.min}
+          max={field.max}
+          checked={field.value}
+          onchange={handleValueChange}
+        >
+        </lightning-input>
+
+        <lightning-combobox
+          if:true={field.isCombobox}
+          name={field.label}
+          label={field.label}
+          value={value}
+          onchange={handleValueChange}
+          options={picklistFieldOptions}
+        >
+        </lightning-combobox>
+
+        <c-custom-lookup
+          if:true={field.isLookup}
+          lookup-label={field.objectsApiNames}
+          objects-api-names={field.objectsApiNames}
+          icon-name="standard:account"
+          onrecordselection={handleRecordSelection}
+          selected-record-id={field.value}
+          selected-value={field.name}
+        ></c-custom-lookup>
+      </div>
+
+      <!--Delete button-->
+      <div class="slds-col slds-size_1-of-8 slds-align-bottom">
+        <template if:true={isDeleteAvailable}>
+          <lightning-button
+            variant="destructive"
+            label={labels.deleteLabel}
+            title={labels.deleteTitle}
+            onclick={handleDeleteRuleClick}
+          ></lightning-button>
+        </template>
+      </div>
+    </div>
+  </template>
+</template>

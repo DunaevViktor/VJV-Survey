@@ -50,6 +50,13 @@
         <value>Delete</value>
     </labels>
     <labels>
+        <fullName>delete_trigger_rule</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>delete trigger rule title</shortDescription>
+        <value>Delete trigger rule</value>
+    </labels>
+    <labels>
         <fullName>dependent_question</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -120,6 +127,7 @@
         <value>False</value>
     </labels>
     <labels>
+<<<<<<< HEAD
         <fullName>is_required</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -139,6 +147,13 @@
         <protected>true</protected>
         <shortDescription>limit question sexceeded</shortDescription>
         <value>Limit of questions is exceeded</value>
+=======
+        <fullName>field</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Field</shortDescription>
+        <value>Field</value>
+>>>>>>> develop
     </labels>
     <labels>
         <fullName>next</fullName>
@@ -162,6 +177,7 @@
         <value>Don&apos;t have questions to create visibility validation</value>
     </labels>
     <labels>
+<<<<<<< HEAD
         <fullName>no_relevant_questions</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -181,6 +197,13 @@
         <protected>true</protected>
         <shortDescription>no template</shortDescription>
         <value>No Template</value>
+=======
+        <fullName>no_records_found</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No records found</shortDescription>
+        <value>No records found</value>
+>>>>>>> develop
     </labels>
     <labels>
         <fullName>no_validations</fullName>
@@ -195,6 +218,13 @@
         <protected>true</protected>
         <shortDescription>number</shortDescription>
         <value>number</value>
+    </labels>
+    <labels>
+        <fullName>object</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Object</shortDescription>
+        <value>Object</value>
     </labels>
     <labels>
         <fullName>operator</fullName>
@@ -239,6 +269,7 @@
         <value>Question</value>
     </labels>
     <labels>
+<<<<<<< HEAD
         <fullName>question_settings</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -251,6 +282,27 @@
         <protected>true</protected>
         <shortDescription>save changes</shortDescription>
         <value>Save changes</value>
+=======
+        <fullName>remove_selected_option</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Remove selected option</shortDescription>
+        <value>Remove selected option</value>
+    </labels>
+    <labels>
+        <fullName>search</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Search</shortDescription>
+        <value>Search</value>
+    </labels>
+    <labels>
+        <fullName>select_an_option</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select an option</shortDescription>
+        <value>Select an option</value>
+>>>>>>> develop
     </labels>
     <labels>
         <fullName>select_operator</fullName>
@@ -300,6 +352,20 @@
         <protected>true</protected>
         <shortDescription>text</shortDescription>
         <value>text</value>
+    </labels>
+    <labels>
+        <fullName>tip_for_user</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Tip for user about trigger rules execution</shortDescription>
+        <value>*Survey polling actions will occur when any of the created trigger rules work.</value>
+    </labels>
+    <labels>
+        <fullName>trigger_rule_required</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Fill at least one trigger rule info</shortDescription>
+        <value>Fill at least one trigger rule info</value>
     </labels>
     <labels>
         <fullName>true</fullName>
