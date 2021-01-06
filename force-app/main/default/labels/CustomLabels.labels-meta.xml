@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>add</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>add</shortDescription>
+        <value>Add</value>
+    </labels>
+    <labels>
+        <fullName>compared_value</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>compared value</shortDescription>
+        <value>Compared Value</value>
+    </labels>
+    <labels>
+        <fullName>delete</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>delete</shortDescription>
+        <value>Delete</value>
+    </labels>
+    <labels>
+        <fullName>delete_trigger_rule</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>delete trigger rule title</shortDescription>
+        <value>Delete trigger rule</value>
+    </labels>
+    <labels>
+        <fullName>dependent_question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>dependent question</shortDescription>
+        <value>Dependent question</value>
+    </labels>
+    <labels>
+        <fullName>enter_compared_value</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>enter compared value</shortDescription>
+        <value>Enter Сompared Value</value>
+    </labels>
+    <labels>
+        <fullName>errorMessage</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>errorMessage</shortDescription>
+        <value>Error occured this page during to work</value>
+    </labels>
+    <labels>
+        <fullName>false</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>false</shortDescription>
+        <value>False</value>
+    </labels>
+    <labels>
+        <fullName>field</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Field</shortDescription>
+        <value>Field</value>
+    </labels>
+    <labels>
+        <fullName>next</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>next</shortDescription>
+        <value>Next</value>
+    </labels>
+    <labels>
+        <fullName>no_questions_to_validation</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>no questions to validation</shortDescription>
+        <value>Don&apos;t have questions to create visibility validation</value>
+    </labels>
+    <labels>
+        <fullName>no_records_found</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No records found</shortDescription>
+        <value>No records found</value>
+    </labels>
+    <labels>
+        <fullName>no_validations</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>no validations</shortDescription>
+        <value>Don&apos;t have validations to display</value>
+    </labels>
+    <labels>
+        <fullName>number</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>number</shortDescription>
+        <value>number</value>
+    </labels>
+    <labels>
+        <fullName>object</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Object</shortDescription>
+        <value>Object</value>
+    </labels>
+    <labels>
+        <fullName>operator</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>operator</shortDescription>
+        <value>Operator</value>
+    </labels>
+    <labels>
+        <fullName>previous</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>previous</shortDescription>
+        <value>Previous</value>
+    </labels>
+    <labels>
+        <fullName>previous_button_message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>previous button message</shortDescription>
+        <value>If you will click this button you will lost all validations variables</value>
+    </labels>
+    <labels>
+        <fullName>question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>question</shortDescription>
+        <value>Question</value>
+    </labels>
+    <labels>
+        <fullName>remove_selected_option</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Remove selected option</shortDescription>
+        <value>Remove selected option</value>
+    </labels>
+    <labels>
+        <fullName>search</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Search</shortDescription>
+        <value>Search</value>
+    </labels>
+    <labels>
+        <fullName>select_an_option</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select an option</shortDescription>
+        <value>Select an option</value>
+    </labels>
+    <labels>
+        <fullName>select_operator</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>select operator</shortDescription>
+        <value>Select Operator</value>
+    </labels>
+    <labels>
+        <fullName>select_value</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>select value</shortDescription>
+        <value>Select value</value>
+    </labels>
+    <labels>
+        <fullName>text</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>text</shortDescription>
+        <value>text</value>
+    </labels>
+    <labels>
+        <fullName>tip_for_user</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Tip for user about trigger rules execution</shortDescription>
+        <value>*Survey polling actions will occur when any of the created trigger rules work.</value>
+    </labels>
+    <labels>
+        <fullName>trigger_rule_required</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Fill at least one trigger rule info</shortDescription>
+        <value>Fill at least one trigger rule info</value>
+    </labels>
+    <labels>
+        <fullName>true</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>true</shortDescription>
+        <value>True</value>
+    </labels>
+    <labels>
+        <fullName>value</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>value</shortDescription>
+        <value>Value</value>
+    </labels>
+</CustomLabels>
