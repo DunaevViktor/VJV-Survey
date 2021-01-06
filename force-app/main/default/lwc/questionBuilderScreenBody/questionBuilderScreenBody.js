@@ -14,6 +14,7 @@ import next from "@salesforce/label/c.next";
 import no_template from "@salesforce/label/c.no_template";
 import unable_to_continue from "@salesforce/label/c.unable_to_continue";
 import should_have_two_questions from "@salesforce/label/c.should_have_two_questions";
+import errorMessage from "@salesforce/label/c.errorMessage";
 
 export default class QuestionBuilderScreenBody extends LightningElement {
 
@@ -37,9 +38,12 @@ export default class QuestionBuilderScreenBody extends LightningElement {
   @track templateOptionsValue;
   noTemplate;
 
+  @track isError = false;
+
   label = {
     selected_survey_template,
     no_questions,
+    errorMessage,
     previous,
     next
   };
@@ -95,6 +99,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
         })
         .catch((error) => {
           console.log(error);
+          this.setError();
         });
     }
   }
@@ -111,6 +116,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
       })
       .catch((error) => {
         console.log(error);
+        this.setError();
       });
   }
 
@@ -123,6 +129,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
         })
         .catch((error) => {
           console.log(error);
+          this.setError();
         });
     }
   }
@@ -136,6 +143,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
         })
         .catch((error) => {
           console.log(error);
+          this.setError();
         });
     } else {
       this.hasQuestions = this.displayedQuestions.length > 0;
@@ -153,6 +161,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
       })
       .catch((error) => {
         console.log(error);
+        this.setError();
       });
   }
 
@@ -337,6 +346,10 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
     this.hasQuestions = this.displayedQuestions.length > 0;
     this.sendQuestionsChangeEvent();
+  }
+
+  setError() {
+    this.isError = true;
   }
 
   sendQuestionsChangeEvent() {

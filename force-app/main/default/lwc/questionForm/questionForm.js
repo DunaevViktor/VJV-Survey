@@ -91,6 +91,7 @@ export default class QuestionForm extends LightningElement {
       this.setOptionsEnabling();
     } else if (error) {
       console.log(error);
+      this.sendErrorNotification();
     }
   }
 
@@ -316,6 +317,11 @@ export default class QuestionForm extends LightningElement {
       this.question.Question_Options__r = null;
     }
     this.question.Type__c = this.selectedType;
+  }
+
+  sendErrorNotification() {
+    const errorEvent = new CustomEvent("error", {});
+    this.dispatchEvent(errorEvent);
   }
 
   resetForm() {
