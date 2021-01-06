@@ -134,6 +134,13 @@
         <value>Is reusable</value>
     </labels>
     <labels>
+        <fullName>limit_question_sexceeded</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>limit question sexceeded</shortDescription>
+        <value>Limit of questions is exceeded</value>
+    </labels>
+    <labels>
         <fullName>next</fullName>
         <language>en_US</language>
         <protected>true</protected>
