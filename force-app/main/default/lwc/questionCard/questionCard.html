@@ -2,7 +2,7 @@
   <div class="slds-box slds-box_x-small slds-m-around_x-small">
     <span
       class="slds-icon_container slds-icon-utility-announcement slds-float_right"
-      title="Delete"
+      title={label.deleteTitle}
     >
       <img
         class="slds-icon slds-icon-text-default slds-icon_x-small"
@@ -12,7 +12,7 @@
     </span>
     <span
       class="slds-icon_container slds-icon-utility-announcement slds-float_right"
-      title="Edit"
+      title={label.edit}
     >
       <img
         class="slds-icon slds-icon-text-default slds-icon_x-small"
@@ -22,7 +22,7 @@
     </span>
     <span
       class="slds-icon_container slds-icon-utility-announcement slds-float_right"
-      title="Down"
+      title={label.down}
     >
       <img
         class="slds-icon slds-icon-text-default slds-icon_x-small"
@@ -32,7 +32,7 @@
     </span>
     <span
       class="slds-icon_container slds-icon-utility-announcement slds-float_right"
-      title="Up"
+      title={label.up}
       onclick={upQuestion}
     >
       <img
@@ -53,7 +53,7 @@
     <template if:true={question.Question_Options__r}>
       <br />
       <div class="slds-m-top_x-small">
-        Options:
+        {label.options}:
         <ul class="slds-listbox slds-listbox_vertical" role="presentation">
           <template for:each={question.Question_Options__r} for:item="option">
             <li key={option.Id} role="presentation" class="slds-listbox__item">
