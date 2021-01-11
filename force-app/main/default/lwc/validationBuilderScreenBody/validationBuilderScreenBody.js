@@ -1,5 +1,4 @@
 import { LightningElement, api, track } from "lwc";
-import createValidationList from "@salesforce/apex/ValidationController.createValidationList";
 
 import no_questions_to_validation from "@salesforce/label/c.no_questions_to_validation";
 import errorMessage from "@salesforce/label/c.errorMessage";
@@ -42,15 +41,8 @@ export default class ValidationBuilderScreenBody extends LightningElement {
 
   initValidations() {
     if (!this.displayedValidations) {
-      createValidationList()
-        .then((result) => {
-          this.displayedValidations = result;
-          this.sendValidationsChange();
-        })
-        .catch((error) => {
-          console.log(error);
-          this.setError();
-        });
+      this.displayedValidations = [];
+      this.sendValidationsChange();
     }
   }
 

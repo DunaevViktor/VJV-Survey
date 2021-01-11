@@ -1,7 +1,5 @@
-import { LightningElement, api, track, wire } from "lwc";
+import { LightningElement, api, track } from "lwc";
 import getTemplateSurveys from "@salesforce/apex/SurveyController.getTemplateSurveys";
-import createQuestionList from "@salesforce/apex/QuestionController.createQuestionList";
-import createQuestion from "@salesforce/apex/QuestionController.createQuestion";
 import getStandardQuestions from "@salesforce/apex/QuestionController.getStandardQuestions";
 import getTemplatesQuestions from "@salesforce/apex/QuestionController.getTemplatesQuestions";
 
@@ -61,7 +59,6 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     );
 
     this.initQuestions();
-    this.initQuestion();
     this.initTemplates();
     this.initStandardQuestions();
 
@@ -138,33 +135,17 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
   initQuestions() {
     if (!this.displayedQuestions) {
-      createQuestionList()
-        .then((result) => {
-          this.displayedQuestions = result;
-          this.hasQuestions = this.displayedQuestions.length > 0;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.setError();
-        });
+      this.displayedQuestions = [];
+      this.hasQuestions = false;
     } else {
       this.hasQuestions = this.displayedQuestions.length > 0;
     }
   }
 
   initQuestion() {
-    createQuestion()
-      .then((result) => {
-        this.question = result;
-
-        this.template
+    this.template
           .querySelectorAll("c-question-form")[0]
-          .setQuestion(this.question);
-      })
-      .catch((error) => {
-        console.log(error);
-        this.setError();
-      });
+          .clearQuestion();
   }
 
   handleTemplateChange(event) {

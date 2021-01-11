@@ -32,7 +32,6 @@ export default class QuestionForm extends LightningElement {
   ERROR_TITLE = errorTitle;
   ERROR_VARIANT = "error";
 
-  @api editedQuestion;
   @track question;
 
   @wire(getObjectInfo, { objectApiName: QUESTION_OBJECT })
@@ -66,12 +65,8 @@ export default class QuestionForm extends LightningElement {
 
   connectedCallback() {
     this.isOptionsEnabled = false;
-    if (!this.editedQuestion) {
-      this.question = {};
-      this.question.Question_Options__r = [];
-    } else {
-      this.question = { ...this.editedQuestion };
-    }
+    this.question = {};
+    this.question.Question_Options__r = [];
   }
 
   @wire(getPicklistValues, {
@@ -133,8 +128,8 @@ export default class QuestionForm extends LightningElement {
   }
 
   @api
-  setQuestion(clearQuestion) {
-    this.question = clearQuestion;
+  clearQuestion() {
+    this.question = {};
     this.question.Question_Options__r = [];
     this.isEditMode = false;
     this.resetForm();
@@ -170,9 +165,7 @@ export default class QuestionForm extends LightningElement {
         return option.Value__c.localeCompare(input.value) === 0;
       }
     );
-
-    console.log(2);
-
+    
     if (filteredOptions.length > 0) {
       this.showToastMessage(
         this.ERROR_TITLE,
