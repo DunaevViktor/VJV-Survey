@@ -1,9 +1,17 @@
 import { LightningElement, api, track } from "lwc";
 
+import survey_name from "@salesforce/label/c.survey_name";
+import survey_bg_color from "@salesforce/label/c.survey_bg_color";
+
 export default class SurveyMainSettings extends LightningElement {
   @api existingSurvey;
 
   @track survey;
+
+  label = {
+    survey_name,
+    survey_bg_color
+  };
 
   connectedCallback() {
     this.updateSurveyData();

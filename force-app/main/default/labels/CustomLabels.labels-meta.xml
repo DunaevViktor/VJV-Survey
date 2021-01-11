@@ -71,6 +71,13 @@
         <value>Down</value>
     </labels>
     <labels>
+        <fullName>drag_n_drop_logo</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>drag-n-drop-logo</shortDescription>
+        <value>Drag&apos;n&apos;drop your logo image</value>
+    </labels>
+    <labels>
         <fullName>edit</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -127,6 +134,13 @@
         <value>False</value>
     </labels>
     <labels>
+        <fullName>field</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Field</shortDescription>
+        <value>Field</value>
+    </labels>
+    <labels>
         <fullName>is_required</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -148,11 +162,11 @@
         <value>Limit of questions is exceeded</value>
     </labels>
     <labels>
-        <fullName>field</fullName>
+        <fullName>logo_image</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Field</shortDescription>
-        <value>Field</value>
+        <shortDescription>logo image</shortDescription>
+        <value>Logo image</value>
     </labels>
     <labels>
         <fullName>next</fullName>
@@ -176,6 +190,13 @@
         <value>Don&apos;t have questions to create visibility validation</value>
     </labels>
     <labels>
+        <fullName>no_records_found</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No records found</shortDescription>
+        <value>No records found</value>
+    </labels>
+    <labels>
         <fullName>no_relevant_questions</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -195,13 +216,6 @@
         <protected>true</protected>
         <shortDescription>no template</shortDescription>
         <value>No Template</value>
-    </labels>
-    <labels>
-        <fullName>no_records_found</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>No records found</shortDescription>
-        <value>No records found</value>
     </labels>
     <labels>
         <fullName>no_validations</fullName>
@@ -274,11 +288,11 @@
         <value>Question Setting</value>
     </labels>
     <labels>
-        <fullName>save_changes</fullName>
+        <fullName>remove_image</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>save changes</shortDescription>
-        <value>Save changes</value>
+        <shortDescription>remove image</shortDescription>
+        <value>Remove image</value>
     </labels>
     <labels>
         <fullName>remove_selected_option</fullName>
@@ -286,6 +300,13 @@
         <protected>true</protected>
         <shortDescription>Remove selected option</shortDescription>
         <value>Remove selected option</value>
+    </labels>
+    <labels>
+        <fullName>save_changes</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>save changes</shortDescription>
+        <value>Save changes</value>
     </labels>
     <labels>
         <fullName>search</fullName>
@@ -300,7 +321,6 @@
         <protected>true</protected>
         <shortDescription>Select an option</shortDescription>
         <value>Select an option</value>
->>>>>>> develop
     </labels>
     <labels>
         <fullName>select_operator</fullName>
@@ -343,6 +363,20 @@
         <protected>true</protected>
         <shortDescription>success</shortDescription>
         <value>Success</value>
+    </labels>
+    <labels>
+        <fullName>survey_bg_color</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>survey bg color</shortDescription>
+        <value>Survey Background Color</value>
+    </labels>
+    <labels>
+        <fullName>survey_name</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>survey name</shortDescription>
+        <value>Survey Name</value>
     </labels>
     <labels>
         <fullName>text</fullName>
