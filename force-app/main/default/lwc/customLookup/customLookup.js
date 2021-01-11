@@ -23,13 +23,6 @@ export default class LwcLookup extends LightningElement {
   @api lookupLabel;
   @track message;
 
-  onLeave(event) {
-    setTimeout(() => {
-      this.searchKey = "";
-      this.recordsList = null;
-    }, 300);
-  }
-
   onRecordSelection(event) {
     this.selectedRecordId = event.target.dataset.key;
     this.selectedValue = event.target.dataset.name;
@@ -43,7 +36,7 @@ export default class LwcLookup extends LightningElement {
     this.getLookupResult();
   }
 
-  removeRecordOnLookup(event) {
+  removeRecordOnLookup() {
     this.searchKey = "";
     this.selectedValue = null;
     this.selectedRecordId = null;
