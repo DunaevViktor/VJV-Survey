@@ -26,4 +26,14 @@
 
     <c-image-upload url={survey.Logo__c} onupdateimageurl={handleImageUpdate}> </c-image-upload>
   </div>
+  <hr class="slds-m-bottom_small" />
+  
+  <div class="slds-text-align_right">
+    <lightning-button
+      variant="brand"
+      label={label.next}
+      onclick={clickNextButton}
+      class="slds-m-left_x-small"
+    ></lightning-button>
+  </div>
 </template>

@@ -2,6 +2,8 @@ import { LightningElement, api, track } from "lwc";
 
 import survey_name from "@salesforce/label/c.survey_name";
 import survey_bg_color from "@salesforce/label/c.survey_bg_color";
+import previous from "@salesforce/label/c.previous";
+import next from "@salesforce/label/c.next";
 
 export default class SurveyMainSettings extends LightningElement {
   @api existingSurvey;
@@ -10,11 +12,22 @@ export default class SurveyMainSettings extends LightningElement {
 
   label = {
     survey_name,
-    survey_bg_color
+    survey_bg_color,
+    previous,
+    next
   };
 
   connectedCallback() {
     this.updateSurveyData();
+  }
+
+  validateInput() {
+    const isInputsCorrect = [...this.template.querySelectorAll('lightning-input')]
+      .reduce((validSoFar, inputField) => {
+        inputField.reportValidity();
+        return validSoFar && inputField.checkValidity();
+      }, true);
+    return isInputsCorrect;
   }
 
   updateSurveyData() {
@@ -42,6 +55,13 @@ export default class SurveyMainSettings extends LightningElement {
   handleImageUpdate(event) {
     this.survey.Logo__c = event.detail.imageUrl;
     this.dispatchSurveyData();
+  }
+
+  clickNextButton() {
+    const nextEvent = new CustomEvent("next", {});
+    if (this.validateInput()) {
+      this.dispatchEvent(nextEvent);
+    }
   }
 
   dispatchSurveyData() {

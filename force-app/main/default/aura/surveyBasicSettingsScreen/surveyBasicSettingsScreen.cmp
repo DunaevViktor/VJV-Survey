@@ -4,6 +4,7 @@
   <c:surveyBasicSettingsScreenBody
     existingSurvey="{!v.survey}"
     onsurveydatachange="{!c.changeSurveyData}"
+    onnext="{!c.onNext}"
   >
   </c:surveyBasicSettingsScreenBody>
 </aura:component>
