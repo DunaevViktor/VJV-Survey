@@ -1,13 +1,15 @@
 ({
-  changeSurveyName: function (component, event) {
-    component.set("v.surveyName", event.getParam("name"));
+  changeSurveyData: function (component, event) {
+    component.set("v.survey", event.getParam("survey"));
   },
 
-  changeSurveyLogo: function (component, event) {
-    component.set("v.surveyLogo", event.getParam("logoUrl"));
+  onPrevious: function (cmp) {
+    const navigate = cmp.get("v.navigateFlow");
+    navigate("BACK");
   },
 
-  changeSurveyColor: function (component, event) {
-    component.set("v.surveyColor", event.getParam("color"));
+  onNext: function (cmp) {
+    const navigate = cmp.get("v.navigateFlow");
+    navigate("NEXT");
   }
 });

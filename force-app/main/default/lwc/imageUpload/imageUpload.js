@@ -3,6 +3,7 @@ import DELETE_ICON from "@salesforce/resourceUrl/DeleteIcon";
 import getLogoURL from "@salesforce/apex/SurveySettingsController.getLogoURL";
 
 export default class ImageUpload extends LightningElement {
+  @api url;
   @track imageFile;
   @track displayImage = false;
   @track imageUrl;
@@ -12,9 +13,8 @@ export default class ImageUpload extends LightningElement {
   acceptedFormats = "image/png, image/jpeg";
   removeIconUrl = DELETE_ICON;
 
-  @api
-  updateImageUrl(imageUrl) {
-    this.imageUrl = imageUrl;
+  connectedCallback() {
+    this.imageUrl = this.url;
     this.updateImageArea();
   }
 
@@ -37,7 +37,7 @@ export default class ImageUpload extends LightningElement {
 
   clearFile() {
     this.imageFile = undefined;
-    this.imageUrl = undefined;
+    this.imageUrl = '';
     this.dispatchImageUrl();
     this.updateImageArea();
   }

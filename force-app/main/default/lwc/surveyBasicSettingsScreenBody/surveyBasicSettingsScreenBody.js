@@ -1,57 +1,45 @@
 import { LightningElement, api, track } from "lwc";
-import getSurveyData from "@salesforce/apex/SurveySettingsController.getSurveyData";
-import { createRecord } from "lightning/uiRecordApi";
 
 export default class SurveyMainSettings extends LightningElement {
-  @api surveyId;
+  @api existingSurvey;
 
-  @track surveyName;
-  @track logoUrl;
-  @track surveyColor;
+  @track survey;
 
   connectedCallback() {
-    this.loadSurveyData();
+    this.updateSurveyData();
   }
 
-  loadSurveyData() {
-    getSurveyData({
-      surveyId: this.surveyId
-    }).then((result) => {
-      if (result) {
-        this.surveyName = result.Name;
-        this.logoUrl = result.Logo__c;
-        this.template
-          .querySelector("c-image-upload")
-          .updateImageUrl(this.logoUrl);
-        this.surveyColor = result.Background_Color__c;
-        this.handleNameChange();
-        this.handleColorChange();
-        this.handleImageUpdate();
-      }
-    });
+  updateSurveyData() {
+    if (this.existingSurvey) {
+      this.survey = { ...this.existingSurvey };
+    } else {
+      this.survey = {
+        Name: '',
+        Background_Color__c: '',
+        Logo__c: ''
+      };
+    }
   }
 
   handleNameChange(event) {
-    this.surveyName = event.target.value;
-    const changeNameEvent = new CustomEvent("namechange", {
-      detail: { name: this.surveyName }
-    });
-    this.dispatchEvent(changeNameEvent);
+    this.survey.Name = event.target.value;
+    this.dispatchSurveyData();
   }
 
   handleColorChange(event) {
-    this.surveyColor = event.target.value;
-    const changeColorEvent = new CustomEvent("colorchange", {
-      detail: { color: this.surveyColor }
-    });
-    this.dispatchEvent(changeColorEvent);
+    this.survey.Background_Color__c = event.target.value;
+    this.dispatchSurveyData();
   }
 
   handleImageUpdate(event) {
-    this.logoUrl = event.detail.imageUrl;
-    const changeLogoEvent = new CustomEvent("logochange", {
-      detail: { logoUrl: this.logoUrl }
+    this.survey.Logo__c = event.detail.imageUrl;
+    this.dispatchSurveyData();
+  }
+
+  dispatchSurveyData() {
+    const changeDataEvent = new CustomEvent("surveydatachange", {
+      detail: { survey: this.survey }
     });
-    this.dispatchEvent(changeLogoEvent);
+    this.dispatchEvent(changeDataEvent);
   }
 }

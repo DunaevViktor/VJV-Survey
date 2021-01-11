@@ -7,7 +7,7 @@
           type="text"
           label="Survey Name"
           placeholder="Enter name of your survey"
-          value={surveyName}
+          value={survey.Name}
           onchange={handleNameChange}
           required
         >
@@ -17,13 +17,13 @@
           class="slds-m-vertical_medium"
           type="color"
           label="Survey Background Color"
-          value={surveyColor}
+          value={survey.Background_Color__c}
           onchange={handleColorChange}
         >
         </lightning-input>
       </div>
     </div>
 
-    <c-image-upload onupdateimageurl={handleImageUpdate}> </c-image-upload>
+    <c-image-upload url={survey.Logo__c} onupdateimageurl={handleImageUpdate}> </c-image-upload>
   </div>
 </template>
