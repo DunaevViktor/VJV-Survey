@@ -1,7 +1,8 @@
-import { LightningElement, api, track } from "lwc";
+import { LightningElement, api, track, wire } from "lwc";
 import getTemplateSurveys from "@salesforce/apex/SurveyController.getTemplateSurveys";
 import getStandardQuestions from "@salesforce/apex/QuestionController.getStandardQuestions";
 import getTemplatesQuestions from "@salesforce/apex/QuestionController.getTemplatesQuestions";
+import getMaxQuestionAmount from "@salesforce/apex/SurveySettingController.getMaxQuestionAmount";
 
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import {label} from "./labels";
@@ -10,7 +11,6 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
   ERROR_VARIANT = "error";
   NO_TEMPLATE_VALUE = "0";
-  MAX_QUESTION_AMOUNT = 20;
 
   @api templates;
   @api standardQuestions;
@@ -21,6 +21,8 @@ export default class QuestionBuilderScreenBody extends LightningElement {
   @track displayedQuestions;
   @track displayedStandardQuestions;
   @track displayedTemplateQuestions;
+
+  @wire(getMaxQuestionAmount) maxQuestionsAmount;
 
   @track question;
   @track hasQuestions = false;
@@ -121,10 +123,8 @@ export default class QuestionBuilderScreenBody extends LightningElement {
   initQuestions() {
     if (!this.displayedQuestions) {
       this.displayedQuestions = [];
-      this.hasQuestions = false;
-    } else {
-      this.hasQuestions = this.displayedQuestions.length > 0;
-    }
+    } 
+    this.hasQuestions = this.displayedQuestions.length > 0;
   }
 
   initQuestion() {
@@ -172,7 +172,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     const question = event.detail;
     question.Position__c = this.displayedQuestions.length + 1;
 
-    if(this.displayedQuestions.length === this.MAX_QUESTION_AMOUNT) {
+    if(this.displayedQuestions.length === this.maxQuestionsAmount.data) {
       this.showToastMessage(label.unable_to_continue, label.limit_question_sexceeded, this.ERROR_VARIANT);
       return;
     }
