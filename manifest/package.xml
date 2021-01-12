@@ -72,5 +72,9 @@
       <members>*</members>
       <name>CustomLabels</name>
     </types>
+    <types>
+        <members>SurveyTemplates/Main_Template</members>
+        <name>EmailTemplate</name>
+    </types>
     <version>50.0</version>
 </Package>

@@ -5,6 +5,7 @@
     <columns>Logo__c</columns>
     <columns>Description__c</columns>
     <columns>IsStandard__c</columns>
+    <columns>IsResending__c</columns>
     <columns>URL__c</columns>
     <columns>Related_To__c</columns>
     <filterScope>Everything</filterScope>
