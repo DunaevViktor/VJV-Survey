@@ -73,6 +73,7 @@
       <name>CustomLabels</name>
     </types>
     <types>
+        <members>SurveyTemplates</members>
         <members>SurveyTemplates/Main_Template</members>
         <name>EmailTemplate</name>
     </types>
