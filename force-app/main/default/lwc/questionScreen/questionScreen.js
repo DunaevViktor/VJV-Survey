@@ -1,3 +1,4 @@
+/* eslint-disable @lwc/lwc/no-api-reassignments */
 import { LightningElement, api, track, wire } from "lwc";
 import getTemplateSurveys from "@salesforce/apex/SurveyController.getTemplateSurveys";
 import getStandardQuestions from "@salesforce/apex/QuestionController.getStandardQuestions";
@@ -7,45 +8,73 @@ import getMaxQuestionAmount from "@salesforce/apex/SurveySettingController.getMa
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import {label} from "./labels";
 
-export default class QuestionBuilderScreenBody extends LightningElement {
+import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
+
+export default class QuestionScreen extends LightningElement {
 
   ERROR_VARIANT = "error";
   NO_TEMPLATE_VALUE = "0";
 
-  @api templates;
-  @api standardQuestions;
-  @api templateQuestions;
-  @api questions;
+  @track displayedQuestions = [];
+  @track displayedTemplates = [];
+  @track displayedTemplateQuestions = [];
+  @track displayedStandardQuestions = [];
 
-  @track displayedTemplates;
-  @track displayedQuestions;
-  @track displayedStandardQuestions;
-  @track displayedTemplateQuestions;
+  @api selectedTemplateName;
+  
+  get questions() {
+    return this.displayedQuestions;
+  };
+
+  get templates() {
+    return this.displayedTemplates;
+  }
+
+  get templateQuestions() {
+    return this.displayedTemplateQuestions;
+  }
+
+  get standardQuestions() {
+    return this.displayedStandardQuestions;
+  }
+
+  @api 
+  set questions(value) {
+    this.displayedQuestions = JSON.parse(JSON.stringify(value));
+  };
+
+  @api
+  set templates(value) {
+    this.displayedTemplates = JSON.parse(JSON.stringify(value));
+  }
+  
+  @api
+  set templateQuestions(value) {
+    this.displayedTemplateQuestions = JSON.parse(JSON.stringify(value));
+  };
+  
+  @api
+  set standardQuestions(value) {
+    this.displayedStandardQuestions = JSON.parse(JSON.stringify(value));
+  }
 
   @wire(getMaxQuestionAmount) maxQuestionsAmount;
 
-  @track question;
   @track hasQuestions = false;
+  @track hasStandardQuestions = false;
   @track editQuestionPosition;
 
   @track templateOptionsValue;
-  noTemplate;
+  @track noTemplate;
 
   @track isError = false;
 
   label = label;
 
   connectedCallback() {
-    this.displayedQuestions = JSON.parse(JSON.stringify(this.questions));
-    this.displayedTemplates = JSON.parse(JSON.stringify(this.templates));
-    this.displayedTemplateQuestions = JSON.parse(
-      JSON.stringify(this.templateQuestions)
-    );
-    this.displayedStandardQuestions = JSON.parse(
-      JSON.stringify(this.standardQuestions)
-    );
+    this.hasQuestions = this.displayedQuestions.length > 0;
+    this.hasStandardQuestions = this.displayedStandardQuestions.length > 0;
 
-    this.initQuestions();
     this.initTemplates();
     this.initStandardQuestions();
 
@@ -54,7 +83,8 @@ export default class QuestionBuilderScreenBody extends LightningElement {
       value: this.NO_TEMPLATE_VALUE
     };
 
-    this.templateOptionsValue = this.noTemplate.value;
+    this.templateOptionsValue = this.selectedTemplateName ? 
+      this.selectedTemplateName : this.noTemplate.value;
   }
 
   get templateOptions() {
@@ -76,17 +106,16 @@ export default class QuestionBuilderScreenBody extends LightningElement {
   }
 
   initTemplates() {
-    if (!this.displayedTemplates) {
+    if(this.displayedTemplates.length === 0) {
       getTemplateSurveys()
-        .then((result) => {
-          this.displayedTemplates = result;
-          this.sendTemplatesEvent();
-          this.initTemplateQuestions();
-        })
-        .catch((error) => {
-          console.log(error);
-          this.setError();
-        });
+      .then((result) => {
+        this.displayedTemplates = result;
+        this.initTemplateQuestions();
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setError();
+      });
     }
   }
 
@@ -98,7 +127,6 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     getTemplatesQuestions({ surveyIds: templateIds })
       .then((result) => {
         this.displayedTemplateQuestions = result;
-        this.sendTemplateQuestionsEvent();
       })
       .catch((error) => {
         console.log(error);
@@ -107,24 +135,17 @@ export default class QuestionBuilderScreenBody extends LightningElement {
   }
 
   initStandardQuestions() {
-    if (!this.displayedStandardQuestions) {
+    if(!this.hasStandardQuestions) {
       getStandardQuestions()
-        .then((result) => {
-          this.displayedStandardQuestions = result;
-          this.sendStandardQuestionsEvent();
-        })
-        .catch((error) => {
-          console.log(error);
-          this.setError();
-        });
+      .then((result) => {
+        this.displayedStandardQuestions = result;
+        this.hasStandardQuestions = this.displayedStandardQuestions.length > 0;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setError();
+      });
     }
-  }
-
-  initQuestions() {
-    if (!this.displayedQuestions) {
-      this.displayedQuestions = [];
-    } 
-    this.hasQuestions = this.displayedQuestions.length > 0;
   }
 
   initQuestion() {
@@ -160,7 +181,6 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     }
 
     this.hasQuestions = this.displayedQuestions.length > 0;
-    this.sendQuestionsChangeEvent();
 
     if (this.editQuestionPosition) {
       this.initQuestion();
@@ -179,7 +199,6 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     this.displayedQuestions.push(question);
 
     this.hasQuestions = this.displayedQuestions.length > 0;
-    this.sendQuestionsChangeEvent();
     this.initQuestion();
   }
 
@@ -217,7 +236,6 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     }
 
     this.hasQuestions = this.displayedQuestions.length > 0;
-    this.sendQuestionsChangeEvent();
   }
 
   updateQuestion(event) {
@@ -234,7 +252,6 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     });
 
     this.editQuestionPosition = null;
-    this.sendQuestionsChangeEvent();
   }
 
   downQuestion(event) {
@@ -269,8 +286,6 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
     this.displayedQuestions[relocatableIndex] = lowerQuestion;
     this.displayedQuestions[lowerIndex] = relocatableQuestion;
-
-    this.sendQuestionsChangeEvent();
   }
 
   upQuestion(event) {
@@ -305,8 +320,6 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
     this.displayedQuestions[relocatableIndex] = upperQuestion;
     this.displayedQuestions[upperIndex] = relocatableQuestion;
-
-    this.sendQuestionsChangeEvent();
   }
 
   selectQuestion(event) {
@@ -317,44 +330,18 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     this.displayedQuestions.push(question);
 
     this.hasQuestions = this.displayedQuestions.length > 0;
-    this.sendQuestionsChangeEvent();
   }
 
   setError() {
     this.isError = true;
   }
 
-  sendQuestionsChangeEvent() {
-    const changeEvent = new CustomEvent("questionschange", {
-      detail: { questions: [...this.displayedQuestions] }
-    });
-    this.dispatchEvent(changeEvent);
-  }
-
-  sendTemplatesEvent() {
-    const changeEvent = new CustomEvent("templateschange", {
-      detail: { templates: [...this.displayedTemplates] }
-    });
-    this.dispatchEvent(changeEvent);
-  }
-
-  sendTemplateQuestionsEvent() {
-    const changeEvent = new CustomEvent("tquestionschange", {
-      detail: { templateQuestions: [...this.displayedTemplateQuestions] }
-    });
-    this.dispatchEvent(changeEvent);
-  }
-
-  sendStandardQuestionsEvent() {
-    const changeEvent = new CustomEvent("stquestionschange", {
-      detail: { standardQuestions: [...this.displayedStandardQuestions] }
-    });
-    this.dispatchEvent(changeEvent);
-  }
-
   clickPreviousButton() {
-    const previousEvent = new CustomEvent("previous", {});
-    this.dispatchEvent(previousEvent);
+    //this.questions = this.displayedQuestions;
+    this.selectedTemplateName = this.templateOptionsValue;
+
+    const backNavigationEvent = new FlowNavigationBackEvent();
+    this.dispatchEvent(backNavigationEvent);
   }
 
   clickNextButton() {
@@ -363,8 +350,11 @@ export default class QuestionBuilderScreenBody extends LightningElement {
       return;
     } 
 
-    const nextEvent = new CustomEvent("next", {});
-    this.dispatchEvent(nextEvent);
+    //this.questions = this.displayedQuestions;
+    this.selectedTemplateName = this.templateOptionsValue;
+
+    const nextNavigationEvent = new FlowNavigationNextEvent();
+    this.dispatchEvent(nextNavigationEvent);
   }
 
   showToastMessage(title, message, variant) {
