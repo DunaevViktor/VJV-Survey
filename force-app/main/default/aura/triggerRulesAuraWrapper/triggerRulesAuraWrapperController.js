@@ -1,8 +1,12 @@
 ({
-  setTriggerRules: function (cmp, event, helper) {
-    const triggerRules = event.getParam("triggerRules");
-    cmp.set("v.triggerRules", triggerRules);
+  navigateNext: function (cmp, event) {
+    cmp.set("v.triggerRules", event.getParam("triggerRules"));
     const navigate = cmp.get("v.navigateFlow");
     navigate("NEXT");
+  },
+  navigatePrev: function (cmp, event) {
+    cmp.set("v.triggerRules", event.getParam("triggerRules"));
+    const navigate = cmp.get("v.navigateFlow");
+    navigate("BACK");
   }
 });

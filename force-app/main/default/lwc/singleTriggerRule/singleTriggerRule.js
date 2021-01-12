@@ -13,7 +13,7 @@ import {
   generateFieldsDescriptionsList,
 } from "./helper";
 
-import { labels } from "./labels"
+import { importedLabels } from "./labels"
 
 import {
   operatorTypes,
@@ -24,7 +24,7 @@ import {
 
 export default class SingleTriggerRule extends LightningElement {
 
-  labels = labels;
+  labels = importedLabels;
 
   initialRender = true;
   deleteIcon = DELETE_ICON;
@@ -163,6 +163,9 @@ export default class SingleTriggerRule extends LightningElement {
         picklistOptions,
         settedValue
       );
+
+      console.log('Generated field');
+      console.log(this. field);
     }
     this.value = this.field.value;
     this.setOperatorsByType();
@@ -227,13 +230,24 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   @api getTriggerRule() {
-    const triggerRule = {
-      Object_Api_Name__c: this.objectValue,
-      Field_Name__c: this.fieldValue,
-      Operator__c: this.operatorValue,
-      Field_Value__c: this.value,
-    };
 
-    return triggerRule;
+    if(this.isAllDataFilled()) {
+      const triggerRule = {
+        Object_Api_Name__c: this.objectValue,
+        Field_Name__c: this.fieldValue,
+        Operator__c: this.operatorValue,
+        Field_Value__c: this.value,
+      };  
+      return triggerRule;
+    }
+    return {};    
+  }
+
+  isAllDataFilled() {
+    if(this.objectValue === "" || this.fieldValue === "" ||
+       this.operatorValue === "" || this.operatorValue.value === "") {
+      return false;
+    }
+    return true;
   }
 }

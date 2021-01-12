@@ -1,16 +1,12 @@
 import { LightningElement, track, api } from "lwc";
+import { FlowNavigationBackEvent } from "lightning/flowSupport";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import tip_for_user from "@salesforce/label/c.tip_for_user";
-import trigger_rule_required from "@salesforce/label/c.trigger_rule_required";
-import add_trigger_rule from "@salesforce/label/c.add_trigger_rule";
+
+import { importedLabels } from "./labels"
 
 export default class TriggerRulesWrapper extends LightningElement {
 
-  labels = {
-    tip_for_user,
-    trigger_rule_required,
-    add_trigger_rule
-  }
+  labels = importedLabels;
 
   @track renderConditions = [
     { cond: true, id: 0, isDeleteAvailable: false },
@@ -57,7 +53,37 @@ export default class TriggerRulesWrapper extends LightningElement {
     return filteredRenderConditions.length === 0 ? false : true;
   }
 
-  handleNavigateNext() {
+  handleNavigateNext() {    
+    this.rules = this.getNewTriggerRules();
+    if (!this.isMinimalDataAmountFilled()) {
+      this.showToast("", this.labels.tip_for_user, "error");
+      console.log('ERROR!');
+    } else {
+      console.log('new tr rules');
+      console.log(this.rules);
+      const navigateNextEvent = new CustomEvent("navigatenext", {
+        detail: { triggerRules: [...this.rules] },
+      });
+      this.dispatchEvent(navigateNextEvent);
+    }
+  }
+
+  handleNavigatePrev() {
+    this.rules = this.getNewTriggerRules();
+    if (!this.isMinimalDataAmountFilled()) {
+      this.showToast("", this.labels.tip_for_user, "error");
+      console.log('ERROR!');
+    } else {
+      console.log('new tr rules');
+      console.log(this.rules);
+      const navigatePrevEvent = new CustomEvent("navigateback", {
+        detail: { triggerRules: [...this.rules] },
+      });
+      this.dispatchEvent(navigatePrevEvent);
+    }
+  }
+
+  getNewTriggerRules() {
     let newTriggerRules = [];
 
     this.renderConditions.forEach((condition) => {
@@ -67,28 +93,14 @@ export default class TriggerRulesWrapper extends LightningElement {
           'c-single-trigger-rule[data-my-id="' + id + '"]'
         );
         let triggerRule = JSON.parse(JSON.stringify(element.getTriggerRule()));
-        let newTriggerRule = {
-          Object_Api_Name__c: triggerRule.Object_Api_Name__c,
-          Field_Name__c: triggerRule.Field_Name__c,
-          Field_Value__c: triggerRule.Field_Value__c,
-          Operator__c: triggerRule.Operator__c,
-        };
-
-        newTriggerRules.push(newTriggerRule);
+        console.log('trigger r fr single');
+        console.log(triggerRule);
+        if(!this.isEmpty(triggerRule)) {
+          newTriggerRules.push(triggerRule);
+        }        
       }
     });
-    this.rules = newTriggerRules;
-    if (
-      this.rules[0].Field_Value__c === "" ||
-      this.rules[0].Operator__c === ""
-    ) {
-      this.showToast("", this.labels.tip_for_user, "error");
-    } else {
-      const navigateNextEvent = new CustomEvent("navigatenext", {
-        detail: { triggerRules: [...this.rules] },
-      });
-      this.dispatchEvent(navigateNextEvent);
-    }
+    return newTriggerRules;
   }
 
   showToast(title, message, variant) {
@@ -99,5 +111,16 @@ export default class TriggerRulesWrapper extends LightningElement {
       mode: "dismissable",
     });
     this.dispatchEvent(event);
+  }
+
+  isMinimalDataAmountFilled() {
+    if(!this.rules[0] || this.isEmpty(this.rules[0]) || this.rules[0].Field_Value__c === "" || this.rules[0].Operator__c === "") {
+      return false;
+    }
+    return true;
+  }
+
+  isEmpty(obj) {
+    return Object.keys(obj).length === 0;
   }
 }

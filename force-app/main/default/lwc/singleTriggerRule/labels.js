@@ -5,7 +5,7 @@ import fieldLabel from "@salesforce/label/c.field";
 import objectLabel from "@salesforce/label/c.object";
 import errorMessage from "@salesforce/label/c.errorMessage";
 
-const labels = {
+const importedLabels = {
     deleteLabel,
     deleteTitle,
     operatorLabel,
@@ -15,5 +15,5 @@ const labels = {
 }
 
 export {
-    labels
+    importedLabels
 }

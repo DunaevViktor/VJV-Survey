@@ -6,6 +6,7 @@
   />
   <c:triggerRulesWrapper
     rules="{!v.triggerRules}"
-    onnavigatenext="{!c.setTriggerRules}"
+    onnavigatenext="{!c.navigateNext}"
+    onnavigateback="{!c.navigatePrev}"
   ></c:triggerRulesWrapper>
 </aura:component>

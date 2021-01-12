@@ -150,13 +150,13 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
   const fieldObject = fieldDescription[field.datatype];
   fieldObject.picklistValues = picklistOptions;
   fieldObject.value = settedValue;
+  fieldObject.label = field.label;
 
   if(fieldTypes.REFERENCE === field.datatype) {
     fieldObject.objectsApiNames = field.referencedObjects;
-
     const value = JSON.parse(JSON.stringify(settedValue));
     fieldObject.value = value.selectedRecordId;
-    fieldObject.name = value.selectedValue;
+    fieldObject.name = value.selectedValue;    
   }
 
   return fieldObject;
