@@ -5,31 +5,16 @@ import { getPicklistValues } from "lightning/uiObjectInfoApi";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-
 import {questionTypes} from "c/formUtil";
-
-import edit_question_form_title from "@salesforce/label/c.edit_question_form_title";
-import create_question_form_title from "@salesforce/label/c.create_question_form_title";
-import specify_question from "@salesforce/label/c.specify_question";
-import type from "@salesforce/label/c.type";
-import question_settings from "@salesforce/label/c.question_settings";
-import enter_option_value from "@salesforce/label/c.enter_option_value";
-import save_changes from "@salesforce/label/c.save_changes";
-import cancel_edit from "@salesforce/label/c.cancel_edit";
-import add_option from "@salesforce/label/c.add_option";
-import add_question from "@salesforce/label/c.add_question";
-import is_required from "@salesforce/label/c.is_required";
-import is_reusable from "@salesforce/label/c.is_reusable";
-import option_already_exists from "@salesforce/label/c.option_already_exists";
-import error_few_options from "@salesforce/label/c.error_few_options";
-import errorTitle from "@salesforce/label/c.error";
-import success from "@salesforce/label/c.success";
+import { label } from "./labels.js";
 
 export default class QuestionForm extends LightningElement {
-  SUCCESS_TITLE = success;
+  label = label;
+
+  SUCCESS_TITLE = label.success;
   SUCCESS_VARIANT = "success";
 
-  ERROR_TITLE = errorTitle;
+  ERROR_TITLE = label.errorTitle;
   ERROR_VARIANT = "error";
 
   @track question;
@@ -49,19 +34,6 @@ export default class QuestionForm extends LightningElement {
 
   requiredFieldName = "Required__c";
   reusableFieldName = "IsReusable__c";
-
-  label = {
-    edit_question_form_title,
-    create_question_form_title,
-    specify_question,
-    type,
-    question_settings,
-    enter_option_value,
-    save_changes,
-    cancel_edit,
-    add_option,
-    add_question
-  }
 
   connectedCallback() {
     this.isOptionsEnabled = false;
@@ -122,8 +94,8 @@ export default class QuestionForm extends LightningElement {
 
   get questionSettingList() {
     return [
-      { label: is_required, value: this.requiredFieldName },
-      { label: is_reusable, value: this.reusableFieldName }
+      { label: label.is_required, value: this.requiredFieldName },
+      { label: label.is_reusable, value: this.reusableFieldName }
     ];
   }
 
@@ -169,7 +141,7 @@ export default class QuestionForm extends LightningElement {
     if (filteredOptions.length > 0) {
       this.showToastMessage(
         this.ERROR_TITLE,
-        option_already_exists,
+        label.option_already_exists,
         this.ERROR_VARIANT
       );
       return;
@@ -213,7 +185,7 @@ export default class QuestionForm extends LightningElement {
     if (filteredOptions.length > 0) {
       this.showToastMessage(
         this.ERROR_TITLE,
-        option_already_exists,
+        label.option_already_exists,
         this.ERROR_VARIANT
       );
       return;
@@ -251,7 +223,7 @@ export default class QuestionForm extends LightningElement {
     ) {
       this.showToastMessage(
         this.ERROR_TITLE,
-        error_few_options,
+        label.error_few_options,
         this.ERROR_VARIANT
       );
       return;
@@ -283,7 +255,7 @@ export default class QuestionForm extends LightningElement {
     ) {
       this.showToastMessage(
         this.ERROR_TITLE,
-        option_already_exists,
+        label.option_already_exists,
         this.ERROR_VARIANT
       );
       return;
