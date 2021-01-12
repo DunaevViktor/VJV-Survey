@@ -8,7 +8,8 @@ import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import {
   questionTypes,
   operatorTypes,
-  typesDescription
+  typesDescription,
+  booleanPicklistOptions
 } from "c/formUtil";
 
 import question from "@salesforce/label/c.question";
@@ -21,8 +22,6 @@ import select_operator from "@salesforce/label/c.select_operator";
 import select_value from "@salesforce/label/c.select_value";
 import number from "@salesforce/label/c.number";
 import text from "@salesforce/label/c.text";
-import trueLabel from "@salesforce/label/c.true";
-import falseLabel from "@salesforce/label/c.false";
 
 export default class ValidationForm extends LightningElement {
   @api questions;
@@ -121,16 +120,7 @@ export default class ValidationForm extends LightningElement {
         .toLowerCase()
         .includes(operatorTypes.NULL.toLowerCase())
     ) {
-      return [
-        {
-          label: trueLabel,
-          value: trueLabel.toUpperCase()
-        },
-        {
-          label: falseLabel,
-          value: falseLabel.toUpperCase()
-        }
-      ];
+      return booleanPicklistOptions;
     }
 
     return this.firstQuestion.Question_Options__r.map((option) => {
@@ -213,9 +203,6 @@ export default class ValidationForm extends LightningElement {
     }
 
     this.secondPosition = +event.detail.value;
-
-    console.log(this.secondPosition);
-    console.log(this.firstPosition);
 
     if (this.secondPosition === this.firstPosition) {
       if (this.firstPosition === this.questions[1].Position__c) {

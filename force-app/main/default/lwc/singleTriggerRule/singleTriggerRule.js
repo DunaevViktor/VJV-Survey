@@ -6,14 +6,15 @@ import getFieldPicklistValues from "@salesforce/apex/MetadataFetcher.getFieldPic
 import {
   getFieldAttributes,
   generateBooleanField,
-  checkForNullOperator,
-  generateComboboxOptions,
-  generateComparisonOperatorList,
-  generateContaintmentOperatorList,
-  getBooleanPicklistOptions,
+  filterOperatorList,
   generateFieldsDescriptionsList,
-  generateReducedOperatorList,
 } from "./helper";
+
+import {
+  operatorTypes,
+  booleanPicklistOptions,
+  generateFieldOptions
+} from "c/formUtil";
 
 import deleteLabel from "@salesforce/label/c.delete";
 import deleteTitle from "@salesforce/label/c.delete_trigger_rule";
@@ -45,9 +46,6 @@ export default class SingleTriggerRule extends LightningElement {
   @track fieldNames = [];
   @track operators = [];
   fullOperatorList = [];
-  reducedOperatorList = [];
-  comparisonOperatorList = [];
-  containmentOperatorList = [];
   @track picklistFieldOptions = [];
 
   @track error;
@@ -61,14 +59,11 @@ export default class SingleTriggerRule extends LightningElement {
   @track objectApiName;
   @track recordTypeId;
 
-
-
   constructor() {
     super();
     getObjectApiNamePickListValues()
       .then((result) => {
-        let comboboxObjectOptions = generateComboboxOptions(result);
-        this.objectNames = comboboxObjectOptions;
+        this.objectNames = generateFieldOptions(result);
         if (this.rule) {
           this.objectValue = this.rule.Object_Api_Name__c;
           this.getObjectFields(this.objectValue);
@@ -80,17 +75,7 @@ export default class SingleTriggerRule extends LightningElement {
 
     getTriggerRuleOperatorPickListValues()
       .then((result) => {
-        let comboboxOperatorOptions = generateComboboxOptions(result);
-        this.fullOperatorList = comboboxOperatorOptions;
-        this.reducedOperatorList = generateReducedOperatorList(
-          this.fullOperatorList
-        );
-        this.comparisonOperatorList = generateComparisonOperatorList(
-          this.fullOperatorList
-        );
-        this.containmentOperatorList = generateContaintmentOperatorList(
-          this.fullOperatorList
-        );
+        this.fullOperatorList = generateFieldOptions(result);
         if (this.rule) {
           this.operatorValue = this.rule.Operator__c;
         }
@@ -145,7 +130,7 @@ export default class SingleTriggerRule extends LightningElement {
     if (chosenFieldObject.datatype === "PICKLIST") {
       this.generateFieldPicklistOptions(chosenFieldObject);
     } else if (chosenFieldObject.datatype === "BOOLEAN") {
-      this.picklistFieldOptions = getBooleanPicklistOptions();
+      this.picklistFieldOptions = booleanPicklistOptions;
       this.setField(chosenFieldObject, this.picklistFieldOptions);
     } else {
       this.setField(chosenFieldObject);
@@ -158,7 +143,7 @@ export default class SingleTriggerRule extends LightningElement {
       field: chosenFieldObject.value,
     })
       .then((result) => {
-        let comboboxOptions = generateComboboxOptions(result);
+        let comboboxOptions = generateFieldOptions(result);
         this.picklistFieldOptions = comboboxOptions;
         this.setField(chosenFieldObject, this.picklistFieldOptions);
       })
@@ -173,7 +158,7 @@ export default class SingleTriggerRule extends LightningElement {
     if (this.rule) {
       settedValue = this.rule.Field_Value__c;
     }
-    if (checkForNullOperator(this.operatorValue)) {
+    if (this.operatorValue === operatorTypes.NULL) {
       let chosenFieldObj = this.fieldNames.find(
         (field) => field.value === this.fieldValue
       );
@@ -194,24 +179,15 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   setOperatorsByType() {
-    switch (this.field.operatorType) {
-      case 1:
-        this.operators = this.reducedOperatorList;
-        break;
-      case 2:
-        this.operators = this.comparisonOperatorList;
-        break;
-      case 3:
-        this.operators = this.containmentOperatorList;
-        break;
-      default:
-        this.operators = this.reducedOperatorList;
-    }
+    this.operators = filterOperatorList(
+      this.fullOperatorList,
+      this.field.operatorType
+    );
   }
 
   handleOperatorChange(event) {
     this.operatorValue = event.detail.value;
-    if (checkForNullOperator(this.operatorValue)) {
+    if (this.operatorValue === operatorTypes.NULL) {
       let settedValue = "";
       if (this.rule) {
         settedValue = this.rule.Field_Value__c;

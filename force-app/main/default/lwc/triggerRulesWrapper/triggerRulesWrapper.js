@@ -1,6 +1,5 @@
 import { LightningElement, track, api } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import createTriggerRuleList from "@salesforce/apex/TriggerRuleController.createTriggerRuleList";
 import tip_for_user from "@salesforce/label/c.tip_for_user";
 import trigger_rule_required from "@salesforce/label/c.trigger_rule_required";
 
@@ -26,13 +25,7 @@ export default class TriggerRulesWrapper extends LightningElement {
 
   connectedCallback() {
     if (!this.rules) {
-      createTriggerRuleList()
-        .then((result) => {
-          this.rules = result;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      this.rules = [];
     } else {
       let i = 0;
       this.rules.forEach((rule) => {
