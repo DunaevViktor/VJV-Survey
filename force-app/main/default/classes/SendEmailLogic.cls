@@ -23,17 +23,16 @@ public with sharing class SendEmailLogic {
             }
         }
         
-        List<Messaging.SingleEmailMessage> emailsForSend = createEmailMessages(receiverForProcessing);
+        List<Messaging.SingleEmailMessage> emailsForSend = createEmailMessages(receiverForProcessing, surveyMap);
         if(emailsForSend.size() > 0){
             Messaging.sendEmail(emailsForSend);
         }
     }
     
-    public static List<Messaging.SingleEmailMessage> createEmailMessages(List<Email_Receiver__c> receiverList){
+    public static List<Messaging.SingleEmailMessage> createEmailMessages(List<Email_Receiver__c> receiverList, Map<Id, Survey__c> surveyMap){
         Organization currentOrg = getOrganization();
         EmailTemplate template = getEmailTemplate();
-        Map<Id, Survey__c> surveyMap = createSurveyMap();
-        Map<String, List<User>> userMap = initializationUserByGroupMap();
+        Map<String, List<User>> userMap = initializeUserByGroupMap();
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
         SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues('Main');
         
@@ -70,7 +69,7 @@ public with sharing class SendEmailLogic {
         return emails;
     }
     
-    public static Map<String, List<User>> initializationUserByGroupMap(){
+    public static Map<String, List<User>> initializeUserByGroupMap(){
         List<User> userList = getUser();
         List<GroupMember> memberGroup = getGroupMember();
         Map<Id, Group> groupMap = createGroupMap();
@@ -146,7 +145,6 @@ public with sharing class SendEmailLogic {
     
     public static EmailTemplate getEmailTemplate(){
         SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues('Main');
-        String templateName = config.Template_Name__c;
-        return [SELECT Id, Name, Body FROM EmailTemplate WHERE Name = :templateName WITH SECURITY_ENFORCED LIMIT 1];
+        return [SELECT Id, Name, Body FROM EmailTemplate WHERE Name = :config.Template_Name__c WITH SECURITY_ENFORCED LIMIT 1];
     }
 }

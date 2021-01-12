@@ -63,7 +63,8 @@ public with sharing class SendEmailLogicTest {
     @IsTest
     static void testCreateEmailMessages() {
         List<Email_Receiver__c> receiverList = [SELECT Id, Type__c, Value__c, Survey__c, IsSend__c FROM Email_Receiver__c WITH SECURITY_ENFORCED];
-        List<Messaging.SingleEmailMessage> messageList = SendEmailLogic.createEmailMessages(receiverList);
+        Map<Id, Survey__c> surveyMap = SendEmailLogic.createSurveyMap();
+        List<Messaging.SingleEmailMessage> messageList = SendEmailLogic.createEmailMessages(receiverList, surveyMap);
         System.assertEquals(3, receiverList.size(), AMOUNT_ERROR);
     }
     
@@ -111,8 +112,8 @@ public with sharing class SendEmailLogicTest {
     }
     
     @IsTest
-    static void testInitializationUserByGroupMap(){
-        Map<String, List<User>> userMap = SendEmailLogic.initializationUserByGroupMap();
+    static void testInitializeUserByGroupMap(){
+        Map<String, List<User>> userMap = SendEmailLogic.initializeUserByGroupMap();
         System.assertEquals(2, userMap.size(), AMOUNT_ERROR);
     }
 }
