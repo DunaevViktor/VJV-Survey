@@ -8,7 +8,7 @@ public with sharing class SurveyControllerTest {
   private static final String INVALID_SURVEY_NAME = 'Actual survey name doesn\'t equal to expected';
 
   @IsTest
-  public static void getStandardSurveyTest() {
+  static void getStandardSurveyTest() {
     List<Survey__c> surveys = new List<Survey__c>();
     for (Integer i = 1; i <= AMOUNT; i++) {
       Survey__c survey = new Survey__c();

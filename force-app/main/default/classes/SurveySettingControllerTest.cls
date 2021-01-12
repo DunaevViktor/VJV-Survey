@@ -6,7 +6,7 @@ public with sharing class SurveySettingControllerTest {
   private static final String INVALID_SETTING_VALUE = 'Actual value of setting doesn\'t equal to expected';
 
   @IsTest
-  public static void getMaxQuestionAmountTest() {
+  static void getMaxQuestionAmountTest() {
     Survey_Setting__c setting = new Survey_Setting__c();
     setting.Name = AMOUNT_SETTING_NAME;
     setting.Value__c = TEST_AMOUNT;

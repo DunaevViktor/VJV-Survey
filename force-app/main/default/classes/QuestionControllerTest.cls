@@ -13,7 +13,7 @@ public with sharing class QuestionControllerTest {
   private static final String INVALID_OPTION_VALUE = 'Actual option value doesn\'t equal to expected';
 
   @IsTest
-  public static void getStandardQuestionsTest() {
+  static void getStandardQuestionsTest() {
     Survey__c survey = new Survey__c();
     insert survey;
 
@@ -64,7 +64,7 @@ public with sharing class QuestionControllerTest {
   }
 
   @IsTest
-  public static void getTemplatesQuestions() {
+  static void getTemplatesQuestions() {
     Survey__c survey = new Survey__c();
     survey.Name = TEST_NAME;
     survey.IsStandard__c = true;
