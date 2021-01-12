@@ -1,86 +1,199 @@
-/* eslint-disable @lwc/lwc/no-api-reassignments */
 import { LightningElement, api, track } from "lwc";
-import createQuestionList from "@salesforce/apex/QuestionController.createQuestionList";
-import createQuestion from "@salesforce/apex/QuestionController.createQuestion";
+import getTemplateSurveys from "@salesforce/apex/SurveyController.getTemplateSurveys";
+import getStandardQuestions from "@salesforce/apex/QuestionController.getStandardQuestions";
+import getTemplatesQuestions from "@salesforce/apex/QuestionController.getTemplatesQuestions";
+
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
+import selected_survey_template from "@salesforce/label/c.selected_survey_template";
+import no_questions from "@salesforce/label/c.no_questions";
+import previous from "@salesforce/label/c.previous";
+import next from "@salesforce/label/c.next";
+import no_template from "@salesforce/label/c.no_template";
+import unable_to_continue from "@salesforce/label/c.unable_to_continue";
+import should_have_two_questions from "@salesforce/label/c.should_have_two_questions";
+import limit_question_sexceeded from "@salesforce/label/c.limit_question_sexceeded";
+import errorMessage from "@salesforce/label/c.errorMessage";
 
 export default class QuestionBuilderScreenBody extends LightningElement {
+
+  ERROR_VARIANT = "error";
+  NO_TEMPLATE_VALUE = "0";
+  MAX_QUESTION_AMOUNT = 20;
+
   @api templates;
   @api standardQuestions;
+  @api templateQuestions;
   @api questions;
 
-  @track question;
+  @track displayedTemplates;
   @track displayedQuestions;
+  @track displayedStandardQuestions;
+  @track displayedTemplateQuestions;
+
+  @track question;
   @track hasQuestions = false;
   @track editQuestionPosition;
 
+  @track templateOptionsValue;
   noTemplate;
-  templateOptionsValue;
+
+  @track isError = false;
+  
+  label = {
+    selected_survey_template,
+    no_questions,
+    errorMessage,
+    previous,
+    next
+  };
 
   connectedCallback() {
-    this.questions = JSON.parse(JSON.stringify(this.questions));
+    this.displayedQuestions = JSON.parse(JSON.stringify(this.questions));
+    this.displayedTemplates = JSON.parse(JSON.stringify(this.templates));
+    this.displayedTemplateQuestions = JSON.parse(
+      JSON.stringify(this.templateQuestions)
+    );
+    this.displayedStandardQuestions = JSON.parse(
+      JSON.stringify(this.standardQuestions)
+    );
+
     this.initQuestions();
-    this.initQuestion();
+    this.initTemplates();
+    this.initStandardQuestions();
 
     this.noTemplate = {
-      label: "No Template",
-      value: "0"
+      label: no_template,
+      value: this.NO_TEMPLATE_VALUE
     };
 
     this.templateOptionsValue = this.noTemplate.value;
   }
 
   get templateOptions() {
-    let templateOptions = this.templates.map((template) => {
-      return {
-        label: template.Name,
-        value: template.Id
-      };
-    });
+    let templateOptions;
+
+    if (this.displayedTemplates) {
+      templateOptions = this.displayedTemplates.map((template) => {
+        return {
+          label: template.Name,
+          value: template.Id
+        };
+      });
+    } else {
+      templateOptions = [];
+    }
+
     templateOptions.push(this.noTemplate);
     return templateOptions;
   }
 
-  initQuestions() {
-    if (!this.questions) {
-      createQuestionList()
+  initTemplates() {
+    if (!this.displayedTemplates) {
+      getTemplateSurveys()
         .then((result) => {
-          this.questions = result;
-
-          this.updateDisplayedQuestions();
-          this.hasQuestions = this.questions.length > 0;
+          this.displayedTemplates = result;
+          this.sendTemplatesEvent();
+          this.initTemplateQuestions();
         })
         .catch((error) => {
           console.log(error);
+          this.setError();
         });
+    }
+  }
+
+  initTemplateQuestions() {
+    const templateIds = this.displayedTemplates.map((template) => {
+      return template.Id;
+    });
+
+    getTemplatesQuestions({ surveyIds: templateIds })
+      .then((result) => {
+        this.displayedTemplateQuestions = result;
+        this.sendTemplateQuestionsEvent();
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setError();
+      });
+  }
+
+  initStandardQuestions() {
+    if (!this.displayedStandardQuestions) {
+      getStandardQuestions()
+        .then((result) => {
+          this.displayedStandardQuestions = result;
+          this.sendStandardQuestionsEvent();
+        })
+        .catch((error) => {
+          console.log(error);
+          this.setError();
+        });
+    }
+  }
+
+  initQuestions() {
+    if (!this.displayedQuestions) {
+      this.displayedQuestions = [];
+      this.hasQuestions = false;
     } else {
-      this.updateDisplayedQuestions();
-      this.hasQuestions = this.questions.length > 0;
+      this.hasQuestions = this.displayedQuestions.length > 0;
     }
   }
 
   initQuestion() {
-    createQuestion()
-      .then((result) => {
-        this.question = result;
-
-        this.template
+    this.template
           .querySelectorAll("c-question-form")[0]
-          .setQuestion(this.question);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+          .clearQuestion();
+  }
+
+  handleTemplateChange(event) {
+    if (this.templateOptionsValue.localeCompare(event.detail.value) === 0) {
+      return;
+    }
+
+    this.templateOptionsValue = event.detail.value;
+
+    if (this.templateOptionsValue.localeCompare(this.NO_TEMPLATE_VALUE) === 0) {
+      this.displayedQuestions = [];
+    } else {
+      this.displayedQuestions = this.displayedTemplateQuestions.filter(
+        (question) => {
+          return (
+            question.Survey__c.localeCompare(this.templateOptionsValue) === 0
+          );
+        }
+      );
+      this.displayedQuestions = this.displayedQuestions.map(
+        (question, index) => {
+          question.Id = null;
+          question.Position__c = index + 1;
+          return JSON.parse(JSON.stringify(question));
+        }
+      );
+    }
+
+    this.hasQuestions = this.displayedQuestions.length > 0;
+    this.sendQuestionsChangeEvent();
+
+    if (this.editQuestionPosition) {
+      this.initQuestion();
+      this.editQuestionPosition = null;
+    }
   }
 
   addQuestion(event) {
     const question = event.detail;
-    question.Position__c = this.questions.length + 1;
+    question.Position__c = this.displayedQuestions.length + 1;
 
-    this.questions = JSON.parse(JSON.stringify(this.questions));
-    this.questions.push(question);
+    if(this.displayedQuestions.length === this.MAX_QUESTION_AMOUNT) {
+      this.showToastMessage(unable_to_continue, limit_question_sexceeded, this.ERROR_VARIANT);
+      return;
+    }
+    this.displayedQuestions.push(question);
 
-    this.hasQuestions = this.questions.length > 0;
-    this.updateDisplayedQuestions();
+    this.hasQuestions = this.displayedQuestions.length > 0;
     this.sendQuestionsChangeEvent();
     this.initQuestion();
   }
@@ -89,7 +202,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     let position = +event.detail;
     this.editQuestionPosition = position;
 
-    const questionForEdit = this.questions.filter((question) => {
+    const questionForEdit = this.displayedQuestions.filter((question) => {
       return +question.Position__c === +position;
     })[0];
 
@@ -105,24 +218,27 @@ export default class QuestionBuilderScreenBody extends LightningElement {
 
   deleteQuestion(event) {
     let position = +event.detail;
-    position--;
 
-    this.questions = JSON.parse(JSON.stringify(this.questions));
-    this.questions.splice(position, 1);
-
-    for (let i = position; i < this.questions.length; i++) {
-      this.questions[i].Position__c = i + 1;
+    if (position === this.editQuestionPosition) {
+      this.initQuestion();
     }
 
-    this.updateDisplayedQuestions();
-    this.hasQuestions = this.questions.length > 0;
+    position--;
+
+    this.displayedQuestions.splice(position, 1);
+
+    for (let i = position; i < this.displayedQuestions.length; i++) {
+      this.displayedQuestions[i].Position__c = i + 1;
+    }
+
+    this.hasQuestions = this.displayedQuestions.length > 0;
     this.sendQuestionsChangeEvent();
   }
 
   updateQuestion(event) {
     const updatedQuestion = event.detail;
 
-    this.questions = this.questions.map((question) => {
+    this.displayedQuestions = this.displayedQuestions.map((question) => {
       if (+question.Position__c === +this.editQuestionPosition) {
         return {
           ...updatedQuestion,
@@ -133,21 +249,19 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     });
 
     this.editQuestionPosition = null;
-    this.updateDisplayedQuestions();
     this.sendQuestionsChangeEvent();
   }
 
   downQuestion(event) {
     const position = +event.detail;
 
-    if (position === this.questions.length) return;
+    if (position === this.displayedQuestions.length) return;
 
     let relocatableQuestion = {},
       lowerQuestion = {};
     let relocatableIndex, lowerIndex;
 
-    this.questions = JSON.parse(JSON.stringify(this.questions));
-    this.questions.forEach((question, index) => {
+    this.displayedQuestions.forEach((question, index) => {
       if (+question.Position__c === position) {
         relocatableQuestion = question;
         relocatableIndex = index;
@@ -168,10 +282,9 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     lowerQuestion.Position__c--;
     relocatableQuestion.Position__c++;
 
-    this.questions[relocatableIndex] = lowerQuestion;
-    this.questions[lowerIndex] = relocatableQuestion;
+    this.displayedQuestions[relocatableIndex] = lowerQuestion;
+    this.displayedQuestions[lowerIndex] = relocatableQuestion;
 
-    this.updateDisplayedQuestions();
     this.sendQuestionsChangeEvent();
   }
 
@@ -184,8 +297,7 @@ export default class QuestionBuilderScreenBody extends LightningElement {
       upperQuestion = {};
     let relocatableIndex, upperIndex;
 
-    this.questions = JSON.parse(JSON.stringify(this.questions));
-    this.questions.forEach((question, index) => {
+    this.displayedQuestions.forEach((question, index) => {
       if (+question.Position__c === position) {
         relocatableQuestion = question;
         relocatableIndex = index;
@@ -206,21 +318,76 @@ export default class QuestionBuilderScreenBody extends LightningElement {
     upperQuestion.Position__c++;
     relocatableQuestion.Position__c--;
 
-    this.questions[relocatableIndex] = upperQuestion;
-    this.questions[upperIndex] = relocatableQuestion;
+    this.displayedQuestions[relocatableIndex] = upperQuestion;
+    this.displayedQuestions[upperIndex] = relocatableQuestion;
 
-    this.updateDisplayedQuestions();
     this.sendQuestionsChangeEvent();
   }
 
-  updateDisplayedQuestions() {
-    this.displayedQuestions = [...this.questions];
+  selectQuestion(event) {
+    const question = JSON.parse(JSON.stringify(event.detail));
+    question.Position__c = this.displayedQuestions.length + 1;
+    question.Id = null;
+
+    this.displayedQuestions.push(question);
+
+    this.hasQuestions = this.displayedQuestions.length > 0;
+    this.sendQuestionsChangeEvent();
+  }
+
+  setError() {
+    this.isError = true;
   }
 
   sendQuestionsChangeEvent() {
-    const questionsChangeEvent = new CustomEvent("questionschange", {
-      detail: { questions: [...this.questions] }
+    const changeEvent = new CustomEvent("questionschange", {
+      detail: { questions: [...this.displayedQuestions] }
     });
-    this.dispatchEvent(questionsChangeEvent);
+    this.dispatchEvent(changeEvent);
+  }
+
+  sendTemplatesEvent() {
+    const changeEvent = new CustomEvent("templateschange", {
+      detail: { templates: [...this.displayedTemplates] }
+    });
+    this.dispatchEvent(changeEvent);
+  }
+
+  sendTemplateQuestionsEvent() {
+    const changeEvent = new CustomEvent("tquestionschange", {
+      detail: { templateQuestions: [...this.displayedTemplateQuestions] }
+    });
+    this.dispatchEvent(changeEvent);
+  }
+
+  sendStandardQuestionsEvent() {
+    const changeEvent = new CustomEvent("stquestionschange", {
+      detail: { standardQuestions: [...this.displayedStandardQuestions] }
+    });
+    this.dispatchEvent(changeEvent);
+  }
+
+  clickPreviousButton() {
+    const previousEvent = new CustomEvent("previous", {});
+    this.dispatchEvent(previousEvent);
+  }
+
+  clickNextButton() {
+    if(this.displayedQuestions.length < 2) {
+      this.showToastMessage(unable_to_continue, should_have_two_questions, this.ERROR_VARIANT);
+      return;
+    } 
+
+    const nextEvent = new CustomEvent("next", {});
+    this.dispatchEvent(nextEvent);
+  }
+
+  showToastMessage(title, message, variant) {
+    const event = new ShowToastEvent({
+      title,
+      message,
+      variant
+    });
+    this.dispatchEvent(event);
   }
 }

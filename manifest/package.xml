@@ -69,6 +69,10 @@
         <name>GlobalValueSet</name>
     </types>
     <types>
+      <members>*</members>
+      <name>CustomLabels</name>
+    </types>
+    <types>
         <members>SurveyTemplates/Main_Template</members>
         <name>EmailTemplate</name>
     </types>

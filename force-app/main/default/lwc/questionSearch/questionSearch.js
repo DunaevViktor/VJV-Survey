@@ -1,13 +1,22 @@
 import { LightningElement, api, track } from "lwc";
 
+import specify_question from "@salesforce/label/c.specify_question";
+import no_standard_questions from "@salesforce/label/c.no_standard_questions";
+import no_relevant_questions from "@salesforce/label/c.no_relevant_questions";
+
 export default class QuestionSearch extends LightningElement {
   EMPTY_STRING = "";
 
   @api standardQuestions;
-
   @track searchResults;
 
   searchTerm;
+
+  label = {
+    specify_question,
+    no_standard_questions,
+    no_relevant_questions
+  }
 
   connectedCallback() {
     this.searchTerm = this.EMPTY_STRING;
@@ -25,6 +34,10 @@ export default class QuestionSearch extends LightningElement {
   }
 
   setAllQuestions() {
+    if (!this.standardQuestions) {
+      this.searchResults = [];
+      return;
+    }
     this.searchResults = this.standardQuestions;
   }
 
@@ -34,5 +47,12 @@ export default class QuestionSearch extends LightningElement {
         this.searchTerm.toLowerCase()
       );
     });
+  }
+
+  selectQuestion(event) {
+    const selectEvent = new CustomEvent("select", {
+      detail: event.detail
+    });
+    this.dispatchEvent(selectEvent);
   }
 }

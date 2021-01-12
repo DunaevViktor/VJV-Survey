@@ -6,14 +6,32 @@ import { getObjectInfo } from "lightning/uiObjectInfoApi";
 
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
+import {questionTypes} from "c/formUtil";
+
+import edit_question_form_title from "@salesforce/label/c.edit_question_form_title";
+import create_question_form_title from "@salesforce/label/c.create_question_form_title";
+import specify_question from "@salesforce/label/c.specify_question";
+import type from "@salesforce/label/c.type";
+import question_settings from "@salesforce/label/c.question_settings";
+import enter_option_value from "@salesforce/label/c.enter_option_value";
+import save_changes from "@salesforce/label/c.save_changes";
+import cancel_edit from "@salesforce/label/c.cancel_edit";
+import add_option from "@salesforce/label/c.add_option";
+import add_question from "@salesforce/label/c.add_question";
+import is_required from "@salesforce/label/c.is_required";
+import is_reusable from "@salesforce/label/c.is_reusable";
+import option_already_exists from "@salesforce/label/c.option_already_exists";
+import error_few_options from "@salesforce/label/c.error_few_options";
+import errorTitle from "@salesforce/label/c.error";
+import success from "@salesforce/label/c.success";
+
 export default class QuestionForm extends LightningElement {
-  SUCCESS_TITLE = "Success";
+  SUCCESS_TITLE = success;
   SUCCESS_VARIANT = "success";
 
-  ERROR_TITLE = "Error";
+  ERROR_TITLE = errorTitle;
   ERROR_VARIANT = "error";
 
-  @api editedQuestion;
   @track question;
 
   @wire(getObjectInfo, { objectApiName: QUESTION_OBJECT })
@@ -29,14 +47,26 @@ export default class QuestionForm extends LightningElement {
 
   displayedTypes;
 
+  requiredFieldName = "Required__c";
+  reusableFieldName = "IsReusable__c";
+
+  label = {
+    edit_question_form_title,
+    create_question_form_title,
+    specify_question,
+    type,
+    question_settings,
+    enter_option_value,
+    save_changes,
+    cancel_edit,
+    add_option,
+    add_question
+  }
+
   connectedCallback() {
     this.isOptionsEnabled = false;
-    if (!this.editedQuestion) {
-      this.question = {};
-      this.question.Options = [];
-    } else {
-      this.question = { ...this.editedQuestion };
-    }
+    this.question = {};
+    this.question.Question_Options__r = [];
   }
 
   @wire(getPicklistValues, {
@@ -51,10 +81,12 @@ export default class QuestionForm extends LightningElement {
           value: item.value
         };
       });
+
       this.selectedType = this.displayedTypes[0].value;
       this.setOptionsEnabling();
     } else if (error) {
       console.log(error);
+      this.sendErrorNotification();
     }
   }
 
@@ -69,27 +101,38 @@ export default class QuestionForm extends LightningElement {
   }
 
   handleSettingChange(event) {
-    this.question[event.detail.value] = !this.question[event.detail.value];
+    this.question[this.requiredFieldName] = false;
+    this.question[this.reusableFieldName] = false;
+
+    for (const value of event.detail.value) {
+      this.question[value] = !this.question[value];
+    }
   }
 
   setOptionsEnabling() {
     this.isOptionsEnabled =
-      this.selectedType.toLowerCase().localeCompare("checkbox") === 0 ||
-      this.selectedType.toLowerCase().localeCompare("radiobutton") === 0 ||
-      this.selectedType.toLowerCase().localeCompare("picklist") === 0;
+      this.selectedType.toLowerCase().localeCompare(questionTypes.CHECKBOX.toLowerCase()) === 0 ||
+      this.selectedType.toLowerCase().localeCompare(questionTypes.RADIOBUTTON.toLowerCase()) === 0 ||
+      this.selectedType.toLowerCase().localeCompare(questionTypes.PICKLIST.toLowerCase()) === 0;
+
+    if(this.isOptionsEnabled && !this.question.Question_Options__r) {
+      this.question.Question_Options__r = [];
+    }
   }
 
   get questionSettingList() {
     return [
-      { label: "Is required", value: "Required__c" },
-      { label: "Is reusable", value: "IsReusable__c" }
+      { label: is_required, value: this.requiredFieldName },
+      { label: is_reusable, value: this.reusableFieldName }
     ];
   }
 
   @api
-  setQuestion(clearQuestion) {
-    this.question = clearQuestion;
-    this.question.Options = [];
+  clearQuestion() {
+    this.question = {};
+    this.question.Question_Options__r = [];
+    this.isEditMode = false;
+    this.resetForm();
   }
 
   @api
@@ -102,9 +145,9 @@ export default class QuestionForm extends LightningElement {
     this.selectedType = this.question.Type__c;
     this.selectedSettings = [];
 
-    if (this.question.Required__c) this.selectedSettings.push("Required__c");
-    if (this.question.IsReusable__c)
-      this.selectedSettings.push("IsReusable__c");
+    if (this.question[this.requiredFieldName]) this.selectedSettings.push(this.requiredFieldName);
+    if (this.question[this.reusableFieldName])
+      this.selectedSettings.push(this.reusableFieldName);
 
     this.setOptionsEnabling();
 
@@ -115,14 +158,18 @@ export default class QuestionForm extends LightningElement {
     const input = this.template.querySelector(".option-input");
     if (!input.validity.valid) return;
 
-    const filteredOptions = this.question.Options.filter((option) => {
-      return option.Value__c.localeCompare(input.value) === 0;
-    });
+    console.log(1);
 
+    const filteredOptions = this.question.Question_Options__r.filter(
+      (option) => {
+        return option.Value__c.localeCompare(input.value) === 0;
+      }
+    );
+    
     if (filteredOptions.length > 0) {
       this.showToastMessage(
         this.ERROR_TITLE,
-        "Option with such value already exists!",
+        option_already_exists,
         this.ERROR_VARIANT
       );
       return;
@@ -132,7 +179,7 @@ export default class QuestionForm extends LightningElement {
       Value__c: input.value
     };
 
-    this.question.Options.push(option);
+    this.question.Question_Options__r.push(option);
     input.value = "";
   }
 
@@ -154,28 +201,32 @@ export default class QuestionForm extends LightningElement {
     const input = this.template.querySelector(".option-input");
     if (!input.validity.valid) return;
 
-    const filteredOptions = this.question.Options.filter((option) => {
-      return (
-        option.Value__c.localeCompare(input.value) === 0 &&
-        this.editOptionValue.localeCompare(input.value) !== 0
-      );
-    });
+    const filteredOptions = this.question.Question_Options__r.filter(
+      (option) => {
+        return (
+          option.Value__c.localeCompare(input.value) === 0 &&
+          this.editOptionValue.localeCompare(input.value) !== 0
+        );
+      }
+    );
 
     if (filteredOptions.length > 0) {
       this.showToastMessage(
         this.ERROR_TITLE,
-        "Option with such value already exists!",
+        option_already_exists,
         this.ERROR_VARIANT
       );
       return;
     }
 
-    this.question.Options = this.question.Options.map((option) => {
-      if (option.Value__c.localeCompare(this.editOptionValue) === 0) {
-        option.Value__c = input.value;
+    this.question.Question_Options__r = this.question.Question_Options__r.map(
+      (option) => {
+        if (option.Value__c.localeCompare(this.editOptionValue) === 0) {
+          option.Value__c = input.value;
+        }
+        return option;
       }
-      return option;
-    });
+    );
 
     input.value = "";
     this.editOptionValue = "";
@@ -183,19 +234,24 @@ export default class QuestionForm extends LightningElement {
   }
 
   deleteOption(event) {
-    this.question.Options = this.question.Options.filter((option) => {
-      return option.Value__c.localeCompare(event.detail) !== 0;
-    });
+    this.question.Question_Options__r = this.question.Question_Options__r.filter(
+      (option) => {
+        return option.Value__c.localeCompare(event.detail) !== 0;
+      }
+    );
   }
 
   addQuestion() {
     const input = this.template.querySelector(".input");
     if (!input.validity.valid) {
       return;
-    } else if (this.isOptionsEnabled && this.question.Options.length < 2) {
+    } else if (
+      this.isOptionsEnabled &&
+      this.question.Question_Options__r.length < 2
+    ) {
       this.showToastMessage(
         this.ERROR_TITLE,
-        "The number of options must be at least two",
+        error_few_options,
         this.ERROR_VARIANT
       );
       return;
@@ -207,8 +263,6 @@ export default class QuestionForm extends LightningElement {
       detail: { ...this.question }
     });
     this.dispatchEvent(addEvent);
-
-    this.resetForm();
   }
 
   cancelQuestionEdit() {
@@ -223,10 +277,13 @@ export default class QuestionForm extends LightningElement {
     const input = this.template.querySelector(".input");
     if (!input.validity.valid) {
       return;
-    } else if (this.isOptionsEnabled && this.question.Options.length < 2) {
+    } else if (
+      this.isOptionsEnabled &&
+      this.question.Question_Options__r.length < 2
+    ) {
       this.showToastMessage(
         this.ERROR_TITLE,
-        "The number of options must be at least two",
+        option_already_exists,
         this.ERROR_VARIANT
       );
       return;
@@ -246,17 +303,24 @@ export default class QuestionForm extends LightningElement {
   getQuestionAttributes() {
     if (
       !this.isOptionsEnabled ||
-      (this.isOptionsEnabled && this.question.Options.length === 0)
+      (this.isOptionsEnabled && this.question.Question_Options__r.length === 0)
     ) {
-      this.question.Options = null;
+      this.question.Question_Options__r = null;
     }
     this.question.Type__c = this.selectedType;
+  }
+
+  sendErrorNotification() {
+    const errorEvent = new CustomEvent("error", {});
+    this.dispatchEvent(errorEvent);
   }
 
   resetForm() {
     const input = this.template.querySelector(".input");
     input.value = "";
-    this.selectedType = this.displayedTypes[0].value;
+    this.selectedType = this.displayedTypes
+      ? this.displayedTypes[0].value
+      : "Text";
     this.selectedSettings = [];
     this.setOptionsEnabling();
   }

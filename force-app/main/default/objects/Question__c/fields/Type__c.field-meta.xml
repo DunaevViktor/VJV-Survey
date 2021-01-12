@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Type__c</fullName>
     <externalId>false</externalId>
@@ -29,11 +29,6 @@
                 <fullName>Picklist</fullName>
                 <default>false</default>
                 <label>Picklist</label>
-            </value>
-            <value>
-                <fullName>Color</fullName>
-                <default>false</default>
-                <label>Color</label>
             </value>
             <value>
                 <fullName>Rating</fullName>
