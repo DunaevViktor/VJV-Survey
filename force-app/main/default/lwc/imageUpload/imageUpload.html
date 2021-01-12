@@ -1,9 +1,11 @@
 <template>
   <div class="slds-box slds-align_absolute-center image-upload-wrapper">
     <template if:false={displayImage}>
+      
       <template if:true={imageLoading}>
         <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
       </template>
+
       <template if:false={imageLoading}>
         <input
           id="uploading-image"
@@ -19,7 +21,7 @@
           ondragover={allowDropFile}
         >
           <span class="slds-text-heading_small">
-            {label.drag_n_drop_logo}
+            {label.drag_n_drop_image}
           </span>
         </label>
       </template>
@@ -32,7 +34,11 @@
         title={label.remove_image}
         onclick={clearFile}
       />
-      <img class="logo-image" src={imageUrl} title={label.logo_image} />
+      <img 
+        class="preview-image" 
+        src={imageUrl} 
+        title={label.image_title} 
+      />
     </template>
   </div>
 </template>

@@ -1,37 +1,32 @@
 import { LightningElement, api, track } from "lwc";
+import getImageURL from "@salesforce/apex/ImageUploadController.getImageURL";
 import DELETE_ICON from "@salesforce/resourceUrl/DeleteIcon";
-import getLogoURL from "@salesforce/apex/SurveySettingsController.getLogoURL";
-
-import remove_image from "@salesforce/label/c.remove_image";
-import drag_n_drop_logo from "@salesforce/label/c.drag_n_drop_logo";
-import logo_image from "@salesforce/label/c.logo_image";
+import { labels } from "./labels";
 
 export default class ImageUpload extends LightningElement {
-  @api url;
-  @track imageFile;
+  
+  @api defaultUrl;
+  
   @track displayImage = false;
   @track imageUrl;
-  @track errorMessage;
   @track imageLoading;
+  @track errorMessage;
 
-  logoName;
-  acceptedFormats = "image/png, image/jpeg";
+  imageFile;
+  imageName;
+  acceptedFormats = 'image/png, image/jpeg';
   removeIconUrl = DELETE_ICON;
 
-  label = {
-    remove_image,
-    drag_n_drop_logo,
-    logo_image
-  };
+  label = labels;
 
   connectedCallback() {
-    this.imageUrl = this.url;
+    this.imageUrl = this.defaultUrl;
     this.updateImageArea();
   }
 
   uploadImage(event) {
     this.imageFile = event.target.files[0];
-    this.logoName = this.imageFile.name;
+    this.imageName = this.imageFile.name;
     this.imageLoading = true;
     this.generateImageData();
   }
@@ -39,7 +34,7 @@ export default class ImageUpload extends LightningElement {
   handleDropFile(event) {
     event.preventDefault();
     this.imageFile = event.dataTransfer.files[0];
-    this.logoName = this.imageFile.name;
+    this.imageName = this.imageFile.name;
     this.imageLoading = true;
     this.generateImageData();
   }
@@ -62,9 +57,9 @@ export default class ImageUpload extends LightningElement {
       const blob = reader.result;
       const base64 = "base64,";
       const imageBase64 = blob.substr(blob.indexOf(base64) + base64.length);
-      getLogoURL({
-        logoName: this.logoName,
-        logoBlobData: imageBase64
+      getImageURL({
+        imageName: this.imageName,
+        imageBase64Data: imageBase64
       })
         .then((result) => {
           this.imageUrl = result;
