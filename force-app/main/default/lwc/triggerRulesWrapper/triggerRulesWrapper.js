@@ -2,15 +2,14 @@ import { LightningElement, track, api } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import tip_for_user from "@salesforce/label/c.tip_for_user";
 import trigger_rule_required from "@salesforce/label/c.trigger_rule_required";
-
+import add_trigger_rule from "@salesforce/label/c.add_trigger_rule";
 
 export default class TriggerRulesWrapper extends LightningElement {
 
-  plus = "+";
-
   labels = {
     tip_for_user,
-    trigger_rule_required
+    trigger_rule_required,
+    add_trigger_rule
   }
 
   @track renderConditions = [

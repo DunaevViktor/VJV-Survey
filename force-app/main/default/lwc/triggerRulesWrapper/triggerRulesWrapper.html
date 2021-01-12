@@ -13,15 +13,16 @@
     </template>
   </template>
 
+
   <template if:true={isPlusVisible}>
     <lightning-layout
-      horizontal-align="space"
+      horizontal-align="end"
       vertical-align="centre"
-      class="slds-p-top_x-small"
+      class="slds-p-top_x-large"
     >
       <lightning-button
         variant="brand-outline"
-        label={plus}
+        label={labels.add_trigger_rule}
         title="Add trigger rule"
         onclick={handlePlusClick}
       ></lightning-button>

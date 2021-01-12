@@ -3,6 +3,9 @@ import getObjectApiNamePickListValues from "@salesforce/apex/MetadataFetcher.get
 import getTriggerRuleOperatorPickListValues from "@salesforce/apex/MetadataFetcher.getTriggerRuleOperatorPickListValues";
 import getObjectFieldsDescriptionList from "@salesforce/apex/MetadataFetcher.getObjectFieldsDescriptionList";
 import getFieldPicklistValues from "@salesforce/apex/MetadataFetcher.getFieldPicklistValues";
+
+import DELETE_ICON from "@salesforce/resourceUrl/DeleteIcon";
+
 import {
   getFieldAttributes,
   generateBooleanField,
@@ -10,31 +13,21 @@ import {
   generateFieldsDescriptionsList,
 } from "./helper";
 
+import { labels } from "./labels"
+
 import {
   operatorTypes,
   booleanPicklistOptions,
   generateFieldOptions
 } from "c/formUtil";
 
-import deleteLabel from "@salesforce/label/c.delete";
-import deleteTitle from "@salesforce/label/c.delete_trigger_rule";
-import operatorLabel from "@salesforce/label/c.operator";
-import fieldLabel from "@salesforce/label/c.field";
-import objectLabel from "@salesforce/label/c.object";
-import errorMessage from "@salesforce/label/c.errorMessage";
 
 export default class SingleTriggerRule extends LightningElement {
 
-  labels = {
-    deleteLabel,
-    deleteTitle,
-    operatorLabel,
-    fieldLabel,
-    objectLabel,
-    errorMessage
-  };
+  labels = labels;
 
   initialRender = true;
+  deleteIcon = DELETE_ICON;
 
   @track objectValue = "";
   @track fieldType = "";

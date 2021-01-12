@@ -4,7 +4,7 @@
   <template if:false={error}>
     <div class="slds-grid slds-grid_align-spread">
       <!--Object-->
-      <div class="slds-col slds-size_1-of-6 slds-align-middle">
+      <div class="slds-col slds-size_1-of-5 slds-align-middle">
         <lightning-combobox
           name="Object"
           label={labels.objectLabel}
@@ -16,7 +16,7 @@
       </div>
 
       <!--Field-->
-      <div class="slds-col slds-size_1-of-6 slds-align-middle">
+      <div class="slds-col slds-size_1-of-5 slds-align-middle">
         <lightning-combobox
           name="Field"
           label={labels.fieldLabel}
@@ -28,7 +28,7 @@
       </div>
 
       <!--Operator-->
-      <div class="slds-col slds-size_1-of-6 slds-align-middle">
+      <div class="slds-col slds-size_1-of-5 slds-align-middle">
         <lightning-combobox
           name="Operator"
           label={labels.operatorLabel}
@@ -40,7 +40,9 @@
       </div>
 
       <!--Value-->
-      <div class="slds-col slds-size_1-of-6">
+      <div class="slds-grid slds-col slds-size_1-of-5 slds-grid_align-spread">
+        <div class="slds-col slds-size_4-of-6">
+        
         <lightning-input
           if:true={field.isInput}
           name={field.name}
@@ -77,18 +79,24 @@
           selected-value={field.name}
         ></c-custom-lookup>
       </div>
-
-      <!--Delete button-->
-      <div class="slds-col slds-size_1-of-8 slds-align-bottom">
+        <!--Delete button-->
+      <div class="slds-col slds-size_1-of-6 slds-align-bottom slds-p-bottom_x-small">
         <template if:true={isDeleteAvailable}>
-          <lightning-button
-            variant="destructive"
-            label={labels.deleteLabel}
+          <span
+            class="slds-icon_container slds-icon-utility-announcement"
             title={labels.deleteTitle}
+          >
+            <img
+              class="slds-icon slds-icon-text-default slds-icon_x-small"
+            src={deleteIcon}
             onclick={handleDeleteRuleClick}
-          ></lightning-button>
+            />
+          </span>          
         </template>
       </div>
+    </div>
+
+      
     </div>
   </template>
 </template>
