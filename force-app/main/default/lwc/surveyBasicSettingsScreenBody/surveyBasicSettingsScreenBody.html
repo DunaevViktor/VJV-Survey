@@ -1,34 +1,36 @@
 <template>
-  <div class="slds-grid slds-m-horizontal_medium slds-align_absolute-center">
-    <div class="slds-p-around_x-small survey-info-form">
-      <div class="slds-box survey-info-form__fields">
-        <lightning-input
-          class="slds-m-vertical_medium"
-          type="text"
-          label={label.survey_name}
-          placeholder={label.survey_name}
-          value={survey.Name}
-          onchange={handleNameChange}
-          required
-        >
-        </lightning-input>
+  <div class="slds-align_absolute-center">
+    <div class="slds-m-horizontal_medium survey-info-form">
+      <lightning-input
+        class="slds-m-vertical_medium"
+        type="text"
+        label={label.survey_name}
+        placeholder={label.survey_name}
+        value={survey.Name}
+        onchange={handleNameChange}
+        required
+      >
+      </lightning-input>
 
-        <lightning-input
-          class="slds-m-vertical_medium"
-          type="color"
-          label={label.survey_bg_color}
-          value={survey.Background_Color__c}
-          onchange={handleColorChange}
-        >
-        </lightning-input>
-      </div>
+      <c-image-upload 
+        url={survey.Logo__c} 
+        onupdateimageurl={handleImageUpdate}
+      ></c-image-upload>
+
+      <lightning-input
+        class="slds-m-vertical_medium"
+        type="color"
+        label={label.survey_bg_color}
+        value={survey.Background_Color__c}
+        onchange={handleColorChange}
+      >
+      </lightning-input>
     </div>
-
-    <c-image-upload url={survey.Logo__c} onupdateimageurl={handleImageUpdate}> </c-image-upload>
   </div>
+
   <hr class="slds-m-bottom_small" />
   
-  <div class="slds-text-align_right">
+  <div class="slds-text-align_right slds-m-bottom_small">
     <lightning-button
       variant="brand"
       label={label.next}
@@ -36,4 +38,5 @@
       class="slds-m-left_x-small"
     ></lightning-button>
   </div>
+    
 </template>

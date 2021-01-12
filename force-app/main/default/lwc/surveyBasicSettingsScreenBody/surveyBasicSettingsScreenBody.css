@@ -1,9 +1,5 @@
 .survey-info-form {
+  min-width: 300px;
   max-width: 600px;
-  flex-grow: 1;
-}
-
-.survey-info-form__fields {
   width: 100%;
-  height: 300px;
 }
