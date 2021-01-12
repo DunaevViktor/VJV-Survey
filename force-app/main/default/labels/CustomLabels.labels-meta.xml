@@ -127,6 +127,13 @@
         <value>The number of options must be at least two</value>
     </labels>
     <labels>
+        <fullName>failed_image_upload</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>failed image upload</shortDescription>
+        <value>Error occured while uploading image</value>
+    </labels>
+    <labels>
         <fullName>false</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -139,6 +146,13 @@
         <protected>true</protected>
         <shortDescription>Field</shortDescription>
         <value>Field</value>
+    </labels>
+    <labels>
+        <fullName>image_loading</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>image loading</shortDescription>
+        <value>Loading</value>
     </labels>
     <labels>
         <fullName>is_required</fullName>

@@ -10,7 +10,7 @@ export default class ImageUpload extends LightningElement {
   @track displayImage = false;
   @track imageUrl;
   @track imageLoading;
-  @track errorMessage;
+  @track error;
 
   imageFile;
   imageName;
@@ -69,6 +69,11 @@ export default class ImageUpload extends LightningElement {
           this.imageLoading = false;
         })
         .then(() => {
+          this.updateImageArea();
+        })
+        .catch(error => {
+          this.imageUrl = '';
+          this.error = error;
           this.updateImageArea();
         });
     };
