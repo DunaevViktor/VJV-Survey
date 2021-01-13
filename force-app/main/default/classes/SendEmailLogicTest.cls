@@ -6,6 +6,7 @@ public with sharing class SendEmailLogicTest {
     private static final String ORG_ERROR = 'The current organization was not found.';
     private static final String TEMPLATE_ERROR = 'The current template was not found.';
     private static final String EMAIL_BODY_ERROR = 'No email body was created.';
+    private static final String CONTAIN_ERROR = 'The specified object will not be found.';
     
     @TestSetup
     static void makeData(){
@@ -65,7 +66,7 @@ public with sharing class SendEmailLogicTest {
         List<Email_Receiver__c> receiverList = [SELECT Id, Type__c, Value__c, Survey__c, IsSend__c FROM Email_Receiver__c WITH SECURITY_ENFORCED];
         Map<Id, Survey__c> surveyMap = SendEmailLogic.createSurveyMap();
         List<Messaging.SingleEmailMessage> messageList = SendEmailLogic.createEmailMessages(receiverList, surveyMap);
-        System.assertEquals(3, receiverList.size(), AMOUNT_ERROR);
+        System.assertEquals(3, messageList.size(), AMOUNT_ERROR);
     }
     
     @IsTest
@@ -80,40 +81,52 @@ public with sharing class SendEmailLogicTest {
     
     @IsTest
     static void testGetMethods(){
+        Group currentGroup = [SELECT Id, Name FROM Group WHERE Name = 'TestGroup' WITH SECURITY_ENFORCED LIMIT 1];
+        GroupMember currentMember = [SELECT Id, GroupId, UserOrGroupId FROM GroupMember WHERE GroupId = :currentGroup.Id WITH SECURITY_ENFORCED LIMIT 1];
+        User currentUser = [SELECT Id, Name, Email FROM User WHERE Email = 'test@test.com' WITH SECURITY_ENFORCED LIMIT 1];
+
         List<User> userList = SendEmailLogic.getUser();
-        System.assertEquals(7, userList.size(), AMOUNT_ERROR);
+        Boolean actualUser = userList.contains(currentUser);
+        System.assertEquals(true, actualUser, CONTAIN_ERROR);
         
         List<Group> groupList = SendEmailLogic.getGroup();
-        System.assertEquals(3, groupList.size(), AMOUNT_ERROR);
+        Boolean actualGroup = groupList.contains(currentGroup);
+        System.assertEquals(true, actualGroup, CONTAIN_ERROR);
         
         List<GroupMember> memberList = SendEmailLogic.getGroupMember();
-        System.assertEquals(2, memberList.size(), AMOUNT_ERROR);
-        
-        List<Survey__c> surveyList = SendEmailLogic.getSurvey();
-        System.assertEquals(2, surveyList.size(), AMOUNT_ERROR);
-        
+        Boolean actualMember = memberList.contains(currentMember);
+        System.assertEquals(true, actualMember, CONTAIN_ERROR);
+
         Organization currentOrg = SendEmailLogic.getOrganization();
         System.assertNotEquals(null, currentOrg, ORG_ERROR);
         
         EmailTemplate template = SendEmailLogic.getEmailTemplate();
         System.assertNotEquals(null, template, TEMPLATE_ERROR);
+        
+        List<Survey__c> surveyList = SendEmailLogic.getSurvey();
+        System.assertEquals(2, surveyList.size(), AMOUNT_ERROR);
     }
     
     @IsTest
     static void testCreateMapMethods(){
+        Group currentGroup = [SELECT Id, Name FROM Group WHERE Name = 'TestGroup' WITH SECURITY_ENFORCED LIMIT 1];
+
+        Map<Id, Group> groupMap = SendEmailLogic.createGroupMap();
+        Boolean actualGroup = groupMap.containsKey(currentGroup.Id);
+        System.assertEquals(true, actualGroup, CONTAIN_ERROR);
+
+        Map<String, List<User>> userMap = SendEmailLogic.createUserByGroupMap();
+        Boolean actualUser = userMap.containsKey('TestGroup');
+        System.assertEquals(true, actualUser, CONTAIN_ERROR);
+
         Map<Id, Survey__c> surveyMap = SendEmailLogic.createSurveyMap();
         System.assertEquals(2, surveyMap.size(), AMOUNT_ERROR);
-        
-        Map<String, List<User>> userMap = SendEmailLogic.createUserByGroupMap();
-        System.assertEquals(2, userMap.size(), AMOUNT_ERROR);
-        
-        Map<Id, Group> groupMap = SendEmailLogic.createGroupMap();
-        System.assertEquals(3, groupMap.size(), AMOUNT_ERROR);
     }
     
     @IsTest
     static void testInitializeUserByGroupMap(){
         Map<String, List<User>> userMap = SendEmailLogic.initializeUserByGroupMap();
-        System.assertEquals(2, userMap.size(), AMOUNT_ERROR);
+        Boolean actualUser = userMap.containsKey('TestGroup');
+        System.assertEquals(true, actualUser, CONTAIN_ERROR);
     }
 }
