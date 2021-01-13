@@ -94,8 +94,6 @@ public with sharing class SendEmailLogicTest {
         System.assertEquals(true, actualGroup, CONTAIN_ERROR);
         
         List<GroupMember> memberList = SendEmailLogic.getGroupMember();
-        System.debug('list - ' + memberList);
-        System.debug(currentMember);
         Boolean actualMember = memberList.contains(currentMember);
         System.assertEquals(true, actualMember, CONTAIN_ERROR);
 
