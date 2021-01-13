@@ -1,10 +1,6 @@
 public with sharing class LookupController {
   @AuraEnabled(cacheable=true)
-  public static List<SObject> findRecords(
-    String searchKey,
-    List<String> objectsApiNames
-  ) {
-    System.debug(objectsApiNames);
+  public static List<SObject> findRecords(String searchKey, List<String> objectsApiNames) {
     List<SObject> result = new List<SObject>();
     try {
       string searchText = '\'' + String.escapeSingleQuotes(searchKey) + '%\'';

@@ -22,16 +22,11 @@ public with sharing class MetadataFetcher {
     for (String key : sobjectFields.keySet()) {
       List<String> fieldDescriptionList = new List<String>(); // [0] - field api name; [1] - field label; [2] - datatype; [3...] - referenced objects api names (if it is lookup field)
       fieldDescriptionList.add(String.valueOf(sobjectfields.get(key)));
-      fieldDescriptionList.add(
-        String.valueOf(sobjectfields.get(key).getDescribe().getLabel())
-      );
+      fieldDescriptionList.add(String.valueOf(sobjectfields.get(key).getDescribe().getLabel()));
       String datatype = String.valueOf(sobjectfields.get(key).getDescribe().getType());
       fieldDescriptionList.add(datatype);
       if (datatype == 'REFERENCE') {
-        populateListWithReferencedObjectNames(
-          sobjectfields.get(key).getDescribe(),
-          fieldDescriptionList
-        );
+        populateListWithReferencedObjectNames(sobjectfields.get(key).getDescribe(), fieldDescriptionList);
       }
       sObjectFieldList.add(fieldDescriptionList);
     }

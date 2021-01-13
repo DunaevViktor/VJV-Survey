@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { LightningElement, track, api } from "lwc";
 import { importedLabels } from "./labels";
 import findRecords from "@salesforce/apex/LookupController.findRecords";
@@ -23,7 +24,6 @@ export default class LwcLookup extends LightningElement {
   }
 
   onLeave() {
-    console.log('leave!');
     setTimeout(() => {
       this.searchKey = "";
       this.recordsList = null;
@@ -73,7 +73,6 @@ export default class LwcLookup extends LightningElement {
   }
 
   onSeletedRecordUpdate() {
-    console.log('before dispatch on lookup');
     
     const recordSelectionEvent = new CustomEvent("recordselection", {
       detail: {
@@ -81,8 +80,6 @@ export default class LwcLookup extends LightningElement {
         selectedValue: this._selectedValue
       }
     });
-    console.log(recordSelectionEvent.detail);
     this.dispatchEvent(recordSelectionEvent);
-
   }
 }

@@ -1,5 +1,4 @@
 import { LightningElement, track, api } from "lwc";
-import { FlowNavigationBackEvent } from "lightning/flowSupport";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 import { importedLabels } from "./labels"
@@ -16,14 +15,14 @@ export default class TriggerRulesWrapper extends LightningElement {
     { cond: false, id: 4, isDeleteAvailable: true },
   ];
 
-  @api rules;
+  @api rules = [];
+  @track _rules = [];
 
   connectedCallback() {
-    if (!this.rules) {
-      this.rules = [];
-    } else {
+    if (this.rules) {
+      this._rules = this.rules;
       let i = 0;
-      this.rules.forEach((rule) => {
+      this._rules.forEach((rule) => {
         this.renderConditions[i].cond = true;
         this.renderConditions[i].rule = rule;
         i++;
@@ -54,30 +53,24 @@ export default class TriggerRulesWrapper extends LightningElement {
   }
 
   handleNavigateNext() {    
-    this.rules = this.getNewTriggerRules();
+    this._rules = this.getNewTriggerRules();
     if (!this.isMinimalDataAmountFilled()) {
-      this.showToast("", this.labels.tip_for_user, "error");
-      console.log('ERROR!');
+      this.showToast("", this.labels.trigger_rule_required, "error");
     } else {
-      console.log('new tr rules');
-      console.log(this.rules);
       const navigateNextEvent = new CustomEvent("navigatenext", {
-        detail: { triggerRules: [...this.rules] },
+        detail: { triggerRules: [...this._rules] },
       });
       this.dispatchEvent(navigateNextEvent);
     }
   }
 
   handleNavigatePrev() {
-    this.rules = this.getNewTriggerRules();
+    this._rules = this.getNewTriggerRules();
     if (!this.isMinimalDataAmountFilled()) {
       this.showToast("", this.labels.tip_for_user, "error");
-      console.log('ERROR!');
     } else {
-      console.log('new tr rules');
-      console.log(this.rules);
       const navigatePrevEvent = new CustomEvent("navigateback", {
-        detail: { triggerRules: [...this.rules] },
+        detail: { triggerRules: [...this._rules] },
       });
       this.dispatchEvent(navigatePrevEvent);
     }
@@ -93,8 +86,6 @@ export default class TriggerRulesWrapper extends LightningElement {
           'c-single-trigger-rule[data-my-id="' + id + '"]'
         );
         let triggerRule = JSON.parse(JSON.stringify(element.getTriggerRule()));
-        console.log('trigger r fr single');
-        console.log(triggerRule);
         if(!this.isEmpty(triggerRule)) {
           newTriggerRules.push(triggerRule);
         }        
@@ -114,7 +105,7 @@ export default class TriggerRulesWrapper extends LightningElement {
   }
 
   isMinimalDataAmountFilled() {
-    if(!this.rules[0] || this.isEmpty(this.rules[0]) || this.rules[0].Field_Value__c === "" || this.rules[0].Operator__c === "") {
+    if(!this._rules[0] || this.isEmpty(this._rules[0]) || this._rules[0].Field_Value__c === "" || this._rules[0].Operator__c === "") {
       return false;
     }
     return true;

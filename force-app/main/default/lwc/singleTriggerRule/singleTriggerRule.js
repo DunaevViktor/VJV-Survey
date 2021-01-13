@@ -55,8 +55,6 @@ export default class SingleTriggerRule extends LightningElement {
 
   constructor() {
     super();
-    console.log('TR RULE OBJECT');
-    console.log(this.triggerRuleObjectApiName);
     getPicklistValues({objectApiName: this.triggerRuleObjectApiName, fieldApiName: 'Object_Api_Name__c'})
       .then((result) => {
         this.objectNames = generateFieldOptions(result);
@@ -82,13 +80,6 @@ export default class SingleTriggerRule extends LightningElement {
       });
 
       
-  }
-
-  connectedCallback() {
-    if(this.rule) {
-      console.log('reeived rule');
-      console.log(JSON.parse(JSON.stringify(this.rule)));
-  }
   }
 
   handleObjectChange(event) {
@@ -176,11 +167,7 @@ export default class SingleTriggerRule extends LightningElement {
         picklistOptions,
         settedValue
       );
-
-      console.log('Generated field');
-      console.log(this. field);
     }
-    //this.value = this.field.value;
     this.setOperatorsByType();
     this.rule = null;
   }
@@ -234,14 +221,11 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   handleRecordSelection(event) {
-    console.log('record selection');
     
     this.value = JSON.parse(JSON.stringify(event.detail));
-    console.log(this.value);
   }
 
   @api getTriggerRule() {
-    console.log("api fetTrRule");
     
     if(this.isAllDataFilled()) {
       const triggerRule = {
@@ -250,7 +234,6 @@ export default class SingleTriggerRule extends LightningElement {
         Operator__c: this.operatorValue,
         Field_Value__c: this.value,
       };  
-      console.log(triggerRule);
       return triggerRule;
     }
     return {};    
