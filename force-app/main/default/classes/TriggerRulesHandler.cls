@@ -18,7 +18,7 @@ public with sharing class TriggerRulesHandler {
         
         if(surveysToSend.size() > 0){
             List<Email_Receiver__c> receiverList = getEmailReceivers(surveysToSend);
-            //send surveys
+            SendEmailLogic.sendEmails(receiverList);
         }
     }    
     
