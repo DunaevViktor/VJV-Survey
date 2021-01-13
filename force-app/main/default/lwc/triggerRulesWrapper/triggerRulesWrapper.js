@@ -67,7 +67,7 @@ export default class TriggerRulesWrapper extends LightningElement {
   handleNavigatePrev() {
     this._rules = this.getNewTriggerRules();
     if (!this.isMinimalDataAmountFilled()) {
-      this.showToast("", this.labels.tip_for_user, "error");
+      this.showToast("", this.labels.trigger_rule_required, "error");
     } else {
       const navigatePrevEvent = new CustomEvent("navigateback", {
         detail: { triggerRules: [...this._rules] },

@@ -73,12 +73,16 @@ export default class LwcLookup extends LightningElement {
   }
 
   onSeletedRecordUpdate() {
-    
-    const recordSelectionEvent = new CustomEvent("recordselection", {
-      detail: {
+    let detailObject = null;
+    if(this._selectedRecordId && this._selectedValue) {
+      detailObject = {
         selectedRecordId: this._selectedRecordId,
         selectedValue: this._selectedValue
       }
+    }
+    
+    const recordSelectionEvent = new CustomEvent("recordselection", {
+      detail: detailObject
     });
     this.dispatchEvent(recordSelectionEvent);
   }

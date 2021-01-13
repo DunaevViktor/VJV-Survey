@@ -2,6 +2,8 @@ import { LightningElement, track, api } from "lwc";
 import getObjectFieldsDescriptionList from "@salesforce/apex/MetadataFetcher.getObjectFieldsDescriptionList";
 import getPicklistValues from "@salesforce/apex/MetadataFetcher.getPicklistValues";
 import TRIGGER_RULE_OBJECT from '@salesforce/schema/Trigger_Rule__c';
+import OBJECT_API_NAME_FIELD from '@salesforce/schema/Trigger_Rule__c.Object_Api_Name__c';
+import OPERATOR_FIELD from '@salesforce/schema/Trigger_Rule__c.Operator__c';
 
 import DELETE_ICON from "@salesforce/resourceUrl/DeleteIcon";
 
@@ -26,6 +28,8 @@ export default class SingleTriggerRule extends LightningElement {
   labels = importedLabels;
 
   triggerRuleObjectApiName = TRIGGER_RULE_OBJECT.objectApiName;
+  object_Api_NameFieldName = OBJECT_API_NAME_FIELD.fieldApiName;
+  operatorFieldName = OPERATOR_FIELD.fieldApiName;
 
   initialRender = true;
   deleteIcon = DELETE_ICON;
@@ -55,7 +59,7 @@ export default class SingleTriggerRule extends LightningElement {
 
   constructor() {
     super();
-    getPicklistValues({objectApiName: this.triggerRuleObjectApiName, fieldApiName: 'Object_Api_Name__c'})
+    getPicklistValues({objectApiName: this.triggerRuleObjectApiName, fieldApiName: this.object_Api_NameFieldName})
       .then((result) => {
         this.objectNames = generateFieldOptions(result);
         if (this.rule) {
@@ -67,7 +71,7 @@ export default class SingleTriggerRule extends LightningElement {
         this.error = error;
       });
 
-    getPicklistValues({objectApiName: this.triggerRuleObjectApiName, fieldApiName: 'Operator__c'})
+    getPicklistValues({objectApiName: this.triggerRuleObjectApiName, fieldApiName: this.operatorFieldName})
       .then((result) => {
         this.fullOperatorList = generateFieldOptions(result);
         if (this.rule) {
@@ -77,9 +81,7 @@ export default class SingleTriggerRule extends LightningElement {
       .catch((error) => {
         this.error = error;
         console.log(error);
-      });
-
-      
+      }); 
   }
 
   handleObjectChange(event) {
@@ -135,8 +137,8 @@ export default class SingleTriggerRule extends LightningElement {
 
   generateFieldPicklistOptions(chosenFieldObject) {
     getPicklistValues({
-      objApiName: this.objectValue,
-      field: chosenFieldObject.value,
+      objectApiName: this.objectValue,
+      fieldApiName: chosenFieldObject.value,
     })
       .then((result) => {
         let comboboxOptions = generateFieldOptions(result);
@@ -241,7 +243,7 @@ export default class SingleTriggerRule extends LightningElement {
 
   isAllDataFilled() {
     if(this.objectValue === "" || this.fieldValue === "" ||
-       this.operatorValue === "" || this.operatorValue.value === "") {
+       this.operatorValue === "" || !this.value || this.value === "") {
       return false;
     }
     return true;

@@ -3,8 +3,8 @@ import {FlowAttributeChangeEvent, FlowNavigationNextEvent, FlowNavigationBackEve
 
 
 export default class TriggerRuleScreen extends LightningElement {
+    
     @track _triggerRules = [];
-
     
     get triggerRules() {
         return this._triggerRules;
