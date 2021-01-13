@@ -6,14 +6,14 @@
         type="text"
         label={label.survey_name}
         placeholder={label.survey_name}
-        value={surveyData.Name}
+        value={survey.Name}
         onchange={handleNameChange}
         required
       >
       </lightning-input>
 
       <c-image-upload 
-        defaulturl={surveyData.Logo__c} 
+        defaulturl={survey.Logo__c} 
         onupdateimageurl={handleImageUpdate}
       ></c-image-upload>
 
@@ -21,7 +21,7 @@
         class="slds-m-vertical_medium"
         type="color"
         label={label.survey_bg_color}
-        value={surveyData.Background_Color__c}
+        value={survey.Background_Color__c}
         onchange={handleColorChange}
       >
       </lightning-input>

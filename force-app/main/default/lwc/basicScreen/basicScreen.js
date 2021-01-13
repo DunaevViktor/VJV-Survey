@@ -3,9 +3,9 @@ import { FlowAttributeChangeEvent, FlowNavigationNextEvent } from 'lightning/flo
 import { labels } from './labels';
 
 export default class BasicScreen extends LightningElement {
-  @api survey;
+  @api surveyData;
 
-  @track surveyData = this.survey;
+  @track survey;
 
   label = labels;
 
@@ -24,9 +24,9 @@ export default class BasicScreen extends LightningElement {
 
   setDefaultSurveyData() {
     if (this.survey) {
-      this.surveyData = { ...this.survey };
+      this.survey = { ...this.surveyData };
     } else {
-      this.surveyData = {
+      this.survey = {
         Name: '',
         Background_Color__c: '',
         Logo__c: ''
@@ -35,15 +35,15 @@ export default class BasicScreen extends LightningElement {
   }
 
   handleNameChange(event) {
-    this.surveyData.Name = event.target.value;
+    this.survey.Name = event.target.value;
   }
 
   handleColorChange(event) {
-    this.surveyData.Background_Color__c = event.target.value;
+    this.survey.Background_Color__c = event.target.value;
   }
 
   handleImageUpdate(event) {
-    this.surveyData.Logo__c = event.detail.imageUrl;
+    this.survey.Logo__c = event.detail.imageUrl;
   }
 
   clickNextButton() {
@@ -55,8 +55,8 @@ export default class BasicScreen extends LightningElement {
   }
 
   updateSurveyData() {
-    this.survey = { ...this.surveyData };
-    const changeSurveyDataEvent = new FlowAttributeChangeEvent("surveydatachange", this.survey);
+    this.surveyData = { ...this.survey };
+    const changeSurveyDataEvent = new FlowAttributeChangeEvent("surveydatachange", this.surveyData);
     this.dispatchEvent(changeSurveyDataEvent);
   }
 }

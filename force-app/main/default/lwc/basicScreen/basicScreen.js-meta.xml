@@ -11,7 +11,7 @@
 
     <targetConfigs>
       <targetConfig targets="lightning__FlowScreen">
-          <property name="survey" label="Survey" type="@salesforce/schema/Survey__c" description="Survey Data"/>
+          <property name="surveyData" label="Survey Data" type="@salesforce/schema/Survey__c" description="Existing data of the current survey"/>
       </targetConfig>
     </targetConfigs>
 
