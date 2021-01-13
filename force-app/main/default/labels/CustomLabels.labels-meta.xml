@@ -307,13 +307,20 @@
         <protected>true</protected>
         <shortDescription>remove image</shortDescription>
         <value>Remove image</value>
-    </labels>
-    <labels>
+      </labels>
+      <labels>
         <fullName>remove_selected_option</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Remove selected option</shortDescription>
         <value>Remove selected option</value>
+    </labels>
+    <labels>
+        <fullName>save_changes</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>save changes</shortDescription>
+        <value>Save changes</value>
     </labels>
     <labels>
         <fullName>save_changes</fullName>
