@@ -1,0 +1,11 @@
+<aura:component access="global" implements="lightning:availableForFlowScreens">
+  <aura:attribute
+    name="triggerRules"
+    type="Trigger_Rule__c[]"
+    access="global"
+  />
+  <c:triggerRulesWrapper
+    rules="{!v.triggerRules}"
+    onnavigatenext="{!c.setTriggerRules}"
+  ></c:triggerRulesWrapper>
+</aura:component>

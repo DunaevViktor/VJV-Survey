@@ -13,5 +13,16 @@
 
   changeStandardQuestions: function (cmp, event) {
     cmp.set("v.standardQuestions", event.getParam("standardQuestions"));
+  },
+
+  onPrevious: function (cmp) {
+    cmp.set("v.validations", []);
+    const navigate = cmp.get("v.navigateFlow");
+    navigate("BACK");
+  },
+
+  onNext: function (cmp) {
+    const navigate = cmp.get("v.navigateFlow");
+    navigate("NEXT");
   }
 });

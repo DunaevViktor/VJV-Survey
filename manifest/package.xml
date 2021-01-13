@@ -68,5 +68,14 @@
         <members>*</members>
         <name>GlobalValueSet</name>
     </types>
+    <types>
+      <members>*</members>
+      <name>CustomLabels</name>
+    </types>
+    <types>
+        <members>SurveyTemplates</members>
+        <members>SurveyTemplates/Main_Template</members>
+        <name>EmailTemplate</name>
+    </types>
     <version>50.0</version>
 </Package>

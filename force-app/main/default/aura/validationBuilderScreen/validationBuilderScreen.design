@@ -1,0 +1,4 @@
+<design:component >
+  <design:attribute name="questions" label="Questions"/>
+  <design:attribute name="validations" label="Validation rules"/>
+</design:component>

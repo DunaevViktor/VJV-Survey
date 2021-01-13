@@ -31,11 +31,6 @@
                 <label>Picklist</label>
             </value>
             <value>
-                <fullName>Color</fullName>
-                <default>false</default>
-                <label>Color</label>
-            </value>
-            <value>
                 <fullName>Rating</fullName>
                 <default>false</default>
                 <label>Rating</label>

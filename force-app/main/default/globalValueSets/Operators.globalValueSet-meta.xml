@@ -6,11 +6,6 @@
         <label>IS NULL</label>
     </customValue>
     <customValue>
-        <fullName>CONTAINS</fullName>
-        <default>false</default>
-        <label>CONTAINS</label>
-    </customValue>
-    <customValue>
         <fullName>EQUALS</fullName>
         <default>false</default>
         <label>EQUALS</label>
@@ -21,6 +16,16 @@
         <label>NOT EQUALS</label>
     </customValue>
     <customValue>
+        <fullName>CONTAINS</fullName>
+        <default>false</default>
+        <label>CONTAINS</label>
+    </customValue>
+    <customValue>
+        <fullName>NOT CONTAINS</fullName>
+        <default>false</default>
+        <label>NOT CONTAINS</label>
+    </customValue>
+    <customValue>
         <fullName>GREATER THAN</fullName>
         <default>false</default>
         <label>GREATER THAN</label>
@@ -29,11 +34,6 @@
         <fullName>LESS THAN</fullName>
         <default>false</default>
         <label>LESS THAN</label>
-    </customValue>
-    <customValue>
-        <fullName>NOT CONTAINS</fullName>
-        <default>false</default>
-        <label>NOT CONTAINS</label>
     </customValue>
     <masterLabel>Operators</masterLabel>
     <sorted>false</sorted>
