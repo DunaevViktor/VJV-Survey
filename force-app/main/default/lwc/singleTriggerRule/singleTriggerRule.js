@@ -80,6 +80,15 @@ export default class SingleTriggerRule extends LightningElement {
         this.error = error;
         console.log(error);
       });
+
+      
+  }
+
+  connectedCallback() {
+    if(this.rule) {
+      console.log('reeived rule');
+      console.log(JSON.parse(JSON.stringify(this.rule)));
+  }
   }
 
   handleObjectChange(event) {
@@ -153,6 +162,7 @@ export default class SingleTriggerRule extends LightningElement {
     let settedValue = "";
     if (this.rule) {
       settedValue = this.rule.Field_Value__c;
+      this.value = settedValue;
     }
     if (this.operatorValue === operatorTypes.NULL) {
       let chosenFieldObj = this.fieldNames.find(
@@ -170,11 +180,9 @@ export default class SingleTriggerRule extends LightningElement {
       console.log('Generated field');
       console.log(this. field);
     }
-    this.value = this.field.value;
+    //this.value = this.field.value;
     this.setOperatorsByType();
-    if (this.rule) {
-      this.rule = undefined;
-    }
+    this.rule = null;
   }
 
   setOperatorsByType() {
@@ -188,9 +196,6 @@ export default class SingleTriggerRule extends LightningElement {
     this.operatorValue = event.detail.value;
     if (this.operatorValue === operatorTypes.NULL) {
       let settedValue = "";
-      if (this.rule) {
-        settedValue = this.rule.Field_Value__c;
-      }
       let chosenFieldObject = this.fieldNames.find(
         (field) => field.value === this.fieldValue
       );
@@ -225,18 +230,19 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   handleValueChange(event) {
-    this.value = event.detail.value;
+    this.value = JSON.parse(JSON.stringify(event.detail.value));
   }
 
   handleRecordSelection(event) {
     console.log('record selection');
     
-    this.value = event.detail;
-    console.log();
+    this.value = JSON.parse(JSON.stringify(event.detail));
+    console.log(this.value);
   }
 
   @api getTriggerRule() {
-
+    console.log("api fetTrRule");
+    
     if(this.isAllDataFilled()) {
       const triggerRule = {
         Object_Api_Name__c: this.objectValue,
@@ -244,6 +250,7 @@ export default class SingleTriggerRule extends LightningElement {
         Operator__c: this.operatorValue,
         Field_Value__c: this.value,
       };  
+      console.log(triggerRule);
       return triggerRule;
     }
     return {};    

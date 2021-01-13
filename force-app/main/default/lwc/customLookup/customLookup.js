@@ -17,6 +17,19 @@ export default class LwcLookup extends LightningElement {
   @api lookupLabel;
   @track message;
 
+  connectedCallback() {
+    this._selectedRecordId = this.selectedRecordId;
+    this._selectedValue = this.selectedValue;
+  }
+
+  onLeave() {
+    console.log('leave!');
+    setTimeout(() => {
+      this.searchKey = "";
+      this.recordsList = null;
+    }, 300);
+  }
+
   onRecordSelection(event) {
     this._selectedRecordId = event.target.dataset.key;
     this._selectedValue = event.target.dataset.name;
@@ -60,12 +73,16 @@ export default class LwcLookup extends LightningElement {
   }
 
   onSeletedRecordUpdate() {
+    console.log('before dispatch on lookup');
+    
     const recordSelectionEvent = new CustomEvent("recordselection", {
       detail: {
         selectedRecordId: this._selectedRecordId,
         selectedValue: this._selectedValue
       }
     });
+    console.log(recordSelectionEvent.detail);
     this.dispatchEvent(recordSelectionEvent);
+
   }
 }

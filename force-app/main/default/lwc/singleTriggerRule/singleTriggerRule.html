@@ -2,9 +2,9 @@
   <template if:true={error}>{labels.errorMessage}</template>
 
   <template if:false={error}>
-    <div class="slds-grid slds-grid_align-spread">
+    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-end">
       <!--Object-->
-      <div class="slds-col slds-size_1-of-5 slds-align-middle">
+      <div class="slds-col slds-size_1-of-4 slds-p-around_x-small">
         <lightning-combobox
           name="Object"
           label={labels.objectLabel}
@@ -16,7 +16,7 @@
       </div>
 
       <!--Field-->
-      <div class="slds-col slds-size_1-of-5 slds-align-middle">
+      <div class="slds-col slds-size_1-of-4 slds-p-around_x-small">
         <lightning-combobox
           name="Field"
           label={labels.fieldLabel}
@@ -28,7 +28,7 @@
       </div>
 
       <!--Operator-->
-      <div class="slds-col slds-size_1-of-5 slds-align-middle">
+      <div class="slds-col slds-size_1-of-4 slds-p-around_x-small">
         <lightning-combobox
           name="Operator"
           label={labels.operatorLabel}
@@ -40,7 +40,7 @@
       </div>
 
       <!--Value-->
-      <div class="slds-grid slds-col slds-size_1-of-5 slds-grid_align-spread">
+      <div class="slds-grid slds-col slds-grid_align-spread slds-size_1-of-4 slds-grid_vertical-align-end slds-p-around_x-small">
         <div class="slds-col slds-size_4-of-6">
         
         <lightning-input
