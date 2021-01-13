@@ -1,12 +1,22 @@
-/* eslint-disable @lwc/lwc/no-api-reassignments */
 import { LightningElement, api, track, wire } from "lwc";
 import getTemplateSurveys from "@salesforce/apex/SurveyController.getTemplateSurveys";
 import getStandardQuestions from "@salesforce/apex/QuestionController.getStandardQuestions";
 import getTemplatesQuestions from "@salesforce/apex/QuestionController.getTemplatesQuestions";
 import getMaxQuestionAmount from "@salesforce/apex/SurveySettingController.getMaxQuestionAmount";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import {label} from "./labels";
+import {
+  transformDisplayesTypes,
+  getQuestionsBySurveyId,
+  updateQuestionByPosition,
+  findQuestionsForDownSwap,
+  findQuestionsForUpSwap
+} from "./questionScreenHelper.js";
+
+import {
+  findQuestionByPosition
+} from "c/formUtil";
 
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 
@@ -19,8 +29,7 @@ export default class QuestionScreen extends LightningElement {
   @track displayedTemplates = [];
   @track displayedTemplateQuestions = [];
   @track displayedStandardQuestions = [];
-
-  @api selectedTemplateName;
+  @track templateOptionsValue = this.NO_TEMPLATE_VALUE;
   
   get questions() {
     return this.displayedQuestions;
@@ -36,6 +45,10 @@ export default class QuestionScreen extends LightningElement {
 
   get standardQuestions() {
     return this.displayedStandardQuestions;
+  }
+
+  get selectedTemplateName() {
+    return this.templateOptionsValue;
   }
 
   @api 
@@ -58,22 +71,24 @@ export default class QuestionScreen extends LightningElement {
     this.displayedStandardQuestions = JSON.parse(JSON.stringify(value));
   }
 
+  @api 
+  set selectedTemplateName(value) {
+    this.templateOptionsValue = value;
+  }
+
   @wire(getMaxQuestionAmount) maxQuestionsAmount;
 
   @track hasQuestions = false;
   @track hasStandardQuestions = false;
   @track editQuestionPosition;
-
-  @track templateOptionsValue;
   @track noTemplate;
-
   @track isError = false;
 
   label = label;
 
   connectedCallback() {
-    this.hasQuestions = this.displayedQuestions.length > 0;
-    this.hasStandardQuestions = this.displayedStandardQuestions.length > 0;
+    this.hasQuestions = this.questions.length > 0;
+    this.hasStandardQuestions = this.standardQuestions.length > 0;
 
     this.initTemplates();
     this.initStandardQuestions();
@@ -82,21 +97,13 @@ export default class QuestionScreen extends LightningElement {
       label: label.no_template,
       value: this.NO_TEMPLATE_VALUE
     };
-
-    this.templateOptionsValue = this.selectedTemplateName ? 
-      this.selectedTemplateName : this.noTemplate.value;
   }
 
   get templateOptions() {
     let templateOptions;
 
     if (this.displayedTemplates) {
-      templateOptions = this.displayedTemplates.map((template) => {
-        return {
-          label: template.Name,
-          value: template.Id
-        };
-      });
+      templateOptions = transformDisplayesTypes(this.displayedTemplates);
     } else {
       templateOptions = [];
     }
@@ -139,7 +146,7 @@ export default class QuestionScreen extends LightningElement {
       getStandardQuestions()
       .then((result) => {
         this.displayedStandardQuestions = result;
-        this.hasStandardQuestions = this.displayedStandardQuestions.length > 0;
+        this.hasStandardQuestions = this.standardQuestions.length > 0;
       })
       .catch((error) => {
         console.log(error);
@@ -164,23 +171,12 @@ export default class QuestionScreen extends LightningElement {
     if (this.templateOptionsValue.localeCompare(this.NO_TEMPLATE_VALUE) === 0) {
       this.displayedQuestions = [];
     } else {
-      this.displayedQuestions = this.displayedTemplateQuestions.filter(
-        (question) => {
-          return (
-            question.Survey__c.localeCompare(this.templateOptionsValue) === 0
-          );
-        }
-      );
-      this.displayedQuestions = this.displayedQuestions.map(
-        (question, index) => {
-          question.Id = null;
-          question.Position__c = index + 1;
-          return JSON.parse(JSON.stringify(question));
-        }
-      );
+      this.displayedQuestions = getQuestionsBySurveyId(
+        this.templateQuestions, 
+        this.templateOptionsValue);
     }
 
-    this.hasQuestions = this.displayedQuestions.length > 0;
+    this.hasQuestions = this.questions.length > 0;
 
     if (this.editQuestionPosition) {
       this.initQuestion();
@@ -198,7 +194,7 @@ export default class QuestionScreen extends LightningElement {
     }
     this.displayedQuestions.push(question);
 
-    this.hasQuestions = this.displayedQuestions.length > 0;
+    this.hasQuestions = this.questions.length > 0;
     this.initQuestion();
   }
 
@@ -206,9 +202,7 @@ export default class QuestionScreen extends LightningElement {
     let position = +event.detail;
     this.editQuestionPosition = position;
 
-    const questionForEdit = this.displayedQuestions.filter((question) => {
-      return +question.Position__c === +position;
-    })[0];
+    const questionForEdit = findQuestionByPosition(this.displayedQuestions, +position);
 
     this.template
       .querySelectorAll("c-question-form")[0]
@@ -235,21 +229,16 @@ export default class QuestionScreen extends LightningElement {
       this.displayedQuestions[i].Position__c = i + 1;
     }
 
-    this.hasQuestions = this.displayedQuestions.length > 0;
+    this.hasQuestions = this.questions.length > 0;
   }
 
   updateQuestion(event) {
     const updatedQuestion = event.detail;
 
-    this.displayedQuestions = this.displayedQuestions.map((question) => {
-      if (+question.Position__c === +this.editQuestionPosition) {
-        return {
-          ...updatedQuestion,
-          Position__c: this.editQuestionPosition
-        };
-      }
-      return question;
-    });
+    this.displayedQuestions = updateQuestionByPosition(
+      this.questions, 
+      this.editQuestionPosition, 
+      updatedQuestion);
 
     this.editQuestionPosition = null;
   }
@@ -259,26 +248,13 @@ export default class QuestionScreen extends LightningElement {
 
     if (position === this.displayedQuestions.length) return;
 
-    let relocatableQuestion = {},
-      lowerQuestion = {};
-    let relocatableIndex, lowerIndex;
+    let {relocatableQuestion, relocatableIndex, lowerQuestion, lowerIndex} = 
+      findQuestionsForDownSwap(this.displayedQuestions, position);
 
-    this.displayedQuestions.forEach((question, index) => {
-      if (+question.Position__c === position) {
-        relocatableQuestion = question;
-        relocatableIndex = index;
-      } else if (+question.Position__c === position + 1) {
-        lowerQuestion = question;
-        lowerIndex = index;
-      }
-    });
-
-    if (+this.editQuestionPosition === +lowerQuestion.Position__c) {
-      this.editQuestionPosition = relocatableQuestion.Position__c;
-    } else if (
-      +this.editQuestionPosition === +relocatableQuestion.Position__c
-    ) {
-      this.editQuestionPosition = lowerQuestion.Position__c;
+    if (this.editQuestionPosition === lowerIndex + 1) {
+      this.editQuestionPosition = relocatableIndex + 1;
+    } else if (this.editQuestionPosition === relocatableIndex + 1) {
+      this.editQuestionPosition = lowerIndex + 1;
     }
 
     lowerQuestion.Position__c--;
@@ -293,26 +269,13 @@ export default class QuestionScreen extends LightningElement {
 
     if (position === 1) return;
 
-    let relocatableQuestion = {},
-      upperQuestion = {};
-    let relocatableIndex, upperIndex;
-
-    this.displayedQuestions.forEach((question, index) => {
-      if (+question.Position__c === position) {
-        relocatableQuestion = question;
-        relocatableIndex = index;
-      } else if (+question.Position__c === position - 1) {
-        upperQuestion = question;
-        upperIndex = index;
-      }
-    });
-
-    if (+this.editQuestionPosition === +upperQuestion.Position__c) {
-      this.editQuestionPosition = relocatableQuestion.Position__c;
-    } else if (
-      +this.editQuestionPosition === +relocatableQuestion.Position__c
-    ) {
-      this.editQuestionPosition = upperQuestion.Position__c;
+    let {relocatableQuestion, relocatableIndex, upperQuestion, upperIndex} =
+      findQuestionsForUpSwap(this.displayedQuestions, position);
+      
+    if (this.editQuestionPosition === upperIndex + 1) {
+      this.editQuestionPosition = relocatableIndex + 1;
+    } else if (this.editQuestionPosition === relocatableIndex + 1) {
+      this.editQuestionPosition = upperIndex + 1;
     }
 
     upperQuestion.Position__c++;
@@ -337,9 +300,6 @@ export default class QuestionScreen extends LightningElement {
   }
 
   clickPreviousButton() {
-    //this.questions = this.displayedQuestions;
-    this.selectedTemplateName = this.templateOptionsValue;
-
     const backNavigationEvent = new FlowNavigationBackEvent();
     this.dispatchEvent(backNavigationEvent);
   }
@@ -349,9 +309,6 @@ export default class QuestionScreen extends LightningElement {
       this.showToastMessage(label.unable_to_continue, label.should_have_two_questions, this.ERROR_VARIANT);
       return;
     } 
-
-    //this.questions = this.displayedQuestions;
-    this.selectedTemplateName = this.templateOptionsValue;
 
     const nextNavigationEvent = new FlowNavigationNextEvent();
     this.dispatchEvent(nextNavigationEvent);

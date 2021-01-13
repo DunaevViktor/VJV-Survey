@@ -30,7 +30,7 @@ export default class ValidationScreen extends LightningElement {
       this.isHaveQuestions = false;
     }
 
-    this.isHaveValidations = this.validations;
+    this.isHaveValidations = this.validations && this.validations.length > 0;
   }
 
   addValidation(event) {
@@ -49,14 +49,13 @@ export default class ValidationScreen extends LightningElement {
   }
 
   clickPreviousButton() {
-    this.validations = [];
+    this.displayedValidations = [];
 
     const backNavigationEvent = new FlowNavigationBackEvent();
     this.dispatchEvent(backNavigationEvent);
   }
 
   clickNextButton() {
-    this.validations = this.displayedValidations;
     const nextNavigationEvent = new FlowNavigationNextEvent();
     this.dispatchEvent(nextNavigationEvent);
   }
