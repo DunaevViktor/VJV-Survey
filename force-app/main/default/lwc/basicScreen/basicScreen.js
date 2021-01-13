@@ -1,3 +1,4 @@
+/* eslint-disable @lwc/lwc/no-api-reassignments */
 import { LightningElement, api, track } from "lwc";
 import { FlowAttributeChangeEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { labels } from './labels';
