@@ -1,8 +1,7 @@
 import { LightningElement, track, api } from "lwc";
-import getObjectApiNamePickListValues from "@salesforce/apex/MetadataFetcher.getObjectApiNamePickListValues";
-import getTriggerRuleOperatorPickListValues from "@salesforce/apex/MetadataFetcher.getTriggerRuleOperatorPickListValues";
 import getObjectFieldsDescriptionList from "@salesforce/apex/MetadataFetcher.getObjectFieldsDescriptionList";
-import getFieldPicklistValues from "@salesforce/apex/MetadataFetcher.getFieldPicklistValues";
+import getPicklistValues from "@salesforce/apex/MetadataFetcher.getPicklistValues";
+import TRIGGER_RULE_OBJECT from '@salesforce/schema/Trigger_Rule__c';
 
 import DELETE_ICON from "@salesforce/resourceUrl/DeleteIcon";
 
@@ -25,6 +24,8 @@ import {
 export default class SingleTriggerRule extends LightningElement {
 
   labels = importedLabels;
+
+  triggerRuleObjectApiName = TRIGGER_RULE_OBJECT.objectApiName;
 
   initialRender = true;
   deleteIcon = DELETE_ICON;
@@ -54,7 +55,9 @@ export default class SingleTriggerRule extends LightningElement {
 
   constructor() {
     super();
-    getObjectApiNamePickListValues()
+    console.log('TR RULE OBJECT');
+    console.log(this.triggerRuleObjectApiName);
+    getPicklistValues({objectApiName: this.triggerRuleObjectApiName, fieldApiName: 'Object_Api_Name__c'})
       .then((result) => {
         this.objectNames = generateFieldOptions(result);
         if (this.rule) {
@@ -66,7 +69,7 @@ export default class SingleTriggerRule extends LightningElement {
         this.error = error;
       });
 
-    getTriggerRuleOperatorPickListValues()
+    getPicklistValues({objectApiName: this.triggerRuleObjectApiName, fieldApiName: 'Operator__c'})
       .then((result) => {
         this.fullOperatorList = generateFieldOptions(result);
         if (this.rule) {
@@ -131,7 +134,7 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   generateFieldPicklistOptions(chosenFieldObject) {
-    getFieldPicklistValues({
+    getPicklistValues({
       objApiName: this.objectValue,
       field: chosenFieldObject.value,
     })
@@ -226,7 +229,10 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   handleRecordSelection(event) {
+    console.log('record selection');
+    
     this.value = event.detail;
+    console.log();
   }
 
   @api getTriggerRule() {

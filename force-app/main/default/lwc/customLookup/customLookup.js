@@ -1,5 +1,6 @@
 import { LightningElement, track, api } from "lwc";
 import { importedLabels } from "./labels";
+import findRecords from "@salesforce/apex/LookupController.findRecords";
 
 export default class LwcLookup extends LightningElement {
 
@@ -8,15 +9,17 @@ export default class LwcLookup extends LightningElement {
   @track recordsList;
   @track searchKey = "";
   @api selectedValue;
+  @track _selectedValue;
   @api selectedRecordId;
+  @track _selectedRecordId;
   @api objectsApiNames;
   @api iconName;
   @api lookupLabel;
   @track message;
 
   onRecordSelection(event) {
-    this.selectedRecordId = event.target.dataset.key;
-    this.selectedValue = event.target.dataset.name;
+    this._selectedRecordId = event.target.dataset.key;
+    this._selectedValue = event.target.dataset.name;
     this.searchKey = "";
     this.onSeletedRecordUpdate();
   }
@@ -29,8 +32,8 @@ export default class LwcLookup extends LightningElement {
 
   removeRecordOnLookup() {
     this.searchKey = "";
-    this.selectedValue = null;
-    this.selectedRecordId = null;
+    this._selectedValue = null;
+    this._selectedRecordId = null;
     this.recordsList = null;
     this.onSeletedRecordUpdate();
   }
@@ -57,12 +60,12 @@ export default class LwcLookup extends LightningElement {
   }
 
   onSeletedRecordUpdate() {
-    const passEventr = new CustomEvent("recordselection", {
+    const recordSelectionEvent = new CustomEvent("recordselection", {
       detail: {
-        selectedRecordId: this.selectedRecordId,
-        selectedValue: this.selectedValue
+        selectedRecordId: this._selectedRecordId,
+        selectedValue: this._selectedValue
       }
     });
-    this.dispatchEvent(passEventr);
+    this.dispatchEvent(recordSelectionEvent);
   }
 }

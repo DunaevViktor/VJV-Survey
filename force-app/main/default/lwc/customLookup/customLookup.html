@@ -11,7 +11,7 @@
           aria-haspopup="listbox"
           role="combobox"
         >
-          <template if:true={selectedValue}>
+          <template if:true={_selectedValue}>
             <div
               data-key="pilldiv"
               class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right"
@@ -37,7 +37,7 @@
                 role="textbox"
                 placeholder={labels.select_an_option}
                 readonly
-                value={selectedValue}
+                value={_selectedValue}
               />
               <button
                 class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
@@ -57,7 +57,7 @@
             </div>
           </template>
 
-          <template if:false={selectedValue}>
+          <template if:false={_selectedValue}>
             <div
               data-key="searchdiv"
               class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
