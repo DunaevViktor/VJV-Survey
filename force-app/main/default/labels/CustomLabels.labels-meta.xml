@@ -323,13 +323,6 @@
         <value>Save changes</value>
     </labels>
     <labels>
-        <fullName>save_changes</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>save changes</shortDescription>
-        <value>Save changes</value>
-    </labels>
-    <labels>
         <fullName>search</fullName>
         <language>en_US</language>
         <protected>true</protected>

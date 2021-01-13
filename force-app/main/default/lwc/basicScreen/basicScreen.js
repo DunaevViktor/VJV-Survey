@@ -24,7 +24,7 @@ export default class BasicScreen extends LightningElement {
   }
 
   setDefaultSurveyData() {
-    if (this.survey) {
+    if (this.surveyData) {
       this.survey = { ...this.surveyData };
     } else {
       this.survey = {
