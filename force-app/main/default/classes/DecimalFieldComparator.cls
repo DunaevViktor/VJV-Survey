@@ -1,26 +1,21 @@
-public with sharing class DecimalFieldComparator implements FieldComparable {
+public with sharing class DecimalFieldComparator implements DateNumberFieldComparable {
+    public Boolean isNull(Object recordFieldValue, Object ruleFieldValue){
+        return (recordFieldValue == null) == Boolean.valueOf(ruleFieldValue);
+    }
     
-    public Boolean compareFields(Object recordFieldValue, String operator, Object ruleFieldValue){
-        Boolean isConditionMet = false;
-        
-        switch on operator{
-            when 'IS NULL'{
-                isConditionMet = (recordFieldValue == null) == Boolean.valueOf(ruleFieldValue);
-            }
-            when 'EQUALS'{
-                isConditionMet = ((Decimal)recordFieldValue == Decimal.valueOf(String.valueOf(ruleFieldValue)));
-            }
-            when 'NOT EQUALS'{ 
-                isConditionMet = ((Decimal)recordFieldValue != Decimal.valueOf(String.valueOf(ruleFieldValue)));
-            }
-            when 'GREATER THAN'{
-                isConditionMet = ((Decimal)recordFieldValue > Decimal.valueOf(String.valueOf(ruleFieldValue)));
-            }
-            when 'LESS THAN'{
-                isConditionMet = ((Decimal)recordFieldValue < Decimal.valueOf(String.valueOf(ruleFieldValue)));
-            }
-        }
-        
-        return isConditionMet;
+    public Boolean isEquals(Object recordFieldValue, Object ruleFieldValue){
+        return ((Decimal)recordFieldValue == Decimal.valueOf(String.valueOf(ruleFieldValue)));
+    }
+
+    public Boolean isNotEquals(Object recordFieldValue, Object ruleFieldValue){
+        return ((Decimal)recordFieldValue != Decimal.valueOf(String.valueOf(ruleFieldValue)));
+    }
+
+    public Boolean isLess(Object recordFieldValue, Object ruleFieldValue){
+        return ((Decimal)recordFieldValue < Decimal.valueOf(String.valueOf(ruleFieldValue)));
+    }
+
+    public Boolean isGreater(Object recordFieldValue, Object ruleFieldValue){
+        return ((Decimal)recordFieldValue > Decimal.valueOf(String.valueOf(ruleFieldValue)));
     }
 }

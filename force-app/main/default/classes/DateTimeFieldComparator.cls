@@ -1,26 +1,21 @@
-public with sharing class DateTimeFieldComparator implements FieldComparable {
+public with sharing class DateTimeFieldComparator implements DateNumberFieldComparable {
+    public Boolean isNull(Object recordFieldValue, Object ruleFieldValue){
+        return (recordFieldValue == null) == Boolean.valueOf(ruleFieldValue);
+    }
     
-    public Boolean compareFields(Object recordFieldValue, String operator, Object ruleFieldValue){
-        Boolean isConditionMet = false;
-        
-        switch on operator{
-            when 'IS NULL'{
-                isConditionMet = (recordFieldValue == null) == Boolean.valueOf(ruleFieldValue);
-            }
-            when 'EQUALS'{
-                isConditionMet = (DateTime)recordFieldValue == DateTime.parse(String.valueof(ruleFieldValue));
-            }
-            when 'NOT EQUALS'{ 
-                isConditionMet = (DateTime)recordFieldValue != DateTime.parse(String.valueof(ruleFieldValue));
-            }
-            when 'GREATER THAN'{
-                isConditionMet = ((DateTime)recordFieldValue > DateTime.parse(String.valueof(ruleFieldValue)));
-            }
-            when 'LESS THAN'{
-                isConditionMet = ((DateTime)recordFieldValue < DateTime.parse(String.valueof(ruleFieldValue)));
-            }
-        }
-        
-        return isConditionMet;
-    }  
+    public Boolean isEquals(Object recordFieldValue, Object ruleFieldValue){
+        return (DateTime)recordFieldValue == DateTime.parse(String.valueof(ruleFieldValue));
+    }
+
+    public Boolean isNotEquals(Object recordFieldValue, Object ruleFieldValue){
+        return (DateTime)recordFieldValue != DateTime.parse(String.valueof(ruleFieldValue));
+    }
+
+    public Boolean isLess(Object recordFieldValue, Object ruleFieldValue){
+        return ((DateTime)recordFieldValue < DateTime.parse(String.valueof(ruleFieldValue)));
+    }
+
+    public Boolean isGreater(Object recordFieldValue, Object ruleFieldValue){
+        return ((DateTime)recordFieldValue > DateTime.parse(String.valueof(ruleFieldValue)));
+    }
 }

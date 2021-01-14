@@ -2,60 +2,60 @@
 public class TestDataFactory {
     
     static final List<String> NUMBER_DATE_OPERATORS = new List<String>{'IS NULL', 'EQUALS', 'NOT EQUALS', 'LESS THAN', 'GREATER THAN'};
-        static final List<String> OTHER_FIELD_OPERATORS = new List<String>{'IS NULL', 'EQUALS', 'NOT EQUALS', 'CONTAINS', 'NOT CONTAINS'};
+    static final List<String> OTHER_FIELD_OPERATORS = new List<String>{'IS NULL', 'EQUALS', 'NOT EQUALS', 'CONTAINS', 'NOT CONTAINS'};
             
-            public static void createTriggerRules(Id surveyId){
-                Survey__c testSurvey = new Survey__c(Name = 'Test Survey');
-                insert testSurvey;
+    public static void createTriggerRules(Id surveyId){
+        Survey__c testSurvey = new Survey__c(Name = 'Test Survey');
+        insert testSurvey;
                 
-                Map<String, List<String>> fieldTypeOperators = new Map<String, List<String>>();
+        Map<String, List<String>> fieldTypeOperators = new Map<String, List<String>>();
                 
-                fieldTypeOperators.put('DATE', NUMBER_DATE_OPERATORS);
-                fieldTypeOperators.put('DATETIME', NUMBER_DATE_OPERATORS);
-                fieldTypeOperators.put('DOUBLE', NUMBER_DATE_OPERATORS);
-                fieldTypeOperators.put('TEXT', OTHER_FIELD_OPERATORS);
+        fieldTypeOperators.put('DATE', NUMBER_DATE_OPERATORS);
+        fieldTypeOperators.put('DATETIME', NUMBER_DATE_OPERATORS);
+        fieldTypeOperators.put('DOUBLE', NUMBER_DATE_OPERATORS);
+        fieldTypeOperators.put('TEXT', OTHER_FIELD_OPERATORS);
                 
-                List<Trigger_Rule__c> triggerRules = new List<Trigger_Rule__c>();
+        List<Trigger_Rule__c> triggerRules = new List<Trigger_Rule__c>();
                 
-                for(String fieldType: fieldTypeOperators.keySet()){
-                    for(String operator: fieldTypeOperators.get(fieldType)){
-                        Trigger_Rule__c triggerRule;
-                        switch on fieldType{
-                            when 'DATE'{
-                                triggerRule = new Trigger_Rule__c(Field_Name__c = 'Birthdate',
+        for(String fieldType: fieldTypeOperators.keySet()){
+            for(String operator: fieldTypeOperators.get(fieldType)){
+                Trigger_Rule__c triggerRule;
+                switch on fieldType{
+                    when 'DATE'{
+                        triggerRule = new Trigger_Rule__c(Field_Name__c = 'Birthdate',
                                                                   Operator__c = operator,
                                                                   Field_Value__c = '4/28/2020',
                                                                   Object_Api_Name__c = 'Contact',
                                                                   Survey__c = testSurvey.Id);
-                            }
-                            when 'DATETIME'{
-                                triggerRule = new Trigger_Rule__c(Field_Name__c = 'EmailBouncedDate', 
+                    }
+                    when 'DATETIME'{
+                        triggerRule = new Trigger_Rule__c(Field_Name__c = 'EmailBouncedDate', 
                                                                   Operator__c = operator,
                                                                   Field_Value__c = '10/14/2019, 11:46 AM', 
                                                                   Object_Api_Name__c = 'Contact', 
                                                                   Survey__c = testSurvey.Id);
-                            }
-                            when 'DOUBLE'{
-                                triggerRule = new Trigger_Rule__c(Field_Name__c = 'MailingLatitude',
+                    }
+                    when 'DOUBLE'{
+                        triggerRule = new Trigger_Rule__c(Field_Name__c = 'MailingLatitude',
                                                                   Operator__c = operator,
                                                                   Field_Value__c = '12345', 
                                                                   Object_Api_Name__c = 'Contact', 
                                                                   Survey__c = testSurvey.Id);
-                            }
-                            when else{
-                                triggerRule = new Trigger_Rule__c(Field_Name__c = 'SuppliedEmail', 
+                    }
+                    when else{
+                        triggerRule = new Trigger_Rule__c(Field_Name__c = 'SuppliedEmail', 
                                                                   Operator__c = operator,
                                                                   Field_Value__c = 'Test Email', 
                                                                   Object_Api_Name__c = 'Case', 
                                                                   Survey__c = testSurvey.Id);
-                            }
-                        }
-                        triggerRules.add(triggerRule);
                     }
                 }
-                
-                insert triggerRules;
+                triggerRules.add(triggerRule);
             }
+        }
+                
+        insert triggerRules;
+    }
     
     public static Id createSurvey(){
         Survey__c testSurvey = new Survey__c(Name = 'Test Survey');

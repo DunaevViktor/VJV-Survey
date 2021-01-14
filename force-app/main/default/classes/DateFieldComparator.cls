@@ -1,26 +1,21 @@
-public with sharing class DateFieldComparator implements FieldComparable {
+public with sharing class DateFieldComparator implements DateNumberFieldComparable {
+    public Boolean isNull(Object recordFieldValue, Object ruleFieldValue){
+        return (recordFieldValue == null) == Boolean.valueOf(ruleFieldValue);
+    }
     
-    public Boolean compareFields(Object recordFieldValue, String operator, Object ruleFieldValue){
-        Boolean isConditionMet = false;
-        
-        switch on operator{
-            when 'IS NULL'{
-                isConditionMet = (recordFieldValue == null) == Boolean.valueOf(ruleFieldValue);
-            }
-            when 'EQUALS'{
-                isConditionMet = (Date)recordFieldValue == Date.parse(String.valueof(ruleFieldValue));
-            }
-            when 'NOT EQUALS'{ 
-                isConditionMet = (Date)recordFieldValue != Date.parse(String.valueof(ruleFieldValue));
-            }
-            when 'GREATER THAN'{
-                isConditionMet = ((Date)recordFieldValue > Date.parse(String.valueof(ruleFieldValue)));
-            }
-            when 'LESS THAN'{
-                isConditionMet = ((Date)recordFieldValue < Date.parse(String.valueof(ruleFieldValue)));
-            }
-        }
-        
-        return isConditionMet;
-    }   
+    public Boolean isEquals(Object recordFieldValue, Object ruleFieldValue){
+        return (Date)recordFieldValue == Date.parse(String.valueof(ruleFieldValue));
+    }
+
+    public Boolean isNotEquals(Object recordFieldValue, Object ruleFieldValue){
+        return (Date)recordFieldValue != Date.parse(String.valueof(ruleFieldValue));
+    }
+
+    public Boolean isLess(Object recordFieldValue, Object ruleFieldValue){
+        return ((Date)recordFieldValue < Date.parse(String.valueof(ruleFieldValue)));
+    }
+
+    public Boolean isGreater(Object recordFieldValue, Object ruleFieldValue){
+        return ((Date)recordFieldValue > Date.parse(String.valueof(ruleFieldValue)));
+    }
 }

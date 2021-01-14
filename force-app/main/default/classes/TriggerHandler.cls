@@ -11,7 +11,7 @@ public with sharing class TriggerHandler {
             
             for(String fieldName: fieldMap.keyset()){
                 if(newRecord.get(fieldName) != oldRecord.get(fieldName)){
-                    String fieldType = fieldMap.get(fieldName).getDescribe().getType().name();
+                    Schema.DisplayType fieldType = fieldMap.get(fieldName).getDescribe().getType();
                     changedField = new ChangedFieldWrapper(fieldName, newRecord.get(fieldName), fieldType);
                     changedRecordsFields.add(changedField);
                 }

@@ -1,3 +1,5 @@
 public interface FieldComparable {
-    Boolean compareFields(Object recordFieldValue, String operator, Object ruleFieldValue);
+    Boolean isNull(Object recordFieldValue, Object ruleFieldValue);
+    Boolean isEquals(Object recordFieldValue, Object ruleFieldValue);
+    Boolean isNotEquals(Object recordFieldValue, Object ruleFieldValue);
 }

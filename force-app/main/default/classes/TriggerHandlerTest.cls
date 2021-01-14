@@ -18,7 +18,7 @@ class TriggerHandlerTest {
     }
     
     @isTest
-    static void processContactChangesTest(){
+    static void testProcessContactChanges(){
         List<Contact> contactList = [SELECT Id, FirstName, LastName,
                                      Birthdate, EmailBouncedDate, MailingLatitude, Title
                                      FROM Contact];
@@ -40,7 +40,7 @@ class TriggerHandlerTest {
     }
     
     @isTest
-    static void processCaseChangesTest(){
+    static void testProcessCaseChanges(){
         List<Case> caseList = [SELECT Id, SuppliedEmail FROM Case];
         List<Case> updatedCases = new List<Case>();
         
@@ -57,7 +57,7 @@ class TriggerHandlerTest {
     }
     
     @isTest
-    static void processLeadChangesTest(){
+    static void testProcessLeadChanges(){
         List<Lead> leadList = [SELECT Id, Industry FROM Lead];
         List<Lead> updatedLeads = new List<Lead>();
         
@@ -74,13 +74,13 @@ class TriggerHandlerTest {
     }
     
     @isTest
-    static void getTriggerRulesTest(){
+    static void testGetTriggerRules(){
         List<Trigger_Rule__c> actualTriggerRules = TriggerRulesHandler.getTriggerRules('Contact');
-        System.assertEquals(20, actualTriggerRules.size(), INVALID_TRIGGER_RULES_AMOUNT);
+        System.assertEquals(15, actualTriggerRules.size(), INVALID_TRIGGER_RULES_AMOUNT);
     }
     
     @isTest
-    static void getEmailReceiversTest(){
+    static void testGetEmailReceivers(){
         List<Survey__c> surveyList = [SELECT Id FROM Survey__c];
         Set<Id> surveySet = new Set<Id>();
         for(Survey__c survey: surveyList){

@@ -20,22 +20,55 @@ public with sharing class TriggerRulesHandler {
             List<Email_Receiver__c> receiverList = getEmailReceivers(surveysToSend);
             SendEmailLogic.sendEmails(receiverList);
         }
-    }    
+    }  
     
     public static Boolean compareFieldValues(ChangedFieldWrapper changedField, String operator, Object ruleFieldValue){
         Boolean isConditionMet = false;
+        FieldComparable comparator = defineComparingType(changedField);
+
+        switch on operator {
+            when 'IS NULL'{
+                isConditionMet = comparator.isNull(changedField.newValue, ruleFieldValue);
+            }
+            when 'EQUALS'{
+                isConditionMet = comparator.isEquals(changedField.newValue, ruleFieldValue);
+            }
+            when 'NOT EQUALS'{
+                isConditionMet = comparator.isNotEquals(changedField.newValue, ruleFieldValue);
+            }
+            when 'CONTAINS'{
+                TextFieldComparable textComparator = (TextFieldComparable)comparator;
+                isConditionMet = textComparator.isContains(changedField.newValue, ruleFieldValue);
+            }
+            when 'NOT CONTAINS'{
+                TextFieldComparable textComparator = (TextFieldComparable)comparator;
+                isConditionMet = textComparator.isNotContains(changedField.newValue, ruleFieldValue);
+            }
+            when 'GREATER THAN'{
+                DateNumberFieldComparable numberComparator = (DateNumberFieldComparable)comparator;
+                isConditionMet = numberComparator.isGreater(changedField.newValue, ruleFieldValue);
+            }
+            when 'LESS THAN'{
+                DateNumberFieldComparable numberComparator = (DateNumberFieldComparable)comparator;
+                isConditionMet = numberComparator.isLess(changedField.newValue, ruleFieldValue);
+            }
+        }
         
+        return isConditionMet;
+    }
+    
+    public static FieldComparable defineComparingType(ChangedFieldWrapper changedField){        
         FieldComparable comparator;
-        String fieldType = changedField.fieldType;
+        Schema.DisplayType fieldType = changedField.fieldType;
         
         switch on fieldType{
-            when 'DATE'{
+            when DATE{
                 comparator = new DateFieldComparator();
             }
-            when 'DATETIME'{
+            when DATETIME{
                 comparator = new DateTimeFieldComparator();
             }
-            when 'DOUBLE', 'INTEGER', 'CURRENCY', 'PERCENT'{
+            when DOUBLE, INTEGER, CURRENCY, PERCENT{
                 comparator = new DecimalFieldComparator();
             }
             when else{
@@ -43,8 +76,7 @@ public with sharing class TriggerRulesHandler {
             }
         }
         
-        isConditionMet = comparator.compareFields(changedField.newValue, operator, ruleFieldValue);
-        return isConditionMet;
+        return comparator;
     }
     
     public static List<Trigger_Rule__c> getTriggerRules(String objectApiName){

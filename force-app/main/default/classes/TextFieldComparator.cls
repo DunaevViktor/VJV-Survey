@@ -1,26 +1,21 @@
-public with sharing class TextFieldComparator implements FieldComparable {
+public with sharing class TextFieldComparator implements TextFieldComparable {
+    public Boolean isNull(Object recordFieldValue, Object ruleFieldValue){
+        return (recordFieldValue == null) == Boolean.valueOf(ruleFieldValue);
+    }
     
-    public Boolean compareFields(Object recordFieldValue, String operator, Object ruleFieldValue){
-        Boolean isConditionMet = false;
-        
-        switch on operator{
-            when 'IS NULL'{
-                isConditionMet = (recordFieldValue == null) == Boolean.valueOf(ruleFieldValue);
-            }
-            when 'EQUALS'{
-                isConditionMet = String.valueOf(recordFieldValue) == String.valueOf(ruleFieldValue);
-            }
-            when 'NOT EQUALS'{ 
-                isConditionMet = (String.valueOf(recordFieldValue) != String.valueOf(ruleFieldValue));
-            }
-            when 'CONTAINS'{
-                isConditionMet = (String.valueOf(recordFieldValue).contains(String.valueOf(ruleFieldValue)));
-            }
-            when 'NOT CONTAINS'{
-                isConditionMet = (!String.valueOf(recordFieldValue).contains(String.valueOf(ruleFieldValue)));
-            }
-        } 
-        
-        return isConditionMet;
+    public Boolean isEquals(Object recordFieldValue, Object ruleFieldValue){
+        return String.valueOf(recordFieldValue) == String.valueOf(ruleFieldValue);
+    }
+
+    public Boolean isNotEquals(Object recordFieldValue, Object ruleFieldValue){
+        return (String.valueOf(recordFieldValue) != String.valueOf(ruleFieldValue));
+    }
+
+    public Boolean isContains(Object recordFieldValue, Object ruleFieldValue){
+        return (String.valueOf(recordFieldValue).contains(String.valueOf(ruleFieldValue)));
+    }
+
+    public Boolean isNotContains(Object recordFieldValue, Object ruleFieldValue){
+        return (!String.valueOf(recordFieldValue).contains(String.valueOf(ruleFieldValue)));
     }
 }
