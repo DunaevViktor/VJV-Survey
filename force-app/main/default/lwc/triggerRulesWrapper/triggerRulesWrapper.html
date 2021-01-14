@@ -13,25 +13,35 @@
     </template>
   </template>
 
+
   <template if:true={isPlusVisible}>
     <lightning-layout
-      horizontal-align="space"
+      horizontal-align="end"
       vertical-align="centre"
-      class="slds-p-top_x-small"
+      class="slds-p-top_x-large"
     >
       <lightning-button
         variant="brand-outline"
-        label={plus}
+        label={labels.add_trigger_rule}
         title="Add trigger rule"
         onclick={handlePlusClick}
       ></lightning-button>
     </lightning-layout>
   </template>
 
-  <p>{tip_for_user}</p>
-  <hr />
+  <p>{labels.tip_for_user}</p>
+  <hr class="slds-m-bottom_small" />
 
-  <c-trigger-rules-footer-navigation
-    onnavigatenext={handleNavigateNext}
-  ></c-trigger-rules-footer-navigation>
+  <div class="slds-text-align_right">
+    <lightning-button
+      label={labels.previous}
+      onclick={handleNavigatePrev}
+    ></lightning-button>
+    <lightning-button
+      variant="brand"
+      label={labels.next}
+      onclick={handleNavigateNext}
+      class="slds-m-left_xx-small"
+    ></lightning-button>
+  </div>
 </template>

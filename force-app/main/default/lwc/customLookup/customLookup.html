@@ -11,7 +11,7 @@
           aria-haspopup="listbox"
           role="combobox"
         >
-          <template if:true={selectedValue}>
+          <template if:true={_selectedValue}>
             <div
               data-key="pilldiv"
               class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right"
@@ -30,6 +30,7 @@
                 <span class="slds-assistive-text">Record</span>
               </span>
               <input
+                
                 type="text"
                 class="slds-input slds-combobox__input slds-combobox__input-value"
                 id="combobox-id-5"
@@ -37,7 +38,7 @@
                 role="textbox"
                 placeholder={labels.select_an_option}
                 readonly
-                value={selectedValue}
+                value={_selectedValue}
               />
               <button
                 class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
@@ -57,7 +58,7 @@
             </div>
           </template>
 
-          <template if:false={selectedValue}>
+          <template if:false={_selectedValue}>
             <div
               data-key="searchdiv"
               class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
@@ -65,6 +66,7 @@
             >
               <input
                 type="text"
+                onfocusout={onLeave}
                 value={searchKey}
                 onkeyup={handleKeyChange}
                 onchange={handleKeyChange}
@@ -99,7 +101,7 @@
                   role="presentation"
                 >
                   <template if:true={message}>
-                    <p>{message}</p>
+                    <p class="slds-p-left_x-large">{message}</p>
                   </template>
                   <template for:each={recordsList} for:item="record">
                     <li
@@ -121,7 +123,7 @@
                           <span class="slds-icon_container">
                             <lightning-icon
                               icon-name={iconName}
-                              size="small"
+                              size="xx-small"
                             ></lightning-icon>
                           </span>
                         </span>
