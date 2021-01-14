@@ -17,31 +17,31 @@ public with sharing class MetadataFetcherTest {
 
 
   @isTest
-  static void getPicklistValuesPositiveTest() {
+  static void testPositiveGetPicklistValues() {
     Map<String, String> result = MetadataFetcher.getPicklistValues(TRIGGER_RULE_OBJECT_API_NAME, OBJECT_API_NAME_FIELD);
     System.assert(result.size() >= 3, INVALID_OBJECT_API_NAMES_AMOUNT);
   }
 
   @isTest
-  static void getPicklistValuesFirstNegativeTest() {
+  static void testFirstNegativeGetPicklistValues() {
     Map<String, String> result = MetadataFetcher.getPicklistValues(CASE_OBJECT_API_NAME, NON_EXISTENT_FIELD);
     System.assertEquals(0, result.size(), INVALID_PICKLIST_OPTIONS_AMOUNT);
   }
 
   @isTest
-  static void getPicklistValuesSecondNegativeTest() {
+  static void testSecondNegativeGetPicklistValues() {
     Map<String, String> result = MetadataFetcher.getPicklistValues(NON_EXISTENT_OBJECT_API_NAME, NAME_FIELD);
     System.assertEquals(0, result.size(), INVALID_PICKLIST_OPTIONS_AMOUNT);
   }
 
   @isTest
-  static void getObjectFieldsDescriptionListPositiveTest() {
+  static void testPositiveGetObjectFieldsDescriptionList() {
     List<List<String>> result = MetadataFetcher.getObjectFieldsDescriptionList(CONTACT_OBJECT_API_NAME);
     System.assert(result.size() >= 29, INVALID_OBJECT_FIELD_AMOUNT);
   }
 
   @isTest
-  static void getObjectFieldsDescriptionListNegativeTest() {
+  static void testNegativeGetObjectFieldsDescriptionList() {
     List<List<String>> result = MetadataFetcher.getObjectFieldsDescriptionList(NON_EXISTENT_OBJECT_API_NAME);
     System.assertEquals(0, result.size(), INVALID_OBJECT_FIELD_DESCRIPTION_RESULT);
   } 
