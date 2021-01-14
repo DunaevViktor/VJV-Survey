@@ -26,6 +26,7 @@ export default class LwcLookup extends LightningElement {
   onLeave() {
     setTimeout(() => {
       this.searchKey = "";
+      this.message = null;
       this.recordsList = null;
     }, 300);
   }
@@ -73,14 +74,10 @@ export default class LwcLookup extends LightningElement {
   }
 
   onSeletedRecordUpdate() {
-    let detailObject = null;
-    if(this._selectedRecordId && this._selectedValue) {
-      detailObject = {
+    const detailObject = {
         selectedRecordId: this._selectedRecordId,
         selectedValue: this._selectedValue
-      }
-    }
-    
+    }    
     const recordSelectionEvent = new CustomEvent("recordselection", {
       detail: detailObject
     });

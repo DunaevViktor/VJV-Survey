@@ -1,5 +1,4 @@
 import { LightningElement, track, api } from "lwc";
-import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 import { importedLabels } from "./labels"
 
@@ -54,26 +53,18 @@ export default class TriggerRulesWrapper extends LightningElement {
 
   handleNavigateNext() {    
     this._rules = this.getNewTriggerRules();
-    if (!this.isMinimalDataAmountFilled()) {
-      this.showToast("", this.labels.trigger_rule_required, "error");
-    } else {
-      const navigateNextEvent = new CustomEvent("navigatenext", {
-        detail: { triggerRules: [...this._rules] },
-      });
-      this.dispatchEvent(navigateNextEvent);
-    }
+    const navigateNextEvent = new CustomEvent("navigatenext", {
+      detail: { triggerRules: [...this._rules] },
+    });
+    this.dispatchEvent(navigateNextEvent);    
   }
 
   handleNavigatePrev() {
     this._rules = this.getNewTriggerRules();
-    if (!this.isMinimalDataAmountFilled()) {
-      this.showToast("", this.labels.trigger_rule_required, "error");
-    } else {
-      const navigatePrevEvent = new CustomEvent("navigateback", {
-        detail: { triggerRules: [...this._rules] },
-      });
-      this.dispatchEvent(navigatePrevEvent);
-    }
+    const navigatePrevEvent = new CustomEvent("navigateback", {
+      detail: { triggerRules: [...this._rules] },
+    });
+    this.dispatchEvent(navigatePrevEvent);
   }
 
   getNewTriggerRules() {
@@ -92,23 +83,6 @@ export default class TriggerRulesWrapper extends LightningElement {
       }
     });
     return newTriggerRules;
-  }
-
-  showToast(title, message, variant) {
-    const event = new ShowToastEvent({
-      title: title,
-      message: message,
-      variant: variant,
-      mode: "dismissable",
-    });
-    this.dispatchEvent(event);
-  }
-
-  isMinimalDataAmountFilled() {
-    if(!this._rules[0] || this.isEmpty(this._rules[0]) || this._rules[0].Field_Value__c === "" || this._rules[0].Operator__c === "") {
-      return false;
-    }
-    return true;
   }
 
   isEmpty(obj) {

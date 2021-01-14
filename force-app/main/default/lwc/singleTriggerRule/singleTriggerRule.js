@@ -62,7 +62,7 @@ export default class SingleTriggerRule extends LightningElement {
     getPicklistValues({objectApiName: this.triggerRuleObjectApiName, fieldApiName: this.object_Api_NameFieldName})
       .then((result) => {
         this.objectNames = generateFieldOptions(result);
-        if (this.rule) {
+        if (this.rule && this.rule.Object_Api_Name__c) {
           this.objectValue = this.rule.Object_Api_Name__c;
           this.getObjectFields(this.objectValue);
         }
@@ -74,7 +74,7 @@ export default class SingleTriggerRule extends LightningElement {
     getPicklistValues({objectApiName: this.triggerRuleObjectApiName, fieldApiName: this.operatorFieldName})
       .then((result) => {
         this.fullOperatorList = generateFieldOptions(result);
-        if (this.rule) {
+        if (this.rule && this.rule.Operator__c) {
           this.operatorValue = this.rule.Operator__c;
         }
       })
@@ -95,7 +95,7 @@ export default class SingleTriggerRule extends LightningElement {
     getObjectFieldsDescriptionList({ objectApiName: objectApiName })
       .then((result) => {
         this.fieldNames = generateFieldsDescriptionsList(result);
-        if (this.rule) {
+        if (this.rule && this.rule.Field_Name__c) {
           let receivedFieldObject = this.fieldNames.find(
             (field) => field.value === this.rule.Field_Name__c
           );
@@ -153,7 +153,7 @@ export default class SingleTriggerRule extends LightningElement {
 
   setField(chosenFieldObject, picklistOptions) {
     let settedValue = "";
-    if (this.rule) {
+    if (this.rule && this.rule.Field_Value__c) {
       settedValue = this.rule.Field_Value__c;
       this.value = settedValue;
     }
@@ -222,30 +222,17 @@ export default class SingleTriggerRule extends LightningElement {
     this.value = JSON.parse(JSON.stringify(event.detail.value));
   }
 
-  handleRecordSelection(event) {
-    
+  handleRecordSelection(event) {    
     this.value = JSON.parse(JSON.stringify(event.detail));
   }
 
-  @api getTriggerRule() {
-    
-    if(this.isAllDataFilled()) {
-      const triggerRule = {
-        Object_Api_Name__c: this.objectValue,
-        Field_Name__c: this.fieldValue,
-        Operator__c: this.operatorValue,
-        Field_Value__c: this.value,
-      };  
-      return triggerRule;
-    }
-    return {};    
-  }
-
-  isAllDataFilled() {
-    if(this.objectValue === "" || this.fieldValue === "" ||
-       this.operatorValue === "" || !this.value || this.value === "") {
-      return false;
-    }
-    return true;
+  @api getTriggerRule() {    
+    const triggerRule = {
+      Object_Api_Name__c: this.objectValue,
+      Field_Name__c: this.fieldValue,
+      Operator__c: this.operatorValue,
+      Field_Value__c: this.value,
+    };  
+    return triggerRule;
   }
 }

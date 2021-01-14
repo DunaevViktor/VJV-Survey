@@ -36,21 +36,14 @@ public with sharing class MetadataFetcherTest {
 
   @isTest
   static void getObjectFieldsDescriptionListPositiveTest() {
-    List<List<String>> result = MetadataFetcher.getObjectFieldsDescriptionList(
-      CONTACT_OBJECT_API_NAME
-    );
+    List<List<String>> result = MetadataFetcher.getObjectFieldsDescriptionList(CONTACT_OBJECT_API_NAME);
     System.assert(result.size() >= 29, INVALID_OBJECT_FIELD_AMOUNT);
   }
 
   @isTest
   static void getObjectFieldsDescriptionListNegativeTest() {
-      List<List<String>> result = MetadataFetcher.getObjectFieldsDescriptionList(
-        NON_EXISTENT_OBJECT_API_NAME
-      );
-    System.assertEquals(0, 
-      result.size(),
-      INVALID_OBJECT_FIELD_DESCRIPTION_RESULT
-    );
+    List<List<String>> result = MetadataFetcher.getObjectFieldsDescriptionList(NON_EXISTENT_OBJECT_API_NAME);
+    System.assertEquals(0, result.size(), INVALID_OBJECT_FIELD_DESCRIPTION_RESULT);
   } 
   
 }

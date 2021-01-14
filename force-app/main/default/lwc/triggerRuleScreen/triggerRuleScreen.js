@@ -1,7 +1,6 @@
 import { api, LightningElement, track } from 'lwc';
 import {FlowAttributeChangeEvent, FlowNavigationNextEvent, FlowNavigationBackEvent} from 'lightning/flowSupport';
 
-
 export default class TriggerRuleScreen extends LightningElement {
     
     @track _triggerRules = [];
