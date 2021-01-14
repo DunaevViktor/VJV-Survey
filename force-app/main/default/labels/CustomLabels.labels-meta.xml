@@ -307,8 +307,8 @@
         <protected>true</protected>
         <shortDescription>remove image</shortDescription>
         <value>Remove image</value>
-      </labels>
-      <labels>
+    </labels>
+    <labels>
         <fullName>remove_selected_option</fullName>
         <language>en_US</language>
         <protected>true</protected>
