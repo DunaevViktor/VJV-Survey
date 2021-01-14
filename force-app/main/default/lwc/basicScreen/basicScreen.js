@@ -1,14 +1,20 @@
-/* eslint-disable @lwc/lwc/no-api-reassignments */
 import { LightningElement, api, track } from "lwc";
 import { FlowAttributeChangeEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { labels } from './labels';
 
 export default class BasicScreen extends LightningElement {
-  @api surveyData;
-
   @track survey;
-
+  
   label = labels;
+
+  @api 
+  set surveyData(data) {
+    this.survey = JSON.parse(JSON.stringify(data));
+  }
+
+  get surveyData() {
+    return this.survey;
+  }
 
   connectedCallback() {
     this.setDefaultSurveyData();
@@ -24,9 +30,7 @@ export default class BasicScreen extends LightningElement {
   }
 
   setDefaultSurveyData() {
-    if (this.surveyData) {
-      this.survey = { ...this.surveyData };
-    } else {
+    if (!this.survey) {
       this.survey = {
         Name: '',
         Background_Color__c: '',
@@ -56,7 +60,6 @@ export default class BasicScreen extends LightningElement {
   }
 
   updateSurveyData() {
-    this.surveyData = { ...this.survey };
     const changeSurveyDataEvent = new FlowAttributeChangeEvent("surveydatachange", this.surveyData);
     this.dispatchEvent(changeSurveyDataEvent);
   }
