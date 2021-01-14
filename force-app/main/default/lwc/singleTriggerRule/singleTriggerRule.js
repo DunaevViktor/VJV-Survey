@@ -8,12 +8,12 @@ import {
   generateBooleanField,
   filterOperatorList,
   generateFieldsDescriptionsList,
+  generateFieldOptions
 } from "./helper";
 
 import {
   operatorTypes,
-  booleanPicklistOptions,
-  generateFieldOptions
+  booleanPicklistOptions
 } from "c/formUtil";
 
 import deleteLabel from "@salesforce/label/c.delete";

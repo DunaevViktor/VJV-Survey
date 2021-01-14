@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>50.0</apiVersion>
+    <isExposed>true</isExposed>
+
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="selectedTemplateName" type="String" label="Selected template name"/>
+            <property name="templates" type="@salesforce/schema/Survey__c[]" label="Survey Templates"/>
+            <property name="templateQuestions" type="@salesforce/schema/Question__c[]" label="Template Questions"/>
+            <property name="standardQuestions" type="@salesforce/schema/Question__c[]" label="Standard Questions"/>
+            <property name="questions" type="@salesforce/schema/Question__c[]" label="Questions"/>
+        </targetConfig>
+    </targetConfigs> 
+</LightningComponentBundle>
