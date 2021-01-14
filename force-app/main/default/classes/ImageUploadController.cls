@@ -12,20 +12,23 @@ public with sharing class ImageUploadController {
     }
     
     public static ContentVersion createContentVersion(String fileName, String fileBase64Data) {
+        if (!ContentVersion.SObjectType.getDescribe().isAccessible() ||
+            !ContentVersion.SObjectType.getDescribe().isCreateable()) {
+                return null;
+            }
         ContentVersion fileContentVersion = new ContentVersion();
         fileContentVersion.VersionData = EncodingUtil.base64Decode(fileBase64Data);
         fileContentVersion.Title = fileName;
         fileContentVersion.PathOnClient = fileName;
-        
-        if (ContentVersion.SObjectType.getDescribe().isAccessible() &&
-            ContentVersion.SObjectType.getDescribe().isCreateable()) {
-                insert fileContentVersion;
-                return fileContentVersion;
-            }
-        return null;
+        insert fileContentVersion;
+        return fileContentVersion;
     }
     
     public static ContentDistribution createContentDistribution(ContentVersion contentVersion) {
+        if (!ContentDistribution.SObjectType.getDescribe().isAccessible() ||
+            !ContentDistribution.SObjectType.getDescribe().isCreateable()) {
+                return null;
+            }
         ContentDistribution fileContentDistribution = new ContentDistribution();
         fileContentDistribution.Name = contentVersion.Title;
         fileContentDistribution.ContentVersionId = contentVersion.id;
@@ -34,11 +37,7 @@ public with sharing class ImageUploadController {
         fileContentDistribution.PreferencesNotifyOnVisit = false;
         fileContentDistribution.PreferencesPasswordRequired = false;
         fileContentDistribution.PreferencesAllowOriginalDownload = true;
-        if (ContentDistribution.SObjectType.getDescribe().isAccessible() &&
-            ContentDistribution.SObjectType.getDescribe().isCreateable()) {
-                insert fileContentDistribution;
-                return fileContentDistribution;
-            }
-        return null;
+        insert fileContentDistribution;
+        return fileContentDistribution;
     }
 }
