@@ -9,7 +9,7 @@
     </targets>
     <targetConfigs>
       <targetConfig targets="lightning__FlowScreen">
-          <property name="surveyData" label="Survey Data" type="@salesforce/schema/Survey__c" description="Existing data of the current survey"/>
+          <property name="surveyData" label="Survey Data" type="@salesforce/schema/Survey__c"/>
       </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>
