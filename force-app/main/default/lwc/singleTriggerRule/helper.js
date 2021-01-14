@@ -214,11 +214,26 @@ const generateFieldsDescriptionsList = (result) => {
   return comboboxFieldsOptions;
 };
 
+const generateFieldOptions = (result) => {
+  let fieldOptions = [];
+  for (let key in result) {
+    if (Object.prototype.hasOwnProperty.call(result, key)) {
+      let comboboxObject = {
+        label: result[key],
+        value: key,
+      };
+      fieldOptions.push(comboboxObject);
+    }
+  }
+  return fieldOptions;
+};
+
 export {
   getFieldAttributes,
   setReferencedObjectNames,
   generateBooleanField,
   generateFieldsDescriptionsList,
   filterOperatorList,
-  operatorGroups
+  operatorGroups,
+  generateFieldOptions
 };

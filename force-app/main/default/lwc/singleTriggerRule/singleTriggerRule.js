@@ -12,14 +12,14 @@ import {
   generateBooleanField,
   filterOperatorList,
   generateFieldsDescriptionsList,
+  generateFieldOptions
 } from "./helper";
 
 import { importedLabels } from "./labels"
 
 import {
   operatorTypes,
-  booleanPicklistOptions,
-  generateFieldOptions
+  booleanPicklistOptions
 } from "c/formUtil";
 
 
