@@ -8,22 +8,20 @@ import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import {
   questionTypes,
   operatorTypes,
-  typesDescription,
-  booleanPicklistOptions
+  booleanPicklistOptions,
+  findQuestionByPosition
 } from "c/formUtil";
 
-import question from "@salesforce/label/c.question";
-import dependent_question from "@salesforce/label/c.dependent_question";
-import operator from "@salesforce/label/c.operator";
-import enter_compared_value from "@salesforce/label/c.enter_compared_value";
-import value from "@salesforce/label/c.value";
-import add from "@salesforce/label/c.add";
-import select_operator from "@salesforce/label/c.select_operator";
-import select_value from "@salesforce/label/c.select_value";
-import number from "@salesforce/label/c.number";
-import text from "@salesforce/label/c.text";
+import {label} from "./labels.js";
+import {
+  transformOperators,
+  resolveOperatorsByQuestionType, 
+  isNeedPicklist
+} from "./validationFormHelper.js";
 
 export default class ValidationForm extends LightningElement {
+  label = label;
+
   @api questions;
 
   operators;
@@ -38,28 +36,16 @@ export default class ValidationForm extends LightningElement {
   @track firstQuestion;
   @track secondQuestion;
 
-  label = {
-    question,
-    dependent_question,
-    operator,
-    enter_compared_value,
-    value,
-    add,
-    select_operator,
-    select_value
-  };
+  @track isFirstQuestionPicklist;
 
   connectedCallback() {
     this.firstPosition = this.questions[0].Position__c;
     this.secondPosition = this.questions[1].Position__c;
 
-    this.firstQuestion = this.questions.filter((item) => {
-      return item.Position__c === this.firstPosition;
-    })[0];
+    this.firstQuestion = findQuestionByPosition(this.questions, this.firstPosition);
+    this.secondQuestion = findQuestionByPosition(this.questions, this.secondPosition);
 
-    this.secondQuestion = this.questions.filter((item) => {
-      return item.Position__c === this.secondPosition;
-    })[0];
+    this.isFirstQuestionPicklist = isNeedPicklist(this.firstQuestion, this.selectedOperator);
   }
 
   @wire(getPicklistValues, {
@@ -68,14 +54,9 @@ export default class ValidationForm extends LightningElement {
   })
   initTypes({ error, data }) {
     if (data) {
-      this.operators = data.values.map((item) => {
-        return {
-          label: item.label,
-          value: item.value
-        };
-      });
-
+      this.operators = transformOperators(data.values);
       this.displayedOperators = [...this.operators];
+      this.setDisplayedOperators();
       this.selectedOperator = this.displayedOperators[0].value;
     } else if (error) {
       this.sendErrorNotification();
@@ -91,26 +72,11 @@ export default class ValidationForm extends LightningElement {
     });
   }
 
-  get isFirstQuestionPicklist() {
-    return (
-      this.firstQuestion.Type__c.toLowerCase() ===
-        questionTypes.PICKLIST.toLowerCase() ||
-      this.firstQuestion.Type__c.toLowerCase() ===
-        questionTypes.RADIOBUTTON.toLowerCase() ||
-      this.firstQuestion.Type__c.toLowerCase() ===
-        questionTypes.CHECKBOX.toLowerCase() ||
-      (this.selectedOperator &&
-        this.selectedOperator
-          .toLowerCase()
-          .includes(operatorTypes.NULL.toLowerCase()))
-    );
-  }
-
   get inputType() {
     return this.firstQuestion.Type__c.toLowerCase() ===
       questionTypes.RATING.toLowerCase()
-      ? number
-      : text;
+      ? "number"
+      : "text";
   }
 
   get questionsOptions() {
@@ -132,37 +98,9 @@ export default class ValidationForm extends LightningElement {
   }
 
   setDisplayedOperators() {
-    let resolvedOperators = [...this.operators];
-
-    if (this.firstQuestion.Required__c) {
-      resolvedOperators = resolvedOperators.filter((item) => {
-        return !item.label
-          .toLowerCase()
-          .includes(operatorTypes.NULL.toLowerCase());
-      });
-    }
-
-    for (let i = 0; i < typesDescription.length; i++) {
-      const questionType = typesDescription[i];
-
-      if (this.firstQuestion.Type__c !== questionType.label) {
-        continue;
-      }
-
-      resolvedOperators = resolvedOperators.filter((item) => {
-        return questionType.deprecatedOperators.reduce(
-          (accumulator, deprecatedOperator) => {
-            return (
-              accumulator &&
-              !item.label
-                .toLowerCase()
-                .includes(deprecatedOperator.toLowerCase())
-            );
-          },
-          true
-        );
-      });
-    }
+    const resolvedOperators = resolveOperatorsByQuestionType(
+      this.operators, 
+      this.firstQuestion);
 
     this.displayedOperators = [...resolvedOperators];
     this.selectedOperator = this.displayedOperators[0].value;
@@ -178,20 +116,19 @@ export default class ValidationForm extends LightningElement {
     this.firstPosition = +event.detail.value;
 
     if (this.firstPosition === this.secondPosition) {
-      if (this.secondPosition === this.questions[1].Position__c) {
-        this.firstPosition = this.questions[0].Position__c;
-      } else {
+      if (this.secondPosition === this.questions[0].Position__c) {
         this.firstPosition = this.questions[1].Position__c;
+      } else {
+        this.firstPosition = this.questions[0].Position__c;
       }
     }
 
     const input = this.template.querySelector(".firstCombobox");
     input.value = this.firstPosition;
 
-    this.firstQuestion = this.questions.filter((item) => {
-      return item.Position__c === this.firstPosition;
-    })[0];
+    this.firstQuestion = findQuestionByPosition(this.questions, this.firstPosition);
 
+    this.isFirstQuestionPicklist = isNeedPicklist(this.firstQuestion, this.selectedOperator);
     this.setDisplayedOperators();
   }
 
@@ -215,9 +152,7 @@ export default class ValidationForm extends LightningElement {
     const input = this.template.querySelector(".secondCombobox");
     input.value = this.secondPosition;
 
-    this.secondQuestion = this.questions.filter((item) => {
-      return item.Position__c === this.secondPosition;
-    })[0];
+    this.secondQuestion = findQuestionByPosition(this.questions, this.secondPosition);
   }
 
   setSelectedOperator(event) {
@@ -255,13 +190,8 @@ export default class ValidationForm extends LightningElement {
     this.firstPosition = this.questions[0].Position__c;
     this.secondPosition = this.questions[1].Position__c;
 
-    this.firstQuestion = this.questions.filter((item) => {
-      return item.Position__c === this.firstPosition;
-    })[0];
-
-    this.secondQuestion = this.questions.filter((item) => {
-      return item.Position__c === this.secondPosition;
-    })[0];
+    this.firstQuestion = findQuestionByPosition(this.questions, this.firstPosition);
+    this.secondQuestion = findQuestionByPosition(this.questions, this.secondPosition);
 
     const input = this.template.querySelector(".input");
     input.value = "";

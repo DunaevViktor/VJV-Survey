@@ -150,13 +150,13 @@ const getFieldAttributes = (field, picklistOptions, settedValue) => {
   const fieldObject = fieldDescription[field.datatype];
   fieldObject.picklistValues = picklistOptions;
   fieldObject.value = settedValue;
+  fieldObject.label = field.label;
 
   if(fieldTypes.REFERENCE === field.datatype) {
     fieldObject.objectsApiNames = field.referencedObjects;
-
     const value = JSON.parse(JSON.stringify(settedValue));
     fieldObject.value = value.selectedRecordId;
-    fieldObject.name = value.selectedValue;
+    fieldObject.name = value.selectedValue;    
   }
 
   return fieldObject;
@@ -214,11 +214,26 @@ const generateFieldsDescriptionsList = (result) => {
   return comboboxFieldsOptions;
 };
 
+const generateFieldOptions = (result) => {
+  let fieldOptions = [];
+  for (let key in result) {
+    if (Object.prototype.hasOwnProperty.call(result, key)) {
+      let comboboxObject = {
+        label: result[key],
+        value: key,
+      };
+      fieldOptions.push(comboboxObject);
+    }
+  }
+  return fieldOptions;
+};
+
 export {
   getFieldAttributes,
   setReferencedObjectNames,
   generateBooleanField,
   generateFieldsDescriptionsList,
   filterOperatorList,
-  operatorGroups
+  operatorGroups,
+  generateFieldOptions
 };

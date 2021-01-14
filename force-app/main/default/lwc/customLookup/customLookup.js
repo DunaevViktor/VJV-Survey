@@ -1,31 +1,39 @@
+/* eslint-disable */
 import { LightningElement, track, api } from "lwc";
+import { importedLabels } from "./labels";
 import findRecords from "@salesforce/apex/LookupController.findRecords";
-import select_an_option from "@salesforce/label/c.select_an_option";
-import remove_selected_option from "@salesforce/label/c.remove_selected_option";
-import search from "@salesforce/label/c.search";
-import no_records_found from "@salesforce/label/c.no_records_found";
 
 export default class LwcLookup extends LightningElement {
 
-  labels = {
-    select_an_option,
-    remove_selected_option,
-    search,
-    no_records_found
-  }
+  labels = importedLabels;
 
   @track recordsList;
   @track searchKey = "";
   @api selectedValue;
+  @track _selectedValue;
   @api selectedRecordId;
+  @track _selectedRecordId;
   @api objectsApiNames;
   @api iconName;
   @api lookupLabel;
   @track message;
 
+  connectedCallback() {
+    this._selectedRecordId = this.selectedRecordId;
+    this._selectedValue = this.selectedValue;
+  }
+
+  onLeave() {
+    setTimeout(() => {
+      this.searchKey = "";
+      this.message = null;
+      this.recordsList = null;
+    }, 300);
+  }
+
   onRecordSelection(event) {
-    this.selectedRecordId = event.target.dataset.key;
-    this.selectedValue = event.target.dataset.name;
+    this._selectedRecordId = event.target.dataset.key;
+    this._selectedValue = event.target.dataset.name;
     this.searchKey = "";
     this.onSeletedRecordUpdate();
   }
@@ -38,8 +46,8 @@ export default class LwcLookup extends LightningElement {
 
   removeRecordOnLookup() {
     this.searchKey = "";
-    this.selectedValue = null;
-    this.selectedRecordId = null;
+    this._selectedValue = null;
+    this._selectedRecordId = null;
     this.recordsList = null;
     this.onSeletedRecordUpdate();
   }
@@ -66,12 +74,13 @@ export default class LwcLookup extends LightningElement {
   }
 
   onSeletedRecordUpdate() {
-    const passEventr = new CustomEvent("recordselection", {
-      detail: {
-        selectedRecordId: this.selectedRecordId,
-        selectedValue: this.selectedValue
-      }
+    const detailObject = {
+        selectedRecordId: this._selectedRecordId,
+        selectedValue: this._selectedValue
+    }    
+    const recordSelectionEvent = new CustomEvent("recordselection", {
+      detail: detailObject
     });
-    this.dispatchEvent(passEventr);
+    this.dispatchEvent(recordSelectionEvent);
   }
 }
