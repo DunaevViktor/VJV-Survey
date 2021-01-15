@@ -16,10 +16,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>Body__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
                 <field>Group_Answer__c</field>
             </layoutItems>
             <layoutItems>

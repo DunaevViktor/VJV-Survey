@@ -2,15 +2,14 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>50.0</apiVersion>
     <isExposed>true</isExposed>
-
     <targets>
         <target>lightning__FlowScreen</target>
     </targets>
-
     <targetConfigs>
         <targetConfig targets="lightning__FlowScreen">
             <property name="questions" type="@salesforce/schema/Question__c[]" label="Questions"/>
             <property name="validations" type="@salesforce/schema/Validation__c[]" label="Validation rules"/>
         </targetConfig>
-    </targetConfigs> 
+    </targetConfigs>
+     
 </LightningComponentBundle>
