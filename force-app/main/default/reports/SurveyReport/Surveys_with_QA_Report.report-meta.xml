@@ -21,7 +21,7 @@
         <field>Survey__c.Questions__r$Label__c</field>
         <sortOrder>Asc</sortOrder>
     </groupingsDown>
-    <name>Surveys with Questions &amp; Answers Report</name>
+    <name>Surveys with Q&amp;A Report</name>
     <params>
         <name>co</name>
         <value>1</value>

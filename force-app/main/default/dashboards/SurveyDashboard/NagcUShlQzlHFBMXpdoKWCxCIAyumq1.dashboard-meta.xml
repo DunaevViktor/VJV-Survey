@@ -129,9 +129,9 @@
                         <sortOrder>a</sortOrder>
                     </groupingSorts>
                 </groupingSortProperties>
-                <header>Answers On Questions By Surveys</header>
+                <header>Q&amp;A By Surveys</header>
                 <legendPosition>Bottom</legendPosition>
-                <report>SurveyReport/Surveys_with_Questions_and_Answers_Report</report>
+                <report>SurveyReport/Surveys_with_QA_Report</report>
                 <showPercentage>false</showPercentage>
                 <showValues>true</showValues>
                 <sortBy>RowLabelAscending</sortBy>

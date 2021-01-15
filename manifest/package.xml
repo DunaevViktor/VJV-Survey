@@ -5,7 +5,7 @@
         <members>SurveyReport</members>
         <members>SurveyReport/Surveys_with_Email_Receivers_Report</members>
         <members>SurveyReport/Surveys_Report</members>
-        <members>SurveyReport/Surveys_with_Questions_and_Answers_Report</members>
+        <members>SurveyReport/Surveys_with_QA_Report</members>
         <name>Report</name>
     </types>
     <types>
