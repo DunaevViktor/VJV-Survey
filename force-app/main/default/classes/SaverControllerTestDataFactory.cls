@@ -18,6 +18,15 @@ public with sharing class SaverControllerTestDataFactory {
     return survey;
   }
 
+  public static List<Trigger_Rule__c> createTriggerRuleList(Integer amount, String surveyId) {
+    List<Trigger_Rule__c> rules = new List<Trigger_Rule__c>();
+    for(Integer i = 0; i < amount; i++) {
+      Trigger_Rule__c rule = SaverControllerTestDataFactory.createTriggerRule(surveyId);
+      rules.add(rule);
+    }
+    return rules;
+  }
+
   public static List<Question__c> createQuestionList(Integer amount, String surveyId) {
     List<Question__c> questions = new List<Question__c>();
     for(Integer i = 0; i < amount; i++) {
@@ -34,15 +43,6 @@ public with sharing class SaverControllerTestDataFactory {
       options.add(option);
     } 
     return options;
-  }
-
-  public static List<Trigger_Rule__c> createTriggerRuleList(Integer amount, String surveyId) {
-    List<Trigger_Rule__c> rules = new List<Trigger_Rule__c>();
-    for(Integer i = 0; i < amount; i++) {
-      Trigger_Rule__c rule = SaverControllerTestDataFactory.createTriggerRule(surveyId);
-      rules.add(rule);
-    }
-    return rules;
   }
 
   private static Question__c createQuestion(String surveyId, Integer position) {

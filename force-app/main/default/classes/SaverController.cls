@@ -6,6 +6,12 @@ public with sharing class SaverController {
   }
 
   @AuraEnabled
+  public static List<Trigger_Rule__c> saveTriggerRules(List<Trigger_Rule__c> rules) {
+    insert rules;
+    return rules;
+  }
+
+  @AuraEnabled
   public static List<Question__c> saveQuestions(List<Question__c> questions) {
      insert questions;
      return questions;
@@ -21,11 +27,5 @@ public with sharing class SaverController {
   public static List<Validation__c> saveValidations(List<Validation__c> validations) {
      insert validations;
      return validations;
-  }
-
-  @AuraEnabled
-  public static List<Trigger_Rule__c> saveTriggerRules(List<Trigger_Rule__c> rules) {
-    insert rules;
-    return rules;
   }
 }

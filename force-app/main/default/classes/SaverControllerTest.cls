@@ -22,6 +22,24 @@ public with sharing class SaverControllerTest {
     System.assertEquals(surveyId, databaseSurvey.Id, INVALID_SURVEY_ID);
   }
 
+  @IsTest 
+  static void testSaveTriggerRules() {
+    Survey__c survey = SaverControllerTestDataFactory.createSurvey();
+    insert survey;
+
+    List<Trigger_Rule__c> rules = SaverControllerTestDataFactory.createTriggerRuleList(TEST_AMOUNT, survey.Id);
+
+    List<Trigger_Rule__c> savedRules = SaverController.saveTriggerRules(rules);
+
+    for(Integer i = 0; i < TEST_AMOUNT; i++) {
+      Trigger_Rule__c savedRule = savedRules[i];
+      System.assertNotEquals(null, savedRule.Id, EXPECTED_NOT_BE_NULL);
+    }
+
+    List<Trigger_Rule__c> databaseRules = [SELECT Id FROM Trigger_Rule__c];
+    System.assertEquals(TEST_AMOUNT, databaseRules.size(), INVALID_RULES_AMOUNT);
+  }
+
   @IsTest
   static void testSaveQuestions() {
     Survey__c survey = SaverControllerTestDataFactory.createSurvey();
@@ -101,23 +119,5 @@ public with sharing class SaverControllerTest {
 
     List<Validation__c> databaseValidations = [SELECT Id FROM Validation__c];
     System.assertEquals(TEST_AMOUNT, databaseValidations.size(), INVALID_VALIDATIONS_AMOUNT);
-  }
-
-  @IsTest 
-  static void testSaveTriggerRules() {
-    Survey__c survey = SaverControllerTestDataFactory.createSurvey();
-    insert survey;
-
-    List<Trigger_Rule__c> rules = SaverControllerTestDataFactory.createTriggerRuleList(TEST_AMOUNT, survey.Id);
-
-    List<Trigger_Rule__c> savedRules = SaverController.saveTriggerRules(rules);
-
-    for(Integer i = 0; i < TEST_AMOUNT; i++) {
-      Trigger_Rule__c savedRule = savedRules[i];
-      System.assertNotEquals(null, savedRule.Id, EXPECTED_NOT_BE_NULL);
-    }
-
-    List<Trigger_Rule__c> databaseRules = [SELECT Id FROM Trigger_Rule__c];
-    System.assertEquals(TEST_AMOUNT, databaseRules.size(), INVALID_RULES_AMOUNT);
   }
 }

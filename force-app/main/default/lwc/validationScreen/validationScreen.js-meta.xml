@@ -3,6 +3,8 @@
     <apiVersion>50.0</apiVersion>
     <isExposed>true</isExposed>
 
+    <masterLabel>Validation Builder Screen</masterLabel>
+
     <targets>
         <target>lightning__FlowScreen</target>
     </targets>
