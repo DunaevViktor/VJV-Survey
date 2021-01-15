@@ -1,0 +1,42 @@
+<template>
+  <div class="slds-align_absolute-center">
+    <div class="slds-m-horizontal_medium survey-info-form">
+      <lightning-input
+        class="slds-m-vertical_medium"
+        type="text"
+        label={label.survey_name}
+        placeholder={label.survey_name}
+        value={survey.Name}
+        onchange={handleNameChange}
+        required
+      >
+      </lightning-input>
+
+      <c-image-upload 
+        default-url={survey.Logo__c} 
+        onupdateimageurl={handleImageUpdate}
+      ></c-image-upload>
+
+      <lightning-input
+        class="slds-m-vertical_medium"
+        type="color"
+        label={label.survey_bg_color}
+        value={survey.Background_Color__c}
+        onchange={handleColorChange}
+      >
+      </lightning-input>
+    </div>
+  </div>
+
+  <hr class="slds-m-bottom_small" />
+
+  <div class="slds-text-align_right slds-m-bottom_small">
+    <lightning-button
+      variant="brand"
+      label={label.next}
+      onclick={clickNextButton}
+      class="slds-m-left_x-small"
+    ></lightning-button>
+  </div>
+    
+</template>
