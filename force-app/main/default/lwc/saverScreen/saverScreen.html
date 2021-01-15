@@ -1,0 +1,42 @@
+<template>
+  <template if:false={isComplete}>
+    <div class="slds-text-align_center">
+      <c-saver-spinner></c-saver-spinner>
+      <br/>
+      We are saving you configurations
+    </div>
+  </template>
+  
+    
+  <div class="slds-m-around_medium">
+    <template for:each={stepsOfSave} for:item="step">
+      <div key={step.label}>
+        <span class="slds-icon_container slds-icon-utility-announcement" >
+          <template if:true={step.isDone}>
+            <lightning-icon icon-name="utility:check" 
+                            alternative-text="Done" 
+                            title="Done"
+                            variant="success">
+            </lightning-icon>
+          </template>
+    
+          <template if:false={step.isDone}>
+            <lightning-icon icon-name="utility:threedots" 
+                        alternative-text="In progress" 
+                        title="In progress" 
+                        variant="error">
+            </lightning-icon>
+          </template>
+          
+          <span class="slds-m-left_x-small">{step.label}</span><br/>
+        </span>
+      </div>
+    </template>
+  </div>
+
+  <template if:true={isComplete}>
+    <div class="slds-text-align_center slds-m-around_medium">
+      Survey created successfully!
+    </div>
+  </template>
+</template>
