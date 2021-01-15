@@ -11,6 +11,7 @@ public with sharing class ImageUploadController {
         return imageUrl;
     }
     
+    @TestVisible
     static ContentVersion createContentVersion(String fileName, String fileBase64Data) {
         if (!ContentVersion.SObjectType.getDescribe().isAccessible() ||
             !ContentVersion.SObjectType.getDescribe().isCreateable()) {
@@ -24,6 +25,7 @@ public with sharing class ImageUploadController {
         return fileContentVersion;
     }
     
+    @TestVisible
     static ContentDistribution createContentDistribution(ContentVersion contentVersion) {
         if (!ContentDistribution.SObjectType.getDescribe().isAccessible() ||
             !ContentDistribution.SObjectType.getDescribe().isCreateable()) {
