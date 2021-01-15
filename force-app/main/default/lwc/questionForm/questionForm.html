@@ -1,17 +1,17 @@
 <template>
   <div class="slds-box slds-box_x-small slds-m-around_x-small">
     <template if:true={isEditMode}>
-      <h2>Edit question form</h2>
+      <h2>{label.edit_question_form_title}</h2>
     </template>
 
     <template if:false={isEditMode}>
-      <h2>Question creating form</h2>
+      <h2>{label.create_question_form_title}</h2>
     </template>
 
     <lightning-input
       class="input"
       type="text"
-      label="Specify question"
+      label={label.specify_question}
       onchange={handleLabel}
       required="true"
     ></lightning-input>
@@ -20,7 +20,7 @@
       <div class="slds-size_1-of-2">
         <lightning-radio-group
           name="radioGroup"
-          label="Type"
+          label={label.type}
           options={displayedTypes}
           value={selectedType}
           type="radio"
@@ -32,7 +32,7 @@
       <div class="slds-size_1-of-2">
         <lightning-checkbox-group
           name="settings"
-          label="Question Setting"
+          label={label.question_settings}
           options={questionSettingList}
           value={selectedSettings}
           onchange={handleSettingChange}
@@ -45,7 +45,7 @@
       <div class="slds-m-top_xx-small">
         <h2>Specify Question Options</h2>
         <ul class="slds-listbox slds-listbox_vertical" role="presentation">
-          <template for:each={question.Options} for:item="option">
+          <template for:each={question.Question_Options__r} for:item="option">
             <li key={option.Id} role="presentation" class="slds-listbox__item">
               <c-option-list-element
                 option={option}
@@ -60,21 +60,19 @@
           <lightning-input
             class="option-input"
             type="text"
-            label="Enter option value"
+            label={label.enter_option_value}
             required
           ></lightning-input>
 
           <template if:true={isEditOption}>
             <lightning-button
-              label="Save changes"
-              title="Save changes"
+              label={label.save_changes}
               class="slds-m-top_x-small slds-m-bottom_x-small slds-float_right"
               onclick={saveOptionChanges}
             ></lightning-button>
             <lightning-button
               variant="destructive-text"
-              label="Cancel edit"
-              title="Cancel edit"
+              label={label.cancel_edit}
               onclick={cancelOptionEdit}
               class="slds-m-top_x-small slds-m-bottom_x-small slds-float_right slds-m-right_small"
             ></lightning-button>
@@ -82,8 +80,7 @@
 
           <template if:false={isEditOption}>
             <lightning-button
-              label="Add Option"
-              title="Add Option"
+              label={label.add_option}
               class="slds-m-top_x-small slds-m-bottom_x-small slds-float_right"
               onclick={addOption}
             ></lightning-button>
@@ -98,17 +95,15 @@
       <template if:true={isEditMode}>
         <lightning-button
           variant="brand"
-          label="Save changes"
-          title="Save changes"
+          label={label.save_changes}
           class="slds-m-left_x-small"
-          onclick={editQuestion}
+          onclick={updateQuestion}
         >
         </lightning-button>
 
         <lightning-button
           variant="destructive"
-          label="Cancel changes"
-          title="Cancel changes"
+          label={label.cancel_edit}
           class="slds-m-left_x-small"
           onclick={cancelQuestionEdit}
         >
@@ -118,8 +113,7 @@
       <template if:false={isEditMode}>
         <lightning-button
           variant="brand"
-          label="Add Question"
-          title="Add Question"
+          label={label.add_question}
           onclick={addQuestion}
         ></lightning-button>
       </template>

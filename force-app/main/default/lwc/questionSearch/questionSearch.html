@@ -2,13 +2,13 @@
   <h2>Select standard question</h2>
   <lightning-input
     type="text"
-    label="Specify Question"
+    label={label.specify_question}
     onchange={onSearchTermChange}
   ></lightning-input>
 
   <div role="listbox">
     <template if:false={standardQuestions.length}>
-      Don't have standard questions
+      {label.no_standard_questions}
     </template>
 
     <template if:true={standardQuestions.length}>
@@ -17,27 +17,15 @@
         role="presentation"
       >
         <template if:false={searchResults.length}>
-          Don't have relevant questions
+          {label.no_relevant_questions}
         </template>
 
         <template for:each={searchResults} for:item="result">
           <li role="presentation" class="slds-listbox__item" key={result.Id}>
-            <div
-              class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta slds-p-left_none"
-            >
-              <span class="slds-media__figure">
-                <lightning-button
-                  variant="brand-outline"
-                  label="+"
-                  title="Add question"
-                  class="slds-m-left_none"
-                >
-                </lightning-button>
-              </span>
-              <div class="slds-media__body">
-                <p>{result.Label__c}</p>
-              </div>
-            </div>
+            <c-question-search-item
+              question={result}
+              onselect={selectQuestion}
+            ></c-question-search-item>
           </li>
         </template>
       </ul>

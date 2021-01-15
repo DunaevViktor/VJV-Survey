@@ -1,0 +1,19 @@
+<template>
+  <div
+    class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta slds-p-left_none"
+  >
+    <span class="slds-media__figure">
+      <lightning-button
+        variant="brand-outline"
+        label="+"
+        title={label.add_question}
+        class="slds-m-left_none"
+        onclick={selectQuestion}
+      >
+      </lightning-button>
+    </span>
+    <div class="slds-media__body">
+      <p>{question.Label__c}</p>
+    </div>
+  </div>
+</template>

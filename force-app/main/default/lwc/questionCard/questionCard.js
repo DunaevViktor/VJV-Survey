@@ -1,16 +1,13 @@
 import { LightningElement, api } from "lwc";
-import EDIT_ICON from "@salesforce/resourceUrl/EditIcon";
-import DELETE_ICON from "@salesforce/resourceUrl/DeleteIcon";
-import ARROW_UP_ICON from "@salesforce/resourceUrl/ArrowUpIcon";
-import ARROW_DOWN_ICON from "@salesforce/resourceUrl/ArrowDownIcon";
+
+import { icons } from "./icons.js";
+import { label } from "./labels.js";
 
 export default class QuestionCard extends LightningElement {
   @api question;
 
-  editIcon = EDIT_ICON;
-  deleteIcon = DELETE_ICON;
-  arrowUpIcon = ARROW_UP_ICON;
-  arrowDownIcon = ARROW_DOWN_ICON;
+  icons = icons;
+  label = label;
 
   deleteQuestion() {
     const deleteEvent = new CustomEvent("delete", {
