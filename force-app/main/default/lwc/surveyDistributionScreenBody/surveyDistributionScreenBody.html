@@ -1,0 +1,75 @@
+<template>
+
+    <div>
+        <lightning-datatable
+                key-field="id"
+                data={data}
+                columns={columns}
+                onrowaction={handleRowAction}>
+        </lightning-datatable>
+    </div>
+    
+    <lightning-radio-group name="newReceiver"
+                    label="Add new receiver"
+                    options={newReceiverOptions}
+                    value="email"
+                    onchange={handleIsNewReceiverChange}
+                    type="radio">
+    </lightning-radio-group>
+<!-- pattern="\w+@\w+\.\w+" -->
+    <template if:true={isEmailReceiver}>
+        <div class="slds-m-vertical_medium">
+            <lightning-input type="text"
+                    id="email"
+                    label="Email"
+                    placeholder="username@example.com"
+                    required>
+            </lightning-input>
+        </div>
+    </template>
+
+    <template if:false={isEmailReceiver}>
+        <div class="slds-m-vertical_medium">
+            <lightning-combobox
+            name="userGroups"
+            label="User Groups"
+            value=""
+            placeholder="Select User Group"
+            options={groupOptions}
+            onchange={handleGroupChange}
+            required
+    ></lightning-combobox>
+        </div>
+    </template>
+
+    <lightning-button 
+            variant="brand" 
+            label="Add"  
+            onclick={handleAddClick} 
+            class="slds-m-left_x-small">
+    </lightning-button>
+
+    <lightning-input type="checkbox" 
+                    label="Build diagrams" 
+                    onchange={handleIsCreateDiagramsChange}>
+    </lightning-input>
+
+    <template if:true={surveys}>
+        <lightning-input type="checkbox" 
+            label="Connect to another survey" 
+            onchange={handleConnectToAnotherSurveyChange}>
+        </lightning-input>
+        <template if:true={isConnectToSurvey}>
+            <lightning-combobox
+                name="surveys"
+                label="Surveys"
+                value=""
+                placeholder="Select survey for connect"
+                options={surveyOptions}
+                onchange={handleSurveyChange}
+                required>       
+            </lightning-combobox>
+        </template>
+    </template>
+   
+</template>
