@@ -4,9 +4,9 @@
     <backgroundFadeDirection>Diagonal</backgroundFadeDirection>
     <backgroundStartColor>#FFFFFF</backgroundStartColor>
     <chartTheme>light</chartTheme>
-    <colorPalette>tropic</colorPalette>
+    <colorPalette>unity</colorPalette>
     <dashboardChartTheme>light</dashboardChartTheme>
-    <dashboardColorPalette>tropic</dashboardColorPalette>
+    <dashboardColorPalette>unity</dashboardColorPalette>
     <dashboardGridLayout>
         <dashboardGridComponents>
             <colSpan>4</colSpan>
@@ -53,55 +53,15 @@
                     <hideChatterPhotos>true</hideChatterPhotos>
                 </flexComponentProperties>
                 <groupingSortProperties/>
-                <header>Surveys Report</header>
+                <header>Surveys Information</header>
                 <report>SurveyReport/Surveys_Report</report>
             </dashboardComponent>
             <rowIndex>0</rowIndex>
             <rowSpan>7</rowSpan>
         </dashboardGridComponents>
         <dashboardGridComponents>
-            <colSpan>4</colSpan>
+            <colSpan>5</colSpan>
             <columnIndex>4</columnIndex>
-            <dashboardComponent>
-                <autoselectColumnsFromReport>false</autoselectColumnsFromReport>
-                <chartAxisRange>Auto</chartAxisRange>
-                <chartSummary>
-                    <axisBinding>y</axisBinding>
-                    <column>RowCount</column>
-                </chartSummary>
-                <componentType>BarGrouped</componentType>
-                <decimalPrecision>-1</decimalPrecision>
-                <displayUnits>Auto</displayUnits>
-                <drillEnabled>false</drillEnabled>
-                <drillToDetailEnabled>false</drillToDetailEnabled>
-                <enableHover>false</enableHover>
-                <expandOthers>false</expandOthers>
-                <groupingColumn>CUST_NAME</groupingColumn>
-                <groupingColumn>Trigger_Rule__c.Operator__c</groupingColumn>
-                <groupingSortProperties>
-                    <groupingSorts>
-                        <groupingLevel>g1</groupingLevel>
-                        <sortOrder>a</sortOrder>
-                    </groupingSorts>
-                    <groupingSorts>
-                        <groupingLevel>g2</groupingLevel>
-                        <sortOrder>a</sortOrder>
-                    </groupingSorts>
-                </groupingSortProperties>
-                <header>Surveys with Trigger Rules Report</header>
-                <legendPosition>Right</legendPosition>
-                <report>SurveyReport/Surveys_with_Trigger_Rules_Report</report>
-                <showPercentage>false</showPercentage>
-                <showValues>true</showValues>
-                <sortBy>RowLabelAscending</sortBy>
-                <useReportChart>false</useReportChart>
-            </dashboardComponent>
-            <rowIndex>0</rowIndex>
-            <rowSpan>7</rowSpan>
-        </dashboardGridComponents>
-        <dashboardGridComponents>
-            <colSpan>4</colSpan>
-            <columnIndex>8</columnIndex>
             <dashboardComponent>
                 <autoselectColumnsFromReport>false</autoselectColumnsFromReport>
                 <chartAxisRange>Auto</chartAxisRange>
@@ -129,7 +89,7 @@
                         <sortOrder>a</sortOrder>
                     </groupingSorts>
                 </groupingSortProperties>
-                <header>Surveys with Email Receivers Report</header>
+                <header>Email Receivers Type Analytics</header>
                 <legendPosition>Right</legendPosition>
                 <report>SurveyReport/Surveys_with_Email_Receivers_Report</report>
                 <showPercentage>false</showPercentage>
@@ -141,7 +101,7 @@
             <rowSpan>7</rowSpan>
         </dashboardGridComponents>
         <dashboardGridComponents>
-            <colSpan>4</colSpan>
+            <colSpan>3</colSpan>
             <columnIndex>0</columnIndex>
             <dashboardComponent>
                 <autoselectColumnsFromReport>false</autoselectColumnsFromReport>
@@ -169,7 +129,7 @@
                         <sortOrder>a</sortOrder>
                     </groupingSorts>
                 </groupingSortProperties>
-                <header>Surveys with Questions &amp; Answers Report</header>
+                <header>Answers On Questions By Surveys</header>
                 <legendPosition>Bottom</legendPosition>
                 <report>SurveyReport/Surveys_with_Questions_and_Answers_Report</report>
                 <showPercentage>false</showPercentage>
@@ -181,32 +141,33 @@
             <rowSpan>7</rowSpan>
         </dashboardGridComponents>
         <dashboardGridComponents>
-            <colSpan>3</colSpan>
-            <columnIndex>4</columnIndex>
+            <colSpan>2</colSpan>
+            <columnIndex>3</columnIndex>
             <dashboardComponent>
                 <autoselectColumnsFromReport>false</autoselectColumnsFromReport>
                 <chartSummary>
-                    <column>RowCount</column>
+                    <aggregate>Sum</aggregate>
+                    <column>Email_Receiver__c.IsSend__c</column>
                 </chartSummary>
                 <componentType>Metric</componentType>
                 <decimalPrecision>-1</decimalPrecision>
-                <displayUnits>Integer</displayUnits>
+                <displayUnits>Auto</displayUnits>
                 <groupingSortProperties/>
-                <header>Surveys with Questions &amp; Answers Report</header>
+                <header>Unique Sent Email Counter</header>
                 <indicatorBreakpoint1>33.0</indicatorBreakpoint1>
                 <indicatorBreakpoint2>67.0</indicatorBreakpoint2>
                 <indicatorHighColor>#00716B</indicatorHighColor>
                 <indicatorLowColor>#C23934</indicatorLowColor>
                 <indicatorMiddleColor>#FFB75D</indicatorMiddleColor>
-                <report>SurveyReport/Surveys_with_Questions_and_Answers_Report</report>
+                <report>SurveyReport/Surveys_with_Email_Receivers_Report</report>
                 <showRange>false</showRange>
             </dashboardComponent>
             <rowIndex>7</rowIndex>
             <rowSpan>7</rowSpan>
         </dashboardGridComponents>
         <dashboardGridComponents>
-            <colSpan>5</colSpan>
-            <columnIndex>7</columnIndex>
+            <colSpan>4</colSpan>
+            <columnIndex>5</columnIndex>
             <dashboardComponent>
                 <autoselectColumnsFromReport>false</autoselectColumnsFromReport>
                 <chartAxisRange>Auto</chartAxisRange>
@@ -214,7 +175,7 @@
                     <axisBinding>y</axisBinding>
                     <column>RowCount</column>
                 </chartSummary>
-                <componentType>LineGrouped</componentType>
+                <componentType>Donut</componentType>
                 <decimalPrecision>-1</decimalPrecision>
                 <displayUnits>Auto</displayUnits>
                 <drillEnabled>false</drillEnabled>
@@ -222,21 +183,17 @@
                 <enableHover>false</enableHover>
                 <expandOthers>false</expandOthers>
                 <groupingColumn>CUST_NAME</groupingColumn>
-                <groupingColumn>Email_Receiver__c.Type__c</groupingColumn>
                 <groupingSortProperties>
                     <groupingSorts>
                         <groupingLevel>g1</groupingLevel>
                         <sortOrder>a</sortOrder>
                     </groupingSorts>
-                    <groupingSorts>
-                        <groupingLevel>g2</groupingLevel>
-                        <sortOrder>a</sortOrder>
-                    </groupingSorts>
                 </groupingSortProperties>
-                <header>Surveys with Email Receivers Report</header>
+                <header>Grouped Email Receivers By Surveys</header>
                 <legendPosition>Right</legendPosition>
                 <report>SurveyReport/Surveys_with_Email_Receivers_Report</report>
                 <showPercentage>false</showPercentage>
+                <showTotal>true</showTotal>
                 <showValues>false</showValues>
                 <sortBy>RowLabelAscending</sortBy>
                 <useReportChart>false</useReportChart>
@@ -244,7 +201,7 @@
             <rowIndex>7</rowIndex>
             <rowSpan>7</rowSpan>
         </dashboardGridComponents>
-        <numberOfColumns>12</numberOfColumns>
+        <numberOfColumns>9</numberOfColumns>
         <rowHeight>36</rowHeight>
     </dashboardGridLayout>
     <dashboardType>SpecifiedUser</dashboardType>
