@@ -22,6 +22,13 @@
         <value>Add Question</value>
     </labels>
     <labels>
+        <fullName>add_trigger_rule</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>add trugger rule</shortDescription>
+        <value>Add Trigger Rule</value>
+    </labels>
+    <labels>
         <fullName>cancel_edit</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -127,6 +134,13 @@
         <value>False</value>
     </labels>
     <labels>
+        <fullName>field</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Field</shortDescription>
+        <value>Field</value>
+    </labels>
+    <labels>
         <fullName>is_required</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -146,13 +160,6 @@
         <protected>true</protected>
         <shortDescription>limit question sexceeded</shortDescription>
         <value>Limit of questions is exceeded</value>
-    </labels>
-    <labels>
-        <fullName>field</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Field</shortDescription>
-        <value>Field</value>
     </labels>
     <labels>
         <fullName>next</fullName>
@@ -176,6 +183,13 @@
         <value>Don&apos;t have questions to create visibility validation</value>
     </labels>
     <labels>
+        <fullName>no_records_found</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No records found</shortDescription>
+        <value>No records found</value>
+    </labels>
+    <labels>
         <fullName>no_relevant_questions</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -195,13 +209,6 @@
         <protected>true</protected>
         <shortDescription>no template</shortDescription>
         <value>No Template</value>
-    </labels>
-    <labels>
-        <fullName>no_records_found</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>No records found</shortDescription>
-        <value>No records found</value>
     </labels>
     <labels>
         <fullName>no_validations</fullName>
@@ -274,18 +281,18 @@
         <value>Question Setting</value>
     </labels>
     <labels>
-        <fullName>save_changes</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>save changes</shortDescription>
-        <value>Save changes</value>
-    </labels>
-    <labels>
         <fullName>remove_selected_option</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Remove selected option</shortDescription>
         <value>Remove selected option</value>
+    </labels>
+    <labels>
+        <fullName>save_changes</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>save changes</shortDescription>
+        <value>Save changes</value>
     </labels>
     <labels>
         <fullName>search</fullName>
@@ -300,7 +307,6 @@
         <protected>true</protected>
         <shortDescription>Select an option</shortDescription>
         <value>Select an option</value>
->>>>>>> develop
     </labels>
     <labels>
         <fullName>select_operator</fullName>
@@ -357,13 +363,6 @@
         <protected>true</protected>
         <shortDescription>Tip for user about trigger rules execution</shortDescription>
         <value>*Survey polling actions will occur when any of the created trigger rules work.</value>
-    </labels>
-    <labels>
-        <fullName>trigger_rule_required</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Fill at least one trigger rule info</shortDescription>
-        <value>Fill at least one trigger rule info</value>
     </labels>
     <labels>
         <fullName>true</fullName>

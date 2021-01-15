@@ -1,5 +1,6 @@
 @isTest
 public with sharing class LookupControllerTest {
+
   private static final String INVALID_FOUND_RECORDS_AMOUNT = 'Actual length of result records list isn\'t equal to expected.';
 
   @testSetup
@@ -7,10 +8,7 @@ public with sharing class LookupControllerTest {
     Contact testContact = new Contact(LastName = 'Happy Contact');
     insert testContact;
 
-    Lead testLead = new Lead(
-      LastName = 'Happy Lead',
-      Company = 'Test Company'
-    );
+    Lead testLead = new Lead(LastName = 'Happy Lead', Company = 'Test Company');
     insert testLead;
 
     Case testCase = new Case();
@@ -18,19 +16,16 @@ public with sharing class LookupControllerTest {
   }
 
   @isTest
-  static void findExsistingRecordsPositiveTest() {
+  static void testPositiveFindExsistingRecords() {
     List<String> objectApiNames = new List<String>();
     objectApiNames.add('Contact');
     objectApiNames.add('Lead');
-    List<SObject> result = LookupController.findRecords(
-      'Happy',
-      objectApiNames
-    );
+    List<SObject> result = LookupController.findRecords('Happy', objectApiNames);
     System.assertEquals(2, result.size(), INVALID_FOUND_RECORDS_AMOUNT);
   }
 
   @isTest
-  static void findMissingRecordsPositiveTest() {
+  static void testPositiveFindMissingRecords() {
     List<String> objectApiNames = new List<String>();
     objectApiNames.add('Contact');
     objectApiNames.add('Lead');
@@ -39,7 +34,7 @@ public with sharing class LookupControllerTest {
   }
 
   @isTest
-  static void findRecordsMissingObjectNameNegativeTest() {
+  static void testNegativeFindRecordsMissingObjectName() {
     List<String> objectApiNames = new List<String>();
     objectApiNames.add('Test');
     List<SObject> res = LookupController.findRecords('Happy', objectApiNames);
@@ -47,7 +42,7 @@ public with sharing class LookupControllerTest {
   }
 
   @isTest
-  static void findRecordsMissingFieldNameNegativeTest() {
+  static void testNegativeFindRecordsMissingFieldName() {
     List<String> objectApiNames = new List<String>();
     objectApiNames.add('Case');
     List<SObject> res = LookupController.findRecords('Happy', objectApiNames);

@@ -3,36 +3,30 @@ import QUESTION_OBJECT from "@salesforce/schema/Question__c";
 import TYPE_FIELD from "@salesforce/schema/Question__c.Type__c";
 import { getPicklistValues } from "lightning/uiObjectInfoApi";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
-
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
-import {questionTypes} from "c/formUtil";
-
-import edit_question_form_title from "@salesforce/label/c.edit_question_form_title";
-import create_question_form_title from "@salesforce/label/c.create_question_form_title";
-import specify_question from "@salesforce/label/c.specify_question";
-import type from "@salesforce/label/c.type";
-import question_settings from "@salesforce/label/c.question_settings";
-import enter_option_value from "@salesforce/label/c.enter_option_value";
-import save_changes from "@salesforce/label/c.save_changes";
-import cancel_edit from "@salesforce/label/c.cancel_edit";
-import add_option from "@salesforce/label/c.add_option";
-import add_question from "@salesforce/label/c.add_question";
-import is_required from "@salesforce/label/c.is_required";
-import is_reusable from "@salesforce/label/c.is_reusable";
-import option_already_exists from "@salesforce/label/c.option_already_exists";
-import error_few_options from "@salesforce/label/c.error_few_options";
-import errorTitle from "@salesforce/label/c.error";
-import success from "@salesforce/label/c.success";
+import { label } from "./labels.js";
+import {
+  transformQuestionTypes,
+  isOptionEnabnling, 
+  filterOptionsByValue,
+  updateOptionsValue,
+  deleteFromOptions,
+  clearInput
+} from "./questionFormHelper.js";
 
 export default class QuestionForm extends LightningElement {
-  SUCCESS_TITLE = success;
+  label = label;
+
+  SUCCESS_TITLE = label.success;
   SUCCESS_VARIANT = "success";
 
-  ERROR_TITLE = errorTitle;
+  ERROR_TITLE = label.errorTitle;
   ERROR_VARIANT = "error";
 
-  @api editedQuestion;
+  REQUIRED_FIELD_API_NAME = "Required__c";
+  REUSABLE_FIELD_API_NAME = "IsReusable__c";
+
   @track question;
 
   @wire(getObjectInfo, { objectApiName: QUESTION_OBJECT })
@@ -48,30 +42,17 @@ export default class QuestionForm extends LightningElement {
 
   displayedTypes;
 
-  requiredFieldName = "Required__c";
-  reusableFieldName = "IsReusable__c";
-
-  label = {
-    edit_question_form_title,
-    create_question_form_title,
-    specify_question,
-    type,
-    question_settings,
-    enter_option_value,
-    save_changes,
-    cancel_edit,
-    add_option,
-    add_question
-  }
-
   connectedCallback() {
     this.isOptionsEnabled = false;
-    if (!this.editedQuestion) {
-      this.question = {};
-      this.question.Question_Options__r = [];
-    } else {
-      this.question = { ...this.editedQuestion };
-    }
+    this.question = {};
+    this.question.Question_Options__r = [];
+  }
+
+  get questionSettingList() {
+    return [
+      { label: label.is_required, value: this.REQUIRED_FIELD_API_NAME },
+      { label: label.is_reusable, value: this.REUSABLE_FIELD_API_NAME }
+    ];
   }
 
   @wire(getPicklistValues, {
@@ -80,19 +61,40 @@ export default class QuestionForm extends LightningElement {
   })
   initTypes({ error, data: types }) {
     if (types) {
-      this.displayedTypes = types.values.map((item) => {
-        return {
-          label: item.label,
-          value: item.value
-        };
-      });
-
+      this.displayedTypes = transformQuestionTypes(types);
       this.selectedType = this.displayedTypes[0].value;
       this.setOptionsEnabling();
     } else if (error) {
       console.log(error);
       this.sendErrorNotification();
     }
+  }
+
+  @api
+  clearQuestion() {
+    this.question = {};
+    this.question.Question_Options__r = [];
+    this.resetForm();
+  }
+
+  @api
+  setQuestionForEdit(editQuestion) {
+    this.question = JSON.parse(JSON.stringify(editQuestion));
+
+    const input = this.template.querySelector(".input");
+    clearInput(input);
+    input.value = this.question.Label__c;
+
+    this.selectedType = this.question.Type__c;
+    this.selectedSettings = [];
+
+    if (this.question[this.REQUIRED_FIELD_API_NAME]) this.selectedSettings.push(this.REQUIRED_FIELD_API_NAME);
+    if (this.question[this.REUSABLE_FIELD_API_NAME])
+      this.selectedSettings.push(this.REUSABLE_FIELD_API_NAME);
+
+    this.setOptionsEnabling();
+
+    this.isEditMode = true;
   }
 
   handleLabel(event) {
@@ -106,92 +108,36 @@ export default class QuestionForm extends LightningElement {
   }
 
   handleSettingChange(event) {
-    this.question[this.requiredFieldName] = false;
-    this.question[this.reusableFieldName] = false;
+    this.question[this.REQUIRED_FIELD_API_NAME] = false;
+    this.question[this.REUSABLE_FIELD_API_NAME] = false;
 
     for (const value of event.detail.value) {
-      this.question[value] = !this.question[value];
+      this.question[value] = true;
     }
   }
 
   setOptionsEnabling() {
-    this.isOptionsEnabled =
-      this.selectedType.toLowerCase().localeCompare(questionTypes.CHECKBOX.toLowerCase()) === 0 ||
-      this.selectedType.toLowerCase().localeCompare(questionTypes.RADIOBUTTON.toLowerCase()) === 0 ||
-      this.selectedType.toLowerCase().localeCompare(questionTypes.PICKLIST.toLowerCase()) === 0;
+    this.isOptionsEnabled = isOptionEnabnling(this.selectedType);
 
     if(this.isOptionsEnabled && !this.question.Question_Options__r) {
       this.question.Question_Options__r = [];
     }
   }
 
-  get questionSettingList() {
-    return [
-      { label: is_required, value: this.requiredFieldName },
-      { label: is_reusable, value: this.reusableFieldName }
-    ];
-  }
-
-  @api
-  setQuestion(clearQuestion) {
-    this.question = clearQuestion;
-    this.question.Question_Options__r = [];
-    this.isEditMode = false;
-    this.resetForm();
-  }
-
-  @api
-  setQuestionForEdit(editQuestion) {
-    this.question = JSON.parse(JSON.stringify(editQuestion));
-
-    const input = this.template.querySelector(".input");
-    input.value = this.question.Label__c;
-
-    this.selectedType = this.question.Type__c;
-    this.selectedSettings = [];
-
-    if (this.question[this.requiredFieldName]) this.selectedSettings.push(this.requiredFieldName);
-    if (this.question[this.reusableFieldName])
-      this.selectedSettings.push(this.reusableFieldName);
-
-    this.setOptionsEnabling();
-
-    this.isEditMode = true;
-  }
-
   addOption() {
     const input = this.template.querySelector(".option-input");
-    if (!input.validity.valid) return;
+    if(!this.isOptionCorrect(input)) return;
 
-    console.log(1);
-
-    const filteredOptions = this.question.Question_Options__r.filter(
-      (option) => {
-        return option.Value__c.localeCompare(input.value) === 0;
-      }
-    );
-
-    console.log(2);
-
-    if (filteredOptions.length > 0) {
-      this.showToastMessage(
-        this.ERROR_TITLE,
-        option_already_exists,
-        this.ERROR_VARIANT
-      );
-      return;
-    }
-
-    const option = {
+    this.question.Question_Options__r.push({
       Value__c: input.value
-    };
+    });
 
-    this.question.Question_Options__r.push(option);
     input.value = "";
   }
 
   editOption(event) {
     const input = this.template.querySelector(".option-input");
+    clearInput(input);
     input.value = event.detail;
     this.editOptionValue = event.detail;
     this.isEditOption = true;
@@ -199,6 +145,7 @@ export default class QuestionForm extends LightningElement {
 
   cancelOptionEdit() {
     const input = this.template.querySelector(".option-input");
+    clearInput(input);
     input.value = "";
     this.editOptionValue = "";
     this.isEditOption = false;
@@ -206,64 +153,39 @@ export default class QuestionForm extends LightningElement {
 
   saveOptionChanges() {
     const input = this.template.querySelector(".option-input");
-    if (!input.validity.valid) return;
+    if(!this.isOptionCorrect(input)) return;
 
-    const filteredOptions = this.question.Question_Options__r.filter(
-      (option) => {
-        return (
-          option.Value__c.localeCompare(input.value) === 0 &&
-          this.editOptionValue.localeCompare(input.value) !== 0
-        );
-      }
-    );
+    this.question.Question_Options__r = updateOptionsValue(
+      this.question.Question_Options__r, 
+      this.editOptionValue, 
+      input.value);
+
+    this.cancelOptionEdit();
+  }
+
+  deleteOption(event) {
+    this.question.Question_Options__r = deleteFromOptions(this.question.Question_Options__r, event.detail);
+  }
+
+  isOptionCorrect(input) {
+    if (!input.validity.valid) return false;
+
+    const filteredOptions = filterOptionsByValue(this.question.Question_Options__r, input.value);
 
     if (filteredOptions.length > 0) {
       this.showToastMessage(
         this.ERROR_TITLE,
-        option_already_exists,
+        label.option_already_exists,
         this.ERROR_VARIANT
       );
-      return;
+      return false;
     }
 
-    this.question.Question_Options__r = this.question.Question_Options__r.map(
-      (option) => {
-        if (option.Value__c.localeCompare(this.editOptionValue) === 0) {
-          option.Value__c = input.value;
-        }
-        return option;
-      }
-    );
-
-    input.value = "";
-    this.editOptionValue = "";
-    this.isEditOption = false;
-  }
-
-  deleteOption(event) {
-    this.question.Question_Options__r = this.question.Question_Options__r.filter(
-      (option) => {
-        return option.Value__c.localeCompare(event.detail) !== 0;
-      }
-    );
+    return true;
   }
 
   addQuestion() {
-    const input = this.template.querySelector(".input");
-    if (!input.validity.valid) {
-      return;
-    } else if (
-      this.isOptionsEnabled &&
-      this.question.Question_Options__r.length < 2
-    ) {
-      this.showToastMessage(
-        this.ERROR_TITLE,
-        error_few_options,
-        this.ERROR_VARIANT
-      );
-      return;
-    }
-
+    if(!this.isQuestionCorrect()) return;
     this.getQuestionAttributes();
 
     const addEvent = new CustomEvent("add", {
@@ -275,27 +197,11 @@ export default class QuestionForm extends LightningElement {
   cancelQuestionEdit() {
     const cancelEvent = new CustomEvent("canseledit");
     this.dispatchEvent(cancelEvent);
-
-    this.isEditMode = false;
     this.resetForm();
   }
 
-  editQuestion() {
-    const input = this.template.querySelector(".input");
-    if (!input.validity.valid) {
-      return;
-    } else if (
-      this.isOptionsEnabled &&
-      this.question.Question_Options__r.length < 2
-    ) {
-      this.showToastMessage(
-        this.ERROR_TITLE,
-        option_already_exists,
-        this.ERROR_VARIANT
-      );
-      return;
-    }
-
+  updateQuestion() {
+    if(!this.isQuestionCorrect()) return;
     this.getQuestionAttributes();
 
     const editEvent = new CustomEvent("edit", {
@@ -304,7 +210,6 @@ export default class QuestionForm extends LightningElement {
     this.dispatchEvent(editEvent);
 
     this.resetForm();
-    this.isEditMode = false;
   }
 
   getQuestionAttributes() {
@@ -317,19 +222,41 @@ export default class QuestionForm extends LightningElement {
     this.question.Type__c = this.selectedType;
   }
 
-  sendErrorNotification() {
-    const errorEvent = new CustomEvent("error", {});
-    this.dispatchEvent(errorEvent);
+  isQuestionCorrect() {
+    const input = this.template.querySelector(".input");
+
+    if (!input.validity.valid) {
+      return false;
+    } else if (
+      this.isOptionsEnabled &&
+      this.question.Question_Options__r.length < 2
+    ) {
+      this.showToastMessage(
+        this.ERROR_TITLE,
+        label.option_already_exists,
+        this.ERROR_VARIANT
+      );
+      return false;
+    }
+
+    return true;
   }
 
   resetForm() {
     const input = this.template.querySelector(".input");
+    clearInput(input);
     input.value = "";
     this.selectedType = this.displayedTypes
       ? this.displayedTypes[0].value
       : "Text";
     this.selectedSettings = [];
+    this.isEditMode = false;
     this.setOptionsEnabling();
+  }
+  
+  sendErrorNotification() {
+    const errorEvent = new CustomEvent("error", {});
+    this.dispatchEvent(errorEvent);
   }
 
   showToastMessage(title, message, variant) {

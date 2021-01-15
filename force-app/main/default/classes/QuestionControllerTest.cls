@@ -13,24 +13,7 @@ public with sharing class QuestionControllerTest {
   private static final String INVALID_OPTION_VALUE = 'Actual option value doesn\'t equal to expected';
 
   @IsTest
-  public static void createQuestionListTest() {
-    List<Question__c> questions = QuestionController.createQuestionList();
-    System.assertEquals(questions.size(), 0, INVALID_QUESTIONS_AMOUNT);
-
-    List<Question__c> questionsDatabase = [SELECT Id FROM Question__c];
-    System.assertEquals(questionsDatabase.size(), 0, INVALID_QUESTIONS_AMOUNT);
-  }
-
-  @IsTest
-  public static void createQuestionTest() {
-    Question__c question = QuestionController.createQuestion();
-
-    List<Question__c> questionsDatabase = [SELECT Id FROM Question__c];
-    System.assertEquals(questionsDatabase.size(), 0, INVALID_QUESTIONS_AMOUNT);
-  }
-
-  @IsTest
-  public static void getStandardQuestionsTest() {
+  static void testGetStandardQuestions() {
     Survey__c survey = new Survey__c();
     insert survey;
 
@@ -81,7 +64,7 @@ public with sharing class QuestionControllerTest {
   }
 
   @IsTest
-  public static void getTemplatesQuestions() {
+  static void testGetTemplatesQuestions() {
     Survey__c survey = new Survey__c();
     survey.Name = TEST_NAME;
     survey.IsStandard__c = true;
