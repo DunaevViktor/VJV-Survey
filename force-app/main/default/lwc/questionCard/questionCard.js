@@ -1,12 +1,10 @@
 import { LightningElement, api } from "lwc";
 
-import { icons } from "./icons.js";
 import { label } from "./labels.js";
 
 export default class QuestionCard extends LightningElement {
   @api question;
 
-  icons = icons;
   label = label;
 
   deleteQuestion() {

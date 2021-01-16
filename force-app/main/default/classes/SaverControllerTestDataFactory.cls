@@ -11,6 +11,8 @@ public with sharing class SaverControllerTestDataFactory {
   private static final String TEST_OBJECT_API_NAME = 'Contact';
   private static final String TEST_VALIDATION_OPERATOR = 'CONTAINS';
   private static final String TEST_VALUE = 'Test Value';
+  private static final String TEST_RECEIVER_TYPE = 'Email';
+  private static final String TEST_RECEIVER_VALUE = 'test@bk.ru';
 
   public static Survey__c createSurvey() {
     Survey__c survey = new Survey__c();
@@ -43,6 +45,15 @@ public with sharing class SaverControllerTestDataFactory {
       options.add(option);
     } 
     return options;
+  }
+
+  public static List<Email_Receiver__c> createEmailReceiverList(Integer amount, String surveyId) {
+    List<Email_Receiver__c> receivers = new List<Email_Receiver__c>();
+    for(Integer j = 0; j < amount; j++) {
+      Email_Receiver__c receiver = SaverControllerTestDataFactory.createEmailReceiver(surveyId);
+      receivers.add(receiver);
+    } 
+    return receivers;
   }
 
   private static Question__c createQuestion(String surveyId, Integer position) {
@@ -78,5 +89,13 @@ public with sharing class SaverControllerTestDataFactory {
     rule.Object_Api_Name__c = TEST_OBJECT_API_NAME;
     rule.Survey__c = surveyId;
     return rule;
+  }
+
+  private static Email_Receiver__c  createEmailReceiver(String surveyId) {
+    Email_Receiver__c receiver = new Email_Receiver__c();
+    receiver.Type__c = TEST_RECEIVER_TYPE;
+    receiver.Value__c = TEST_RECEIVER_VALUE;
+    receiver.Survey__c = surveyId;
+    return receiver;
   }
 }

@@ -28,4 +28,10 @@ public with sharing class SaverController {
      insert validations;
      return validations;
   }
+
+  @AuraEnabled
+  public static List<Email_Receiver__c> saveEmailReceivers(List<Email_Receiver__c> receivers) {
+     insert receivers;
+     return receivers;
+  }
 }

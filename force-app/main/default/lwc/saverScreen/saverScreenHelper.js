@@ -1,3 +1,5 @@
+import {findQuestionByPosition} from "c/formUtil";
+
 const transformRules = (rules, surveyId) => {
   return rules.map((rule) => {
     rule = JSON.parse(JSON.stringify(rule));
@@ -22,9 +24,7 @@ const transformOptions = (questions, savedQuestions) => {
      
     if(question.Question_Options__r === null || question.Question_Options__r.length === 0) continue;
 
-    const savedQuestion = savedQuestions.filter((item) => {
-      return item.Position__c === question.Position__c;
-    })[0];
+    const savedQuestion = findQuestionByPosition(savedQuestions, question.Position__c);
 
     question.Question_Options__r.forEach((option) => {
       option = JSON.parse(JSON.stringify(option));
@@ -44,13 +44,9 @@ const transformValidations = (validations, savedQuestions) => {
   validations.forEach((validation) => {
     validation = JSON.parse(JSON.stringify(validation));
 
-    const relatedQuestion = savedQuestions.filter((item) => {
-      return item.Position__c === validation.Related_Question__c.Position__c;
-    })[0];
+    const relatedQuestion = findQuestionByPosition(savedQuestions, validation.Related_Question__c.Position__c);
 
-    const dependantQuestion = savedQuestions.filter((item) => {
-      return item.Position__c === validation.Dependent_Question__c.Position__c;
-    })[0];
+    const dependantQuestion = findQuestionByPosition(savedQuestions, validation.Dependent_Question__c.Position__c);
 
     validation.Related_Question__c = relatedQuestion.Id;
     validation.Dependent_Question__c = dependantQuestion.Id;

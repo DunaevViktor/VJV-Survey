@@ -10,6 +10,7 @@ public with sharing class SaverControllerTest {
   private static final String INVALID_OPTIONS_AMOUNT = 'Actual amount of question options doesn\'t equal to expected';
   private static final String INVALID_RULES_AMOUNT = 'Actual amount of rules doesn\'t equal to expected';
   private static final String INVALID_VALIDATIONS_AMOUNT = 'Actual amount of validations doesn\'t equal to expected';
+  private static final String INVALID_RECEIVERS_AMOUNT = 'Actual amount of email receivers doesn\'t equal to expected';
 
   @IsTest  
   static void testSaveSurvey() {
@@ -119,5 +120,23 @@ public with sharing class SaverControllerTest {
 
     List<Validation__c> databaseValidations = [SELECT Id FROM Validation__c];
     System.assertEquals(TEST_AMOUNT, databaseValidations.size(), INVALID_VALIDATIONS_AMOUNT);
+  }
+
+  @IsTest
+  static void testSaveEmailReceivers() {
+    Survey__c survey = SaverControllerTestDataFactory.createSurvey();
+    insert survey;
+
+    List<Email_Receiver__c> receivers = SaverControllerTestDataFactory.createEmailReceiverList(TEST_AMOUNT, survey.Id);
+
+    List<Email_Receiver__c> savedReceivers = SaverController.saveEmailReceivers(receivers);
+
+    for(Integer i = 0; i < TEST_AMOUNT; i++) {
+      Email_Receiver__c savedReceiver = savedReceivers[i];
+      System.assertNotEquals(null, savedReceiver.Id, EXPECTED_NOT_BE_NULL);
+    }
+
+    List<Email_Receiver__c> databaseReceivers = [SELECT Id FROM Email_Receiver__c];
+    System.assertEquals(TEST_AMOUNT, databaseReceivers.size(), INVALID_RECEIVERS_AMOUNT);
   }
 }
