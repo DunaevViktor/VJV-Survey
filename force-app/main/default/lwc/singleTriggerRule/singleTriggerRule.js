@@ -244,9 +244,13 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   isTriggerRuleClear(triggerRule) {
-    if(triggerRule.Object_Api_Name__c === "" && triggerRule.Field_Name__c === "" && triggerRule.Operator__c === "" && triggerRule.Field_Value__c === "") {
-      return true;
+    let isClear = true;
+    for(let field in triggerRule) { 
+      if(triggerRule[field] !== "") {
+        isClear = false;
+        break;
+      }
     }
-    return false;
+    return isClear;
   }
 }
