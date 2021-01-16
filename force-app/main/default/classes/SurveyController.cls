@@ -1,10 +1,10 @@
 public with sharing class SurveyController {
-  @AuraEnabled(cacheable=false)
+  @AuraEnabled(cacheable=true)
   public static List<Survey__c> getAllSurveys() {
     return [
       SELECT Id, Name 
       FROM Survey__c
-      WITH SECURITY_ENFORCED
+      //WITH SECURITY_ENFORCED
     ];
   }
 

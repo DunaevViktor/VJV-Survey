@@ -8,6 +8,13 @@
         <value>Add</value>
     </labels>
     <labels>
+        <fullName>add_new_receiver</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>add new receiver</shortDescription>
+        <value>Add new receiver</value>
+    </labels>
+    <labels>
         <fullName>add_option</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -43,6 +50,13 @@
         <value>Compared Value</value>
     </labels>
     <labels>
+        <fullName>connect_to_another_survey</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>connect to another survey</shortDescription>
+        <value>Connect to another Survey</value>
+    </labels>
+    <labels>
         <fullName>create_question_form_title</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -54,6 +68,13 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>delete</shortDescription>
+        <value>Delete</value>
+    </labels>
+    <labels>
+        <fullName>delete_button</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>delete button</shortDescription>
         <value>Delete</value>
     </labels>
     <labels>
@@ -92,6 +113,13 @@
         <value>Edit question form</value>
     </labels>
     <labels>
+        <fullName>email</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>email</shortDescription>
+        <value>Email</value>
+    </labels>
+    <labels>
         <fullName>enter_compared_value</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -120,6 +148,34 @@
         <value>Error occured this page during to work</value>
     </labels>
     <labels>
+        <fullName>error_already_added_this_email</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error already added this email</shortDescription>
+        <value>You&apos; ve already added this email!</value>
+    </labels>
+    <labels>
+        <fullName>error_already_added_this_group</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error already added this group</shortDescription>
+        <value>You&apos;ve already added this group!</value>
+    </labels>
+    <labels>
+        <fullName>error_choose_some_group</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error choose some group</shortDescription>
+        <value>Choose some group to add!</value>
+    </labels>
+    <labels>
+        <fullName>error_email_pattern_mismatch</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error email pattern mismatch</shortDescription>
+        <value>Email pattern mismatch!</value>
+    </labels>
+    <labels>
         <fullName>error_few_options</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -139,6 +195,20 @@
         <protected>true</protected>
         <shortDescription>Field</shortDescription>
         <value>Field</value>
+    </labels>
+    <labels>
+        <fullName>group_name</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>group name</shortDescription>
+        <value>Group Name</value>
+    </labels>
+    <labels>
+        <fullName>group_name_or_email</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>group name or email</shortDescription>
+        <value>Group Name or Email</value>
     </labels>
     <labels>
         <fullName>is_required</fullName>
@@ -344,11 +414,25 @@
         <value>Specify question</value>
     </labels>
     <labels>
+        <fullName>standard_survey</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>standard survey</shortDescription>
+        <value>Standard survey</value>
+    </labels>
+    <labels>
         <fullName>success</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>success</shortDescription>
         <value>Success</value>
+    </labels>
+    <labels>
+        <fullName>surveys</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>surveys</shortDescription>
+        <value>Surveys</value>
     </labels>
     <labels>
         <fullName>text</fullName>
@@ -391,6 +475,13 @@
         <protected>true</protected>
         <shortDescription>up</shortDescription>
         <value>Up</value>
+    </labels>
+    <labels>
+        <fullName>user_groups</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>user groups</shortDescription>
+        <value>Public User Groups</value>
     </labels>
     <labels>
         <fullName>value</fullName>

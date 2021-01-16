@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="data-table">
     <lightning-datatable
       key-field="id"
       data={data}
@@ -9,21 +9,23 @@
     </lightning-datatable>
   </div>
 
+  <div class="slds-text-heading_medium">{label.add_new_receiver}</div>
   <lightning-radio-group
     name="newReceiver"
-    label="Add new receiver"
+    variant="label-hidden"
     options={newReceiverOptions}
     value="email"
     onchange={handleIsNewReceiverChange}
     type="radio"
   >
   </lightning-radio-group>
+
   <template if:true={isEmailReceiver}>
     <div class="slds-m-vertical_medium">
       <lightning-input
         type="text"
         id="email"
-        label="Email"
+        label={label.email}
         placeholder="username@example.com"
         required
       >
@@ -35,7 +37,7 @@
     <div class="slds-m-vertical_medium">
       <lightning-combobox
         name="userGroups"
-        label="User Groups"
+        label={label.user_groups}
         value=""
         placeholder="Select User Group"
         options={groupOptions}
@@ -45,32 +47,34 @@
     </div>
   </template>
 
-  <lightning-button
-    variant="brand"
-    label="Add"
-    onclick={handleAddClick}
-    class="slds-m-left_x-small"
-  >
-  </lightning-button>
+  <div class="button">
+    <lightning-button
+      variant="brand"
+      label={label.add}
+      onclick={handleAddClick}
+      class="slds-m-left_x-small"
+    >
+    </lightning-button>
+  </div>
 
   <lightning-input
     type="checkbox"
-    label="Build diagrams"
-    onchange={handleIsCreateDiagramsChange}
+    label={label.standard_survey}
+    onchange={handleIsStandardSurveyChange}
   >
   </lightning-input>
 
   <template if:true={surveys}>
     <lightning-input
       type="checkbox"
-      label="Connect to another survey"
+      label={label.connect_to_another_survey}
       onchange={handleConnectToAnotherSurveyChange}
     >
     </lightning-input>
     <template if:true={isConnectToSurvey}>
       <lightning-combobox
         name="surveys"
-        label="Surveys"
+        label={label.surveys}
         value=""
         placeholder="Select survey for connect"
         options={surveyOptions}

@@ -1,53 +1,55 @@
-//TODO: aura to lwc
-//TODO: naming
-//TODO: tests
-//TODO: add styles for button
-//TODO: add labels
 //TODO: format code with prettier
-//TODO: add constants to code
+//TODO: pass settings to flow (pass array of receivers, isStandard, connectToSurvey)
 
-import { LightningElement, track, wire } from "lwc";
+import { LightningElement, track, wire, api } from "lwc";
 import getGroups from "@salesforce/apex/GroupController.getGroups";
-import getSurveys from "@salesforce/apex/SurveyController.getSurveys";
+import getSurveys from "@salesforce/apex/SurveyController.getAllSurveys";
+import {label} from "./labels";
 
 const columns = [
-  { label: "Type", fieldName: "type", type: "text" },
-  { label: "Group Name or Email", fieldName: "nameOrEmail", type: "text" },
+  { label: label.type, fieldName: "type", type: "text" },
+  { label: label.group_name_or_email, fieldName: "nameOrEmail", type: "text" },
   {
     type: "button",
     initialWidth: 100,
     typeAttributes: {
-      label: "Delete",
+      label: label.delete_button,
       name: "delete"
     }
   }
 ];
 
-export default class SurveyDistributionScreenBody extends LightningElement {
+export default class AdvanceSettingScreen extends LightningElement {
+
+  label = label;
   groupId = "";
-  surveyId = "";
+  @api surveyId = "";
   columns = columns;
-  isCreateDiagrams = false;
+  @api isStandardSurvey = false;
+  @api shit = {
+    name: "shit",
+  };
   @track data = [];
   @track isEmailReceiver = true;
   @track isConnectToSurvey = false;
-  @track receiverType = "email";
   @track surveys;
   @wire(getGroups, {})
   groups;
   @wire(getSurveys, {})
   wiredSurveys({ error, data }) {
     if (data) {
-      this.surveys;
+      console.log("shit1");
+      this.surveys = data;
     } else {
+      console.log("shit2");
       this.surveys = undefined;
     }
   }
 
   get newReceiverOptions() {
     return [
-      { label: "Email", value: "email" },
-      { label: "Group Name", value: "groupName" }
+      { label: label.email, value: "email" },
+      { label: label.group_name, value: "groupName" }
     ];
   }
 
@@ -81,21 +83,19 @@ export default class SurveyDistributionScreenBody extends LightningElement {
     return ret;
   }
 
-  handleIsCreateDiagramsChange(event) {
-    this.isCreateDiagrams = event.target.checked;
+  handleIsStandardSurveyChange(event) {
+    this.isStandardSurvey = event.target.checked;
   }
 
   handleIsNewReceiverChange(event) {
     const selectedReceiver = event.detail.value;
     switch (selectedReceiver) {
       case "email":
-        this.receiverType = "email";
         this.isEmailReceiver = true;
         break;
 
       case "groupName":
         this.groupId = "";
-        this.receiverType = "group";
         this.isEmailReceiver = false;
         break;
     }
@@ -111,24 +111,24 @@ export default class SurveyDistributionScreenBody extends LightningElement {
     this.groupId = event.detail.value;
   }
 
-  handleAddEmailReceiver(inputForm, receiver) {
+  handleAddEmailReceiver(receiver) {
+    let inputForm = this.template.querySelector("lightning-input");
     let inputStr = inputForm.value.match(/\w+@\w+\.\w+/);
     if (inputStr === null) {
-      inputForm.setCustomValidity("Email pattern mismatch!");
+      inputForm.setCustomValidity(label.error_email_pattern_mismatch);
       inputForm.reportValidity();
       return;
     }
     receiver.type = "Email";
     receiver.nameOrEmail = inputForm.value;
     let validityMessage = "";
-    console.log("shit");
     if (
       this.data.find((tempReceiver, index) => {
         if (receiver.nameOrEmail.localeCompare(tempReceiver.nameOrEmail) === 0)
           return true;
       })
     ) {
-      validityMessage = "You've alredy added this email";
+      validityMessage = label.error_alredy_added_this_email;
     } else {
       this.data = [...this.data, receiver];
     }
@@ -136,13 +136,13 @@ export default class SurveyDistributionScreenBody extends LightningElement {
     inputForm.reportValidity();
   }
 
-  handleAddGroupReceiver(combobox, receiver) {
+  handleAddGroupReceiver(receiver) {
+    let combobox = this.template.querySelector("lightning-combobox");
     if (this.groupId.localeCompare("") === 0) {
-      combobox.setCustomValidity("Choose some group!");
+      combobox.setCustomValidity(label.error_choose_some_group);
       combobox.reportValidity();
       return;
     }
-    console.log("shit2");
     receiver.type = "Group";
     receiver.nameOrEmail = this.groups.data.find((group, index) => {
       if (this.groupId == group.Id) return true;
@@ -155,7 +155,7 @@ export default class SurveyDistributionScreenBody extends LightningElement {
           return true;
       })
     ) {
-      validityMessage = "You've alredy added this group";
+      validityMessage = label.error_alredy_added_this_group;
     } else {
       this.data = [...this.data, receiver];
     }
@@ -169,20 +169,10 @@ export default class SurveyDistributionScreenBody extends LightningElement {
       nameOrEmail: ""
     };
 
-    switch (this.receiverType) {
-      case "email":
-        {
-          let inputForm = this.template.querySelector("lightning-input");
-          this.handleAddEmailReceiver(inputForm, receiver);
-        }
-        break;
-      case "group":
-        {
-          let combobox = this.template.querySelector("lightning-combobox");
-          console.log("shit1");
-          this.handleAddGroupReceiver(combobox, receiver);
-        }
-        break;
+    if(this.isEmailReceiver) {
+      this.handleAddEmailReceiver(receiver);
+    }else{
+      this.handleAddGroupReceiver(receiver);
     }
   }
 

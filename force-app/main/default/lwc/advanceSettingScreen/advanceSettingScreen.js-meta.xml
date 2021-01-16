@@ -2,7 +2,16 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>50.0</apiVersion>
     <isExposed>true</isExposed>
+    <masterLabel>Advance Settings Screen</masterLabel>
+    <description>This is a simple todos component</description>
     <targets>
         <target>lightning__FlowScreen</target>
     </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="isStandardSurvey" type="Boolean" label="Is Standard Survey" description="Is survey is standard or not"/>
+            <property name="surveyId" type="String" label="Survey Id" description="Stores survey id, which should be connected to new survey"/>
+            <property name="surveyReceivers" type="@salesforce/schema/Email_Receiver__c[]" label="Survey Receivers"/>
+        </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>

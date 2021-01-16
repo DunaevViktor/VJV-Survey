@@ -1,3 +1,0 @@
-<aura:component access="global" implements="lightning:availableForFlowScreens">
-    <c:surveyDistributionScreenBody></c:surveyDistributionScreenBody>
-</aura:component>	
