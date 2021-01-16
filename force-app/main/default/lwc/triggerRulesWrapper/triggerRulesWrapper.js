@@ -101,7 +101,7 @@ export default class TriggerRulesWrapper extends LightningElement {
   isFilledCompletely(obj) {
     let filledCompletely = true;
     for(let field in obj) { 
-      if(obj[field] === "" || !obj[field]) {
+      if(!obj[field] || obj[field] === "") {
         filledCompletely = false;
         break;
       }
