@@ -121,12 +121,7 @@ export default class TriggerRulesWrapper extends LightningElement {
   }
 
   showToast(title, message, variant) {
-    const event = new ShowToastEvent({
-      title: title,
-      message: message,
-      variant: variant,
-      mode: "dismissable",
-    });
+    const event = new ShowToastEvent({title, message, variant, mode: "dismissable"});
     this.dispatchEvent(event);
   }
 
