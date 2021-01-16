@@ -3,7 +3,7 @@
     <div class="slds-text-align_center">
       <c-saver-spinner></c-saver-spinner>
       <br/>
-      We are saving your configurations
+      {label.saving_your_configurations}
     </div>
   </template>
   
@@ -14,16 +14,16 @@
         <span class="slds-icon_container slds-icon-utility-announcement" >
           <template if:true={step.isDone}>
             <lightning-icon icon-name="utility:check" 
-                            alternative-text="Done" 
-                            title="Done"
+                            alternative-text={label.done} 
+                            title={label.done} 
                             variant="success">
             </lightning-icon>
           </template>
     
           <template if:false={step.isDone}>
             <lightning-icon icon-name="utility:threedots" 
-                        alternative-text="In progress" 
-                        title="In progress" 
+                        alternative-text={label.in_progress}
+                        title={label.in_progress} 
                         variant="error">
             </lightning-icon>
           </template>
@@ -36,7 +36,7 @@
 
   <template if:true={isComplete}>
     <div class="slds-text-align_center slds-m-around_medium">
-      Survey created successfully!
+      {label.survey_created_successfully}
     </div>
   </template>
 </template>

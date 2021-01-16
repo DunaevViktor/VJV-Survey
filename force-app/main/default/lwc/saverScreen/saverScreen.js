@@ -1,5 +1,5 @@
 import { LightningElement, api, track } from 'lwc';
-import { stepsOfSave } from './constants';
+import { stepsOfSave } from './constants.js';
 
 import saveSurvey from "@salesforce/apex/SaverController.saveSurvey";
 import saveTriggerRules from "@salesforce/apex/SaverController.saveTriggerRules";
@@ -13,7 +13,11 @@ import { transformRules,
          transformValidations
 } from './saverScreenHelper';
 
+import {label} from "./labels.js";
+
 export default class SaverScreen extends LightningElement {
+
+  label = label;
 
   @api survey;
   @api triggerRules;
