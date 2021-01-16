@@ -36,6 +36,13 @@
         <value>Cancel edit</value>
     </labels>
     <labels>
+        <fullName>clear_trigger_rules_fields</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Clear trigger rule&apos;s fields</shortDescription>
+        <value>Clear trigger rule&apos;s fields</value>
+    </labels>
+    <labels>
         <fullName>compared_value</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -153,6 +160,13 @@
         <protected>true</protected>
         <shortDescription>Field</shortDescription>
         <value>Field</value>
+    </labels>
+    <labels>
+        <fullName>fill_trigger_rules</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Clear(delete) or full trigger rules completely</shortDescription>
+        <value>Full incomplete trigger rules or clear(delete) them completely</value>
     </labels>
     <labels>
         <fullName>image_loading</fullName>
