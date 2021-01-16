@@ -37,6 +37,7 @@
         <name>CustomObject</name>
     </types>
     <types>
+        <members>Survey_Report_Dashboard_Permission_Set</members>
         <members>Survey_Permission_Set</members>
         <name>PermissionSet</name>
     </types>
@@ -76,6 +77,18 @@
         <members>SurveyTemplates</members>
         <members>SurveyTemplates/Main_Template</members>
         <name>EmailTemplate</name>
+    </types>
+    <types>
+        <members>Survey_Analysis_Team</members>
+        <name>Role</name>
+    </types>
+    <types>
+        <members>SurveyReport</members>
+        <name>Report</name>
+    </types>
+    <types>
+        <members>SurveyDashboard</members>
+        <name>Dashboard</name>
     </types>
     <version>50.0</version>
 </Package>
