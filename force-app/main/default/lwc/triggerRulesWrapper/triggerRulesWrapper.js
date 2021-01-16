@@ -1,4 +1,5 @@
 import { LightningElement, track, api } from "lwc";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 import { importedLabels } from "./labels"
 
@@ -53,18 +54,26 @@ export default class TriggerRulesWrapper extends LightningElement {
 
   handleNavigateNext() {    
     this._rules = this.getNewTriggerRules();
-    const navigateNextEvent = new CustomEvent("navigatenext", {
-      detail: { triggerRules: [...this._rules] },
-    });
-    this.dispatchEvent(navigateNextEvent);    
+    if(!this.areTriggerRulesFilledCompletely(this._rules)) {
+      this.showToast("", this.labels.fill_trigger_rules, "error");
+    } else {
+      const navigateNextEvent = new CustomEvent("navigatenext", {
+        detail: { triggerRules: [...this._rules] },
+      });
+      this.dispatchEvent(navigateNextEvent);    
+    }    
   }
 
   handleNavigatePrev() {
     this._rules = this.getNewTriggerRules();
-    const navigatePrevEvent = new CustomEvent("navigateback", {
-      detail: { triggerRules: [...this._rules] },
-    });
-    this.dispatchEvent(navigatePrevEvent);
+    if(!this.areTriggerRulesFilledCompletely(this._rules)) {
+      this.showToast("", this.labels.fill_trigger_rules, "error");
+    } else {
+      const navigatePrevEvent = new CustomEvent("navigateback", {
+        detail: { triggerRules: [...this._rules] },
+      });
+      this.dispatchEvent(navigatePrevEvent);
+    }    
   }
 
   getNewTriggerRules() {
@@ -88,4 +97,37 @@ export default class TriggerRulesWrapper extends LightningElement {
   isEmpty(obj) {
     return Object.keys(obj).length === 0;
   }
+
+  isFilledCompletely(obj) {
+    let filledCompletely = true;
+    for(let field in obj) { 
+      if(obj[field] === "") {
+        filledCompletely = false;
+        break;
+      }
+    }
+    return filledCompletely;
+  }
+
+  areTriggerRulesFilledCompletely(triggerRules) {
+    let completelyFilled = true;
+    for (let i = 0; i < triggerRules.length; i++) {
+      if(!this.isFilledCompletely(triggerRules[i])) {
+        completelyFilled = false;
+        break;
+      }
+    }
+    return completelyFilled;
+  }
+
+  showToast(title, message, variant) {
+    const event = new ShowToastEvent({
+      title: title,
+      message: message,
+      variant: variant,
+      mode: "dismissable",
+    });
+    this.dispatchEvent(event);
+  }
+
 }

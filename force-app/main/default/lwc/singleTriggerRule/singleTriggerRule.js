@@ -201,7 +201,7 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   handleClearRuleClick() {
-    
+    this.clearChosenData();
   }
 
   handleDeleteRuleClick() {
@@ -238,7 +238,17 @@ export default class SingleTriggerRule extends LightningElement {
       Field_Name__c: this.fieldValue,
       Operator__c: this.operatorValue,
       Field_Value__c: this.value,
-    };  
+    };
+    if(this.isTriggerRuleClear(triggerRule)) {
+      return {};
+    }  
     return triggerRule;
+  }
+
+  isTriggerRuleClear(triggerRule) {
+    if(triggerRule.Object_Api_Name__c === "" && triggerRule.Field_Name__c === "" && triggerRule.Operator__c === "" && triggerRule.Field_Value__c === "") {
+      return true;
+    }
+    return false;
   }
 }
