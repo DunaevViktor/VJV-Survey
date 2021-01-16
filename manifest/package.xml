@@ -84,11 +84,21 @@
     </types>
     <types>
         <members>SurveyReport</members>
+        <members>SurveyReport/Surveys_Report</members>
+        <members>SurveyReport/Surveys_with_QA_Report</members>
+        <members>SurveyReport/Surveys_with_Email_Receivers_Report</members>
         <name>Report</name>
     </types>
     <types>
         <members>SurveyDashboard</members>
+        <members>SurveyDashboard/MainDashboard</members>
         <name>Dashboard</name>
+    </types>
+    <types>
+        <members>Surveys</members>
+        <members>Surveys_with_Email_Receivers</members>
+        <members>Surveys_with_Questions_with_Answers</members>
+        <name>ReportType</name>
     </types>
     <version>50.0</version>
 </Package>
