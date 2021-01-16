@@ -41,7 +41,7 @@
 
       <!--Value-->
       <div class="slds-grid slds-col slds-grid_align-spread slds-size_1-of-4 slds-grid_vertical-align-end slds-p-around_x-small">
-        <div class="slds-col slds-size_4-of-6 slds-m-right_xx-small">
+        <div class="slds-col slds-size_4-of-6 slds-m-right_x-large">
         
         <lightning-input
           if:true={field.isInput}
@@ -85,11 +85,11 @@
           class="slds-icon_container slds-icon-utility-announcement"
           title={labels.clearTitle}
         >
-          <img
-            class="slds-icon slds-icon-text-default slds-icon_x-small"
-            src={clearIcon}
+          <lightning-icon
+            icon-name={clearIconName}
+            size="x-Small"
             onclick={handleClearRuleClick}
-          />
+          ></lightning-icon>
         </span>  
       </div>
       <!--Delete button-->
@@ -99,16 +99,15 @@
             class="slds-icon_container slds-icon-utility-announcement"
             title={labels.deleteTitle}
           >
-            <img
-              class="slds-icon slds-icon-text-default slds-icon_x-small"
-              src={deleteIcon}
+            <lightning-icon
+              icon-name={deleteIconName}
+              size="x-Small"
               onclick={handleDeleteRuleClick}
-            />
+            ></lightning-icon>
           </span>          
         </template>
       </div>
     </div>
-
       
     </div>
   </template>

@@ -5,9 +5,6 @@ import TRIGGER_RULE_OBJECT from '@salesforce/schema/Trigger_Rule__c';
 import OBJECT_API_NAME_FIELD from '@salesforce/schema/Trigger_Rule__c.Object_Api_Name__c';
 import OPERATOR_FIELD from '@salesforce/schema/Trigger_Rule__c.Operator__c';
 
-import DELETE_ICON from "@salesforce/resourceUrl/DeleteIcon";
-import CLEAR_ICON from "@salesforce/resourceUrl/ClearIcon";
-
 import {
   getFieldAttributes,
   generateBooleanField,
@@ -33,8 +30,9 @@ export default class SingleTriggerRule extends LightningElement {
   operatorFieldName = OPERATOR_FIELD.fieldApiName;
 
   initialRender = true;
-  deleteIcon = DELETE_ICON;
-  clearIcon = CLEAR_ICON;
+  
+  clearIconName = "utility:clear";
+  deleteIconName = "utility:delete";
 
   @track objectValue = "";
   @track fieldType = "";
