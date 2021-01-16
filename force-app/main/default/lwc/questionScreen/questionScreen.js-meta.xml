@@ -14,5 +14,4 @@
             <property name="questions" type="@salesforce/schema/Question__c[]" label="Questions"/>
         </targetConfig>
     </targetConfigs>
-
 </LightningComponentBundle>
