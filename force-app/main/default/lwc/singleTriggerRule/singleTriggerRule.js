@@ -246,7 +246,7 @@ export default class SingleTriggerRule extends LightningElement {
   isTriggerRuleClear(triggerRule) {
     let isClear = true;
     for(let field in triggerRule) { 
-      if(triggerRule[field] !== "") {
+      if(triggerRule[field] !== "" || !triggerRule[field]) {
         isClear = false;
         break;
       }
