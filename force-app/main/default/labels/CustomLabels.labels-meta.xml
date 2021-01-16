@@ -36,6 +36,13 @@
         <value>Cancel edit</value>
     </labels>
     <labels>
+        <fullName>clear_trigger_rules_fields</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Clear trigger rule&apos;s fields</shortDescription>
+        <value>Clear this trigger rule&apos;s fields</value>
+    </labels>
+    <labels>
         <fullName>compared_value</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -76,13 +83,6 @@
         <protected>true</protected>
         <shortDescription>down</shortDescription>
         <value>Down</value>
-    </labels>
-    <labels>
-        <fullName>drag_n_drop_logo</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>drag-n-drop-logo</shortDescription>
-        <value>Drag&apos;n&apos;drop your logo image</value>
     </labels>
     <labels>
         <fullName>edit</fullName>
@@ -134,13 +134,6 @@
         <value>The number of options must be at least two</value>
     </labels>
     <labels>
-        <fullName>failed_image_upload</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>failed image upload</shortDescription>
-        <value>Error occured while uploading image</value>
-    </labels>
-    <labels>
         <fullName>false</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -153,13 +146,6 @@
         <protected>true</protected>
         <shortDescription>Field</shortDescription>
         <value>Field</value>
-    </labels>
-    <labels>
-        <fullName>image_loading</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>image loading</shortDescription>
-        <value>Loading</value>
     </labels>
     <labels>
         <fullName>is_required</fullName>
@@ -181,13 +167,6 @@
         <protected>true</protected>
         <shortDescription>limit question sexceeded</shortDescription>
         <value>Limit of questions is exceeded</value>
-    </labels>
-    <labels>
-        <fullName>logo_image</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>logo image</shortDescription>
-        <value>Logo image</value>
     </labels>
     <labels>
         <fullName>next</fullName>
@@ -309,13 +288,6 @@
         <value>Question Setting</value>
     </labels>
     <labels>
-        <fullName>remove_image</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>remove image</shortDescription>
-        <value>Remove image</value>
-    </labels>
-    <labels>
         <fullName>remove_selected_option</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -384,20 +356,6 @@
         <protected>true</protected>
         <shortDescription>success</shortDescription>
         <value>Success</value>
-    </labels>
-    <labels>
-        <fullName>survey_bg_color</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>survey bg color</shortDescription>
-        <value>Survey Background Color</value>
-    </labels>
-    <labels>
-        <fullName>survey_name</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>survey name</shortDescription>
-        <value>Survey Name</value>
     </labels>
     <labels>
         <fullName>text</fullName>

@@ -6,6 +6,7 @@ import OBJECT_API_NAME_FIELD from '@salesforce/schema/Trigger_Rule__c.Object_Api
 import OPERATOR_FIELD from '@salesforce/schema/Trigger_Rule__c.Operator__c';
 
 import DELETE_ICON from "@salesforce/resourceUrl/DeleteIcon";
+import CLEAR_ICON from "@salesforce/resourceUrl/ClearIcon";
 
 import {
   getFieldAttributes,
@@ -33,6 +34,7 @@ export default class SingleTriggerRule extends LightningElement {
 
   initialRender = true;
   deleteIcon = DELETE_ICON;
+  clearIcon = CLEAR_ICON;
 
   @track objectValue = "";
   @track fieldType = "";
@@ -196,6 +198,10 @@ export default class SingleTriggerRule extends LightningElement {
       );
       this.provideValueInput(selectedFieldObject);
     }
+  }
+
+  handleClearRuleClick() {
+    
   }
 
   handleDeleteRuleClick() {
