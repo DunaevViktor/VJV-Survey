@@ -9,9 +9,8 @@
     </targets>
     <targetConfigs>
         <targetConfig targets="lightning__FlowScreen">
-            <property name="isStandardSurvey" type="Boolean" label="Is Standard Survey" description="Is survey is standard or not"/>
-            <property name="surveyId" type="String" label="Survey Id" description="Stores survey id, which should be connected to new survey"/>
-            <property name="surveyReceivers" type="@salesforce/schema/Email_Receiver__c[]" label="Survey Receivers"/>
+            <property name="survey" type="@salesforce/schema/Survey__c" label="Survey Object" description="New survey"/>
+            <property name="surveyReceivers" type="@salesforce/schema/Email_Receiver__c[]" label="Survey Receivers" description="Array of survey receivers (by groups and/or email)"/>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

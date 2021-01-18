@@ -4,7 +4,7 @@ public with sharing class SurveyController {
     return [
       SELECT Id, Name 
       FROM Survey__c
-      //WITH SECURITY_ENFORCED
+      WITH SECURITY_ENFORCED
     ];
   }
 

@@ -32,6 +32,4 @@ const label = {
   surveys
 };
 
-export {
-  label
-};
+export { label };

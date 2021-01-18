@@ -1,14 +1,14 @@
-//TODO: format code with prettier
-//TODO: pass settings to flow (pass array of receivers, isStandard, connectToSurvey)
+//TODO: add showToastEvents
+//TODO: add survey initialization
 
 import { LightningElement, track, wire, api } from "lwc";
 import getGroups from "@salesforce/apex/GroupController.getGroups";
 import getSurveys from "@salesforce/apex/SurveyController.getAllSurveys";
-import {label} from "./labels";
+import { label } from "./labels.js";
 
 const columns = [
-  { label: label.type, fieldName: "type", type: "text" },
-  { label: label.group_name_or_email, fieldName: "nameOrEmail", type: "text" },
+  { label: label.type, fieldName: "Type__c", type: "text" },
+  { label: label.group_name_or_email, fieldName: "Value__c", type: "text" },
   {
     type: "button",
     initialWidth: 100,
@@ -20,30 +20,48 @@ const columns = [
 ];
 
 export default class AdvanceSettingScreen extends LightningElement {
-
   label = label;
-  groupId = "";
-  @api surveyId = "";
   columns = columns;
-  @api isStandardSurvey = false;
-  @api shit = {
-    name: "shit",
-  };
+  groupId = "";
+
   @track data = [];
   @track isEmailReceiver = true;
-  @track isConnectToSurvey = false;
+  @track isConnectToSurvey;
   @track surveys;
+
   @wire(getGroups, {})
   groups;
+
   @wire(getSurveys, {})
   wiredSurveys({ error, data }) {
     if (data) {
-      console.log("shit1");
       this.surveys = data;
     } else {
-      console.log("shit2");
       this.surveys = undefined;
     }
+  }
+
+  __survey = {};
+
+  get surveyReceivers() {
+    return this.data;
+  }
+
+  get survey() {
+    return this.__survey;
+  }
+
+  @api set survey(value) {
+    this.__survey = JSON.parse(JSON.stringify(value));
+    if (this.__survey.Related_To__c.localeCompare("") != 0) {
+      this.isConnectToSurvey = true;
+    } else {
+      this.isConnectToSurvey = false;
+    }
+  }
+
+  @api set surveyReceivers(value) {
+    this.data = JSON.parse(JSON.stringify(value));
   }
 
   get newReceiverOptions() {
@@ -84,7 +102,7 @@ export default class AdvanceSettingScreen extends LightningElement {
   }
 
   handleIsStandardSurveyChange(event) {
-    this.isStandardSurvey = event.target.checked;
+    this.__survey.IsStandard__c = event.target.checked;
   }
 
   handleIsNewReceiverChange(event) {
@@ -119,17 +137,18 @@ export default class AdvanceSettingScreen extends LightningElement {
       inputForm.reportValidity();
       return;
     }
-    receiver.type = "Email";
-    receiver.nameOrEmail = inputForm.value;
+    receiver.Type__c = "Email";
+    receiver.Value__c = inputForm.value;
     let validityMessage = "";
     if (
       this.data.find((tempReceiver, index) => {
-        if (receiver.nameOrEmail.localeCompare(tempReceiver.nameOrEmail) === 0)
+        if (receiver.Value__c.localeCompare(tempReceiver.Value__c) === 0)
           return true;
       })
     ) {
       validityMessage = label.error_alredy_added_this_email;
     } else {
+      console.log(JSON.stringify(receiver));
       this.data = [...this.data, receiver];
     }
     inputForm.setCustomValidity(validityMessage);
@@ -143,20 +162,21 @@ export default class AdvanceSettingScreen extends LightningElement {
       combobox.reportValidity();
       return;
     }
-    receiver.type = "Group";
-    receiver.nameOrEmail = this.groups.data.find((group, index) => {
+    receiver.Type__c = "Group";
+    receiver.Value__c = this.groups.data.find((group, index) => {
       if (this.groupId == group.Id) return true;
     }).Name;
 
     let validityMessage = "";
     if (
       this.data.find((tempReceiver, index) => {
-        if (receiver.nameOrEmail.localeCompare(tempReceiver.nameOrEmail) === 0)
+        if (receiver.Value__c.localeCompare(tempReceiver.Value__c) === 0)
           return true;
       })
     ) {
       validityMessage = label.error_alredy_added_this_group;
     } else {
+      console.log(JSON.stringify(receiver));
       this.data = [...this.data, receiver];
     }
     combobox.setCustomValidity(validityMessage);
@@ -164,14 +184,10 @@ export default class AdvanceSettingScreen extends LightningElement {
   }
 
   handleAddClick() {
-    const receiver = {
-      type: "",
-      nameOrEmail: ""
-    };
-
-    if(this.isEmailReceiver) {
+    const receiver = {};
+    if (this.isEmailReceiver) {
       this.handleAddEmailReceiver(receiver);
-    }else{
+    } else {
       this.handleAddGroupReceiver(receiver);
     }
   }
@@ -183,7 +199,7 @@ export default class AdvanceSettingScreen extends LightningElement {
   }
 
   handleSurveyChange(event) {
-    this.surveyId = event.detail.value;
+    this.__survey.Related_To__c = event.detail.value;
   }
 
   handleConnectToAnotherSurveyChange(event) {

@@ -60,6 +60,7 @@
   <lightning-input
     type="checkbox"
     label={label.standard_survey}
+    checked={__survey.IsStandard__c}
     onchange={handleIsStandardSurveyChange}
   >
   </lightning-input>
@@ -68,6 +69,7 @@
     <lightning-input
       type="checkbox"
       label={label.connect_to_another_survey}
+      checked={iscConnectToSurvey}
       onchange={handleConnectToAnotherSurveyChange}
     >
     </lightning-input>
