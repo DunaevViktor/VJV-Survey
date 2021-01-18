@@ -41,7 +41,7 @@
 
       <!--Value-->
       <div class="slds-grid slds-col slds-grid_align-spread slds-size_1-of-4 slds-grid_vertical-align-end slds-p-around_x-small">
-        <div class="slds-col slds-size_4-of-6">
+        <div class="slds-col slds-size_4-of-6 slds-m-right_x-large">
         
         <lightning-input
           if:true={field.isInput}
@@ -79,23 +79,29 @@
           selected-value={field.name}
         ></c-custom-lookup>
       </div>
-        <!--Delete button-->
+      <!--Clear button-->
+      <div class="slds-col slds-size_1-of-6 slds-align-bottom slds-p-bottom_x-small">
+        <lightning-icon
+          icon-name={clearIconName}
+          size="x-small"
+          alternative-text={labels.clearTitle}
+          title={labels.clearTitle}
+          onclick={handleClearRuleClick}
+        ></lightning-icon>
+      </div>
+      <!--Delete button-->
       <div class="slds-col slds-size_1-of-6 slds-align-bottom slds-p-bottom_x-small">
         <template if:true={isDeleteAvailable}>
-          <span
-            class="slds-icon_container slds-icon-utility-announcement"
+          <lightning-icon
+            icon-name={deleteIconName}
+            size="x-small"
+            alternative-text={labels.deleteTitle}
             title={labels.deleteTitle}
-          >
-            <img
-              class="slds-icon slds-icon-text-default slds-icon_x-small"
-            src={deleteIcon}
             onclick={handleDeleteRuleClick}
-            />
-          </span>          
+          ></lightning-icon>     
         </template>
       </div>
     </div>
-
       
     </div>
   </template>

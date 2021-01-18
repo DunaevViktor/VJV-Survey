@@ -20,10 +20,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>Condition__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Required</behavior>
                 <field>Dependent_Question__c</field>
             </layoutItems>
             <layoutItems>

@@ -3,7 +3,6 @@
     <fullName>All</fullName>
     <columns>NAME</columns>
     <columns>Question__c</columns>
-    <columns>Body__c</columns>
     <columns>Value__c</columns>
     <columns>Group_Answer__c</columns>
     <filterScope>Everything</filterScope>
