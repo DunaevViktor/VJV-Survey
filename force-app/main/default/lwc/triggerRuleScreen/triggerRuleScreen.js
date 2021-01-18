@@ -6,7 +6,7 @@ export default class TriggerRuleScreen extends LightningElement {
     @track _triggerRules = [];
     
     get triggerRules() {
-        return this._triggerRules;
+        return JSON.parse(JSON.stringify(this._triggerRules));
     }
 
     @api
@@ -15,13 +15,15 @@ export default class TriggerRuleScreen extends LightningElement {
     }
 
     handleNavigateNext(event) {
-        this._triggerRules = event.detail.triggerRules;        
+        this._triggerRules = event.detail.triggerRules;
+        this.fireAttributeChangeEvent();        
         const nextNavigationEvent = new FlowNavigationNextEvent();
         this.dispatchEvent(nextNavigationEvent);
     }
 
     handleNavigatePrev(event) {
         this._triggerRules = event.detail.triggerRules;
+        this.fireAttributeChangeEvent();        
         const backNavigationEvent = new FlowNavigationBackEvent();
         this.dispatchEvent(backNavigationEvent);
     }
