@@ -49,17 +49,13 @@ export default class SaverScreen extends LightningElement {
 
         this.increaseProgress();
 
-        const rules = JSON.parse(JSON.stringify(this.triggerRules));
-
-        console.log(rules, rules.length > 0);
-
-        if(rules !== null && rules.length > 0) {
-          this.sendSaveTriggerRulesRequest();
-        } else {
+        if(!this.triggerRules || this.triggerRules.length === 0) {
           this.increaseProgress();
           this.sendSaveQuestionsRequest();
+          return;
         }
-        
+
+        this.sendSaveTriggerRulesRequest();
       })
       .catch((error) => {
         console.log(error);
