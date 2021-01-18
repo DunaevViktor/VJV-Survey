@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Набор разрешений для работы с custom object и flow.</description>
     <fieldPermissions>
         <editable>true</editable>
         <field>Email_Receiver__c.IsSend__c</field>
@@ -48,6 +49,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Related_Object__c.Related_Lead__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Survey__c.Background_Color__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
