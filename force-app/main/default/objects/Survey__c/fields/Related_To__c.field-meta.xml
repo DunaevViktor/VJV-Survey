@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Related_To__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
-    <description>Ссылка на следующий опрос в цепочке.</description>
+    <description>Link to the next poll in the chain.</description>
     <externalId>false</externalId>
     <label>Related To</label>
     <referenceTo>Survey__c</referenceTo>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Position__c</fullName>
-    <description>Позиция вопроса в опросе.</description>
+    <description>The position of the question in the survey.</description>
     <externalId>false</externalId>
     <label>Position</label>
     <precision>3</precision>

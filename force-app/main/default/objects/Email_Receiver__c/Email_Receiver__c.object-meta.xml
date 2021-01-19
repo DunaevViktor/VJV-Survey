@@ -143,7 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Объект Email Receiver необходим для хранения информации о получателе email-ов. С помощью него будет проверяться не отправлялось ли уже приглашение на данный Survey на какой-то конкретный email.</description>
+    <description>The Email Receiver object is required to store information about the recipient of emails. It will be used to check whether an invitation to this Survey has already been sent to a specific email.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
