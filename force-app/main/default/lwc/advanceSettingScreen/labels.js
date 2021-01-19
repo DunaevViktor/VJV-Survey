@@ -13,6 +13,7 @@ import user_groups from "@salesforce/label/c.user_groups";
 import standard_survey from "@salesforce/label/c.standard_survey";
 import connect_to_another_survey from "@salesforce/label/c.connect_to_another_survey";
 import surveys from "@salesforce/label/c.surveys";
+import msg_no_public_groups_found from "@salesforce/label/c.msg_no_public_groups_found";
 
 const label = {
   type,
@@ -29,7 +30,8 @@ const label = {
   add,
   standard_survey,
   connect_to_another_survey,
-  surveys
+  surveys,
+  msg_no_public_groups_found
 };
 
 export { label };

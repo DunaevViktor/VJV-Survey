@@ -7,6 +7,7 @@ import { columns, isReceiverExist } from "./advanceSettingScreenHelper.js";
 export default class AdvanceSettingScreen extends LightningElement {
   TYPE_EMAIL = "email";
   TYPE_GROUP = "groupName";
+  EMAIL_PATTERN = /\w+@\w+\.\w+/;
 
   label = label;
   columns = columns;
@@ -17,9 +18,22 @@ export default class AdvanceSettingScreen extends LightningElement {
   @track isEmailReceiver = true;
   @track isConnectToSurvey;
   @track surveys;
+  @track groups;
+
+  __survey = {};
 
   @wire(getGroups, {})
-  groups;
+  wiredGroups({error, data}) {
+    if(data){
+      if(data.length != 0) {
+        this.groups = data;
+      }else{
+        this.groups = undefined;
+      }
+    }else if(error){
+      console.log(error);
+    }
+  };
 
   @wire(getSurveys, {})
   wiredSurveys({ error, data }) {
@@ -29,13 +43,10 @@ export default class AdvanceSettingScreen extends LightningElement {
       } else {
         this.surveys = undefined;
       }
-      console.log(JSON.stringify(data));
-    } else {
-      this.surveys = undefined;
+    } else if(error){
+      console.log(error);
     }
-  }
-
-  __survey = {};
+  };
 
   get surveyReceivers() {
     return this.receivers;
@@ -117,9 +128,14 @@ export default class AdvanceSettingScreen extends LightningElement {
   }
 
   get groupOptions() {
-    return this.groups.data.map((group) => {
-      return { label: group.Name, value: group.Id };
-    });
+    if(this.groups != undefined){
+      return this.groups.map((group) => {
+        return { label: group.Name, value: group.Id };
+      });
+    }else{
+      return [];
+    }
+    
   }
 
   handleGroupChange(event) {
@@ -128,7 +144,7 @@ export default class AdvanceSettingScreen extends LightningElement {
 
   handleAddEmailReceiver(receiver) {
     let inputForm = this.template.querySelector("lightning-input");
-    let inputStr = inputForm.value.match(/\w+@\w+\.\w+/);
+    let inputStr = inputForm.value.match(this.EMAIL_PATTERN);
     if (inputStr === null) {
       inputForm.setCustomValidity(label.error_email_pattern_mismatch);
       inputForm.reportValidity();
@@ -138,17 +154,18 @@ export default class AdvanceSettingScreen extends LightningElement {
     receiver.Value__c = inputForm.value;
     let validityMessage = "";
     if (isReceiverExist(receiver, this.receivers)) {
-      validityMessage = label.error_alredy_added_this_email;
+      validityMessage = label.error_already_added_this_email;
     } else {
       this.receivers = [...this.receivers, receiver];
     }
+    console.log(validityMessage);
     inputForm.setCustomValidity(validityMessage);
     inputForm.reportValidity();
   }
 
   handleAddGroupReceiver(receiver) {
     let combobox = this.template.querySelector("lightning-combobox");
-    if (this.groupId.localeCompare("") === 0) {
+    if ((this.groupId.localeCompare("") === 0) && (combobox.name == "userGroups")) {
       combobox.setCustomValidity(label.error_choose_some_group);
       combobox.reportValidity();
       return;
@@ -160,7 +177,7 @@ export default class AdvanceSettingScreen extends LightningElement {
 
     let validityMessage = "";
     if (isReceiverExist(receiver, this.receivers)) {
-      validityMessage = label.error_alredy_added_this_group;
+      validityMessage = label.error_already_added_this_group;
     } else {
       this.receivers = [...this.receivers, receiver];
     }

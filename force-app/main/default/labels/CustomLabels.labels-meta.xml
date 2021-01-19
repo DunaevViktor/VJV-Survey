@@ -288,6 +288,13 @@
         <value>Logo image</value>
     </labels>
     <labels>
+        <fullName>msg_no_public_groups_found</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>no public groups on org</shortDescription>
+        <value>No public groups found!</value>
+    </labels>
+    <labels>
         <fullName>next</fullName>
         <language>en_US</language>
         <protected>true</protected>

@@ -34,17 +34,23 @@
   </template>
 
   <template if:false={isEmailReceiver}>
-    <div class="slds-m-vertical_medium">
-      <lightning-combobox
-        name="userGroups"
-        label={label.user_groups}
-        value=""
-        placeholder="Select User Group"
-        options={groupOptions}
-        onchange={handleGroupChange}
-        required
-      ></lightning-combobox>
-    </div>
+    <template if:true={groups}>
+      <div class="slds-m-vertical_medium">
+        <lightning-combobox
+          name="userGroups"
+          label={label.user_groups}
+          value=""
+          placeholder="Select User Group"
+          options={groupOptions}
+          onchange={handleGroupChange}
+          required
+        ></lightning-combobox>
+      </div>
+    </template>
+    <template if:false={groups}>
+      <div class="text">{label.msg_no_public_groups_found}</div>
+    </template>
+    
   </template>
 
   <div class="button">
