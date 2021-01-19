@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
     <customObject>true</customObject>
-    <description>Объект Question Option служит для хранения вариантов ответа Question, если у второго тип подразумевает тип с возможностью выбора варианта ответа(к примеру picklist).</description>
+    <description>The Question Option object is used to store the Question answer options, if the second type implies a type with a choice of answer options (for example, picklist).</description>
     <motif>Custom50: Big top</motif>
 </CustomTab>
