@@ -6,11 +6,13 @@ import saveTriggerRules from "@salesforce/apex/SaverController.saveTriggerRules"
 import saveQuestions from "@salesforce/apex/SaverController.saveQuestions";
 import saveOptions from "@salesforce/apex/SaverController.saveOptions";
 import saveValidations from "@salesforce/apex/SaverController.saveValidations";
+import saveEmailReceivers from "@salesforce/apex/SaverController.saveEmailReceivers";
 
 import { transformRules,  
          transformQuestions,
          transformOptions,
-         transformValidations
+         transformValidations,
+         transformEmailReceivers
 } from './saverScreenHelper';
 
 import {label} from "./labels.js";
@@ -23,9 +25,12 @@ export default class SaverScreen extends LightningElement {
   @api triggerRules;
   @api questions;
   @api validations = [];
+  @api emailReceivers = [];
 
   @track
   stepsOfSave = stepsOfSave;
+
+  @track isError = false;
 
   currentStep = 0;
 
@@ -57,8 +62,8 @@ export default class SaverScreen extends LightningElement {
 
         this.sendSaveTriggerRulesRequest();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        this.isError = true;
       });
   }
 
@@ -70,8 +75,8 @@ export default class SaverScreen extends LightningElement {
         this.increaseProgress();
         this.sendSaveQuestionsRequest();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        this.isError = true;
       });
   }
 
@@ -84,7 +89,8 @@ export default class SaverScreen extends LightningElement {
         this.sendSaveOptionsRequest();
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error)
+        this.isError = true;
       });
   }
 
@@ -103,7 +109,8 @@ export default class SaverScreen extends LightningElement {
         this.sendSaveValidationsRequest();
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error)
+        this.isError = true;
       });
   }
 
@@ -112,16 +119,36 @@ export default class SaverScreen extends LightningElement {
 
     if(transformedValidations.length === 0) {
       this.increaseProgress();
+      this.sendSaveEmailReceiversRequest();
       return;
     }
 
     saveValidations({validations : transformedValidations})
       .then(() => {
         this.increaseProgress();
+        this.sendSaveEmailReceiversRequest();
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error)
+        this.isError = true;
       });
+  }
+
+  sendSaveEmailReceiversRequest() {
+    const transformedEmailReceivers = transformEmailReceivers(this.emailReceivers, this.surveyId);
+
+    if(!transformedEmailReceivers || transformedEmailReceivers.length === 0) {
+      this.increaseProgress();
+      return;
+    }
+
+    saveEmailReceivers({receivers : transformedEmailReceivers})
+      .then(() => {
+        this.increaseProgress();
+      })
+      .catch(() => {
+        this.isError = true;
+      })
   }
 
   increaseProgress() {

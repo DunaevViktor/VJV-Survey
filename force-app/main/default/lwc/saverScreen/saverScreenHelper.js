@@ -57,9 +57,18 @@ const transformValidations = (validations, savedQuestions) => {
   return transformedValidations;
 }
 
+const transformEmailReceivers = (emailReceivers, surveyId) => {
+  return emailReceivers.map((receiver) => {
+    receiver = JSON.parse(JSON.stringify(receiver));
+    receiver.Survey__c = surveyId;
+    return receiver;
+  });
+}
+
 export {
   transformRules,
   transformQuestions,
   transformOptions,
-  transformValidations
+  transformValidations,
+  transformEmailReceivers
 }
