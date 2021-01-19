@@ -1,22 +1,19 @@
-//TODO: add showToastEvents
-//TODO: add survey initialization
-
 import { LightningElement, track, wire, api } from "lwc";
 import getGroups from "@salesforce/apex/GroupController.getGroups";
 import getSurveys from "@salesforce/apex/SurveyController.getAllSurveys";
 import { label } from "./labels.js";
-import { columns } from "./advanceSettingScreenHelper.js"
+import { columns, isReceiverExist } from "./advanceSettingScreenHelper.js";
 
 export default class AdvanceSettingScreen extends LightningElement {
-
   TYPE_EMAIL = "email";
   TYPE_GROUP = "groupName";
 
   label = label;
   columns = columns;
   groupId = "";
+  surveyId = "";
 
-  @track data = [];
+  @track receivers = [];
   @track isEmailReceiver = true;
   @track isConnectToSurvey;
   @track surveys;
@@ -27,7 +24,12 @@ export default class AdvanceSettingScreen extends LightningElement {
   @wire(getSurveys, {})
   wiredSurveys({ error, data }) {
     if (data) {
-      this.surveys = data;
+      if (data.length != 0) {
+        this.surveys = data;
+      } else {
+        this.surveys = undefined;
+      }
+      console.log(JSON.stringify(data));
     } else {
       this.surveys = undefined;
     }
@@ -36,7 +38,7 @@ export default class AdvanceSettingScreen extends LightningElement {
   __survey = {};
 
   get surveyReceivers() {
-    return this.data;
+    return this.receivers;
   }
 
   get survey() {
@@ -45,15 +47,16 @@ export default class AdvanceSettingScreen extends LightningElement {
 
   @api set survey(value) {
     this.__survey = JSON.parse(JSON.stringify(value));
-    if (this.__survey.Related_To__c.localeCompare("") != 0) {
-      this.isConnectToSurvey = true;
-    } else {
+    if (this.__survey.Related_To__c == undefined) {
       this.isConnectToSurvey = false;
+    } else {
+      this.isConnectToSurvey = true;
+      this.surveyId = this.__survey.Related_To__c;
     }
   }
 
   @api set surveyReceivers(value) {
-    this.data = JSON.parse(JSON.stringify(value));
+    this.receivers = JSON.parse(JSON.stringify(value));
   }
 
   get newReceiverOptions() {
@@ -77,13 +80,15 @@ export default class AdvanceSettingScreen extends LightningElement {
     const { id } = row;
     const index = this.findRowIndexById(id);
     if (index !== -1) {
-      this.data = this.data.slice(0, index).concat(this.data.slice(index + 1));
+      this.receivers = this.receivers
+        .slice(0, index)
+        .concat(this.receivers.slice(index + 1));
     }
   }
 
   findRowIndexById(id) {
     let ret = -1;
-    this.data.some((row, index) => {
+    this.receivers.some((row, index) => {
       if (row.id === id) {
         ret = index;
         return true;
@@ -121,13 +126,6 @@ export default class AdvanceSettingScreen extends LightningElement {
     this.groupId = event.detail.value;
   }
 
-  isReceiverExist(receiver){
-    return this.data.find((tempReceiver, index) => {
-      if (receiver.Value__c.localeCompare(tempReceiver.Value__c) === 0)
-        return true;
-    })
-  }
-
   handleAddEmailReceiver(receiver) {
     let inputForm = this.template.querySelector("lightning-input");
     let inputStr = inputForm.value.match(/\w+@\w+\.\w+/);
@@ -139,10 +137,10 @@ export default class AdvanceSettingScreen extends LightningElement {
     receiver.Type__c = "Email";
     receiver.Value__c = inputForm.value;
     let validityMessage = "";
-    if (this.isReceiverExist(receiver)) {
+    if (isReceiverExist(receiver, this.receivers)) {
       validityMessage = label.error_alredy_added_this_email;
     } else {
-      this.data = [...this.data, receiver];
+      this.receivers = [...this.receivers, receiver];
     }
     inputForm.setCustomValidity(validityMessage);
     inputForm.reportValidity();
@@ -161,10 +159,10 @@ export default class AdvanceSettingScreen extends LightningElement {
     }).Name;
 
     let validityMessage = "";
-    if (this.isReceiverExist(receiver)) {
+    if (isReceiverExist(receiver, this.receivers)) {
       validityMessage = label.error_alredy_added_this_group;
     } else {
-      this.data = [...this.data, receiver];
+      this.receivers = [...this.receivers, receiver];
     }
     combobox.setCustomValidity(validityMessage);
     combobox.reportValidity();
@@ -187,9 +185,14 @@ export default class AdvanceSettingScreen extends LightningElement {
 
   handleSurveyChange(event) {
     this.__survey.Related_To__c = event.detail.value;
+    this.surveyId = event.detail.value;
   }
 
   handleConnectToAnotherSurveyChange(event) {
     this.isConnectToSurvey = event.target.checked;
+    if (!this.isConnectToSurvey) {
+      this.surveyId = "";
+      this.__survey.Related_To__c = undefined;
+    }
   }
 }
