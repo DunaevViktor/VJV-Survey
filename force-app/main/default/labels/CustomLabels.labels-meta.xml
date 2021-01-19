@@ -78,6 +78,13 @@
         <value>Dependent question</value>
     </labels>
     <labels>
+        <fullName>done</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>done</shortDescription>
+        <value>Done</value>
+    </labels>
+    <labels>
         <fullName>down</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -174,6 +181,13 @@
         <protected>true</protected>
         <shortDescription>image loading</shortDescription>
         <value>Loading</value>
+    </labels>
+    <labels>
+        <fullName>in_progress</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>in progress</shortDescription>
+        <value>In progress</value>
     </labels>
     <labels>
         <fullName>is_required</fullName>
@@ -344,6 +358,48 @@
         <value>Save changes</value>
     </labels>
     <labels>
+        <fullName>save_email_rules_label</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>save email rules label</shortDescription>
+        <value>Save email rules</value>
+    </labels>
+    <labels>
+        <fullName>save_main_survey_info_label</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>save main survey info label</shortDescription>
+        <value>Save main information about survey</value>
+    </labels>
+    <labels>
+        <fullName>save_questions_label</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>save questions label</shortDescription>
+        <value>Save questions</value>
+    </labels>
+    <labels>
+        <fullName>save_trigger_rules_label</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>save trigger rules label</shortDescription>
+        <value>Save trigger rules</value>
+    </labels>
+    <labels>
+        <fullName>save_validations_label</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>save validations label</shortDescription>
+        <value>Save validations</value>
+    </labels>
+    <labels>
+        <fullName>saving_your_configurations</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>saving your configurations</shortDescription>
+        <value>We are saving your configurations</value>
+    </labels>
+    <labels>
         <fullName>search</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -405,6 +461,13 @@
         <protected>true</protected>
         <shortDescription>survey bg color</shortDescription>
         <value>Survey Background Color</value>
+    </labels>
+    <labels>
+        <fullName>survey_created_successfully</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>survey created successfully</shortDescription>
+        <value>Survey created successfully!</value>
     </labels>
     <labels>
         <fullName>survey_name</fullName>

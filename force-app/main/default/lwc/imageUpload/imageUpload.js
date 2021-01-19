@@ -1,6 +1,5 @@
 import { LightningElement, api, track } from "lwc";
 import getImageURL from "@salesforce/apex/ImageUploadController.getImageURL";
-import DELETE_ICON from "@salesforce/resourceUrl/DeleteIcon";
 import { labels } from "./labels";
 
 export default class ImageUpload extends LightningElement {
@@ -15,7 +14,6 @@ export default class ImageUpload extends LightningElement {
   imageFile;
   imageName;
   acceptedFormats = 'image/png, image/jpeg';
-  removeIconUrl = DELETE_ICON;
 
   label = labels;
 

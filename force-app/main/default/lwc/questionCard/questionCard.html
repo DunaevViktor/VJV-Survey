@@ -1,45 +1,34 @@
 <template>
   <div class="slds-box slds-box_x-small slds-m-around_x-small">
-    <span
-      class="slds-icon_container slds-icon-utility-announcement slds-float_right"
-      title={label.deleteTitle}
-    >
-      <img
-        class="slds-icon slds-icon-text-default slds-icon_x-small"
-        src={icons.deleteIcon}
-        onclick={deleteQuestion}
-      />
-    </span>
-    <span
-      class="slds-icon_container slds-icon-utility-announcement slds-float_right"
-      title={label.edit}
-    >
-      <img
-        class="slds-icon slds-icon-text-default slds-icon_x-small"
-        src={icons.editIcon}
-        onclick={editQuestion}
-      />
-    </span>
-    <span
-      class="slds-icon_container slds-icon-utility-announcement slds-float_right"
-      title={label.down}
-    >
-      <img
-        class="slds-icon slds-icon-text-default slds-icon_x-small"
-        src={icons.arrowDownIcon}
-        onclick={downQuestion}
-      />
-    </span>
-    <span
-      class="slds-icon_container slds-icon-utility-announcement slds-float_right"
-      title={label.up}
-      onclick={upQuestion}
-    >
-      <img
-        class="slds-icon slds-icon-text-default slds-icon_x-small"
-        src={icons.arrowUpIcon}
-      />
-    </span>
+
+    <lightning-icon icon-name="utility:delete" 
+                    alternative-text={label.deleteTitle} 
+                    title={label.deleteTitle} 
+                    class="slds-float_right" 
+                    size="x-small" 
+                    onclick={deleteQuestion}>
+    </lightning-icon>
+    <lightning-icon icon-name="utility:edit" 
+                    alternative-text={label.edit} 
+                    title={label.edit} 
+                    class="slds-float_right" 
+                    size="x-small" 
+                    onclick={editQuestion}>
+    </lightning-icon>
+    <lightning-icon icon-name="utility:chevrondown" 
+                    alternative-text={label.down} 
+                    title={label.down} 
+                    class="slds-float_right" 
+                    size="x-small" 
+                    onclick={downQuestion}>
+    </lightning-icon>
+    <lightning-icon icon-name="utility:chevronup" 
+                    alternative-text={label.up} 
+                    title={label.up} 
+                    class="slds-float_right" 
+                    size="x-small" 
+                    onclick={upQuestion}>
+    </lightning-icon>
 
     <template if:true={question.Required__c}>
       <span class="required">*</span>
