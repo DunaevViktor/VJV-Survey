@@ -100,5 +100,13 @@
         <members>Surveys_with_Questions_with_Answers</members>
         <name>ReportType</name>
     </types>
+    <types>
+        <members>Survey</members>
+        <name>CustomApplication</name>
+    </types>
+    <types>
+        <members>Survey_Constructor</members>
+        <name>FlexiPage</name>
+    </types>
     <version>50.0</version>
 </Package>
