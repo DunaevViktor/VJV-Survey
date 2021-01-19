@@ -1,4 +1,4 @@
-import delete_button from "@salesforce/label/c.delete_button";
+import delete_button from "@salesforce/label/c.delete";
 import add from "@salesforce/label/c.add";
 import type from "@salesforce/label/c.type";
 import group_name_or_email from "@salesforce/label/c.group_name_or_email";

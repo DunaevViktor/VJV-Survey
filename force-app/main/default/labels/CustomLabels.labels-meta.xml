@@ -230,6 +230,8 @@
         <protected>true</protected>
         <shortDescription>group name or email</shortDescription>
         <value>Group Name or Email</value>
+    </labels>
+    <labels>
         <fullName>fill_trigger_rules</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -480,6 +482,8 @@
         <protected>true</protected>
         <shortDescription>surveys</shortDescription>
         <value>Surveys</value>
+    </labels>
+    <labels>
         <fullName>survey_bg_color</fullName>
         <language>en_US</language>
         <protected>true</protected>

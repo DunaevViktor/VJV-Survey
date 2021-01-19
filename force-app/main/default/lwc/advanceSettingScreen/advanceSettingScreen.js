@@ -5,21 +5,13 @@ import { LightningElement, track, wire, api } from "lwc";
 import getGroups from "@salesforce/apex/GroupController.getGroups";
 import getSurveys from "@salesforce/apex/SurveyController.getAllSurveys";
 import { label } from "./labels.js";
-
-const columns = [
-  { label: label.type, fieldName: "Type__c", type: "text" },
-  { label: label.group_name_or_email, fieldName: "Value__c", type: "text" },
-  {
-    type: "button",
-    initialWidth: 100,
-    typeAttributes: {
-      label: label.delete_button,
-      name: "delete"
-    }
-  }
-];
+import { columns } from "./advanceSettingScreenHelper.js"
 
 export default class AdvanceSettingScreen extends LightningElement {
+
+  TYPE_EMAIL = "email";
+  TYPE_GROUP = "groupName";
+
   label = label;
   columns = columns;
   groupId = "";
@@ -66,8 +58,8 @@ export default class AdvanceSettingScreen extends LightningElement {
 
   get newReceiverOptions() {
     return [
-      { label: label.email, value: "email" },
-      { label: label.group_name, value: "groupName" }
+      { label: label.email, value: this.TYPE_EMAIL },
+      { label: label.group_name, value: this.TYPE_GROUP }
     ];
   }
 
@@ -108,11 +100,11 @@ export default class AdvanceSettingScreen extends LightningElement {
   handleIsNewReceiverChange(event) {
     const selectedReceiver = event.detail.value;
     switch (selectedReceiver) {
-      case "email":
+      case this.TYPE_EMAIL:
         this.isEmailReceiver = true;
         break;
 
-      case "groupName":
+      case this.TYPE_GROUP:
         this.groupId = "";
         this.isEmailReceiver = false;
         break;
@@ -129,6 +121,13 @@ export default class AdvanceSettingScreen extends LightningElement {
     this.groupId = event.detail.value;
   }
 
+  isReceiverExist(receiver){
+    return this.data.find((tempReceiver, index) => {
+      if (receiver.Value__c.localeCompare(tempReceiver.Value__c) === 0)
+        return true;
+    })
+  }
+
   handleAddEmailReceiver(receiver) {
     let inputForm = this.template.querySelector("lightning-input");
     let inputStr = inputForm.value.match(/\w+@\w+\.\w+/);
@@ -140,15 +139,9 @@ export default class AdvanceSettingScreen extends LightningElement {
     receiver.Type__c = "Email";
     receiver.Value__c = inputForm.value;
     let validityMessage = "";
-    if (
-      this.data.find((tempReceiver, index) => {
-        if (receiver.Value__c.localeCompare(tempReceiver.Value__c) === 0)
-          return true;
-      })
-    ) {
+    if (this.isReceiverExist(receiver)) {
       validityMessage = label.error_alredy_added_this_email;
     } else {
-      console.log(JSON.stringify(receiver));
       this.data = [...this.data, receiver];
     }
     inputForm.setCustomValidity(validityMessage);
@@ -168,15 +161,9 @@ export default class AdvanceSettingScreen extends LightningElement {
     }).Name;
 
     let validityMessage = "";
-    if (
-      this.data.find((tempReceiver, index) => {
-        if (receiver.Value__c.localeCompare(tempReceiver.Value__c) === 0)
-          return true;
-      })
-    ) {
+    if (this.isReceiverExist(receiver)) {
       validityMessage = label.error_alredy_added_this_group;
     } else {
-      console.log(JSON.stringify(receiver));
       this.data = [...this.data, receiver];
     }
     combobox.setCustomValidity(validityMessage);

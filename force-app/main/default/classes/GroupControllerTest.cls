@@ -18,7 +18,7 @@ public with sharing class GroupControllerTest {
     }
     insert groups;
 
-    Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
+    Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User' WITH SECURITY_ENFORCED];
     User testUser = new User(
       Alias = 'standt',
       Email = 'standarduser@testorg.com',
