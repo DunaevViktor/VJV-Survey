@@ -88,8 +88,7 @@ export default class SaverScreen extends LightningElement {
         this.savedQuestions = result;
         this.sendSaveOptionsRequest();
       })
-      .catch((error) => {
-        console.log(error)
+      .catch(() => {
         this.isError = true;
       });
   }
@@ -108,8 +107,7 @@ export default class SaverScreen extends LightningElement {
         this.increaseProgress();
         this.sendSaveValidationsRequest();
       })
-      .catch((error) => {
-        console.log(error)
+      .catch(() => {
         this.isError = true;
       });
   }
@@ -128,8 +126,7 @@ export default class SaverScreen extends LightningElement {
         this.increaseProgress();
         this.sendSaveEmailReceiversRequest();
       })
-      .catch((error) => {
-        console.log(error)
+      .catch(() => {
         this.isError = true;
       });
   }
