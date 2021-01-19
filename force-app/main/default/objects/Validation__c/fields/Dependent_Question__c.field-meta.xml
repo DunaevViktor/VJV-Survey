@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Dependent_Question__c</fullName>
-    <description>Cсылка на зависимый вопрос.</description>
+    <description>Link to dependent question.</description>
     <externalId>false</externalId>
     <label>Dependent Question</label>
     <referenceTo>Question__c</referenceTo>

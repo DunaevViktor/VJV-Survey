@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>IsLinked__c</fullName>
     <defaultValue>false</defaultValue>
-    <description>Указывает нужно ли привязывать ответ на опрос к Contact/Case/Lead.</description>
+    <description>Indicates whether the survey response should be linked to Contact/Case/Lead.</description>
     <externalId>false</externalId>
     <label>IsLinked</label>
     <trackTrending>false</trackTrending>

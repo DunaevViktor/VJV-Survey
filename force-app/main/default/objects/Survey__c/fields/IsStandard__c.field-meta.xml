@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>IsStandard__c</fullName>
     <defaultValue>false</defaultValue>
-    <description>Показывает является ли опрос доступным для переисопльзования.</description>
+    <description>Indicates whether the survey is available for reuse.</description>
     <externalId>false</externalId>
     <label>IsStandard</label>
     <trackTrending>false</trackTrending>

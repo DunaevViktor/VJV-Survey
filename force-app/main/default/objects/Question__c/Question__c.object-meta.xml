@@ -143,7 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Объект Question олицетворяет вопрос. Содержит ссылку на survey, общую позицию вопроса в списке и флажок видимости (True по дефолту). Видимость вопроса важна, если у нас связанные вопрос, и зависимый вопрос не должен быть виден по достижении условий. Содержит сам текст вопроса, флажок переиспользования вопроса, и его тип(picklist, radiobutton, checkbox и т.д.).</description>
+    <description>The Question object represents the question. Contains a link to survey, the general position of the question in the list, and a visibility flag (true by default). Question visibility is important if we have a related question and the dependent question should not be visible when the conditions are met. Contains the question text itself, the question reuse flag, and its type (picklist, radiobutton, checkbox, etc.).</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
