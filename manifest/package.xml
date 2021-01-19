@@ -105,6 +105,7 @@
         <name>CustomApplication</name>
     </types>
     <types>
+        <members>Survey_UtilityBar</members>
         <members>Survey_Constructor</members>
         <name>FlexiPage</name>
     </types>
