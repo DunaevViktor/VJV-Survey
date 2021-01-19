@@ -143,7 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Объект Validation необходим для реализации связки вопросов и логики отображения некоторых. Имеет ссылку на вопрос поставщика зависимости Question, ссылку на зависимый вопрос того же типа и условие в виде строки.</description>
+    <description>The Validation object is needed to implement a bunch of questions and display logic for some. Has a link to a dependency provider question Question, a link to a dependent question of the same type, and a condition as a string.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -156,8 +156,9 @@
     <externalSharingModel>ControlledByParent</externalSharingModel>
     <label>Validation</label>
     <nameField>
+        <displayFormat>VR-{00000}</displayFormat>
         <label>Validation Name</label>
-        <type>Text</type>
+        <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Validations</pluralLabel>
     <searchLayouts/>

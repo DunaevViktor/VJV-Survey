@@ -1,42 +1,48 @@
 <template>
-  <template if:false={isComplete}>
-    <div class="slds-text-align_center">
-      <c-saver-spinner></c-saver-spinner>
-      <br/>
-      {label.saving_your_configurations}
-    </div>
+  <template if:true={isError}>
+    {label.errorMessage}
   </template>
-  
-    
-  <div class="slds-m-around_medium">
-    <template for:each={stepsOfSave} for:item="step">
-      <div key={step.label}>
-        <span class="slds-icon_container slds-icon-utility-announcement" >
-          <template if:true={step.isDone}>
-            <lightning-icon icon-name="utility:check" 
-                            alternative-text={label.done} 
-                            title={label.done} 
-                            variant="success">
-            </lightning-icon>
-          </template>
-    
-          <template if:false={step.isDone}>
-            <lightning-icon icon-name="utility:threedots" 
-                        alternative-text={label.in_progress}
-                        title={label.in_progress} 
-                        variant="error">
-            </lightning-icon>
-          </template>
-          
-          <span class="slds-m-left_x-small">{step.label}</span><br/>
-        </span>
+
+  <template if:false={isError}>
+    <template if:false={isComplete}>
+      <div class="slds-text-align_center">
+        <c-saver-spinner></c-saver-spinner>
+        <br/>
+        {label.saving_your_configurations}
       </div>
     </template>
-  </div>
-
-  <template if:true={isComplete}>
-    <div class="slds-text-align_center slds-m-around_medium">
-      {label.survey_created_successfully}
+    
+      
+    <div class="slds-m-around_medium">
+      <template for:each={stepsOfSave} for:item="step">
+        <div key={step.label}>
+          <span class="slds-icon_container slds-icon-utility-announcement" >
+            <template if:true={step.isDone}>
+              <lightning-icon icon-name="utility:check" 
+                              alternative-text={label.done} 
+                              title={label.done} 
+                              variant="success">
+              </lightning-icon>
+            </template>
+      
+            <template if:false={step.isDone}>
+              <lightning-icon icon-name="utility:threedots" 
+                          alternative-text={label.in_progress}
+                          title={label.in_progress} 
+                          variant="error">
+              </lightning-icon>
+            </template>
+            
+            <span class="slds-m-left_x-small">{step.label}</span><br/>
+          </span>
+        </div>
+      </template>
     </div>
+  
+    <template if:true={isComplete}>
+      <div class="slds-text-align_center slds-m-around_medium">
+        {label.survey_created_successfully}
+      </div>
+    </template>
   </template>
 </template>

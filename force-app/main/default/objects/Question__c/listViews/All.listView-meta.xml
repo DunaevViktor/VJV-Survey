@@ -4,11 +4,11 @@
     <columns>NAME</columns>
     <columns>Label__c</columns>
     <columns>Type__c</columns>
-    <columns>Survey__c</columns>
     <columns>Position__c</columns>
-    <columns>Required__c</columns>
-    <columns>IsReusable__c</columns>
     <columns>IsVisible__c</columns>
+    <columns>IsReusable__c</columns>
+    <columns>Required__c</columns>
+    <columns>Survey__c</columns>
     <filterScope>Everything</filterScope>
     <label>All</label>
 </ListView>

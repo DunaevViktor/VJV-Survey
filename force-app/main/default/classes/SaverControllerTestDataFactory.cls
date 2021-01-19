@@ -56,6 +56,13 @@ public with sharing class SaverControllerTestDataFactory {
     return receivers;
   }
 
+  private static Question_Option__c createOption(String questionId) {
+    Question_Option__c option = new Question_Option__c();
+    option.Value__c = TEST_OPTION_VALUE;
+    option.Question__c = questionId;
+    return option;
+  }
+
   private static Question__c createQuestion(String surveyId, Integer position) {
     Question__c question = new Question__c();
     question.Label__c =  TEST_QUESTION_NAME;
@@ -63,13 +70,6 @@ public with sharing class SaverControllerTestDataFactory {
     question.Survey__c = surveyId;
     question.Position__c = position;
     return question;
-  }
-
-  private static Question_Option__c createOption(String questionId) {
-    Question_Option__c option = new Question_Option__c();
-    option.Value__c = TEST_OPTION_VALUE;
-    option.Question__c = questionId;
-    return option;
   }
 
   public static Validation__c  createValidation(String relatedQuestionId, String dependentQuestionId) {

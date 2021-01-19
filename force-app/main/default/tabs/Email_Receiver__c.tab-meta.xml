@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
     <customObject>true</customObject>
-    <description>Объект Email Receiver необходим для хранения информации о получателе email-ов. С помощью него будет проверяться не отправлялось ли уже приглашение на данный Survey на какой-то конкретный email.</description>
+    <description>The Email Receiver object is required to store information about the recipient of emails. It will be used to check whether an invitation to this Survey has already been sent to a specific email.</description>
     <motif>Custom38: Camera</motif>
 </CustomTab>
