@@ -1,11 +1,11 @@
 public with sharing class SendEmailLogic {
     
     /**
-	Запись объекта SurveyEmailConfig__c с необходимыми настройками будет создана в
-	"global class PostInstallClass implements InstallHandler"
-	в данный момент для тестирования кода можно создать запись (Name = 'Main') вручную через Setup
-	доступные поля: Display_Name__c, Subject__c, Template_Name__c, Url_Config__c, Company_Config__c
-	*/
+    A record of the SurveyEmailConfig__c object with the necessary settings will be created in
+    "global class PostInstallClass implements InstallHandler"
+    at the moment, to test the code, you can create an entry (Name = 'Main') manually via Setup
+    available fields: Display_Name__c, Subject__c, Template_Name__c, Url_Config__c, Company_Config__c
+    */
     
     public static void sendEmails(List<Email_Receiver__c> emailReceiverList){
         Map<Id, Survey__c> surveyMap = createSurveyMap();

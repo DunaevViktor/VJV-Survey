@@ -11,9 +11,9 @@ import add_question from "@salesforce/label/c.add_question";
 import is_required from "@salesforce/label/c.is_required"; 
 import is_reusable from "@salesforce/label/c.is_reusable";
 import option_already_exists from "@salesforce/label/c.option_already_exists"; 
-import error_few_options from "@salesforce/label/c.error_few_options"; //
-import errorTitle from "@salesforce/label/c.error"; //
-import success from "@salesforce/label/c.success"; //
+import error_few_options from "@salesforce/label/c.error_few_options";
+import errorTitle from "@salesforce/label/c.error";
+import success from "@salesforce/label/c.success";
 
 const label = {
   edit_question_form_title,

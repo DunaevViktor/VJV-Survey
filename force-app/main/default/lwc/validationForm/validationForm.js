@@ -44,8 +44,6 @@ export default class ValidationForm extends LightningElement {
 
     this.firstQuestion = findQuestionByPosition(this.questions, this.firstPosition);
     this.secondQuestion = findQuestionByPosition(this.questions, this.secondPosition);
-
-    this.isFirstQuestionPicklist = isNeedPicklist(this.firstQuestion, this.selectedOperator);
   }
 
   @wire(getPicklistValues, {
@@ -55,9 +53,9 @@ export default class ValidationForm extends LightningElement {
   initTypes({ error, data }) {
     if (data) {
       this.operators = transformOperators(data.values);
-      this.displayedOperators = [...this.operators];
+
       this.setDisplayedOperators();
-      this.selectedOperator = this.displayedOperators[0].value;
+      this.isFirstQuestionPicklist = isNeedPicklist(this.firstQuestion, this.selectedOperator);
     } else if (error) {
       this.sendErrorNotification();
     }
@@ -128,8 +126,8 @@ export default class ValidationForm extends LightningElement {
 
     this.firstQuestion = findQuestionByPosition(this.questions, this.firstPosition);
 
-    this.isFirstQuestionPicklist = isNeedPicklist(this.firstQuestion, this.selectedOperator);
     this.setDisplayedOperators();
+    this.isFirstQuestionPicklist = isNeedPicklist(this.firstQuestion, this.selectedOperator);
   }
 
   selectSecondQuestion(event) {
@@ -157,6 +155,7 @@ export default class ValidationForm extends LightningElement {
 
   setSelectedOperator(event) {
     this.selectedOperator = event.detail.value;
+    this.isFirstQuestionPicklist = isNeedPicklist(this.firstQuestion, this.selectedOperator);
   }
 
   addValidation() {
