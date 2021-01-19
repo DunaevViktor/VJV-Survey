@@ -4,7 +4,7 @@
         <application>Survey</application>
         <visible>true</visible>
     </applicationVisibilities>
-    <description>A set of permissions for working with custom object and flow.</description>
+    <description>A set of permissions for working with custom objects, applications and flows.</description>
     <fieldPermissions>
         <editable>true</editable>
         <field>Email_Receiver__c.IsSend__c</field>
