@@ -119,8 +119,7 @@ export default class QuestionScreen extends LightningElement {
         this.displayedTemplates = result;
         this.initTemplateQuestions();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
         this.setError();
       });
     }
@@ -135,8 +134,7 @@ export default class QuestionScreen extends LightningElement {
       .then((result) => {
         this.displayedTemplateQuestions = result;
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
         this.setError();
       });
   }
@@ -148,8 +146,7 @@ export default class QuestionScreen extends LightningElement {
         this.displayedStandardQuestions = result;
         this.hasStandardQuestions = this.standardQuestions.length > 0;
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
         this.setError();
       });
     }
