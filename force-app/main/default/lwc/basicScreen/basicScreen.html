@@ -8,12 +8,14 @@
         placeholder={label.survey_name}
         value={survey.Name}
         onchange={handleNameChange}
+        disabled={loading}
         required
       >
       </lightning-input>
 
       <c-image-upload 
-        default-url={survey.Logo__c} 
+        default-url={survey.Logo__c}
+        loading={loading}
         onupdateimageurl={handleImageUpdate}
       ></c-image-upload>
 
@@ -23,19 +25,21 @@
         label={label.survey_bg_color}
         value={survey.Background_Color__c}
         onchange={handleColorChange}
+        disabled={loading}
       >
       </lightning-input>
     </div>
   </div>
 
   <hr class="slds-m-bottom_small" />
-
+  
   <div class="slds-text-align_right slds-m-bottom_small">
     <lightning-button
       variant="brand"
       label={label.next}
       onclick={clickNextButton}
       class="slds-m-left_x-small"
+      disabled={loading}
     ></lightning-button>
   </div>
     
