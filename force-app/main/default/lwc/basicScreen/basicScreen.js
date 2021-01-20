@@ -98,6 +98,7 @@ export default class BasicScreen extends LightningElement {
       const navigateNextEvent = new FlowNavigationNextEvent();
       if (this.isNewLogo) {
         this.loading = true;
+
         this.saveLogo().
           then(result => {
             this.loading = false;
@@ -113,10 +114,10 @@ export default class BasicScreen extends LightningElement {
             this.loading = false;
             this.showToastEvent(this.label.unable_to_continue, this.errorVariant, this.label.failed_image_upload)
           });
-        return;
+      } else {
+        this.updateSurveyData();
+        this.dispatchEvent(navigateNextEvent);
       }
-      this.updateSurveyData();
-      this.dispatchEvent(navigateNextEvent);
     }
   }
 
@@ -144,7 +145,7 @@ export default class BasicScreen extends LightningElement {
     const changeLogoIdEvent = new FlowAttributeChangeEvent("logoidchange", this.logoDocumentId);
     this.dispatchEvent(changeSurveyDataEvent);
     this.dispatchEvent(changeLogoIdEvent);
-    if (!this.survey.Logo__c) {
+    if (this.logoId && !this.survey.Logo__c) {
       this.deleteImage();
     }
   }
