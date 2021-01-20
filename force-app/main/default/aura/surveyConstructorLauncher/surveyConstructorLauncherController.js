@@ -1,6 +1,7 @@
 ({
-	launchFlow : function(component, event, helper) {
-		let flow = component.find("surveyFlow");
-        flow.startFlow("Survey_Flow");
+	launchFlow : function(component) {
+		var flow = component.find("surveyFlow");
+
+		flow.startFlow("Survey_Flow");
 	},
 })
