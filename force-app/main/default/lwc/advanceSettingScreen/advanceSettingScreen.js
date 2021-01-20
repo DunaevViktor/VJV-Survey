@@ -1,52 +1,34 @@
-import { LightningElement, track, wire, api } from "lwc";
+import { LightningElement, track, api } from "lwc";
 import getGroups from "@salesforce/apex/GroupController.getGroups";
 import getSurveys from "@salesforce/apex/SurveyController.getAllSurveys";
 import { label } from "./labels.js";
-import { columns, isReceiverExist } from "./advanceSettingScreenHelper.js";
+import { columns, receiverOptions, isReceiverExist } from "./advanceSettingScreenHelper.js";
+import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 
 export default class AdvanceSettingScreen extends LightningElement {
   TYPE_EMAIL = "email";
   TYPE_GROUP = "groupName";
   EMAIL_PATTERN = /\w+@\w+\.\w+/;
 
+  EMAIL_VARIANT = "Email";
+  GROUP_VARIANT = "User Group";
+
   label = label;
   columns = columns;
-  groupId = "";
-  surveyId = "";
+  receiverOptions = receiverOptions;
 
+  @track hasReceiers;
   @track receivers = [];
   @track isEmailReceiver = true;
   @track isConnectToSurvey;
-  @track surveys;
-  @track groups;
 
-  __survey = {};
+  @track __survey = {};
+  @track displayedSurveys = [];
+  @track displayedGroups = [];
 
-  @wire(getGroups, {})
-  wiredGroups({error, data}) {
-    if(data){
-      if(data.length != 0) {
-        this.groups = data;
-      }else{
-        this.groups = undefined;
-      }
-    }else if(error){
-      console.log(error);
-    }
-  };
-
-  @wire(getSurveys, {})
-  wiredSurveys({ error, data }) {
-    if (data) {
-      if (data.length != 0) {
-        this.surveys = data;
-      } else {
-        this.surveys = undefined;
-      }
-    } else if(error){
-      console.log(error);
-    }
-  };
+  @track isHasSurveys = false;
+  @track isHasGroups = false;
+  @track isError = false;
 
   get surveyReceivers() {
     return this.receivers;
@@ -56,9 +38,17 @@ export default class AdvanceSettingScreen extends LightningElement {
     return this.__survey;
   }
 
+  get surveys() {
+    return this.displayedSurveys;
+  }
+
+  get groups() {
+    return this.displayedSurveys;
+  }
+
   @api set survey(value) {
     this.__survey = JSON.parse(JSON.stringify(value));
-    if (this.__survey.Related_To__c == undefined) {
+    if (this.__survey.Related_To__c === undefined) {
       this.isConnectToSurvey = false;
     } else {
       this.isConnectToSurvey = true;
@@ -70,134 +60,184 @@ export default class AdvanceSettingScreen extends LightningElement {
     this.receivers = JSON.parse(JSON.stringify(value));
   }
 
-  get newReceiverOptions() {
-    return [
-      { label: label.email, value: this.TYPE_EMAIL },
-      { label: label.group_name, value: this.TYPE_GROUP }
-    ];
+  @api set surveys(value) {
+    this.displayedSurveys = JSON.parse(JSON.stringify(value));
+  }
+
+  @api set groups(value) {
+    this.displayedGroups = JSON.parse(JSON.stringify(value));
+  }
+
+  groupId = "";
+  surveyId = "";
+
+  connectedCallback() {
+    this.initSurveys();
+    this.initGroups();
+    this.setIsHasReseivers();
+
+    this.isHasSurveys = this.displayedSurveys.length > 0;
+    this.isHasGroups = this.displayedGroups > 0;
+  }
+
+  initSurveys() {
+    if(this.displayedSurveys.length === 0) {
+      getSurveys()
+      .then((result) => {
+        this.displayedSurveys = result.length > 0 ? result : [];
+        this.isHasSurveys = this.displayedSurveys.length > 0;
+      })
+      .catch(() => {
+        this.isError = true;
+      });
+    }
+  }
+
+  initGroups() {
+    if(this.displayedGroups.length === 0) {
+      getGroups()
+      .then((result) => {
+        this.displayedGroups = result.length > 0 ? result : [];
+        this.isHasGroups = this.displayedGroups.length > 0;
+      })
+      .catch(() => {
+        this.isError = true;
+      });
+    }
+  } 
+
+  get groupOptions() {
+    return this.displayedGroups.map((group) => {
+      return { label: group.Name, value: group.Id };
+    });
+  }
+
+  get surveyOptions() {
+    return this.displayedSurveys.map((survey) => {
+      return { label: survey.Name, value: survey.Id };
+    });
+  }
+
+
+  setIsHasReseivers() {
+    this.hasReceiers = this.receivers && this.receivers.length > 0;
   }
 
   handleRowAction(event) {
     const actionName = event.detail.action.name;
     const row = event.detail.row;
-    switch (actionName) {
-      case "delete":
-        this.deleteRow(row);
-        break;
+
+    if(actionName === "delete") {
+      this.deleteRow(row);
     }
   }
 
   deleteRow(row) {
-    const { id } = row;
-    const index = this.findRowIndexById(id);
-    if (index !== -1) {
-      this.receivers = this.receivers
-        .slice(0, index)
-        .concat(this.receivers.slice(index + 1));
-    }
-  }
-
-  findRowIndexById(id) {
-    let ret = -1;
-    this.receivers.some((row, index) => {
-      if (row.id === id) {
-        ret = index;
-        return true;
-      }
-      return false;
+    const { Value__c } = row;
+    this.receivers = this.receivers.filter((receiver) => {
+      return receiver.Value__c !== Value__c;
     });
-    return ret;
-  }
 
-  handleIsStandardSurveyChange(event) {
-    this.__survey.IsStandard__c = event.target.checked;
+    this.setIsHasReseivers();
   }
 
   handleIsNewReceiverChange(event) {
     const selectedReceiver = event.detail.value;
-    switch (selectedReceiver) {
-      case this.TYPE_EMAIL:
-        this.isEmailReceiver = true;
-        break;
+    this.isEmailReceiver = selectedReceiver === this.TYPE_EMAIL;
 
-      case this.TYPE_GROUP:
-        this.groupId = "";
-        this.isEmailReceiver = false;
-        break;
+    if(!this.isEmailReceiver) {
+      this.groupId = "";
     }
-  }
-
-  get groupOptions() {
-    if(this.groups != undefined){
-      return this.groups.map((group) => {
-        return { label: group.Name, value: group.Id };
-      });
-    }else{
-      return [];
-    }
-    
   }
 
   handleGroupChange(event) {
     this.groupId = event.detail.value;
   }
 
-  handleAddEmailReceiver(receiver) {
-    let inputForm = this.template.querySelector("lightning-input");
-    let inputStr = inputForm.value.match(this.EMAIL_PATTERN);
-    if (inputStr === null) {
-      inputForm.setCustomValidity(label.error_email_pattern_mismatch);
-      inputForm.reportValidity();
+  handleAddEmailReceiver() {
+    const input = this.template.querySelector(".email-input");
+    
+    if(!this.isEmailValid(input)) {
       return;
     }
-    receiver.Type__c = "Email";
-    receiver.Value__c = inputForm.value;
-    let validityMessage = "";
-    if (isReceiverExist(receiver, this.receivers)) {
-      validityMessage = label.error_already_added_this_email;
-    } else {
-      this.receivers = [...this.receivers, receiver];
-    }
-    console.log(validityMessage);
-    inputForm.setCustomValidity(validityMessage);
-    inputForm.reportValidity();
+    
+    const receiver = {};
+    receiver.Type__c = this.EMAIL_VARIANT;
+    receiver.Value__c = input.value;
+    this.receivers = [...this.receivers, receiver];
+
+    input.setCustomValidity("");
+    input.reportValidity();
+    input.value = "";
+
+    this.setIsHasReseivers();
   }
 
-  handleAddGroupReceiver(receiver) {
-    let combobox = this.template.querySelector("lightning-combobox");
-    if ((this.groupId.localeCompare("") === 0) && (combobox.name == "userGroups")) {
-      combobox.setCustomValidity(label.error_choose_some_group);
-      combobox.reportValidity();
+  isEmailValid(input) {
+    const result = input.value.match(this.EMAIL_PATTERN);
+    if (result === null) {
+      this.callReportValidity(input, label.error_email_pattern_mismatch);
+      return false;
+    }
+
+    if(isReceiverExist(this.receivers, input.value)) {
+      this.callReportValidity(input, label.error_already_added_this_email);
+      return false;
+    }
+
+    return true;
+  }
+
+  callReportValidity(input, message) {
+    input.setCustomValidity(message);
+    input.reportValidity();
+  }
+
+  handleAddGroupReceiver() {
+    const combobox = this.template.querySelector(".group-combobox");
+
+    if(!this.isGroupValid(combobox)) {
       return;
     }
-    receiver.Type__c = "Group";
-    receiver.Value__c = this.groups.data.find((group, index) => {
+    
+    const receiver = {};
+    receiver.Type__c = this.GROUP_VARIANT;
+    receiver.Value__c = this.displayedGroups.find((group) => {
       if (this.groupId == group.Id) return true;
     }).Name;
 
-    let validityMessage = "";
-    if (isReceiverExist(receiver, this.receivers)) {
-      validityMessage = label.error_already_added_this_group;
-    } else {
-      this.receivers = [...this.receivers, receiver];
-    }
-    combobox.setCustomValidity(validityMessage);
+    this.receivers = [...this.receivers, receiver];
+
+    combobox.setCustomValidity("");
     combobox.reportValidity();
+
+    this.setIsHasReseivers();
   }
 
-  handleAddClick() {
-    const receiver = {};
-    if (this.isEmailReceiver) {
-      this.handleAddEmailReceiver(receiver);
-    } else {
-      this.handleAddGroupReceiver(receiver);
+  isGroupValid(combobox) {
+    if (this.groupId.localeCompare("") === 0) {
+      this.callReportValidity(combobox, label.error_choose_some_group);
+      return false;
     }
+
+    const value = this.displayedGroups.find((group) => {
+      if (this.groupId == group.Id) return true;
+    }).Name;
+
+    if(isReceiverExist(this.receivers, value)) {
+      this.callReportValidity(combobox, label.error_already_added_this_group);
+      return false;
+    }
+
+    return true;
   }
 
-  get surveyOptions() {
-    return this.surveys.map((survey) => {
-      return { label: survey.Name, value: survey.Id };
-    });
+  handleIsStandardSurveyChange(event) {
+    this.__survey.IsStandard__c = event.target.checked;
+  }
+
+  handleIsResendingChange(event) {
+    this.__survey.IsResending__c = event.target.checked;
   }
 
   handleSurveyChange(event) {
@@ -211,5 +251,15 @@ export default class AdvanceSettingScreen extends LightningElement {
       this.surveyId = "";
       this.__survey.Related_To__c = undefined;
     }
+  }
+
+  clickPreviousButton() {
+    const backNavigationEvent = new FlowNavigationBackEvent();
+    this.dispatchEvent(backNavigationEvent);
+  }
+
+  clickNextButton() {
+    const nextNavigationEvent = new FlowNavigationNextEvent();
+    this.dispatchEvent(nextNavigationEvent);
   }
 }

@@ -14,6 +14,10 @@ import standard_survey from "@salesforce/label/c.standard_survey";
 import connect_to_another_survey from "@salesforce/label/c.connect_to_another_survey";
 import surveys from "@salesforce/label/c.surveys";
 import msg_no_public_groups_found from "@salesforce/label/c.msg_no_public_groups_found";
+import errorTitle from "@salesforce/label/c.error";
+import previous from "@salesforce/label/c.previous";
+import next from "@salesforce/label/c.next";
+import can_be_resending from "@salesforce/label/c.can_be_resending";
 
 const label = {
   type,
@@ -31,7 +35,11 @@ const label = {
   standard_survey,
   connect_to_another_survey,
   surveys,
-  msg_no_public_groups_found
+  msg_no_public_groups_found,
+  errorTitle,
+  previous,
+  next,
+  can_be_resending
 };
 
 export { label };
