@@ -2,23 +2,24 @@ public with sharing class AnswerController {
 
     private static final String ERROR_INSERTING_ANSWER = 'Error occurred inserting answer record/records.';
     
-    @AuraEnabled(cacheable=true)
-    public static void saveAnswer(Answer__c answer) {
+    @AuraEnabled
+    public static Id saveAnswer(Answer__c answer) {
         try {
-            insert answer;
+            insert answer;  
+            return answer.Id;
         } catch(DmlException e) {
-            System.debug('The following exception has occurred: ' + e.getMessage());
-            throw new CustomDatabaseException(ERROR_INSERTING_ANSWER, e);
+            CustomExceptionData excData = new CustomExceptionData('SaveAnswerException', e.getMessage());
+            throw new AuraHandledException(JSON.serialize(excData));
         }
     }
 
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static void saveAnswers(Answer__c[] answers) {
         try {
             insert answers;
         } catch(DmlException e) {
-            System.debug('The following exception has occurred: ' + e.getMessage());
-            throw new CustomDatabaseException(ERROR_INSERTING_ANSWER, e);
+            CustomExceptionData excData = new CustomExceptionData('SaveAnswersException', 'Error occured saving answers.');
+            throw new AuraHandledException(JSON.serialize(excData));
         }
     }
 }

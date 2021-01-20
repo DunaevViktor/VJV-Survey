@@ -11,7 +11,7 @@ public with sharing class RelatedObjectControllerTest {
 
 
     @TestSetup
-    static void createCaseRelatedObject(){
+    static void setup(){
         Case testCaseFirst = new Case(Subject = FIRST_TEST_CASE_SUBJECT);
         insert testCaseFirst;
         Related_Object__c testCaseRelatedObject = new Related_Object__c(Related_Case__c = testCaseFirst.Id);
@@ -19,23 +19,29 @@ public with sharing class RelatedObjectControllerTest {
 
         Case testCaseSecond = new Case(Subject = SECOND_TEST_CASE_SUBJECT);
         insert testCaseSecond; 
-    }    
 
-    @isTest
-    static void testGetStandardObjectApiNames() {
-        Set<String> result = RelatedObjectController.getStandardObjectApiNames();
-        System.assert(result.size() >= 3, INVALID_STANDARD_OBJECT_API_NAMES_AMOUNT);
+        Profile p = [SELECT Id 
+                     FROM Profile 
+                     WHERE Name = 'Standard User']; 
+                     Blob b = Crypto.GenerateAESKey(128);
+                     String h = EncodingUtil.ConvertTohex(b);
+                     String uid = h.SubString(0,8);
+        User testUser = new User(Alias = uid, Email = uid + '@myorg.com', 
+                                 EmailEncodingKey = 'UTF-8', LastName = 'Testing', LanguageLocaleKey = 'en_US', 
+                                 LocaleSidKey = 'en_US', ProfileId = p.Id, 
+                                 TimeZoneSidKey = 'America/New_York', UserName = uid + '@myorg.com');
+        insert testUser; 
+    }  
+
+    private static User getTestUser() {
+        User testUser = [SELECT Id
+                         FROM User
+                         WHERE LastName = 'Testing'
+                         LIMIT 1];
+        return testUser;
     }
-
-    @isTest
-    static void testGetRelatedObjectIdByRelatedStandardObject() {
-        Id testCaseId = getFirstTestCaseId();
-        System.debug(testCaseId);
-        Related_Object__c result = RelatedObjectController.getRelatedObjectIdByRelatedStandardObject('Case', testCaseId);
-        System.assertNotEquals(null, result, INVALID_RELATED_OBJECT_ID_RESULT);
-    }
-
-    static Id getTestCaseRelatedObjectId() {
+    
+    private static Id getTestCaseRelatedObjectId() {
         Case testCase = [SELECT Id, Subject
                          FROM Case
                          WHERE Subject =: FIRST_TEST_CASE_SUBJECT];
@@ -47,14 +53,14 @@ public with sharing class RelatedObjectControllerTest {
         return testCaseRelatedObject.Id;
     }
 
-    static Id getFirstTestCaseId() {
+    private static Id getFirstTestCaseId() {
         Case testCase = [SELECT Id, Subject
                          FROM Case
                          WHERE Subject =: FIRST_TEST_CASE_SUBJECT];
         return testCase.Id;                 
     }
 
-    static Id getSecondTestCaseId() {
+    private static Id getSecondTestCaseId() {
         Case testCase = [SELECT Id, Subject
                          FROM Case
                          WHERE Subject =: SECOND_TEST_CASE_SUBJECT];
@@ -62,15 +68,11 @@ public with sharing class RelatedObjectControllerTest {
     }
 
     @isTest
-    static void testFirstCheckStandardObjectRecordExistence() {
-        boolean res = RelatedObjectController.isStandardObjectRecordExisting('Case', getFirstTestCaseId());
-        System.assertEquals(true, res, INVALID_STANDARD_OBJECT_CHECK_RESULT);
-    }
-
-    @isTest
-    static void testSecondCheckStandardObjectRecordExistence() {
-        boolean res = RelatedObjectController.isStandardObjectRecordExisting('Case', TestUtility.getFakeId('Case'));
-        System.assertEquals(false, res, INVALID_STANDARD_OBJECT_CHECK_RESULT);
+    static void testFirstGetRelatedObjectIdByRelatedStandardObject() {
+        Id testCaseId = getFirstTestCaseId();
+        System.debug(testCaseId);
+        Id result = RelatedObjectController.getRelatedObjectIdByRelatedStandardObject('Case', testCaseId);
+        System.assertNotEquals(null, result, INVALID_RELATED_OBJECT_ID_RESULT);
     }
 
     @isTest
@@ -81,17 +83,100 @@ public with sharing class RelatedObjectControllerTest {
 
     @isTest
     static void testNegativeCreateRelatedObjectWithRelatedStandardObjectId() {
-        CustomDatabaseException customException = null;
-        try {
-            Id relatedObjectId = RelatedObjectController.createRelatedObjectWithRelatedStandardObjectId('Case', TestUtility.getFakeId('Case'));
-        } catch(CustomDatabaseException cde) {
-            customException = cde;
-        }        
-        System.assertNotEquals(null, customException, INVALID_RELATED_OBJECT_CREATION_RESULT);
+        User testUser = getTestUser();
+        Id secondTestCaseId = getSecondTestCaseId();
+        AuraHandledException auraExc = null;
+        System.runAs(testUser) { 
+            try {
+                Id res = RelatedObjectController.createRelatedObjectWithRelatedStandardObjectId('Case', secondTestCaseId);
+            } catch(AuraHandledException exc) {
+                auraExc = exc;
+            }
+            System.assertNotEquals(null, auraExc, INVALID_RELATED_OBJECT_ID_RESULT);
+        } 
     }
 
-    /*@isTest
-    static void createRelatedObjectWithRelatedStandardObjectId() {
-        Id 
-    }*/
+    @isTest
+    static void testNegativeGetRelatedObjectWithRelatedStandardObjectId() {
+        User testUser = getTestUser();
+        Id secondTestCaseId = getSecondTestCaseId();
+        AuraHandledException auraExc = null;
+        System.runAs(testUser) { 
+            try {
+                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', secondTestCaseId);
+            } catch(AuraHandledException exc) {
+                auraExc = exc;
+            }
+            System.assertNotEquals(null, auraExc, INVALID_RELATED_OBJECT_ID_RESULT);
+        } 
+    }
+
+    @isTest
+    static void testFirstPositiveGetRelatedObjectIdByStandardObjectId() {
+        Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', getFirstTestCaseId());
+        System.assertNotEquals(null, res, INVALID_RELATED_OBJECT_ID_RESULT);
+    }
+
+    @isTest
+    static void testFirstNegativeGetRelatedObjectIdByStandardObjectId() {
+        User testUser = getTestUser();
+        Id secondTestCaseId = getSecondTestCaseId();
+        Exception auraExc = null;
+        System.runAs(testUser) { 
+            try {
+                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', secondTestCaseId);
+            } catch(Exception exc) {
+                auraExc = exc;
+            }
+            System.assertNotEquals(null, auraExc, INVALID_RELATED_OBJECT_ID_RESULT);
+        }               
+    }
+
+    @isTest
+    static void testGetRelatedObjectIdByStandardObjectId() {
+        User testUser = getTestUser();
+        Id secondTestCaseId = getSecondTestCaseId();
+        Exception auraExc = null;
+        System.runAs(testUser) { 
+            try {
+                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', TestUtility.getFakeId('Case'));
+            } catch(Exception exc) {
+                auraExc = exc;
+            }
+            System.assertNotEquals(null, auraExc, INVALID_RELATED_OBJECT_ID_RESULT);
+        }               
+    }
+
+    @isTest
+    static void testFirstNegativeGetRelatedObjectIdByRelatedStandardObject() {
+        User testUser = getTestUser();
+        Id secondTestCaseId = getSecondTestCaseId();
+        Exception auraExc = null;
+        System.runAs(testUser) { 
+            try {
+                Id res = RelatedObjectController.getRelatedObjectIdByRelatedStandardObject('Case', secondTestCaseId);
+            } catch(Exception exc) {
+                auraExc = exc;
+            }
+            System.assertNotEquals(null, auraExc, INVALID_RELATED_OBJECT_ID_RESULT);
+        }
+    }
+
+    @isTest
+    static void testSecondNegativeGetRelatedObjectIdByStandardObjectId() {
+        AuraHandledException auraExc = null;
+        try {
+            Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', TestUtility.getFakeId('Case'));
+        } catch(AuraHandledException exc) {
+            auraExc = exc;
+        }
+        System.assertNotEquals(null, auraExc, INVALID_RELATED_OBJECT_ID_RESULT);
+    } 
+
+    @isTest
+    static void testPositiveGetRelatedObjectIdByStandardObjectId() {
+        Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', getSecondTestCaseId());
+        System.assertNotEquals(null, res, INVALID_RELATED_OBJECT_ID_RESULT);
+    } 
+    
 }

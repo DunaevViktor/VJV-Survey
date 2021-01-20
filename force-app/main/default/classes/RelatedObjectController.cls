@@ -2,56 +2,53 @@ public with sharing class RelatedObjectController {
 
     private static final String RECORD_NOT_FOUND = 'Given standard record doesn\'t exist.';
     private static final String RELATED_OBJECT_IS_NOT_CREATEABLE = 'Related_Object__c is\'t createable.';
+    private static final String RELATED_OBJECT_IS_NOT_ACCESSIBLE = 'Related_Object__c is\'t accessible.';
 
-    /*public static Id getRelatedObjectIdByStandardObjectId(Id standardObjectId) {
-        if(!getRelatedObjectId(standardObjectId)) {
-            //insert
+    @AuraEnabled(cacheable=true)
+    public static Id getRelatedObjectIdByStandardObjectId(String standardObjectApiName, Id standardObjectId) { 
+        try {
+            //this will throw exception if record with standardObjectId doesn't exist
+            checkStandardObjectRecordExisting(standardObjectApiName, standardObjectId);
+
+            Id relatedObjectId = getRelatedObjectIdByRelatedStandardObject(standardObjectApiName, standardObjectId);
+            if(relatedObjectId == null) {
+                relatedObjectId = createRelatedObjectWithRelatedStandardObjectId(standardObjectApiName, standardObjectId);
+            }
+            return relatedObjectId;
+
+        } catch(Exception exc) {
+            throw exc;
         }
-    }*/
-
-    /*private static Id getRelatedObjectId(Id standardObjectId) {
-
-        Set<String> standardObjectApiNames = getStandardObjectApiNames();
-
-        for(String objectApiName : standardObjectApiNames) {
-
-        }
-
-        //check in Case records
-        Related_Object__c caseRelatedObjectFindResult = [SELECT Id
-                                                         FROM Related_Object__c
-                                                         WHERE Related_Case__c =: standardObjectId];
-    }*/
+    }
 
     @TestVisible
-    private static Related_Object__c getRelatedObjectIdByRelatedStandardObject(String relatedStandardObjectApiName, Id relatedStandardObjectId) {
-        
+    private static Id getRelatedObjectIdByRelatedStandardObject(String relatedStandardObjectApiName, Id relatedStandardObjectId) {
+        Id result;        
+        if(!Related_Object__c.SObjectType.getDescribe().isAccessible()) {
+            CustomExceptionData excData = new CustomExceptionData('GetRelatedObjectException', RELATED_OBJECT_IS_NOT_ACCESSIBLE);
+            throw new AuraHandledException(JSON.serialize(excData));
+        }
         List<Related_Object__c> res = Database.query(
           'SELECT Id FROM Related_Object__c' +
           ' WHERE Related_' + String.escapeSingleQuotes(relatedStandardObjectApiName) + '__c =: relatedStandardObjectId' +
           ' WITH SECURITY_ENFORCED LIMIT 1'
         );
         if(res != null && res.size() > 0) {
-            return res[0];
+            result = res[0].Id;
+        } else {
+            result = null;
         }
-        return null;
-    }
 
-    @TestVisible
-    private static Set<String> getStandardObjectApiNames() {
-        Map<String, String> standardObjectApiNames = MetadataFetcher.getPicklistValues('Trigger_Rule__c', 'Object_Api_Name__c');
-        return standardObjectApiNames.keySet();
+        return result;
     }
-
 
     @TestVisible
     private static Id createRelatedObjectWithRelatedStandardObjectId(String standardObjectApiName, Id relatedObjectId) {
-        if(!Related_Object__c.sObjectType.getDescribe().isCreateable()) {
-            throw new CustomDatabaseException(RELATED_OBJECT_IS_NOT_CREATEABLE);
+        if(!Related_Object__c.SObjectType.getDescribe().isCreateable() || !Schema.SObjectType.Related_Object__c.fields.Related_Case__c.isAccessible()
+        || !Schema.SObjectType.Related_Object__c.fields.Related_Contact__c.isAccessible() || !Schema.SObjectType.Related_Object__c.fields.Related_Lead__c.isAccessible()) {
+            CustomExceptionData excData = new CustomExceptionData('CreateRelatedObjectException', RELATED_OBJECT_IS_NOT_CREATEABLE);
+            throw new AuraHandledException(JSON.serialize(excData));
         }
-        if(!isStandardObjectRecordExisting(standardObjectApiName, relatedObjectId)) {
-            throw new CustomDatabaseException(RECORD_NOT_FOUND);
-        }   
         Related_Object__c relatedObjectToInsert = new Related_Object__c();
         relatedObjectToInsert.put('Related_' + standardObjectApiName + '__c', relatedObjectId + '');
         insert relatedObjectToInsert;
@@ -59,8 +56,12 @@ public with sharing class RelatedObjectController {
     }
 
     @TestVisible
-    private static boolean isStandardObjectRecordExisting(String standardObjectApiName, Id recordId) { 
+    private static boolean checkStandardObjectRecordExisting(String standardObjectApiName, Id recordId) { 
         boolean objectExists = false;
+        if(!Related_Object__c.SObjectType.getDescribe().isAccessible()) {
+            CustomExceptionData excData = new CustomExceptionData('GetRelatedObjectException', RELATED_OBJECT_IS_NOT_ACCESSIBLE);
+            throw new AuraHandledException(JSON.serialize(excData));
+        }
         List<SObject> res = Database.query(
             'SELECT Id FROM ' + String.escapeSingleQuotes(standardObjectApiName) +
             ' WHERE Id =: recordId' +
@@ -68,6 +69,9 @@ public with sharing class RelatedObjectController {
         );
         if(res != null && res.size() > 0) {
             objectExists = true;
+        } else {
+            CustomExceptionData excData = new CustomExceptionData('GetRelatedObjectException', RECORD_NOT_FOUND);
+            throw new AuraHandledException(JSON.serialize(excData));
         }
         return objectExists;
     }
