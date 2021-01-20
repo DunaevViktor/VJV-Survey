@@ -3,7 +3,6 @@
     <apiVersion>50.0</apiVersion>
     <isExposed>true</isExposed>
     <masterLabel>Basic Settings Screen</masterLabel>
-    <description>Component with basic settings for survey.</description>
     <targets>
         <target>lightning__FlowScreen</target>
     </targets>
