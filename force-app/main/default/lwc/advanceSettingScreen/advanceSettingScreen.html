@@ -1,0 +1,137 @@
+<template>
+  <template if:true={isError}>{label.errorTitle}</template>
+
+  <template if:false={isError}>
+    <template if:true={hasReceiers}>
+      <div class="data-table">
+        <lightning-datatable
+          key-field="Value__c"
+          data={receivers}
+          columns={columns}
+          onrowaction={handleRowAction}
+          hide-checkbox-column
+        >
+        </lightning-datatable>
+      </div>
+    </template>
+
+    <div class="slds-text-heading_medium">{label.add_new_receiver}</div>
+    <lightning-radio-group
+      name="newReceiver"
+      variant="label-hidden"
+      options={receiverOptions}
+      value="email"
+      onchange={handleIsNewReceiverChange}
+      type="radio"
+    >
+    </lightning-radio-group>
+
+    <template if:true={isEmailReceiver}>
+      <div class="slds-m-vertical_medium">
+        <lightning-input
+          type="text"
+          id="email"
+          label={label.email}
+          placeholder="username@example.com"
+          class="email-input"
+          required
+        >
+        </lightning-input>
+      </div>
+
+      <div class="button">
+        <lightning-button
+          variant="brand"
+          label={label.add}
+          onclick={handleAddEmailReceiver}
+        >
+        </lightning-button>
+      </div>
+
+    </template>
+
+    <template if:false={isEmailReceiver}>
+      <template if:true={isHasGroups}>
+        <div class="slds-m-vertical_medium">
+          <lightning-combobox
+            name="userGroups"
+            label={label.user_groups}
+            value=""
+            placeholder="Select User Group"
+            options={groupOptions}
+            onchange={handleGroupChange}
+            class="group-combobox"
+            required
+          ></lightning-combobox>
+        </div>
+
+        <div class="button">
+          <lightning-button
+            variant="brand"
+            label={label.add}
+            onclick={handleAddGroupReceiver}
+          >
+          </lightning-button>
+        </div>
+
+      </template>
+      <template if:false={isHasGroups}>
+        <div class="text">{label.msg_no_public_groups_found}</div>
+      </template>
+      
+    </template>
+
+    <lightning-input
+      type="checkbox"
+      label={label.standard_survey}
+      checked={__survey.IsStandard__c}
+      onchange={handleIsStandardSurveyChange}
+    >
+    </lightning-input>
+
+    <lightning-input
+      type="checkbox"
+      label={label.can_be_resending}
+      checked={__survey.IsResending__c}
+      onchange={handleIsResendingChange}
+    >
+    </lightning-input>
+
+    <template if:true={isHasSurveys}>
+      <lightning-input
+        type="checkbox"
+        label={label.connect_to_another_survey}
+        checked={isConnectToSurvey}
+        onchange={handleConnectToAnotherSurveyChange}
+      >
+      </lightning-input>
+      <template if:true={isConnectToSurvey}>
+        <lightning-combobox
+          name="surveys"
+          label={label.surveys}
+          value={surveyId}
+          placeholder="Select survey for connect"
+          options={surveyOptions}
+          onchange={handleSurveyChange}
+          required
+        >
+        </lightning-combobox>
+      </template>
+    </template>
+
+    <hr class="slds-m-bottom_small" />
+
+    <div class="slds-text-align_right">
+      <lightning-button
+        label={label.previous}
+        onclick={clickPreviousButton}
+      ></lightning-button>
+      <lightning-button
+        variant="brand"
+        label={label.next}
+        onclick={clickNextButton}
+        class="slds-m-left_x-small"
+      ></lightning-button>
+    </div>
+  </template>
+</template>
