@@ -1,3 +1,4 @@
+@isTest
 public class TestUtility
 {
    static Integer sNum = 1;

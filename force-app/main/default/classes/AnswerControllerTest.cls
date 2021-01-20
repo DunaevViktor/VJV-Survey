@@ -1,7 +1,8 @@
 @isTest
 public with sharing class AnswerControllerTest {
 
-    private static final String INVALID_SAVE_ANSWERS_RESULT = 'Invalid answer/answers saving.';
+    private static final String INVALID_SAVE_ANSWERS_RESULT = 'Invalid answers saving.';
+    private static final String INVALID_PARTIAL_SAVE_ANSWERS_RESULT = 'Invalid partial answers saving.';
 
     @TestSetup
     static void setup() {
@@ -11,7 +12,7 @@ public with sharing class AnswerControllerTest {
         Group_Answer__c testGroupAnswer = new Group_Answer__c(Survey__c = testSurvey.Id);
         insert testGroupAnswer;
 
-        Question__c testQuestion = new Question__c(Survey__c = testSurvey.Id,Label__c = 'Test label', Position__c = 2);
+        Question__c testQuestion = new Question__c(Survey__c = testSurvey.Id, Label__c = 'Test label', Position__c = 2);
         insert testQuestion;
     }
 
@@ -37,22 +38,19 @@ public with sharing class AnswerControllerTest {
     }
 
     @isTest
-    static void testPositiveSaveAnswer() {
-        Answer__c testAnswer = new Answer__c(Group_Answer__c = getTestGroupAnswerId(), Question__c = getTestQuestionId(), Value__c = 'Test');
-        Id savedAnswerId = AnswerController.saveAnswer(testAnswer);
-        System.assertNotEquals(null, savedAnswerId, INVALID_SAVE_ANSWERS_RESULT);
-    }
-
-    @isTest
-    static void testNegativeSaveAnswer() {
-        AuraHandledException auraExc = null;
+    static void testSaveAnswersPartially() {
+        Exception auraExc = null;
         try {
-            Answer__c testAnswer = new Answer__c(Group_Answer__c = getTestGroupAnswerId(), Question__c = getTestQuestionId());
-            Id savedAnswerId = AnswerController.saveAnswer(testAnswer);
-        } catch(AuraHandledException exc) {
+            Answer__c testCorrectAnswer = new Answer__c(Group_Answer__c = getTestGroupAnswerId(), Question__c = getTestQuestionId(), Value__c = 'Test Value');
+            Answer__c testIncorrectAnswer = new Answer__c(Group_Answer__c = getTestGroupAnswerId(), Question__c = getTestQuestionId());
+            List<Answer__c> testAnswerList = new List<Answer__c>();
+            testAnswerList.add(testCorrectAnswer);
+            testAnswerList.add(testIncorrectAnswer);
+            AnswerController.saveAnswersPartially(testAnswerList);
+        } catch(Exception exc) {
             auraExc = exc;
         }
-        System.assertNotEquals(null, auraExc, INVALID_SAVE_ANSWERS_RESULT);
+        System.assertEquals(null, auraExc, INVALID_PARTIAL_SAVE_ANSWERS_RESULT);
     }
 
     @isTest
@@ -60,7 +58,7 @@ public with sharing class AnswerControllerTest {
         AuraHandledException auraExc = null;
         try {
             Answer__c testAnswer = new Answer__c(Group_Answer__c = getTestGroupAnswerId(), Question__c = getTestQuestionId(), Value__c = 'Test Value');
-            Answer__c[] answers = new List<Answer__c>();
+            List<Answer__c> answers = new List<Answer__c>();
             answers.add(testAnswer);
             AnswerController.saveAnswers(answers);
         } catch(AuraHandledException exc) {
@@ -74,7 +72,7 @@ public with sharing class AnswerControllerTest {
         AuraHandledException auraExc = null;
         try {
             Answer__c testAnswer = new Answer__c(Group_Answer__c = getTestGroupAnswerId(), Question__c = getTestQuestionId());
-            Answer__c[] answers = new List<Answer__c>();
+            List<Answer__c> answers = new List<Answer__c>();
             answers.add(testAnswer);
             AnswerController.saveAnswers(answers);
         } catch(AuraHandledException exc) {

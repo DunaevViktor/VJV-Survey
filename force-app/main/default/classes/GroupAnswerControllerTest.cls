@@ -1,7 +1,7 @@
 @isTest
 public with sharing class GroupAnswerControllerTest {
     
-    private static final String INVALID_SAVE_GROUP_ANSWERS_RESULT = 'Invalid group answer/answers saving.';
+    private static final String INVALID_SAVE_GROUP_ANSWER_RESULT = 'Invalid group answer saving.';
 
     @TestSetup
     static void setup() {
@@ -20,11 +20,11 @@ public with sharing class GroupAnswerControllerTest {
     static void testPositiveSaveGroupAnswer() {
         Group_Answer__c testGroupAnswer = new Group_Answer__c(Survey__c = getTestSurveyId());
         Id savedGroupAnswerId = GroupAnswerController.saveGroupAnswer(testGroupAnswer);
-        System.assertNotEquals(null, savedGroupAnswerId, INVALID_SAVE_GROUP_ANSWERS_RESULT);
+        System.assertNotEquals(null, savedGroupAnswerId, INVALID_SAVE_GROUP_ANSWER_RESULT);
     }
 
     @isTest
-    static void testNegativeSaveGroupAnswers() {
+    static void testNegativeSaveGroupAnswer() {
         AuraHandledException auraExc = null;
         try {
             Group_Answer__c testGroupAnswer = new Group_Answer__c();
@@ -32,34 +32,7 @@ public with sharing class GroupAnswerControllerTest {
         } catch(AuraHandledException exc) {
             auraExc = exc;
         }
-        System.assertNotEquals(null, auraExc, INVALID_SAVE_GROUP_ANSWERS_RESULT);
+        System.assertNotEquals(null, auraExc, INVALID_SAVE_GROUP_ANSWER_RESULT);
     }
-
-    @isTest
-    static void testPositiveSaveGroupAnswers() {
-        AuraHandledException auraExc = null;
-        try {
-            Group_Answer__c testGroupAnswer = new Group_Answer__c(Survey__c = getTestSurveyId());
-            Group_Answer__c[] groupAnswers = new List<Group_Answer__c>();
-            groupAnswers.add(testGroupAnswer);
-            GroupAnswerController.saveGroupAnswers(groupAnswers);
-        } catch(AuraHandledException exc) {
-            auraExc = exc;
-        }
-        System.assertEquals(null, auraExc, INVALID_SAVE_GROUP_ANSWERS_RESULT);
-    }
-
-    @isTest
-    static void testNegativeSaveAnswers() {
-        AuraHandledException auraExc = null;
-        try {
-            Group_Answer__c testGroupAnswer = new Group_Answer__c();
-            Group_Answer__c[] groupAnswers = new List<Group_Answer__c>();
-            groupAnswers.add(testGroupAnswer);
-            GroupAnswerController.saveGroupAnswers(groupAnswers);
-        } catch(AuraHandledException exc) {
-            auraExc = exc;
-        }
-        System.assertNotEquals(null, auraExc, INVALID_SAVE_GROUP_ANSWERS_RESULT);
-    }
+    
 }
