@@ -143,7 +143,8 @@ export default class SaverScreen extends LightningElement {
       .then(() => {
         this.increaseProgress();
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         this.isError = true;
       })
   }
