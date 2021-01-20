@@ -8,7 +8,7 @@ public with sharing class LookupController {
           'SELECT Id, Name FROM ' +
           String.escapeSingleQuotes(objectApiName) +
           ' WHERE Name LIKE ' +
-          String.escapeSingleQuotes(searchKey) +
+          '\'' + String.escapeSingleQuotes(searchKey) + '%\'' +
           'WITH SECURITY_ENFORCED LIMIT 10'
         );
         for (SObject singleSObject : res) {

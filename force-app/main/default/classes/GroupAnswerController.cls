@@ -16,7 +16,7 @@ public with sharing class GroupAnswerController {
         try {
             insert groupAnswers;
         } catch(DmlException e) {
-            CustomExceptionData excData = new CustomExceptionData('SaveGroupAnswerException', e.getMessage());
+            CustomExceptionData excData = new CustomExceptionData('SaveGroupAnswersException', e.getMessage());
             throw new AuraHandledException(JSON.serialize(excData));
         }
     }
