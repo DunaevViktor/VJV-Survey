@@ -36,6 +36,13 @@
         <value>Add Trigger Rule</value>
     </labels>
     <labels>
+        <fullName>can_be_resending</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>can be resending</shortDescription>
+        <value>Can be resending</value>
+    </labels>
+    <labels>
         <fullName>cancel_edit</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -225,6 +232,13 @@
         <value>Field</value>
     </labels>
     <labels>
+        <fullName>fill_trigger_rules</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Clear(delete) or full trigger rules completely</shortDescription>
+        <value>Full incomplete trigger rules or clear(delete) them completely</value>
+    </labels>
+    <labels>
         <fullName>group_name</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -237,13 +251,6 @@
         <protected>true</protected>
         <shortDescription>group name or email</shortDescription>
         <value>Group Name or Email</value>
-    </labels>
-    <labels>
-        <fullName>fill_trigger_rules</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Clear(delete) or full trigger rules completely</shortDescription>
-        <value>Full incomplete trigger rules or clear(delete) them completely</value>
     </labels>
     <labels>
         <fullName>image_loading</fullName>
@@ -540,13 +547,6 @@
         <value>Success</value>
     </labels>
     <labels>
-        <fullName>surveys</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>surveys</shortDescription>
-        <value>Surveys</value>
-    </labels>
-    <labels>
         <fullName>survey_bg_color</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -566,6 +566,13 @@
         <protected>true</protected>
         <shortDescription>survey name</shortDescription>
         <value>Survey Name</value>
+    </labels>
+    <labels>
+        <fullName>surveys</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>surveys</shortDescription>
+        <value>Surveys</value>
     </labels>
     <labels>
         <fullName>text</fullName>
