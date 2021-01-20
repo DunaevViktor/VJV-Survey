@@ -143,21 +143,22 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Объект Question Option служит для хранения вариантов ответа Question, если у второго тип подразумевает тип с возможностью выбора варианта ответа(к примеру picklist).</description>
+    <description>The Question Option object is used to store the Question answer options, if the second type implies a type with a choice of answer options (for example, picklist).</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
     <enableHistory>false</enableHistory>
     <enableLicensing>false</enableLicensing>
-    <enableReports>false</enableReports>
+    <enableReports>true</enableReports>
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>ControlledByParent</externalSharingModel>
     <label>Question Option</label>
     <nameField>
+        <displayFormat>QO-{00000}</displayFormat>
         <label>Question Option Name</label>
-        <type>Text</type>
+        <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Question Options</pluralLabel>
     <searchLayouts/>

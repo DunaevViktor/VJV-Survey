@@ -5,8 +5,6 @@ import TRIGGER_RULE_OBJECT from '@salesforce/schema/Trigger_Rule__c';
 import OBJECT_API_NAME_FIELD from '@salesforce/schema/Trigger_Rule__c.Object_Api_Name__c';
 import OPERATOR_FIELD from '@salesforce/schema/Trigger_Rule__c.Operator__c';
 
-import DELETE_ICON from "@salesforce/resourceUrl/DeleteIcon";
-
 import {
   getFieldAttributes,
   generateBooleanField,
@@ -32,7 +30,9 @@ export default class SingleTriggerRule extends LightningElement {
   operatorFieldName = OPERATOR_FIELD.fieldApiName;
 
   initialRender = true;
-  deleteIcon = DELETE_ICON;
+  
+  clearIconName = "utility:clear";
+  deleteIconName = "utility:delete";
 
   @track objectValue = "";
   @track fieldType = "";
@@ -198,6 +198,10 @@ export default class SingleTriggerRule extends LightningElement {
     }
   }
 
+  handleClearRuleClick() {
+    this.clearChosenData();
+  }
+
   handleDeleteRuleClick() {
     this.clearChosenData();
 
@@ -232,7 +236,21 @@ export default class SingleTriggerRule extends LightningElement {
       Field_Name__c: this.fieldValue,
       Operator__c: this.operatorValue,
       Field_Value__c: this.value,
-    };  
+    };
+    if(this.isTriggerRuleClear(triggerRule)) {
+      return {};
+    }  
     return triggerRule;
+  }
+
+  isTriggerRuleClear(triggerRule) {
+    let isClear = true;
+    for(let field in triggerRule) { 
+      if(triggerRule[field]) {
+        isClear = false;
+        break;
+      }
+    }
+    return isClear;
   }
 }

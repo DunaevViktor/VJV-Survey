@@ -143,13 +143,13 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Объект Survey олицетворяет сам опросник. Хранит в себе название, описание, лого опросника, и ссылку на следующий опрос в цепочке, а также ссылку на свою форму. Дополнительным полем является флажок отвечающим за то, не является ли опрос стандартным.</description>
+    <description>The Survey object represents the questionnaire itself. It stores the name, description, logo of the questionnaire, and a link to the next poll in the chain, as well as a link to its form. An additional field is a checkbox responsible for whether the survey is standard.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
     <enableHistory>false</enableHistory>
     <enableLicensing>false</enableLicensing>
-    <enableReports>false</enableReports>
+    <enableReports>true</enableReports>
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Value__c</fullName>
-    <description>Название группы пользователей, которые получат email либо же сам email (одна штука).</description>
+    <description>The name of the group of users who will receive the email or the single email.</description>
     <externalId>false</externalId>
     <label>Value</label>
     <length>80</length>
