@@ -3,25 +3,21 @@
     class="slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
   >
     <span>{option.Value__c}</span>
-    <span
-      class="slds-icon_container slds-icon-utility-announcement slds-float_right"
-      title={label.deleteTitle}
-      onclick={deleteOption}
-    >
-      <img
-        class="slds-icon slds-icon-text-default slds-icon_x-small"
-        src={deleteIcon}
-      />
-    </span>
-    <span
-      class="slds-icon_container slds-icon-utility-announcement slds-float_right"
-      title="Edit"
-      onclick={editOption}
-    >
-      <img
-        class="slds-icon slds-icon-text-default slds-icon_x-small"
-        src={editIcon}
-      />
-    </span>
+
+    <lightning-icon icon-name="utility:delete" 
+                    alternative-text={label.deleteTitle} 
+                    title={label.deleteTitle} 
+                    class="slds-float_right" 
+                    size="x-small" 
+                    onclick={deleteOption}>
+    </lightning-icon>
+    <lightning-icon icon-name="utility:edit" 
+                    alternative-text={label.edit} 
+                    title={label.edit} 
+                    class="slds-float_right" 
+                    size="x-small" 
+                    onclick={editOption}>
+    </lightning-icon>
+
   </div>
 </template>
