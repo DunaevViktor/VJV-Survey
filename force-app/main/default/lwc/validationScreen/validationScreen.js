@@ -29,7 +29,7 @@ export default class ValidationScreen extends LightningElement {
     } else {
       this.isHaveQuestions = false;
     }
-
+    
     this.isHaveValidations = this.validations && this.validations.length > 0;
   }
 
