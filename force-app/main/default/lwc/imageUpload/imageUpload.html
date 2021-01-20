@@ -21,13 +21,15 @@
     </template>
 
     <template if:true={displayImage}>
-      <img
+      <lightning-icon 
         if:false={loading}
-        class="remove-button"
-        src={removeIconUrl}
-        title={label.remove_image}
-        onclick={clearFile}
-      />
+        icon-name="utility:delete" 
+        alternative-text={label.remove_image}
+        title={label.remove_image} 
+        class="remove-button slds-align_absolute-center"
+        size="x-small" 
+        onclick={clearFile}>
+      </lightning-icon>
       <img 
         class="preview-image" 
         src={imageUrl} 
