@@ -1,14 +1,12 @@
 import { LightningElement, api, track } from "lwc";
-import getImageURL from "@salesforce/apex/ImageUploadController.getImageURL";
 import { labels } from "./labels";
 
 export default class ImageUpload extends LightningElement {
-  
   @api defaultUrl;
+  @api loading;
   
   @track displayImage = false;
   @track imageUrl;
-  @track imageLoading;
   @track error;
 
   imageFile;
@@ -25,7 +23,6 @@ export default class ImageUpload extends LightningElement {
   uploadImage(event) {
     this.imageFile = event.target.files[0];
     this.imageName = this.imageFile.name;
-    this.imageLoading = true;
     this.generateImageData();
   }
 
@@ -33,7 +30,6 @@ export default class ImageUpload extends LightningElement {
     event.preventDefault();
     this.imageFile = event.dataTransfer.files[0];
     this.imageName = this.imageFile.name;
-    this.imageLoading = true;
     this.generateImageData();
   }
 
@@ -43,6 +39,7 @@ export default class ImageUpload extends LightningElement {
 
   clearFile() {
     this.imageFile = undefined;
+    this.imageName = '';
     this.imageUrl = '';
     this.dispatchImageUrl();
     this.updateImageArea();
@@ -52,40 +49,24 @@ export default class ImageUpload extends LightningElement {
     const reader = new FileReader();
 
     reader.onload = () => {
-      const blob = reader.result;
-      const base64 = "base64,";
-      const imageBase64 = blob.substr(blob.indexOf(base64) + base64.length);
-      getImageURL({
-        imageName: this.imageName,
-        imageBase64Data: imageBase64
-      })
-        .then((result) => {
-          this.imageUrl = result;
-          this.dispatchImageUrl();
-        })
-        .then(() => {
-          this.imageLoading = false;
-        })
-        .then(() => {
-          this.updateImageArea();
-        })
-        .catch(error => {
-          this.imageUrl = '';
-          this.error = error;
-          this.updateImageArea();
-        });
+      const blobUrl = reader.result;
+      this.imageUrl = blobUrl;
+      this.dispatchImageUrl();
+      this.updateImageArea();
     };
     reader.readAsDataURL(this.imageFile);
   }
 
   updateImageArea() {
     this.displayImage = !!this.imageUrl;
-    this.imageLoading = false;
   }
 
   dispatchImageUrl() {
     const imageUrlUpdateEvent = new CustomEvent("updateimageurl", {
-      detail: { imageUrl: this.imageUrl }
+      detail: { 
+        imageName: this.imageName,
+        imageUrl: this.imageUrl 
+      }
     });
     this.dispatchEvent(imageUrlUpdateEvent);
   }

@@ -9,6 +9,7 @@
     <targetConfigs>
         <targetConfig targets="lightning__FlowScreen">
             <property name="surveyData" label="Survey Data" type="@salesforce/schema/Survey__c"/>
+            <property name="logoDocumentId" label="Logo ContentDocument Id" type="String"/>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

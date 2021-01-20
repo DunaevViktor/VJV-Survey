@@ -148,6 +148,13 @@
         <value>The number of options must be at least two</value>
     </labels>
     <labels>
+        <fullName>failed_image_delete</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Failed Image Delete</shortDescription>
+        <value>Error occured while deletion image</value>
+    </labels>
+    <labels>
         <fullName>failed_image_upload</fullName>
         <language>en_US</language>
         <protected>true</protected>
