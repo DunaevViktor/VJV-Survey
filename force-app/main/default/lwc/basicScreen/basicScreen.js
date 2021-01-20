@@ -110,6 +110,7 @@ export default class BasicScreen extends LightningElement {
             this.dispatchEvent(navigateNextEvent);
           }).
           catch(() => {
+            this.loading = false;
             this.showToastEvent(this.label.unable_to_continue, this.errorVariant, this.label.failed_image_upload)
           });
         return;
