@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0070D2</headerColor>
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <description>Application for creating and analyzing surveys.</description>
+    <formFactors>Small</formFactors>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <label>Survey</label>
+    <navType>Standard</navType>
+    <tabs>Survey_Constructor</tabs>
+    <tabs>Survey__c</tabs>
+    <tabs>Question__c</tabs>
+    <tabs>Question_Option__c</tabs>
+    <tabs>Answer__c</tabs>
+    <tabs>Trigger_Rule__c</tabs>
+    <tabs>Validation__c</tabs>
+    <tabs>Email_Receiver__c</tabs>
+    <tabs>Group_Answer__c</tabs>
+    <tabs>Related_Object__c</tabs>
+    <tabs>standard-report</tabs>
+    <tabs>standard-Dashboard</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>Survey_UtilityBar</utilityBar>
+</CustomApplication>
