@@ -1,41 +1,28 @@
 <template>
   <div class="slds-box slds-align_absolute-center image-upload-wrapper">
     <template if:false={displayImage}>
-      <template if:true={error}>
-        <p>{label.failed_image_upload}</p>
-      </template>
-
-      <template if:false={error}>
-        <lightning-spinner 
-          if:true={imageLoading} 
-          alternative-text={label.image_loading} 
-          size="large"
-        ></lightning-spinner>
-
-        <template if:false={imageLoading}>
-          <input
-            id="uploading-image"
-            class="image-upload-hidden"
-            type="file"
-            accept={acceptedFormats}
-            onchange={uploadImage}
-          />
-          <label
-            for="uploading-image"
-            class="slds-align_absolute-center image-upload-component"
-            ondrop={handleDropFile}
-            ondragover={allowDropFile}
-          >
-            <span class="slds-text-heading_small">
-              {label.drag_n_drop_image}
-            </span>
-          </label>
-        </template>
-      </template>
+      <input
+        id="uploading-image"
+        class="image-upload-hidden"
+        type="file"
+        accept={acceptedFormats}
+        onchange={uploadImage}
+      />
+      <label
+        for="uploading-image"
+        class="slds-align_absolute-center image-upload-component"
+        ondrop={handleDropFile}
+        ondragover={allowDropFile}
+      >
+        <span class="slds-text-heading_small">
+          {label.drag_n_drop_image}
+        </span>
+      </label>
     </template>
 
     <template if:true={displayImage}>
       <img
+        if:false={loading}
         class="remove-button"
         src={removeIconUrl}
         title={label.remove_image}
