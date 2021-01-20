@@ -14,5 +14,4 @@
             <property name="validations" type="@salesforce/schema/Validation__c[]" label="Validation rules"/>
         </targetConfig>
     </targetConfigs>
-     
 </LightningComponentBundle>
