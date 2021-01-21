@@ -56,6 +56,8 @@ export default class TriggerRulesWrapper extends LightningElement {
     this._rules = this.getNewTriggerRules();
     if(!this.areTriggerRulesFilledCompletely(this._rules)) {
       this.showToast("", this.labels.fill_trigger_rules, "error");
+    } else if(this.areDuplicatesPresent(this._rules)) {
+      this.showToast("", this.labels.restrict_duplicate_rules, "error");
     } else {
       const navigateNextEvent = new CustomEvent("navigatenext", {
         detail: { triggerRules: [...this._rules] },
@@ -68,6 +70,8 @@ export default class TriggerRulesWrapper extends LightningElement {
     this._rules = this.getNewTriggerRules();
     if(!this.areTriggerRulesFilledCompletely(this._rules)) {
       this.showToast("", this.labels.fill_trigger_rules, "error");
+    } else if(this.areDuplicatesPresent(this._rules)) {
+      this.showToast("", this.labels.restrict_duplicate_rules, "error");
     } else {
       const navigatePrevEvent = new CustomEvent("navigateback", {
         detail: { triggerRules: [...this._rules] },
@@ -118,6 +122,12 @@ export default class TriggerRulesWrapper extends LightningElement {
       }
     }
     return completelyFilled;
+  }
+
+  areDuplicatesPresent(triggerRules) {  
+    const triggerRulesInJSON = triggerRules.map(triggerRule => JSON.stringify(triggerRule));
+    const res = new Set(triggerRulesInJSON).size !== triggerRulesInJSON.length;
+    return res;
   }
 
   showToast(title, message, variant) {
