@@ -290,7 +290,6 @@ export default class QuestionScreen extends LightningElement {
 
     if(!!question.Question_Options__r) {
       question.Question_Options__r = resetOptionsIds(question.Question_Options__r);
-      console.log('norm')
     }
 
     this.displayedQuestions.push(question);
