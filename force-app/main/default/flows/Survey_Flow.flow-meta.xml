@@ -131,7 +131,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>Validations_Screen</targetReference>
+            <targetReference>Validation_Screen</targetReference>
         </connector>
         <fields>
             <name>QuestionScreenComponent</name>
@@ -271,8 +271,8 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
-        <name>Validations_Screen</name>
-        <label>Validations Screen</label>
+        <name>Validation_Screen</name>
+        <label>Validation Screen</label>
         <locationX>176</locationX>
         <locationY>518</locationY>
         <allowBack>true</allowBack>
@@ -298,10 +298,6 @@
                 </value>
             </inputParameters>
             <isRequired>true</isRequired>
-            <outputParameters>
-                <assignToReference>QuestionList</assignToReference>
-                <name>questions</name>
-            </outputParameters>
             <outputParameters>
                 <assignToReference>ValidationList</assignToReference>
                 <name>validations</name>

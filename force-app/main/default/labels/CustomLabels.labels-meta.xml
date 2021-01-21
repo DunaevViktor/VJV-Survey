@@ -428,6 +428,13 @@
         <value>Question Setting</value>
     </labels>
     <labels>
+        <fullName>questions_connected</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>questions connected</shortDescription>
+        <value>These questions are already connected in another validation</value>
+    </labels>
+    <labels>
         <fullName>remove_image</fullName>
         <language>en_US</language>
         <protected>true</protected>

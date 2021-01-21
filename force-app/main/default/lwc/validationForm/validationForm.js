@@ -176,8 +176,6 @@ export default class ValidationForm extends LightningElement {
       detail: validation
     });
     this.dispatchEvent(addEvent);
-
-    this.resetForm();
   }
 
   sendErrorNotification() {
@@ -185,6 +183,7 @@ export default class ValidationForm extends LightningElement {
     this.dispatchEvent(errorEvent);
   }
 
+  @api
   resetForm() {
     this.firstPosition = this.questions[0].Position__c;
     this.secondPosition = this.questions[1].Position__c;
