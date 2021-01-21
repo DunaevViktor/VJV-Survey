@@ -221,6 +221,7 @@ export default class SingleTriggerRule extends LightningElement {
     this.value = "";
     this.operatorValue = "";
     this.operators = [];
+    this.fieldNames = [];
     this.fieldValue = "";
     this.fieldType = "";
     this.objectValue = "";
