@@ -43,8 +43,6 @@ const deleteFromOptions = (options, selectedValue) => {
 }
 
 const clearInput = (input) => {
-  // input.value = ".";
-  // input.focus();
   input.setCustomValidity("");
   input.reportValidity();
   input.value = "";
