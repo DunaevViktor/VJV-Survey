@@ -12,7 +12,8 @@ import {
   filterOptionsByValue,
   updateOptionsValue,
   deleteFromOptions,
-  clearInput
+  clearInput,
+  setInputValidity
 } from "./questionFormHelper.js";
 
 export default class QuestionForm extends LightningElement {
@@ -26,6 +27,8 @@ export default class QuestionForm extends LightningElement {
 
   REQUIRED_FIELD_API_NAME = "Required__c";
   REUSABLE_FIELD_API_NAME = "IsReusable__c";
+
+  EMPTRY_STRING = "";
 
   @track question;
 
@@ -132,7 +135,7 @@ export default class QuestionForm extends LightningElement {
       Value__c: input.value
     });
 
-    input.value = "";
+    clearInput(input);
   }
 
   editOption(event) {
@@ -168,7 +171,10 @@ export default class QuestionForm extends LightningElement {
   }
 
   isOptionCorrect(input) {
-    if (!input.validity.valid) return false;
+    if (input.value === this.EMPTRY_STRING) {
+      setInputValidity(input, label.complete_this_field);
+      return false;
+    }
 
     const filteredOptions = filterOptionsByValue(this.question.Question_Options__r, input.value);
 
@@ -225,7 +231,8 @@ export default class QuestionForm extends LightningElement {
   isQuestionCorrect() {
     const input = this.template.querySelector(".input");
 
-    if (!input.validity.valid) {
+    if (input.value === this.EMPTRY_STRING) {
+      setInputValidity(input, label.complete_this_field);
       return false;
     } else if (
       this.isOptionsEnabled &&
@@ -245,7 +252,6 @@ export default class QuestionForm extends LightningElement {
   resetForm() {
     const input = this.template.querySelector(".input");
     clearInput(input);
-    input.value = "";
     this.selectedType = this.displayedTypes
       ? this.displayedTypes[0].value
       : "Text";

@@ -64,6 +64,13 @@
         <value>Compared Value</value>
     </labels>
     <labels>
+        <fullName>complete_this_field</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>complete this field</shortDescription>
+        <value>Complete this field</value>
+    </labels>
+    <labels>
         <fullName>connect_to_another_survey</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -426,6 +433,13 @@
         <protected>true</protected>
         <shortDescription>question settings</shortDescription>
         <value>Question Setting</value>
+    </labels>
+    <labels>
+        <fullName>questions_connected</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>questions connected</shortDescription>
+        <value>These questions are already connected in another validation</value>
     </labels>
     <labels>
         <fullName>remove_image</fullName>

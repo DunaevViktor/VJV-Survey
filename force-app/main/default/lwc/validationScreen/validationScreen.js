@@ -2,8 +2,14 @@ import { LightningElement, api, track } from "lwc";
 
 import { label } from "./labels.js";
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
+import { isValidNewValidation } from "./validationScreenHelper";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 export default class ValidationScreen extends LightningElement {
+
+
+  ERROR_VARIANT = "error";
+
   @track displayedValidations = [];
 
   get validations() {
@@ -25,7 +31,7 @@ export default class ValidationScreen extends LightningElement {
 
   connectedCallback() {
     if (this.questions) {
-      this.isHaveQuestions = this.questions.length > 2;
+      this.isHaveQuestions = this.questions.length >= 2;
     } else {
       this.isHaveQuestions = false;
     }
@@ -35,6 +41,16 @@ export default class ValidationScreen extends LightningElement {
 
   addValidation(event) {
     const validation = event.detail;
+
+    if(!isValidNewValidation(this.displayedValidations, validation)) {
+      this.showToastMessage(label.error_title, label.questions_connected, this.ERROR_VARIANT);
+      return;
+    }
+
+    this.template
+          .querySelectorAll("c-validation-form")[0]
+          .resetForm();
+
     this.displayedValidations.push(validation);
     this.isHaveValidations = this.displayedValidations.length > 0;
   }
@@ -58,5 +74,14 @@ export default class ValidationScreen extends LightningElement {
   clickNextButton() {
     const nextNavigationEvent = new FlowNavigationNextEvent();
     this.dispatchEvent(nextNavigationEvent);
+  }
+
+  showToastMessage(title, message, variant) {
+    const event = new ShowToastEvent({
+      title,
+      message,
+      variant
+    });
+    this.dispatchEvent(event);
   }
 }

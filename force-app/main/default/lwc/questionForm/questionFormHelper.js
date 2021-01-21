@@ -43,8 +43,14 @@ const deleteFromOptions = (options, selectedValue) => {
 }
 
 const clearInput = (input) => {
-  input.value = ".";
-  input.focus();
+  input.setCustomValidity("");
+  input.reportValidity();
+  input.value = "";
+  input.blur();
+}
+
+const setInputValidity = (input, message) => {
+  input.setCustomValidity(message);
   input.reportValidity();
 }
 
@@ -54,5 +60,6 @@ export {
   filterOptionsByValue,
   updateOptionsValue,
   deleteFromOptions,
-  clearInput
+  clearInput,
+  setInputValidity
 }
