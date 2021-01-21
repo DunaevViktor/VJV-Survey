@@ -12,13 +12,6 @@
         <aura:if isTrue="{!v.showFlow}">
             <lightning:flow aura:id="surveyFlow" class="slds-align_absolute-center"
                             onstatuschange="{!c.handleStatusChange}"/>
-            <aura:set attribute="else">
-                <div class="slds-align_absolute-center">
-                    <h1>
-                        YOUR FLOW FINISHED
-                    </h1>
-                </div>
-            </aura:set>
         </aura:if>
     </lightning:card>
     
