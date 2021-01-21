@@ -203,7 +203,7 @@ export default class AdvanceSettingScreen extends LightningElement {
     const receiver = {};
     receiver.Type__c = this.GROUP_VARIANT;
     receiver.Value__c = this.displayedGroups.find((group) => {
-      if (this.groupId == group.Id) return true;
+      if (this.groupId === group.Id) return true;
     }).Name;
 
     this.receivers = [...this.receivers, receiver];
@@ -221,7 +221,7 @@ export default class AdvanceSettingScreen extends LightningElement {
     }
 
     const value = this.displayedGroups.find((group) => {
-      if (this.groupId == group.Id) return true;
+      if (this.groupId === group.Id) return true;
     }).Name;
 
     if(isReceiverExist(this.receivers, value)) {
