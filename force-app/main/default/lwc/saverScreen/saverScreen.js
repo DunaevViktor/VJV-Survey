@@ -62,9 +62,10 @@ export default class SaverScreen extends LightningElement {
 
         this.sendSaveTriggerRulesRequest();
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         this.isError = true;
-      });
+      })
   }
 
   sendSaveTriggerRulesRequest() {
@@ -75,9 +76,10 @@ export default class SaverScreen extends LightningElement {
         this.increaseProgress();
         this.sendSaveQuestionsRequest();
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         this.isError = true;
-      });
+      })
   }
 
   sendSaveQuestionsRequest() {
@@ -88,9 +90,10 @@ export default class SaverScreen extends LightningElement {
         this.savedQuestions = result;
         this.sendSaveOptionsRequest();
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         this.isError = true;
-      });
+      })
   }
 
   sendSaveOptionsRequest() {
@@ -107,9 +110,10 @@ export default class SaverScreen extends LightningElement {
         this.increaseProgress();
         this.sendSaveValidationsRequest();
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         this.isError = true;
-      });
+      })
   }
 
   sendSaveValidationsRequest() {
@@ -126,9 +130,10 @@ export default class SaverScreen extends LightningElement {
         this.increaseProgress();
         this.sendSaveEmailReceiversRequest();
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         this.isError = true;
-      });
+      })
   }
 
   sendSaveEmailReceiversRequest() {
