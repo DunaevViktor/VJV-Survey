@@ -161,7 +161,15 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Questions</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <searchResultsAdditionalFields>Label__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Type__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Position__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>IsVisible__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>IsReusable__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Required__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Survey__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>
