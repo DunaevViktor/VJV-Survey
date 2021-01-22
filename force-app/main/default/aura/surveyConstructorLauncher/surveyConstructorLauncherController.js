@@ -1,6 +1,7 @@
 ({
     launchFlow : function(component) {
         var modalBody;
+        
         $A.createComponent(
             "c:surveyConstructor",
             {},

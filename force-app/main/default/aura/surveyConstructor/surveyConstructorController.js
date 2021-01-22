@@ -1,5 +1,5 @@
 ({
-    doInit : function(component, event, helper) {
+    doInit : function(component) {
         var flow = component.find("surveyFlow");
         
         flow.startFlow("Survey_Flow");
@@ -11,7 +11,7 @@
         }
     },
     
-    closeModal: function(component, event, helper) {
+    closeModal: function(component) {
         component.find("overlayLibFlow").notifyClose();
     },
     
