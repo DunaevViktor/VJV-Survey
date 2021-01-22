@@ -5,7 +5,7 @@
     
     <lightning:card>
         <aura:if isTrue="{!v.showLaunch}">
-            <lightning:button variant="brand" label="Launch Constructor" title="Launch"
+            <lightning:button variant="brand" label="Create Survey" title="Launch"
                               class="slds-align_absolute-center" onclick="{!c.launchFlow}"/>
         </aura:if>
         
