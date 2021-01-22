@@ -1,5 +1,7 @@
 <template>
 
+  <div class="slds-p-left_x-small">{labels.tip_for_user}</div>
+
   <template for:each={renderConditions} for:item="condition">
     <template if:true={condition.cond}>
       <c-single-trigger-rule
@@ -29,7 +31,6 @@
     </lightning-layout>
   </template>
 
-  <p>{labels.tip_for_user}</p>
   <hr class="slds-m-bottom_small" />
 
   <div class="slds-text-align_right">

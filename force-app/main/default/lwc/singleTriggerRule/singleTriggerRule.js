@@ -119,14 +119,19 @@ export default class SingleTriggerRule extends LightningElement {
 
   handleFieldChange(event) {
     this.fieldValue = event.detail.value;
-    this.operatorValue = "";
-    this.provideValueInput(event.detail);
+    this.operatorValue = "";    
     this.value = "";
+    let chosenFieldObject = this.fieldNames.find(
+      (field) => field.value === this.fieldValue
+    );
+    console.log('Chosen field object');
+    console.log(chosenFieldObject);
+    this.setOperatorsByType(chosenFieldObject);
   }
 
-  provideValueInput(fieldObject) {
+  provideValueInput() {
     let chosenFieldObject = this.fieldNames.find(
-      (field) => field.value === fieldObject.value
+      (field) => field.value === this.fieldValue
     );
     this.value = "";
 
@@ -174,15 +179,14 @@ export default class SingleTriggerRule extends LightningElement {
         picklistOptions,
         settedValue
       );
-    }
-    this.setOperatorsByType();
+    }    
     this._rule = null;
   }
 
-  setOperatorsByType() {
+  setOperatorsByType(chosenFieldObject) {
     this.operators = filterOperatorList(
       this.fullOperatorList,
-      this.field.operatorType
+      chosenFieldObject.operatorType
     );
   }
 
@@ -195,12 +199,8 @@ export default class SingleTriggerRule extends LightningElement {
       );
       this.field = generateBooleanField(chosenFieldObject.label, settedValue);
       this.picklistFieldOptions = this.field.picklistValues;
-    } else {
-      let selectedFieldObject = this.fieldNames.find(
-        (field) => field.value === this.fieldValue
-      );
-      this.provideValueInput(selectedFieldObject);
     }
+      this.provideValueInput();
   }
 
   handleClearRuleClick() {
