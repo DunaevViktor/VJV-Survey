@@ -1,16 +1,19 @@
 ({
     launchFlow : function(component) {
-        component.set("v.showFlow", true);
-        component.set("v.showLaunch", false);
-        var flow = component.find("surveyFlow");
-        
-        flow.startFlow("Survey_Flow");
+        var modalBody;
+        $A.createComponent(
+            "c:surveyConstructor",
+            {},
+            function (content, status) {
+                if (status === "SUCCESS") {
+                    modalBody = content;
+                    component.find("overlayLibButton").showCustomModal({
+                        body: modalBody,
+                        showCloseButton: true
+                    });
+                }
+            }
+        );
     },
     
-    handleStatusChange : function(component, event) {
-        if(event.getParam("status") === "FINISHED") {
-            component.set("v.showFlow", false); 
-            component.set("v.showLaunch", true);
-        }
-    },
 })
