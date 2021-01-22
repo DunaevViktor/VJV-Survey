@@ -10,7 +10,8 @@ import {
   generateBooleanField,
   filterOperatorList,
   generateFieldsDescriptionsList,
-  generateFieldOptions
+  generateFieldOptions,
+  getFieldOperatorType
 } from "./helper";
 
 import { importedLabels } from "./labels"
@@ -121,9 +122,11 @@ export default class SingleTriggerRule extends LightningElement {
     this.fieldValue = event.detail.value;
     this.operatorValue = "";    
     this.value = "";
+    this.field = {}; 
     let chosenFieldObject = this.fieldNames.find(
       (field) => field.value === this.fieldValue
     );
+    chosenFieldObject.operatorType = getFieldOperatorType(chosenFieldObject);
     console.log('Chosen field object');
     console.log(chosenFieldObject);
     this.setOperatorsByType(chosenFieldObject);

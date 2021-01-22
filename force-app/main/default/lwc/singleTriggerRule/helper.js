@@ -145,6 +145,10 @@ const fieldDescription = {
   },
 };
 
+const getFieldOperatorType = (field) => {
+  return fieldDescription[field.datatype].operatorType;
+}
+
 const getFieldAttributes = (field, picklistOptions, settedValue) => {
 
   const fieldObject = fieldDescription[field.datatype];
@@ -235,5 +239,6 @@ export {
   generateFieldsDescriptionsList,
   filterOperatorList,
   operatorGroups,
-  generateFieldOptions
+  generateFieldOptions,
+  getFieldOperatorType
 };
