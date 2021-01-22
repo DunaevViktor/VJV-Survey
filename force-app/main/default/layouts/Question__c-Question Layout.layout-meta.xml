@@ -74,6 +74,7 @@
     </layoutSections>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Value__c</fields>
         <relatedList>Question_Option__c.Question__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -94,7 +95,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h6D000001GolC</masterLabel>
+        <masterLabel>00h1y000000ooaN</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>
