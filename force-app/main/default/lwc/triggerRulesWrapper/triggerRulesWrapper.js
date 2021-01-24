@@ -11,57 +11,72 @@ import {
 
 export default class TriggerRulesWrapper extends LightningElement {
 
+  RULES_AMOUNT = 5;
+
   labels = importedLabels;
 
-  @track renderConditions = [
-    { cond: true, id: 0 },
-    { cond: false, id: 1 },
-    { cond: false, id: 2 },
-    { cond: false, id: 3 },
-    { cond: false, id: 4 },
-  ];
+  @track triggerRules = [];
 
   @track isDeleteAvailable = false;
 
   @api rules = [];
   @track _rules = [];
-
+  
   connectedCallback() {
-    if (this.rules) {
+    console.log('connected call rules');
+    console.log(this.rules);
+    if (this.rules && this.rules.length > 0) {
+      let newtriggerRules = [];
       this._rules = this.rules;
       let i = 0;
       this._rules.forEach((rule) => {
-        this.renderConditions[i].cond = true;
-        this.renderConditions[i].rule = rule;
+        newtriggerRules.push({
+          id: i,
+          rule: rule
+        });
         i++;
+      });
+      this.triggerRules = newtriggerRules;
+    } else {
+      this.triggerRules.push({
+        id: 0
       });
     }
   }
 
   handlePlusClick() {
-    let flag = false;
-    this.renderConditions.forEach((el) => {
-      if (el.cond === false && !flag) {
-        el.cond = true;
-        flag = true;
-      }
-    });
+    const triggerRuleId = this.triggerRules.length;
+    const newTriggerRule = {
+      id: triggerRuleId
+    }
+    this.triggerRules.push(newTriggerRule);
+    this.updateIsDeleteAvailableState();
   }
 
   handleDeleteTriggerRule(event) {
     let childKey = event.detail;
-    this.renderConditions[childKey].cond = false;
+    this.triggerRules.splice(childKey, 1);
+    this.updateIsDeleteAvailableState();
+  }
+
+  updateIsDeleteAvailableState() {
+    let visibleRulesAmount = this.triggerRules.length;
+    if(visibleRulesAmount === 1) {
+      this.isDeleteAvailable = false;
+    } else {
+      this.isDeleteAvailable = true;
+    }
   }
 
   get isPlusVisible() {
-    let filteredRenderConditions = this.renderConditions.filter(
-      (condition) => condition.cond === false
-    );
-    return filteredRenderConditions.length === 0 ? false : true;
+    const triggerRulesAmount = this.triggerRules.length;    
+    return triggerRulesAmount === this.RULES_AMOUNT ? false : true;
   }
 
   handleNavigateNext() {    
     this._rules = this.getNewTriggerRules();
+    console.log('new tr rules getted');
+    console.log(this._rules);
     if(!areTriggerRulesFilledCompletely(this._rules)) {
       this.showToast("", this.labels.fill_trigger_rules, "error");
     } else if(areDuplicatesPresent(this._rules)) {
@@ -89,20 +104,21 @@ export default class TriggerRulesWrapper extends LightningElement {
   }
 
   getNewTriggerRules() {
+    console.log('this.triggerRules');
+    console.log(this.triggerRules);
     let newTriggerRules = [];
 
-    this.renderConditions.forEach((condition) => {
-      if (condition.cond === true) {
-        let id = condition.id.toString();
+    this.triggerRules.forEach((rule) => {
+        let id = rule.id.toString();
         let element = this.template.querySelector(
           'c-single-trigger-rule[data-my-id="' + id + '"]'
         );
         let triggerRule = JSON.parse(JSON.stringify(element.getTriggerRule()));
         if(!isEmpty(triggerRule)) {
           newTriggerRules.push(triggerRule);
-        }        
-      }
+        }    
     });
+
     return newTriggerRules;
   }  
 
