@@ -3,17 +3,25 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 import { importedLabels } from "./labels"
 
+import { 
+  areTriggerRulesFilledCompletely,
+  isEmpty,
+  areDuplicatesPresent
+ } from "./helper"
+
 export default class TriggerRulesWrapper extends LightningElement {
 
   labels = importedLabels;
 
   @track renderConditions = [
-    { cond: true, id: 0, isDeleteAvailable: false },
-    { cond: false, id: 1, isDeleteAvailable: true },
-    { cond: false, id: 2, isDeleteAvailable: true },
-    { cond: false, id: 3, isDeleteAvailable: true },
-    { cond: false, id: 4, isDeleteAvailable: true },
+    { cond: true, id: 0 },
+    { cond: false, id: 1 },
+    { cond: false, id: 2 },
+    { cond: false, id: 3 },
+    { cond: false, id: 4 },
   ];
+
+  @track isDeleteAvailable = false;
 
   @api rules = [];
   @track _rules = [];
@@ -54,9 +62,9 @@ export default class TriggerRulesWrapper extends LightningElement {
 
   handleNavigateNext() {    
     this._rules = this.getNewTriggerRules();
-    if(!this.areTriggerRulesFilledCompletely(this._rules)) {
+    if(!areTriggerRulesFilledCompletely(this._rules)) {
       this.showToast("", this.labels.fill_trigger_rules, "error");
-    } else if(this.areDuplicatesPresent(this._rules)) {
+    } else if(areDuplicatesPresent(this._rules)) {
       this.showToast("", this.labels.restrict_duplicate_rules, "error");
     } else {
       const navigateNextEvent = new CustomEvent("navigatenext", {
@@ -68,9 +76,9 @@ export default class TriggerRulesWrapper extends LightningElement {
 
   handleNavigatePrev() {
     this._rules = this.getNewTriggerRules();
-    if(!this.areTriggerRulesFilledCompletely(this._rules)) {
+    if(!areTriggerRulesFilledCompletely(this._rules)) {
       this.showToast("", this.labels.fill_trigger_rules, "error");
-    } else if(this.areDuplicatesPresent(this._rules)) {
+    } else if(areDuplicatesPresent(this._rules)) {
       this.showToast("", this.labels.restrict_duplicate_rules, "error");
     } else {
       const navigatePrevEvent = new CustomEvent("navigateback", {
@@ -90,45 +98,13 @@ export default class TriggerRulesWrapper extends LightningElement {
           'c-single-trigger-rule[data-my-id="' + id + '"]'
         );
         let triggerRule = JSON.parse(JSON.stringify(element.getTriggerRule()));
-        if(!this.isEmpty(triggerRule)) {
+        if(!isEmpty(triggerRule)) {
           newTriggerRules.push(triggerRule);
         }        
       }
     });
     return newTriggerRules;
-  }
-
-  isEmpty(obj) {
-    return Object.keys(obj).length === 0;
-  }
-
-  isFilledCompletely(obj) {
-    let filledCompletely = true;
-    for(let field in obj) { 
-      if(!obj[field] || obj[field] === "") {
-        filledCompletely = false;
-        break;
-      }
-    }
-    return filledCompletely;
-  }
-
-  areTriggerRulesFilledCompletely(triggerRules) {
-    let completelyFilled = true;
-    for (let i = 0; i < triggerRules.length; i++) {
-      if(!this.isFilledCompletely(triggerRules[i])) {
-        completelyFilled = false;
-        break;
-      }
-    }
-    return completelyFilled;
-  }
-
-  areDuplicatesPresent(triggerRules) {  
-    const triggerRulesInJSON = triggerRules.map(triggerRule => JSON.stringify(triggerRule));
-    const res = new Set(triggerRulesInJSON).size !== triggerRulesInJSON.length;
-    return res;
-  }
+  }  
 
   showToast(title, message, variant) {
     const event = new ShowToastEvent({title, message, variant, mode: "dismissable"});
