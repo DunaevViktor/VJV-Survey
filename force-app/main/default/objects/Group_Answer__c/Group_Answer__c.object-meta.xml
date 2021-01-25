@@ -161,7 +161,11 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Group Answers</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <searchResultsAdditionalFields>IsLinked__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Related_To__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Survey__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

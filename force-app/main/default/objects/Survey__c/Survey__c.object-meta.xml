@@ -160,7 +160,15 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Surveys</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <searchResultsAdditionalFields>Description__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>URL__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Logo__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Background_Color__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>IsStandard__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>IsResending__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Related_To__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

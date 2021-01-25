@@ -1,21 +1,10 @@
 <aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
                 access="global" >
-    <aura:attribute name="showLaunch" type="Boolean" default="true"/>
+    <lightning:overlayLibrary aura:id="overlayLibButton"/>
     
     <lightning:card>
-        <lightning:button variant="brand" label="Launch Constructor" title="Launch"
+        <lightning:button variant="brand" label="{!$Label.c.Create_Survey}" title="{!$Label.c.Launch}"
                           class="slds-align_absolute-center" onclick="{!c.launchFlow}"/>
-        <aura:if isTrue="{!v.showLaunch}">
-            <lightning:flow aura:id="surveyFlow" class="slds-align_absolute-center"
-                            onstatuschange="{!c.handleStatusChange}"/>
-            <aura:set attribute="else">
-                <div class="slds-align_absolute-center">
-                    <h1>
-                        YOUR FLOW FINISHED
-                    </h1>
-                </div>
-            </aura:set>
-        </aura:if>
     </lightning:card>
     
 </aura:component>

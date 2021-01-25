@@ -161,7 +161,10 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Question Options</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <searchResultsAdditionalFields>Question__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Value__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>
