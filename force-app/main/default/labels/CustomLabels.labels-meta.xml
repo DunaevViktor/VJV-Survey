@@ -113,13 +113,6 @@
         <value>Delete</value>
     </labels>
     <labels>
-        <fullName>delete_button</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>delete button</shortDescription>
-        <value>Delete</value>
-    </labels>
-    <labels>
         <fullName>delete_trigger_rule</fullName>
         <language>en_US</language>
         <protected>true</protected>

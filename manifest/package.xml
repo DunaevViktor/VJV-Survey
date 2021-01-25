@@ -106,5 +106,9 @@
         <members>Survey_Constructor</members>
         <name>FlexiPage</name>
     </types>
+    <types>
+       <members>*</members>
+        <name>Translations</name>
+    </types>
     <version>50.0</version>
 </Package>

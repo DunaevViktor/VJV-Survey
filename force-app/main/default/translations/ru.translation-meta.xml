@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customApplications>
+        <label>Опрос</label>
+        <name>Survey</name>
+    </customApplications>
+    <customLabels>
+        <label>Создать опрос</label>
+        <name>Create_Survey</name>
+    </customLabels>
+    <customLabels>
+        <label>Запустить</label>
+        <name>Launch</name>
+    </customLabels>
+    <customLabels>
+        <label>Конструктор опроса</label>
+        <name>Survey_Constructor</name>
+    </customLabels>
+    <customLabels>
+        <label>Добавить</label>
+        <name>add</name>
+    </customLabels>
+    <customLabels>
+        <label>Добавить нового получателя</label>
+        <name>add_new_receiver</name>
+    </customLabels>
+    <customLabels>
+        <label>Добавить вариант</label>
+        <name>add_option</name>
+    </customLabels>
+    <customLabels>
+        <label>Добавить вопрос</label>
+        <name>add_question</name>
+    </customLabels>
+    <customLabels>
+        <label>Добавить правило для триггера</label>
+        <name>add_trigger_rule</name>
+    </customLabels>
+    <customLabels>
+        <label>Может пересылаться</label>
+        <name>can_be_resending</name>
+    </customLabels>
+    <customLabels>
+        <label>Отменить изменение</label>
+        <name>cancel_edit</name>
+    </customLabels>
+    <customLabels>
+        <label>Очистить поля правил триггеров</label>
+        <name>clear_trigger_rules_fields</name>
+    </customLabels>
+    <customLabels>
+        <label>Сравниваемое значение</label>
+        <name>compared_value</name>
+    </customLabels>
+    <customLabels>
+        <label>Это поле должно быть заполнено</label>
+        <name>complete_this_field</name>
+    </customLabels>
+    <customLabels>
+        <label>Связать с другим опросом</label>
+        <name>connect_to_another_survey</name>
+    </customLabels>
+    <customLabels>
+        <label>Форма создания вопроса</label>
+        <name>create_question_form_title</name>
+    </customLabels>
+    <customLabels>
+        <label>Удалить</label>
+        <name>delete</name>
+    </customLabels>
+    <customLabels>
+        <label>Удалить правило для триггера</label>
+        <name>delete_trigger_rule</name>
+    </customLabels>
+    <customLabels>
+        <label>Зависимый вопрос</label>
+        <name>dependent_question</name>
+    </customLabels>
+    <customLabels>
+        <label>Выполнено</label>
+        <name>done</name>
+    </customLabels>
+    <customLabels>
+        <label>Вниз</label>
+        <name>down</name>
+    </customLabels>
+    <customLabels>
+        <label>Добавить логотип опроса</label>
+        <name>drag_n_drop_logo</name>
+    </customLabels>
+    <customLabels>
+        <label>Изменить</label>
+        <name>edit</name>
+    </customLabels>
+    <customLabels>
+        <label>Форма изменения вопроса</label>
+        <name>edit_question_form_title</name>
+    </customLabels>
+    <customLabels>
+        <label>Email</label>
+        <name>email</name>
+    </customLabels>
+    <customLabels>
+        <label>Введите значение для сравнения</label>
+        <name>enter_compared_value</name>
+    </customLabels>
+    <customLabels>
+        <label>Введите значение варианта</label>
+        <name>enter_option_value</name>
+    </customLabels>
+    <customLabels>
+        <label>Уважаемый, ошибка</label>
+        <name>error</name>
+    </customLabels>
+    <customLabels>
+        <label>Возникла ошибка во время работы этой страницы</label>
+        <name>errorMessage</name>
+    </customLabels>
+    <customLabels>
+        <label>Этот Email уже был добавлен</label>
+        <name>error_already_added_this_email</name>
+    </customLabels>
+    <customLabels>
+        <label>Эта группа уже была добавлена</label>
+        <name>error_already_added_this_group</name>
+    </customLabels>
+    <customLabels>
+        <label>Выберите группу</label>
+        <name>error_choose_some_group</name>
+    </customLabels>
+    <customLabels>
+        <label>Некорректный Email</label>
+        <name>error_email_pattern_mismatch</name>
+    </customLabels>
+    <customLabels>
+        <label>Количество вариантов должно быть не меньше двух</label>
+        <name>error_few_options</name>
+    </customLabels>
+    <customLabels>
+        <label>Ошибка во время удаления картинки</label>
+        <name>failed_image_delete</name>
+    </customLabels>
+    <customLabels>
+        <label>Ошибка загрузки картинки</label>
+        <name>failed_image_upload</name>
+    </customLabels>
+    <customLabels>
+        <label>Ложь</label>
+        <name>false</name>
+    </customLabels>
+    <customLabels>
+        <label>Поле</label>
+        <name>field</name>
+    </customLabels>
+    <customLabels>
+        <label>Неполные правила триггеров</label>
+        <name>fill_trigger_rules</name>
+    </customLabels>
+    <customLabels>
+        <label>Название группы</label>
+        <name>group_name</name>
+    </customLabels>
+    <customLabels>
+        <label>Название группы или Email</label>
+        <name>group_name_or_email</name>
+    </customLabels>
+    <customLabels>
+        <label>Загрузка картинки</label>
+        <name>image_loading</name>
+    </customLabels>
+    <customLabels>
+        <label>В процессе</label>
+        <name>in_progress</name>
+    </customLabels>
+    <customLabels>
+        <label>Обязательный</label>
+        <name>is_required</name>
+    </customLabels>
+    <customLabels>
+        <label>Многоразовый</label>
+        <name>is_reusable</name>
+    </customLabels>
+    <customLabels>
+        <label>Достигнут предел количества вопросов</label>
+        <name>limit_question_sexceeded</name>
+    </customLabels>
+    <customLabels>
+        <label>Логотип</label>
+        <name>logo_image</name>
+    </customLabels>
+    <customLabels>
+        <label>Публичные группы отсутствуют в данной организации</label>
+        <name>msg_no_public_groups_found</name>
+    </customLabels>
+    <customLabels>
+        <label>Далее</label>
+        <name>next</name>
+    </customLabels>
+    <customLabels>
+        <label>Вопросы отсутствуют</label>
+        <name>no_questions</name>
+    </customLabels>
+    <customLabels>
+        <label>Отсутствуют вопросы для проверок</label>
+        <name>no_questions_to_validation</name>
+    </customLabels>
+    <customLabels>
+        <label>Записи отсутствуют</label>
+        <name>no_records_found</name>
+    </customLabels>
+    <customLabels>
+        <label>Отсутствуют актуальные вопросы</label>
+        <name>no_relevant_questions</name>
+    </customLabels>
+    <customLabels>
+        <label>Отсутсвуют стандартные вопросы</label>
+        <name>no_standard_questions</name>
+    </customLabels>
+    <customLabels>
+        <label>Шаблоны отсутсвуют</label>
+        <name>no_template</name>
+    </customLabels>
+    <customLabels>
+        <label>Проверки отсутствуют</label>
+        <name>no_validations</name>
+    </customLabels>
+    <customLabels>
+        <label>Число</label>
+        <name>number</name>
+    </customLabels>
+    <customLabels>
+        <label>Объект</label>
+        <name>object</name>
+    </customLabels>
+    <customLabels>
+        <label>Оператор</label>
+        <name>operator</name>
+    </customLabels>
+    <customLabels>
+        <label>Этот вариант уже существует</label>
+        <name>option_already_exists</name>
+    </customLabels>
+    <customLabels>
+        <label>Варианты</label>
+        <name>options</name>
+    </customLabels>
+    <customLabels>
+        <label>Назад</label>
+        <name>previous</name>
+    </customLabels>
+    <customLabels>
+        <label>Если вы нажмете эту кнопку, вы потеряете все созданные проверки.</label>
+        <name>previous_button_message</name>
+    </customLabels>
+    <customLabels>
+        <label>Вопрос</label>
+        <name>question</name>
+    </customLabels>
+    <customLabels>
+        <label>Настройки вопросов</label>
+        <name>question_settings</name>
+    </customLabels>
+    <customLabels>
+        <label>Эти вопросы уже связаны с другой проверкой</label>
+        <name>questions_connected</name>
+    </customLabels>
+    <customLabels>
+        <label>Удалить логотип</label>
+        <name>remove_image</name>
+    </customLabels>
+    <customLabels>
+        <label>Удалить выбранный вариант</label>
+        <name>remove_selected_option</name>
+    </customLabels>
+    <customLabels>
+        <label>Нельзя дублировать правила для триггеров</label>
+        <name>restrict_duplicate_rules</name>
+    </customLabels>
+    <customLabels>
+        <label>Сохранить изменения</label>
+        <name>save_changes</name>
+    </customLabels>
+    <customLabels>
+        <label>Сохранение настроек рассылки</label>
+        <name>save_email_rules_label</name>
+    </customLabels>
+    <customLabels>
+        <label>Сохранение общей информации об опросе</label>
+        <name>save_main_survey_info_label</name>
+    </customLabels>
+    <customLabels>
+        <label>Сохранение вопросов</label>
+        <name>save_questions_label</name>
+    </customLabels>
+    <customLabels>
+        <label>Сохранение правил для триггеров</label>
+        <name>save_trigger_rules_label</name>
+    </customLabels>
+    <customLabels>
+        <label>Сохранение проверок</label>
+        <name>save_validations_label</name>
+    </customLabels>
+    <customLabels>
+        <label>Сохранение ваших настроек</label>
+        <name>saving_your_configurations</name>
+    </customLabels>
+    <customLabels>
+        <label>Поиск</label>
+        <name>search</name>
+    </customLabels>
+    <customLabels>
+        <label>Выберите вариант</label>
+        <name>select_an_option</name>
+    </customLabels>
+    <customLabels>
+        <label>Выберите оператор</label>
+        <name>select_operator</name>
+    </customLabels>
+    <customLabels>
+        <label>Выберите значение</label>
+        <name>select_value</name>
+    </customLabels>
+    <customLabels>
+        <label>Выбранный шаблон опроса</label>
+        <name>selected_survey_template</name>
+    </customLabels>
+    <customLabels>
+        <label>Ваш опрос должен содержать как минимум два вопроса</label>
+        <name>should_have_two_questions</name>
+    </customLabels>
+    <customLabels>
+        <label>Уточнить вопрос</label>
+        <name>specify_question</name>
+    </customLabels>
+    <customLabels>
+        <label>Шаблонный опрос</label>
+        <name>standard_survey</name>
+    </customLabels>
+    <customLabels>
+        <label>Успех</label>
+        <name>success</name>
+    </customLabels>
+    <customLabels>
+        <label>Фон опроса</label>
+        <name>survey_bg_color</name>
+    </customLabels>
+    <customLabels>
+        <label>Опрос успешно создан</label>
+        <name>survey_created_successfully</name>
+    </customLabels>
+    <customLabels>
+        <label>Название опроса</label>
+        <name>survey_name</name>
+    </customLabels>
+    <customLabels>
+        <label>Опросы</label>
+        <name>surveys</name>
+    </customLabels>
+    <customLabels>
+        <label>Текст</label>
+        <name>text</name>
+    </customLabels>
+    <customLabels>
+        <label>* Отправка опроса будет происходить, когда сработает любое из созданных правил триггеров.</label>
+        <name>tip_for_user</name>
+    </customLabels>
+    <customLabels>
+        <label>Истина</label>
+        <name>true</name>
+    </customLabels>
+    <customLabels>
+        <label>Тип</label>
+        <name>type</name>
+    </customLabels>
+    <customLabels>
+        <label>Невозможно продолжить</label>
+        <name>unable_to_continue</name>
+    </customLabels>
+    <customLabels>
+        <label>Вверх</label>
+        <name>up</name>
+    </customLabels>
+    <customLabels>
+        <label>Публичные группы</label>
+        <name>user_groups</name>
+    </customLabels>
+    <customLabels>
+        <label>Значение</label>
+        <name>value</name>
+    </customLabels>
+    <customTabs>
+        <label>Конструктор опроса</label>
+        <name>Survey_Constructor</name>
+    </customTabs>
+    <flowDefinitions>
+        <flows>
+            <screens>
+                <fields>
+                    <name>AdvanceSettingsScreenComponent</name>
+                </fields>
+                <name>AdvanceSettingsScreen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>BasicScreenComponent</name>
+                </fields>
+                <name>Basic_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>QuestionScreenComponent</name>
+                </fields>
+                <name>Questions_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>SaverScreenComponent</name>
+                </fields>
+                <name>SaverScreen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>TriggerRuleScreenComponent</name>
+                </fields>
+                <name>Trigger_Rule_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>ValidationScreenComponent</name>
+                </fields>
+                <name>Validation_Screen</name>
+            </screens>
+        </flows>
+        <fullName>Survey_Flow</fullName>
+    </flowDefinitions>
+    <quickActions>
+        <label><!-- LogACall --></label>
+        <name>LogACall</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewAccount --></label>
+        <name>NewAccount</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewCase --></label>
+        <name>NewCase</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewContact --></label>
+        <name>NewContact</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewEvent --></label>
+        <name>NewEvent</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewGroup --></label>
+        <name>NewGroup</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewLead --></label>
+        <name>NewLead</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewNote --></label>
+        <name>NewNote</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewOpportunity --></label>
+        <name>NewOpportunity</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewTask --></label>
+        <name>NewTask</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- SendEmail --></label>
+        <name>SendEmail</name>
+    </quickActions>
+    <reportTypes>
+        <description><!-- Surveys --></description>
+        <label><!-- Surveys --></label>
+        <name>Surveys</name>
+        <sections>
+            <label><!-- Surveys --></label>
+            <name>Surveys</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Surveys with Email Receivers --></description>
+        <label><!-- Surveys with Email Receivers --></label>
+        <name>Surveys_with_Email_Receivers</name>
+        <sections>
+            <label><!-- Surveys --></label>
+            <name>Surveys</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Surveys with Questions with Answers --></description>
+        <label><!-- Surveys with Questions with Answers --></label>
+        <name>Surveys_with_Questions_with_Answers</name>
+        <sections>
+            <label><!-- Anwers --></label>
+            <name>Anwers</name>
+        </sections>
+        <sections>
+            <label><!-- Questions --></label>
+            <name>Questions</name>
+        </sections>
+        <sections>
+            <label><!-- Surveys --></label>
+            <name>Surveys</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Screen Flows --></description>
+        <label><!-- Screen Flows --></label>
+        <name>screen_flows_prebuilt_crt</name>
+        <sections>
+            <label><!-- Flow Interview Log Entries --></label>
+            <name>Flow Interview Log Entries</name>
+        </sections>
+        <sections>
+            <label><!-- Flow Interview Logs --></label>
+            <name>Flow Interview Logs</name>
+        </sections>
+    </reportTypes>
+</Translations>
