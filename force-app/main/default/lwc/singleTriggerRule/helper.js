@@ -6,7 +6,12 @@ import {
 const INTEGER_MIN = "0";
 const INTEGER_MAX = "99999999999999";
 const INTEGER_STEP = "1";
-const CURRENCY_STEP = "0.5";
+const DOUBLE_MIN = "0.0";
+const DOUBLE_MAX = "99999999999999.0";
+const DOUBLE_STEP = "0.01";
+const CURRENCY_MIN = "0.0";
+const CURRENCY_MAX = "99999999999999.0";
+const CURRENCY_STEP = "0.1";
 
 const fieldTypes = {
   PICKLIST : "PICKLIST",
@@ -38,7 +43,8 @@ const inputTypes = {
   DATETIME : "datetime",
   DATE : "date",
   EMAIL : "email",
-  URL : "URL"
+  URL : "url",
+  PHONE : "tel",
 }
 
 const operatorsGroupDescription = {
@@ -77,6 +83,7 @@ const fieldDescription = {
   [fieldTypes.PHONE] : {
     isInput : true,
     pattern : "[0-9]+",
+    type : inputTypes.PHONE,
     operatorType : operatorGroups.STRING_VALUES
   },
   [fieldTypes.EMAIL] : {
@@ -87,7 +94,8 @@ const fieldDescription = {
   [fieldTypes.CURRENCY] : {
     isInput : true,
     type : inputTypes.NUMBER,
-    formatter : CURRENCY_STEP,
+    min : CURRENCY_MIN,
+    max : CURRENCY_MAX,
     step : CURRENCY_STEP,
     operatorType : operatorGroups.COMPARABLE_VALUES
   },
@@ -112,7 +120,7 @@ const fieldDescription = {
   },
   [fieldTypes.INTEGER] : {
     isInput : true,
-    type : inputTypes.INTEGER,
+    type : inputTypes.NUMBER,
     min : INTEGER_MIN,
     max : INTEGER_MAX,
     step : INTEGER_STEP,
@@ -121,6 +129,9 @@ const fieldDescription = {
   [fieldTypes.DOUBLE] : {
     isInput : true,
     type : inputTypes.NUMBER,
+    min : DOUBLE_MIN,
+    max : DOUBLE_MAX,
+    step : DOUBLE_STEP,
     operatorType : operatorGroups.COMPARABLE_VALUES
   },
   [fieldTypes.STRING] : {
@@ -144,6 +155,10 @@ const fieldDescription = {
     operatorType : operatorGroups.GENERAL_TYPES
   },
 };
+
+const getFieldOperatorType = (field) => {
+  return fieldDescription[field.datatype].operatorType;
+}
 
 const getFieldAttributes = (field, picklistOptions, settedValue) => {
 
@@ -204,9 +219,9 @@ const generateFieldsDescriptionsList = (result) => {
   let comboboxFieldsOptions = [];
   result.forEach((fieldDescriptionList) => {
     let fieldObject = {
-      label: fieldDescriptionList[1],
       value: fieldDescriptionList[0],
-      datatype: fieldDescriptionList[2],
+      label: fieldDescriptionList[1],      
+      datatype: fieldDescriptionList[2]
     };
     setReferencedObjectNames(fieldDescriptionList, fieldObject);
     comboboxFieldsOptions.push(fieldObject);
@@ -235,5 +250,6 @@ export {
   generateFieldsDescriptionsList,
   filterOperatorList,
   operatorGroups,
-  generateFieldOptions
+  generateFieldOptions,
+  getFieldOperatorType
 };

@@ -477,6 +477,13 @@
         <value>Remove selected option</value>
     </labels>
     <labels>
+        <fullName>restrict_duplicate_rules</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Duplicate trigger rules are not allowed.</shortDescription>
+        <value>Duplicate trigger rules are not allowed.</value>
+    </labels>
+    <labels>
         <fullName>save_changes</fullName>
         <language>en_US</language>
         <protected>true</protected>
