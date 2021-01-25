@@ -11,44 +11,28 @@
       onadd={openForm}
     ></c-question-bar>
 
-    <div class="slds-box slds-box_x-small slds-m-top_x-small">
-      <template if:false={hasQuestions}>{label.no_questions}</template>
+    <template if:true={isQuestionBlockOpened}>
+      <c-questions-block
+        questions={displayedQuestions}>
+      </c-questions-block>
+    </template>
 
-      <template if:true={hasQuestions}>
-        <template if:true={isNeedPagination}>
-          <lightning-input type="text" label="Enter some text"></lightning-input>
+    <template if:true={isFormOpened}>
+      <c-question-form
+        onadd={addQuestion}
+        oncancelevent={cancelEditQuestion}
+        onedit={updateQuestion}
+        onerror={setError}
+      ></c-question-form>
+    </template>
 
-          <div class="slds-text-align_right slds-m-top_x-small">
-            <lightning-button label={label.clear} class="slds-m-left_x-small"></lightning-button>
-            <lightning-button variant="brand-outline" label={label.find} class="slds-m-left_x-small"></lightning-button>
-          </div>
-        </template>
-        
-
-        <span>{labelOfAvailableItems}</span>
-
-        <template for:each={filteredQuestions} for:item="displayedQuestion">
-          <div key={displayedQuestion.Position__c}>
-            <c-question-card
-              question={displayedQuestion}
-              ondelete={deleteQuestion}
-              onedit={editQuestion}
-              ondown={downQuestion}
-              onup={upQuestion}
-            >
-            </c-question-card>
-          </div>
-        </template>
-
-        <template if:true={isNeedPagination}>
-          <c-question-pagination
-            current-page={currentPage}
-            amount-pages={amountPages}
-            onpagechange={changePage}
-          ></c-question-pagination>
-        </template>
-      </template>
-    </div>
+    <template if:true={isStandardSelectorOpen}>
+      <c-question-standard-selector
+      standard-questions={displayedStandardQuestions}
+      onselect={selectQuestion}
+      ></c-question-standard-selector>
+    </template>
+    
 
     <hr class="slds-m-bottom_small"/>
   
@@ -64,69 +48,5 @@
         class="slds-m-left_x-small"
       ></lightning-button>
     </div>
-
-    
-     <template if:true={isFormOpen}>
-
-      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
-        <div class="slds-modal__container">
-          <header class="slds-modal__header slds-box">
-            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={closeForm}>
-              <lightning-icon icon-name="utility:close"
-                alternative-text="close"
-                size="small" ></lightning-icon>
-              <span class="slds-assistive-text">"Close"</span>
-            </button>
-            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create new question</h2>
-          </header>
-            
-          <div class="slds-modal__content modal_content">
-            <div class="modal_form order_form" id="modal-content-id-1">
-  
-              <c-question-form
-                onadd={addQuestion}
-                oncancelevent={cancelEditQuestion}
-                onedit={updateQuestion}
-                onerror={setError}
-              ></c-question-form>
-  
-            </div>
-          </div>
-        </div>
-      </section>
-
-     </template>
-
-     <template if:true={isStandardSelectorOpen}>
-
-      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-02" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
-        <div class="slds-modal__container">
-          <!-- Modal/Popup Box LWC header here -->
-          <header class="slds-modal__header slds-box">
-            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={closeStandardSelector}>
-              <lightning-icon icon-name="utility:close"
-                alternative-text="close"
-                size="small" ></lightning-icon>
-              <span class="slds-assistive-text">"Close"</span>
-            </button>
-            <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">Create new question</h2>
-          </header>
-            
-          <div class="slds-modal__content modal_content">
-            <div class="modal_form order_form" id="modal-content-id-2">
-  
-              <c-question-standard-selector
-                standard-questions={displayedStandardQuestions}
-                onselect={selectQuestion}
-              ></c-question-standard-selector>
-  
-            </div>
-          </div>
-        </div>
-      </section>
-
-     </template>
-     
-
   </template>
 </template>

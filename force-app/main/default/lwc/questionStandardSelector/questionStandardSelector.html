@@ -1,9 +1,11 @@
 <template>
-  <lightning-datatable
-    key-field="id"
-    data={displayedQuestions}
-    columns={columns}
-    onrowaction={handleRowAction}
-    hide-checkbox-column>
-  </lightning-datatable>
+  <div class="slds-m-top_x-small">
+    <lightning-datatable
+      key-field="id"
+      data={displayedQuestions}
+      columns={columns}
+      onrowaction={handleRowAction}
+      hide-checkbox-column>
+    </lightning-datatable>
+  </div>
 </template>

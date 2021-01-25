@@ -1,0 +1,42 @@
+<template>
+  <div class="slds-box slds-box_x-small slds-m-top_x-small">
+    <template if:false={hasQuestions}>{label.no_questions}</template>
+  
+    <template if:true={hasQuestions}>
+      <template if:true={isNeedPagination}>
+        <lightning-input type="text" label="Enter some text"></lightning-input>
+  
+        <div class="slds-text-align_right slds-m-top_x-small">
+          <lightning-button label={label.clear} class="slds-m-left_x-small"></lightning-button>
+          <lightning-button variant="brand-outline" label={label.find} class="slds-m-left_x-small"></lightning-button>
+        </div>
+      </template>
+          
+      <span>{labelOfAvailableItems}</span>
+  
+      <template for:each={filteredDisplayedQuestions} for:item="displayedQuestion">
+        <div key={displayedQuestion.Position__c}>
+          <c-question-card
+            question={displayedQuestion}
+            ondelete={deleteQuestion}
+            onedit={editQuestion}
+            ondown={downQuestion}
+            onup={upQuestion}>
+          </c-question-card>
+        </div>
+      </template>
+  
+      <template if:true={isNeedPagination}>
+        <div class="slds-text-align_center">
+          <lightning-button-group>
+            <lightning-button label={label.first_page} onclick={clickFirstPage} disabled={isFirstDisabled}></lightning-button>
+            <lightning-button label={label.previous_page}  onclick={clickPreviousPage} disabled={isPreviousDisabled}></lightning-button>
+            <lightning-button label={currentPage}></lightning-button>
+            <lightning-button label={label.next_page}  onclick={clickNextPage} disabled={isNextDisabled}></lightning-button>
+            <lightning-button label={label.last_page}  onclick={clickLastPage} disabled={isLastDisabled}></lightning-button>
+            </lightning-button-group>
+          </div>
+      </template>
+    </template>
+  </div> 
+</template>

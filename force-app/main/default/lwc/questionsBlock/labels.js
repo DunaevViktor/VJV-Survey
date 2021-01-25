@@ -1,0 +1,29 @@
+import find from "@salesforce/label/c.find";
+import clear from "@salesforce/label/c.clear";
+import you_can_create from "@salesforce/label/c.you_can_create";
+import questions from "@salesforce/label/c.questions";
+import question from "@salesforce/label/c.question";
+import can_no_longer_create_questions from "@salesforce/label/c.can_no_longer_create_questions";
+import no_questions from "@salesforce/label/c.no_questions";
+import first_page from '@salesforce/label/c.first_page';
+import previous_page from '@salesforce/label/c.previous_page';
+import next_page from '@salesforce/label/c.next_page';
+import last_page from '@salesforce/label/c.last_page';
+
+const label = {
+  find,
+  clear,
+  you_can_create,
+  questions,
+  question,
+  can_no_longer_create_questions,
+  no_questions,
+  first_page,
+  previous_page,
+  next_page,
+  last_page
+}
+
+export {
+  label,
+}

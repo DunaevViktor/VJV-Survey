@@ -4,7 +4,6 @@ import getStandardQuestions from "@salesforce/apex/QuestionController.getStandar
 import getTemplatesQuestions from "@salesforce/apex/QuestionController.getTemplatesQuestions";
 import getMaxQuestionAmount from "@salesforce/apex/SurveySettingController.getMaxQuestionAmount";
 import getMinQuestionAmount from "@salesforce/apex/SurveySettingController.getMinQuestionAmount";
-import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getPageQuestionAmount";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 import {label} from "./labels";
@@ -23,6 +22,9 @@ import {
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 
 export default class QuestionScreen extends LightningElement {
+  QUESTION_BLOCK = 'Question block';
+  FORM_BLOCK = 'Form block';
+  STANDARD_SELECTOR_BLOCK = 'Standard selector block';
 
   ERROR_VARIANT = "error";
   NO_TEMPLATE_VALUE = "0";
@@ -80,40 +82,19 @@ export default class QuestionScreen extends LightningElement {
 
   @wire(getMaxQuestionAmount) maxQuestionsAmount;
   @wire(getMinQuestionAmount) minQuestionsAmount;
-  @wire(getPageQuestionAmount) pageQuestionsAmount;
 
-  @track filteredQuestions;
-  @track hasQuestions = false;
-  @track isNeedPagination = false;
   @track editQuestionPosition;
   @track isError = false;
 
   label = label;
 
-  @track isFormOpen = false;
-  @track isStandardSelectorOpen = false;
-
-  @track currentPage = 1;
-  @track amountPages;
+  @track currentMode = this.QUESTION_BLOCK;
 
   connectedCallback() {
-    this.resolveQuestionsSubinfo();
-    this.resolveDisplayedQuestions();
-
+    this.hasStandardQuestions = this.standardQuestions.length > 0;
+    
     this.initTemplates();
     this.initStandardQuestions();
-  }
-
-  get labelOfAvailableItems() {
-    switch(this.availableQuestionsAmount) {
-      case 1: return this.label.you_can_create + " " + this.availableQuestionsAmount + " " + this.label.question;
-      case 0: return this.label.can_no_longer_create_questions;
-      default: return this.label.you_can_create + " " + this.availableQuestionsAmount + " " + this.label.questions;
-    }
-  }
-
-  get availableQuestionsAmount() {
-    return +this.maxQuestionsAmount.data - +this.displayedQuestions.length;
   }
 
   initTemplates() {
@@ -156,26 +137,28 @@ export default class QuestionScreen extends LightningElement {
     }
   }
 
-  openForm() {
-    this.isFormOpen = true;
+  openQuestionBlock() {
+    this.currentMode = this.QUESTION_BLOCK;
   }
 
-  closeForm() {
-    this.isFormOpen = false;
+  openForm() {
+    this.currentMode = this.FORM_BLOCK;
   }
 
   openStandardSelector() {
-    this.isStandardSelectorOpen = true;
+    this.currentMode = this.STANDARD_SELECTOR_BLOCK;
   }
 
-  closeStandardSelector() {
-    this.isStandardSelectorOpen = false;
+  get isQuestionBlockOpened() {
+    return this.currentMode === this.QUESTION_BLOCK;
   }
 
-  clearFormQuestion() {
-    this.template
-          .querySelectorAll("c-question-form")[0]
-          .clearQuestion();
+  get isFormOpened() {
+    return this.currentMode === this.FORM_BLOCK;
+  }
+
+  get isStandardSelectorOpen() {
+    return this.currentMode === this.STANDARD_SELECTOR_BLOCK;
   }
 
   handleTemplateChange(event) {
@@ -193,9 +176,7 @@ export default class QuestionScreen extends LightningElement {
         this.templateOptionsValue);
     }
 
-    this.resolveQuestionsSubinfo();
-    this.resolveDisplayedQuestions();
-    this.currentPage = 1;
+    this.updateQuestions();
   }
 
   addQuestion(event) {
@@ -208,9 +189,7 @@ export default class QuestionScreen extends LightningElement {
     }
     this.displayedQuestions.push(question);
 
-    this.resolveQuestionsSubinfo();
-    this.resolveDisplayedQuestions();
-    this.closeForm();
+    this.updateQuestions();
   }
 
   selectQuestion(event) {
@@ -225,31 +204,15 @@ export default class QuestionScreen extends LightningElement {
 
     this.displayedQuestions.push(question);
 
-    this.resolveQuestionsSubinfo();
-    this.resolveDisplayedQuestions();
-    this.closeStandardSelector();
+    this.updateQuestions();
   }
 
-  resolveQuestionsSubinfo() {
-    this.hasQuestions = this.questions.length > 0;
-    this.amountPages =  Math.ceil(this.questions.length / +this.pageQuestionsAmount.data);
-    this.isNeedPagination = this.questions.length > +this.pageQuestionsAmount.data;
-
-    if(this.amountPages > 2) {
-      const paginationBlock = this.template.querySelectorAll("c-question-pagination")[0];
-      if(paginationBlock) paginationBlock.setAmountPages(this.amountPages);
+  updateQuestions() {
+    if(this.isQuestionBlockOpened) {
+      this.template.querySelectorAll("c-questions-block")[0].updateQuestions(this.displayedQuestions);
+    } else {
+      this.openQuestionBlock();
     }
-  }
-
-  changePage(event) {
-    this.currentPage = event.detail;
-    this.resolveDisplayedQuestions();
-  }
-
-  resolveDisplayedQuestions() {
-    this.filteredQuestions = this.displayedQuestions.filter((item, index) => {
-      return index >= (this.currentPage-1) * +this.pageQuestionsAmount.data && index < (this.currentPage) * +this.pageQuestionsAmount.data;
-    });
   }
 
   clickPreviousButton() {
