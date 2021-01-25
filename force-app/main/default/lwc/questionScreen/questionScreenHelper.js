@@ -1,12 +1,3 @@
-const transformDisplayesTypes = (displayedTemplates) => {
-  return displayedTemplates.map((template) => {
-    return {
-      label: template.Name,
-      value: template.Id
-    };
-  });
-}
-
 const getQuestionsBySurveyId = (templateQuestions, surveyId) => {
   return templateQuestions.filter(
     (question) => {
@@ -96,7 +87,6 @@ const findQuestionsForUpSwap = (questions, position) => {
 }
 
 export {
-  transformDisplayesTypes,
   getQuestionsBySurveyId,
   updateQuestionByPosition,
   findQuestionsForDownSwap,

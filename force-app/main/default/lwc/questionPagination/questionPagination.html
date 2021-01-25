@@ -1,0 +1,11 @@
+<template>
+  <div class="slds-text-align_center">
+    <lightning-button-group>
+      <lightning-button label={label.first_page} onclick={clickFirstPage} disabled={isFirstDisabled}></lightning-button>
+      <lightning-button label={label.previous_page}  onclick={clickPreviousPage} disabled={isPreviousDisabled}></lightning-button>
+      <lightning-button label={displayedCurrentPage}></lightning-button>
+      <lightning-button label={label.next_page}  onclick={clickNextPage} disabled={isNextDisabled}></lightning-button>
+      <lightning-button label={label.last_page}  onclick={clickLastPage} disabled={isLastDisabled}></lightning-button>
+      </lightning-button-group>
+  </div>
+</template>

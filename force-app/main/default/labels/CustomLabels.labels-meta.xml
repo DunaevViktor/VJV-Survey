@@ -8,6 +8,13 @@
         <value>Add</value>
     </labels>
     <labels>
+        <fullName>add_new_question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>add new question</shortDescription>
+        <value>Add new question</value>
+    </labels>
+    <labels>
         <fullName>add_new_receiver</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -29,6 +36,13 @@
         <value>Add Question</value>
     </labels>
     <labels>
+        <fullName>add_standard_question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>add standard question</shortDescription>
+        <value>Add standard question</value>
+    </labels>
+    <labels>
         <fullName>add_trigger_rule</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -43,11 +57,25 @@
         <value>Can be resending</value>
     </labels>
     <labels>
+        <fullName>can_no_longer_create_questions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>can no longer create questions</shortDescription>
+        <value>You can no longer create questions</value>
+    </labels>
+    <labels>
         <fullName>cancel_edit</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>cancel edit</shortDescription>
         <value>Cancel edit</value>
+    </labels>
+    <labels>
+        <fullName>clear</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>clear</shortDescription>
+        <value>Clear</value>
     </labels>
     <labels>
         <fullName>clear_trigger_rules_fields</fullName>
@@ -253,6 +281,20 @@
         <value>Full incomplete trigger rules or clear(delete) them completely</value>
     </labels>
     <labels>
+        <fullName>find</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>find</shortDescription>
+        <value>Find</value>
+    </labels>
+    <labels>
+        <fullName>first_page</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>first_page</shortDescription>
+        <value>First</value>
+    </labels>
+    <labels>
         <fullName>group_name</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -295,6 +337,13 @@
         <value>Is reusable</value>
     </labels>
     <labels>
+        <fullName>last_page</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>last page</shortDescription>
+        <value>Last</value>
+    </labels>
+    <labels>
         <fullName>limit_question_sexceeded</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -320,6 +369,13 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>next</shortDescription>
+        <value>Next</value>
+    </labels>
+    <labels>
+        <fullName>next_page</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>next_page</shortDescription>
         <value>Next</value>
     </labels>
     <labels>
@@ -372,6 +428,13 @@
         <value>Don&apos;t have validations to display</value>
     </labels>
     <labels>
+        <fullName>none</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>none</shortDescription>
+        <value>None</value>
+    </labels>
+    <labels>
         <fullName>number</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -421,6 +484,13 @@
         <value>If you will click this button you will lost all validations variables</value>
     </labels>
     <labels>
+        <fullName>previous_page</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>previous_page</shortDescription>
+        <value>Previous</value>
+    </labels>
+    <labels>
         <fullName>question</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -435,11 +505,25 @@
         <value>Question Setting</value>
     </labels>
     <labels>
+        <fullName>questions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>questions</shortDescription>
+        <value>questions</value>
+    </labels>
+    <labels>
         <fullName>questions_connected</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>questions connected</shortDescription>
         <value>These questions are already connected in another validation</value>
+    </labels>
+    <labels>
+        <fullName>qustion</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>qustion</shortDescription>
+        <value>question</value>
     </labels>
     <labels>
         <fullName>remove_image</fullName>
@@ -512,6 +596,13 @@
         <value>Search</value>
     </labels>
     <labels>
+        <fullName>select</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>select</shortDescription>
+        <value>Select</value>
+    </labels>
+    <labels>
         <fullName>select_an_option</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -538,13 +629,6 @@
         <protected>true</protected>
         <shortDescription>selected survey template</shortDescription>
         <value>Selected Survey Template</value>
-    </labels>
-    <labels>
-        <fullName>should_have_two_questions</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>should have two questions</shortDescription>
-        <value>Your survey should have at least two questions</value>
     </labels>
     <labels>
         <fullName>specify_question</fullName>
@@ -650,5 +734,19 @@
         <protected>true</protected>
         <shortDescription>value</shortDescription>
         <value>Value</value>
+    </labels>
+    <labels>
+        <fullName>you_can_create</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>you can create</shortDescription>
+        <value>You can create</value>
+    </labels>
+    <labels>
+        <fullName>you_must_have_at_least</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>you must have at least</shortDescription>
+        <value>You must have at least</value>
     </labels>
 </CustomLabels>

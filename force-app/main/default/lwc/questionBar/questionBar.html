@@ -1,0 +1,36 @@
+<template>
+  <div class="slds-box slds-box_x-small">
+    <div class="slds-grid slds-wrap">
+      <div class="slds-col slds-size_2-of-6">
+        <lightning-combobox
+        name="template"
+        label={label.selected_survey_template}
+        value={templateOptionsValue}
+        options={templateOptions}
+        onchange={handleTemplateChange}
+        >
+        </lightning-combobox>
+      </div>
+
+      <div class="slds-col slds-size_2-of-6 slds-m-top_large">
+        <template if:true={hasStandardQuestions}>
+          <lightning-button 
+          variant="brand-outline"            
+          label={label.add_standard_question} 
+          onclick={handleAddStandardQuestion} 
+          class="slds-m-left_x-small">
+          </lightning-button>
+        </template>
+      </div>
+
+      <div class="slds-col slds-size_2-of-6 slds-m-top_large">
+        <lightning-button 
+        variant="brand-outline" 
+        label={label.add_new_question} 
+        onclick={handleAddQuestion} 
+        class="slds-m-left_x-small">
+        </lightning-button>
+      </div>
+    </div>   
+  </div>
+</template>

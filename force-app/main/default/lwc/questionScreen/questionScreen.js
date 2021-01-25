@@ -3,11 +3,12 @@ import getTemplateSurveys from "@salesforce/apex/SurveyController.getTemplateSur
 import getStandardQuestions from "@salesforce/apex/QuestionController.getStandardQuestions";
 import getTemplatesQuestions from "@salesforce/apex/QuestionController.getTemplatesQuestions";
 import getMaxQuestionAmount from "@salesforce/apex/SurveySettingController.getMaxQuestionAmount";
+import getMinQuestionAmount from "@salesforce/apex/SurveySettingController.getMinQuestionAmount";
+import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getPageQuestionAmount";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 import {label} from "./labels";
 import {
-  transformDisplayesTypes,
   getQuestionsBySurveyId,
   updateQuestionByPosition,
   findQuestionsForDownSwap,
@@ -78,39 +79,41 @@ export default class QuestionScreen extends LightningElement {
   }
 
   @wire(getMaxQuestionAmount) maxQuestionsAmount;
+  @wire(getMinQuestionAmount) minQuestionsAmount;
+  @wire(getPageQuestionAmount) pageQuestionsAmount;
 
+  @track filteredQuestions;
   @track hasQuestions = false;
-  @track hasStandardQuestions = false;
+  @track isNeedPagination = false;
   @track editQuestionPosition;
-  @track noTemplate;
   @track isError = false;
 
   label = label;
 
+  @track isFormOpen = false;
+  @track isStandardSelectorOpen = false;
+
+  @track currentPage = 1;
+  @track amountPages;
+
   connectedCallback() {
-    this.hasQuestions = this.questions.length > 0;
-    this.hasStandardQuestions = this.standardQuestions.length > 0;
+    this.resolveQuestionsSubinfo();
+    this.resolveDisplayedQuestions();
 
     this.initTemplates();
     this.initStandardQuestions();
-
-    this.noTemplate = {
-      label: label.no_template,
-      value: this.NO_TEMPLATE_VALUE
-    };
   }
 
-  get templateOptions() {
-    let templateOptions;
-
-    if (this.displayedTemplates) {
-      templateOptions = transformDisplayesTypes(this.displayedTemplates);
-    } else {
-      templateOptions = [];
+  get labelOfAvailableItems() {
+    switch(this.availableQuestionsAmount) {
+      case 1: return this.label.you_can_create + " " + this.availableQuestionsAmount + " " + this.label.question;
+      case 0: return this.label.can_no_longer_create_questions;
+      default: return this.label.you_can_create + " " + this.availableQuestionsAmount + " " + this.label.questions;
     }
+  }
 
-    templateOptions.push(this.noTemplate);
-    return templateOptions;
+  get availableQuestionsAmount() {
+    return +this.maxQuestionsAmount.data - +this.displayedQuestions.length;
   }
 
   initTemplates() {
@@ -153,18 +156,34 @@ export default class QuestionScreen extends LightningElement {
     }
   }
 
-  initQuestion() {
+  openForm() {
+    this.isFormOpen = true;
+  }
+
+  closeForm() {
+    this.isFormOpen = false;
+  }
+
+  openStandardSelector() {
+    this.isStandardSelectorOpen = true;
+  }
+
+  closeStandardSelector() {
+    this.isStandardSelectorOpen = false;
+  }
+
+  clearFormQuestion() {
     this.template
           .querySelectorAll("c-question-form")[0]
           .clearQuestion();
   }
 
   handleTemplateChange(event) {
-    if (this.templateOptionsValue.localeCompare(event.detail.value) === 0) {
+    if (this.templateOptionsValue.localeCompare(event.detail) === 0) {
       return;
     }
 
-    this.templateOptionsValue = event.detail.value;
+    this.templateOptionsValue = event.detail;
 
     if (this.templateOptionsValue.localeCompare(this.NO_TEMPLATE_VALUE) === 0) {
       this.displayedQuestions = [];
@@ -174,12 +193,9 @@ export default class QuestionScreen extends LightningElement {
         this.templateOptionsValue);
     }
 
-    this.hasQuestions = this.questions.length > 0;
-
-    if (this.editQuestionPosition) {
-      this.initQuestion();
-      this.editQuestionPosition = null;
-    }
+    this.resolveQuestionsSubinfo();
+    this.resolveDisplayedQuestions();
+    this.currentPage = 1;
   }
 
   addQuestion(event) {
@@ -192,100 +208,15 @@ export default class QuestionScreen extends LightningElement {
     }
     this.displayedQuestions.push(question);
 
-    this.hasQuestions = this.questions.length > 0;
-    this.initQuestion();
-  }
-
-  editQuestion(event) {
-    let position = +event.detail;
-    this.editQuestionPosition = position;
-
-    const questionForEdit = findQuestionByPosition(this.displayedQuestions, +position);
-
-    this.template
-      .querySelectorAll("c-question-form")[0]
-      .setQuestionForEdit(questionForEdit);
-  }
-
-  cancelEditQuestion() {
-    this.editQuestionPosition = null;
-    this.initQuestion();
-  }
-
-  deleteQuestion(event) {
-    let position = +event.detail;
-
-    if (position === this.editQuestionPosition) {
-      this.initQuestion();
-    }
-
-    position--;
-
-    this.displayedQuestions.splice(position, 1);
-
-    for (let i = position; i < this.displayedQuestions.length; i++) {
-      this.displayedQuestions[i].Position__c = i + 1;
-    }
-
-    this.hasQuestions = this.questions.length > 0;
-  }
-
-  updateQuestion(event) {
-    const updatedQuestion = event.detail;
-
-    this.displayedQuestions = updateQuestionByPosition(
-      this.questions, 
-      this.editQuestionPosition, 
-      updatedQuestion);
-
-    this.editQuestionPosition = null;
-  }
-
-  downQuestion(event) {
-    const position = +event.detail;
-
-    if (position === this.displayedQuestions.length) return;
-
-    let {relocatableQuestion, relocatableIndex, lowerQuestion, lowerIndex} = 
-      findQuestionsForDownSwap(this.displayedQuestions, position);
-
-    if (this.editQuestionPosition === lowerIndex + 1) {
-      this.editQuestionPosition = relocatableIndex + 1;
-    } else if (this.editQuestionPosition === relocatableIndex + 1) {
-      this.editQuestionPosition = lowerIndex + 1;
-    }
-
-    lowerQuestion.Position__c--;
-    relocatableQuestion.Position__c++;
-
-    this.displayedQuestions[relocatableIndex] = lowerQuestion;
-    this.displayedQuestions[lowerIndex] = relocatableQuestion;
-  }
-
-  upQuestion(event) {
-    const position = +event.detail;
-
-    if (position === 1) return;
-
-    let {relocatableQuestion, relocatableIndex, upperQuestion, upperIndex} =
-      findQuestionsForUpSwap(this.displayedQuestions, position);
-      
-    if (this.editQuestionPosition === upperIndex + 1) {
-      this.editQuestionPosition = relocatableIndex + 1;
-    } else if (this.editQuestionPosition === relocatableIndex + 1) {
-      this.editQuestionPosition = upperIndex + 1;
-    }
-
-    upperQuestion.Position__c++;
-    relocatableQuestion.Position__c--;
-
-    this.displayedQuestions[relocatableIndex] = upperQuestion;
-    this.displayedQuestions[upperIndex] = relocatableQuestion;
+    this.resolveQuestionsSubinfo();
+    this.resolveDisplayedQuestions();
+    this.closeForm();
   }
 
   selectQuestion(event) {
     const question = JSON.parse(JSON.stringify(event.detail));
     question.Position__c = this.displayedQuestions.length + 1;
+    question.IsReusable__c = false;
     question.Id = null;
 
     if(!!question.Question_Options__r) {
@@ -294,11 +225,31 @@ export default class QuestionScreen extends LightningElement {
 
     this.displayedQuestions.push(question);
 
-    this.hasQuestions = this.displayedQuestions.length > 0;
+    this.resolveQuestionsSubinfo();
+    this.resolveDisplayedQuestions();
+    this.closeStandardSelector();
   }
 
-  setError() {
-    this.isError = true;
+  resolveQuestionsSubinfo() {
+    this.hasQuestions = this.questions.length > 0;
+    this.amountPages =  Math.ceil(this.questions.length / +this.pageQuestionsAmount.data);
+    this.isNeedPagination = this.questions.length > +this.pageQuestionsAmount.data;
+
+    if(this.amountPages > 2) {
+      const paginationBlock = this.template.querySelectorAll("c-question-pagination")[0];
+      if(paginationBlock) paginationBlock.setAmountPages(this.amountPages);
+    }
+  }
+
+  changePage(event) {
+    this.currentPage = event.detail;
+    this.resolveDisplayedQuestions();
+  }
+
+  resolveDisplayedQuestions() {
+    this.filteredQuestions = this.displayedQuestions.filter((item, index) => {
+      return index >= (this.currentPage-1) * +this.pageQuestionsAmount.data && index < (this.currentPage) * +this.pageQuestionsAmount.data;
+    });
   }
 
   clickPreviousButton() {
@@ -307,8 +258,9 @@ export default class QuestionScreen extends LightningElement {
   }
 
   clickNextButton() {
-    if(this.displayedQuestions.length < 2) {
-      this.showToastMessage(label.unable_to_continue, label.should_have_two_questions, this.ERROR_VARIANT);
+    if(this.displayedQuestions.length < +this.minQuestionsAmount.data) {
+      const errorMessage = label.you_must_have_at_least + " " + this.minQuestionsAmount.data + " " +label.questions;
+      this.showToastMessage(label.unable_to_continue, errorMessage, this.ERROR_VARIANT);
       return;
     } 
 
@@ -323,5 +275,9 @@ export default class QuestionScreen extends LightningElement {
       variant
     });
     this.dispatchEvent(event);
+  }
+
+  setError() {
+    this.isError = true;
   }
 }
