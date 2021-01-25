@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>Create_Survey</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Create Survey</shortDescription>
+        <value>Create Survey</value>
+    </labels>
+    <labels>
+        <fullName>Launch</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Launch</shortDescription>
+        <value>Launch</value>
+    </labels>
+    <labels>
+        <fullName>Survey_Constructor</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Survey Constructor</shortDescription>
+        <value>Survey Constructor</value>
+    </labels>
+    <labels>
         <fullName>add</fullName>
         <language>en_US</language>
         <protected>true</protected>

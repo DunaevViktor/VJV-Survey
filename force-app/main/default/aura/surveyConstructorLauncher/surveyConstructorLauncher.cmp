@@ -1,18 +1,10 @@
 <aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
                 access="global" >
-    <aura:attribute name="showFlow" type="Boolean" default="true"/>
-    <aura:attribute name="showLaunch" type="Boolean" default="true"/>
+    <lightning:overlayLibrary aura:id="overlayLibButton"/>
     
     <lightning:card>
-        <aura:if isTrue="{!v.showLaunch}">
-            <lightning:button variant="brand" label="Create Survey" title="Launch"
-                              class="slds-align_absolute-center" onclick="{!c.launchFlow}"/>
-        </aura:if>
-        
-        <aura:if isTrue="{!v.showFlow}">
-            <lightning:flow aura:id="surveyFlow" class="slds-align_absolute-center"
-                            onstatuschange="{!c.handleStatusChange}"/>
-        </aura:if>
+        <lightning:button variant="brand" label="{!$Label.c.Create_Survey}" title="{!$Label.c.Launch}"
+                          class="slds-align_absolute-center" onclick="{!c.launchFlow}"/>
     </lightning:card>
     
 </aura:component>
