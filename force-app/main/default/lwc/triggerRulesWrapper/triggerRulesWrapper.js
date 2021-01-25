@@ -23,8 +23,6 @@ export default class TriggerRulesWrapper extends LightningElement {
   @track _rules = [];
   
   connectedCallback() {
-    console.log('connected call rules');
-    console.log(this.rules);
     if (this.rules && this.rules.length > 0) {
       let newtriggerRules = [];
       this._rules = this.rules;
@@ -55,7 +53,7 @@ export default class TriggerRulesWrapper extends LightningElement {
 
   handleDeleteTriggerRule(event) {
     let childKey = event.detail;
-    this.triggerRules.splice(childKey, 1);
+    this.triggerRules.splice(this.triggerRules.findIndex(rule => rule.id === childKey), 1);
     this.updateIsDeleteAvailableState();
   }
 
@@ -75,8 +73,6 @@ export default class TriggerRulesWrapper extends LightningElement {
 
   handleNavigateNext() {    
     this._rules = this.getNewTriggerRules();
-    console.log('new tr rules getted');
-    console.log(this._rules);
     if(!areTriggerRulesFilledCompletely(this._rules)) {
       this.showToast("", this.labels.fill_trigger_rules, "error");
     } else if(areDuplicatesPresent(this._rules)) {
@@ -104,8 +100,6 @@ export default class TriggerRulesWrapper extends LightningElement {
   }
 
   getNewTriggerRules() {
-    console.log('this.triggerRules');
-    console.log(this.triggerRules);
     let newTriggerRules = [];
 
     this.triggerRules.forEach((rule) => {
