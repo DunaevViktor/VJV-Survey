@@ -226,7 +226,6 @@ const generateFieldsDescriptionsList = (result) => {
     setReferencedObjectNames(fieldDescriptionList, fieldObject);
     comboboxFieldsOptions.push(fieldObject);
   });
-  console.log(comboboxFieldsOptions);
   return comboboxFieldsOptions;
 };
 

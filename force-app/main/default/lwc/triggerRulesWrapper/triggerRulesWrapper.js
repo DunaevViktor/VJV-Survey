@@ -1,5 +1,6 @@
 import { LightningElement, track, api } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import getMaxTriggerRuleAmount from "@salesforce/apex/SurveySettingController.getMaxTriggerRuleAmount";
 
 import { importedLabels } from "./labels"
 
@@ -11,7 +12,7 @@ import {
 
 export default class TriggerRulesWrapper extends LightningElement {
 
-  RULES_AMOUNT = 5;
+  @track maxTriggerRulesAmount = 5;
 
   labels = importedLabels;
 
@@ -21,6 +22,18 @@ export default class TriggerRulesWrapper extends LightningElement {
 
   @api rules = [];
   @track _rules = [];
+
+  constructor() {
+    super();
+    getMaxTriggerRuleAmount()
+      .then((result) => {
+        this.maxTriggerRulesAmount = result;        
+      })
+      .catch((error) => {
+        this.error = error;
+        console.log(error);
+      });
+  }
   
   connectedCallback() {
     if (this.rules && this.rules.length > 0) {
@@ -69,7 +82,7 @@ export default class TriggerRulesWrapper extends LightningElement {
 
   get isPlusVisible() {
     const triggerRulesAmount = this.triggerRules.length;    
-    return triggerRulesAmount === this.RULES_AMOUNT ? false : true;
+    return triggerRulesAmount === this.maxTriggerRulesAmount ? false : true;
   }
 
   handleNavigateNext() {    
