@@ -6,8 +6,10 @@ import value from "@salesforce/label/c.value";
 import add from "@salesforce/label/c.add";
 import select_operator from "@salesforce/label/c.select_operator";
 import select_value from "@salesforce/label/c.select_value";
+import none_value from "@salesforce/label/c.none_value";
 
 const label = {
+  none_value,
   question,
   dependent_question,
   operator,

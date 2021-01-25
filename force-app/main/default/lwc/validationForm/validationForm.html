@@ -5,6 +5,7 @@
         <div class="slds-m-around_x-small">
           <lightning-combobox
             label={label.question}
+            placeholder={label.none_value}
             value={firstPosition}
             options={questionOptions}
             onchange={selectFirstQuestion}
@@ -23,6 +24,7 @@
             options={displayedOperators}
             class="slds-m-around_x-small"
             onchange={setSelectedOperator}
+            disabled={isFirstQuestionNotChoosen}
           >
           </lightning-combobox>
         </div>
@@ -36,6 +38,7 @@
             placeholder={label.select_value}
             options={questionsOptions}
             class="input"
+            disabled={isFirstQuestionNotChoosen}
             required
           >
           </lightning-combobox>
@@ -45,6 +48,7 @@
             type={inputType}
             label={label.enter_compared_value}
             class="input"
+            disabled={isFirstQuestionNotChoosen}
             required
           ></lightning-input>
         </div>
@@ -54,6 +58,7 @@
         <div class="slds-m-around_x-small">
           <lightning-combobox
             label={label.dependent_question}
+            placeholder={label.none_value}
             value={secondPosition}
             options={questionOptions}
             onchange={selectSecondQuestion}

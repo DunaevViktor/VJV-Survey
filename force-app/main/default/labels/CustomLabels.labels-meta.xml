@@ -344,6 +344,13 @@
         <value>Next</value>
     </labels>
     <labels>
+        <fullName>none_value</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>none value</shortDescription>
+        <value>--None--</value>
+    </labels>
+    <labels>
         <fullName>no_questions</fullName>
         <language>en_US</language>
         <protected>true</protected>

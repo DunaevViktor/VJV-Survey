@@ -38,14 +38,6 @@ export default class ValidationForm extends LightningElement {
 
   @track isFirstQuestionPicklist;
 
-  connectedCallback() {
-    this.firstPosition = this.questions[0].Position__c;
-    this.secondPosition = this.questions[1].Position__c;
-
-    this.firstQuestion = findQuestionByPosition(this.questions, this.firstPosition);
-    this.secondQuestion = findQuestionByPosition(this.questions, this.secondPosition);
-  }
-
   @wire(getPicklistValues, {
     recordTypeId: "$validationObjectInfo.data.defaultRecordTypeId",
     fieldApiName: OPERATOR_FIELD
@@ -53,9 +45,6 @@ export default class ValidationForm extends LightningElement {
   initTypes({ error, data }) {
     if (data) {
       this.operators = transformOperators(data.values);
-
-      this.setDisplayedOperators();
-      this.isFirstQuestionPicklist = isNeedPicklist(this.firstQuestion, this.selectedOperator);
     } else if (error) {
       this.sendErrorNotification();
     }
@@ -71,13 +60,20 @@ export default class ValidationForm extends LightningElement {
   }
 
   get inputType() {
-    return this.firstQuestion.Type__c.toLowerCase() ===
+    if(this.firstPosition){
+      return this.firstQuestion.Type__c.toLowerCase() ===
       questionTypes.RATING.toLowerCase()
       ? "number"
       : "text";
+    }
+    
   }
 
   get questionsOptions() {
+    if(!this.firstQuestion){
+      return false;
+    }
+
     if (
       this.selectedOperator &&
       this.selectedOperator
@@ -96,6 +92,9 @@ export default class ValidationForm extends LightningElement {
   }
 
   setDisplayedOperators() {
+    if(!this.firstQuestion){
+      return;
+    }
     const resolvedOperators = resolveOperatorsByQuestionType(
       this.operators, 
       this.firstQuestion);
@@ -183,17 +182,26 @@ export default class ValidationForm extends LightningElement {
     this.dispatchEvent(errorEvent);
   }
 
+  get isFirstQuestionNotChoosen(){
+    if(this.firstQuestion === undefined){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   @api
   resetForm() {
-    this.firstPosition = this.questions[0].Position__c;
-    this.secondPosition = this.questions[1].Position__c;
 
-    this.firstQuestion = findQuestionByPosition(this.questions, this.firstPosition);
-    this.secondQuestion = findQuestionByPosition(this.questions, this.secondPosition);
+    this.firstPosition = undefined;
+    this.firstQuestion = undefined;
+    this.secondPosition = undefined;
+    this.secondQuestion = undefined;
+    this.selectedOperator = undefined;
+    this.displayedOperators = undefined;
 
     const input = this.template.querySelector(".input");
     input.value = "";
 
-    this.setDisplayedOperators();
   }
 }
