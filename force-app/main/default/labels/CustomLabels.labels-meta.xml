@@ -8,6 +8,13 @@
         <value>Create Survey</value>
     </labels>
     <labels>
+        <fullName>Launch</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Launch</shortDescription>
+        <value>Launch</value>
+    </labels>
+    <labels>
         <fullName>Survey_Constructor</fullName>
         <language>en_US</language>
         <protected>true</protected>
