@@ -3,7 +3,7 @@
     <lightning:overlayLibrary aura:id="overlayLibButton"/>
     
     <lightning:card>
-        <lightning:button variant="brand" label="Create Survey" title="Launch"
+        <lightning:button variant="brand" label="{!$Label.c.Create_Survey}" title="Launch"
                           class="slds-align_absolute-center" onclick="{!c.launchFlow}"/>
     </lightning:card>
     
