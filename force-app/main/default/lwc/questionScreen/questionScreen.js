@@ -11,7 +11,8 @@ import {
   getQuestionsBySurveyId,
   updateQuestionByPosition,
   findQuestionsForDownSwap,
-  findQuestionsForUpSwap
+  findQuestionsForUpSwap,
+  resetOptionsIds
 } from "./questionScreenHelper.js";
 
 import {
@@ -286,6 +287,10 @@ export default class QuestionScreen extends LightningElement {
     const question = JSON.parse(JSON.stringify(event.detail));
     question.Position__c = this.displayedQuestions.length + 1;
     question.Id = null;
+
+    if(!!question.Question_Options__r) {
+      question.Question_Options__r = resetOptionsIds(question.Question_Options__r);
+    }
 
     this.displayedQuestions.push(question);
 

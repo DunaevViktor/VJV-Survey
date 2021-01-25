@@ -18,9 +18,21 @@ const getQuestionsBySurveyId = (templateQuestions, surveyId) => {
     (question, index) => {
       question.Id = null;
       question.Position__c = index + 1;
+
+      if(question.Question_Options__r) {
+        question.Question_Options__r = resetOptionsIds(question.Question_Options__r);
+      }
+
       return JSON.parse(JSON.stringify(question));
     }
   );
+}
+
+const resetOptionsIds = (options) => {
+  return options.map((option) => {
+    option.Id = null;
+    return option;
+  });
 }
 
 const updateQuestionByPosition = (questions, position, updatedQuestion) => {
@@ -88,5 +100,6 @@ export {
   getQuestionsBySurveyId,
   updateQuestionByPosition,
   findQuestionsForDownSwap,
-  findQuestionsForUpSwap
+  findQuestionsForUpSwap,
+  resetOptionsIds
 }

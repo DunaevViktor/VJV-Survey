@@ -38,7 +38,8 @@
     </types>
     <types>
         <members>Survey_Report_Dashboard_Permission_Set</members>
-        <members>Survey_Permission_Set</members>
+        <members>Admin_Survey_Permission_Set</members>
+        <members>User_Survey_Permission_Set</members>
         <name>PermissionSet</name>
     </types>
     <types>

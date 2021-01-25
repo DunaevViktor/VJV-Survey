@@ -22,7 +22,7 @@ const transformOptions = (questions, savedQuestions) => {
   for(let i = 0; i < questions.length; i++) {
     const question = questions[i];
      
-    if(question.Question_Options__r === null || question.Question_Options__r.length === 0) continue;
+    if(!question.Question_Options__r || question.Question_Options__r.length === 0) continue;
 
     const savedQuestion = findQuestionByPosition(savedQuestions, question.Position__c);
 

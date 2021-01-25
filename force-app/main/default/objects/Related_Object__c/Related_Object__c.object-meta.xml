@@ -161,7 +161,11 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Related Objects</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <searchResultsAdditionalFields>Related_Contact__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Related_Case__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Related_Lead__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

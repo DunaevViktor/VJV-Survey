@@ -8,11 +8,14 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { label } from "./labels.js";
 import {
   transformQuestionTypes,
-  isOptionEnabnling, 
+  isOptionEnabling, 
   filterOptionsByValue,
+  filterOptionsByValueAndIndex,
+  findOptionIndexByValue,
   updateOptionsValue,
   deleteFromOptions,
-  clearInput
+  clearInput,
+  setInputValidity
 } from "./questionFormHelper.js";
 
 export default class QuestionForm extends LightningElement {
@@ -27,6 +30,8 @@ export default class QuestionForm extends LightningElement {
   REQUIRED_FIELD_API_NAME = "Required__c";
   REUSABLE_FIELD_API_NAME = "IsReusable__c";
 
+  EMPTRY_STRING = "";
+
   @track question;
 
   @wire(getObjectInfo, { objectApiName: QUESTION_OBJECT })
@@ -39,6 +44,7 @@ export default class QuestionForm extends LightningElement {
   @track isEditOption = false;
   @track isEditMode = false;
   @track editOptionValue = "";
+  @track editOptionIndex;
 
   displayedTypes;
 
@@ -117,7 +123,7 @@ export default class QuestionForm extends LightningElement {
   }
 
   setOptionsEnabling() {
-    this.isOptionsEnabled = isOptionEnabnling(this.selectedType);
+    this.isOptionsEnabled = isOptionEnabling(this.selectedType);
 
     if(this.isOptionsEnabled && !this.question.Question_Options__r) {
       this.question.Question_Options__r = [];
@@ -132,7 +138,7 @@ export default class QuestionForm extends LightningElement {
       Value__c: input.value
     });
 
-    input.value = "";
+    clearInput(input);
   }
 
   editOption(event) {
@@ -140,6 +146,7 @@ export default class QuestionForm extends LightningElement {
     clearInput(input);
     input.value = event.detail;
     this.editOptionValue = event.detail;
+    this.editOptionIndex = findOptionIndexByValue(this.question.Question_Options__r, event.detail);
     this.isEditOption = true;
   }
 
@@ -148,6 +155,7 @@ export default class QuestionForm extends LightningElement {
     clearInput(input);
     input.value = "";
     this.editOptionValue = "";
+    this.editOptionIndex = null;
     this.isEditOption = false;
   }
 
@@ -165,19 +173,27 @@ export default class QuestionForm extends LightningElement {
 
   deleteOption(event) {
     this.question.Question_Options__r = deleteFromOptions(this.question.Question_Options__r, event.detail);
+
+    if(this.editOptionValue.localeCompare(event.detail) === 0) {
+      this.cancelOptionEdit();
+    } else {
+      this.isEditOption--;
+    }
   }
 
   isOptionCorrect(input) {
-    if (!input.validity.valid) return false;
+    if (input.value === this.EMPTRY_STRING) {
+      setInputValidity(input, label.complete_this_field);
+      return false;
+    }
 
-    const filteredOptions = filterOptionsByValue(this.question.Question_Options__r, input.value);
+    const filteredOptions = this.isEditOption ? 
+    filterOptionsByValueAndIndex(this.question.Question_Options__r, input.value, this.editOptionIndex) :
+    filterOptionsByValue(this.question.Question_Options__r, input.value);
 
+    
     if (filteredOptions.length > 0) {
-      this.showToastMessage(
-        this.ERROR_TITLE,
-        label.option_already_exists,
-        this.ERROR_VARIANT
-      );
+      setInputValidity(input, label.option_already_exists);
       return false;
     }
 
@@ -197,7 +213,7 @@ export default class QuestionForm extends LightningElement {
   cancelQuestionEdit() {
     const cancelEvent = new CustomEvent("canseledit");
     this.dispatchEvent(cancelEvent);
-    this.resetForm();
+    this.clearQuestion();
   }
 
   updateQuestion() {
@@ -209,7 +225,7 @@ export default class QuestionForm extends LightningElement {
     });
     this.dispatchEvent(editEvent);
 
-    this.resetForm();
+    this.clearQuestion();
   }
 
   getQuestionAttributes() {
@@ -225,7 +241,8 @@ export default class QuestionForm extends LightningElement {
   isQuestionCorrect() {
     const input = this.template.querySelector(".input");
 
-    if (!input.validity.valid) {
+    if (input.value === this.EMPTRY_STRING) {
+      setInputValidity(input, label.complete_this_field);
       return false;
     } else if (
       this.isOptionsEnabled &&
@@ -233,7 +250,7 @@ export default class QuestionForm extends LightningElement {
     ) {
       this.showToastMessage(
         this.ERROR_TITLE,
-        label.option_already_exists,
+        label.error_few_options,
         this.ERROR_VARIANT
       );
       return false;
@@ -245,7 +262,6 @@ export default class QuestionForm extends LightningElement {
   resetForm() {
     const input = this.template.querySelector(".input");
     clearInput(input);
-    input.value = "";
     this.selectedType = this.displayedTypes
       ? this.displayedTypes[0].value
       : "Text";

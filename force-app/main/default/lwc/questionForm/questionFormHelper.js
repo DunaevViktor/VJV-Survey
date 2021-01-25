@@ -9,7 +9,7 @@ const transformQuestionTypes = (types) => {
   });
 }
 
-const isOptionEnabnling = (selectedType) => {
+const isOptionEnabling = (selectedType) => {
   return selectedType.toLowerCase().localeCompare(questionTypes.CHECKBOX.toLowerCase()) === 0 ||
          selectedType.toLowerCase().localeCompare(questionTypes.RADIOBUTTON.toLowerCase()) === 0 ||
          selectedType.toLowerCase().localeCompare(questionTypes.PICKLIST.toLowerCase()) === 0;
@@ -21,6 +21,26 @@ const filterOptionsByValue = (options, value) => {
       return option.Value__c.localeCompare(value) === 0;
     }
   );
+}
+
+const filterOptionsByValueAndIndex = (options, value, editiIndex) => {
+  return options.filter(
+    (option, index) => {
+      return option.Value__c.localeCompare(value) === 0 && index !== editiIndex;
+    }
+  );
+}
+
+const findOptionIndexByValue = (options, value) => {
+  let idx;
+
+  options.forEach((option, index) => {
+    if(option.Value__c.localeCompare(value) === 0) {
+      idx = index;
+    }
+  });
+
+  return idx;
 }
 
 const updateOptionsValue = (options, oldValue, newValue) => {
@@ -43,16 +63,25 @@ const deleteFromOptions = (options, selectedValue) => {
 }
 
 const clearInput = (input) => {
-  input.value = ".";
-  input.focus();
+  input.setCustomValidity("");
+  input.reportValidity();
+  input.value = "";
+  input.blur();
+}
+
+const setInputValidity = (input, message) => {
+  input.setCustomValidity(message);
   input.reportValidity();
 }
 
 export {
   transformQuestionTypes,
-  isOptionEnabnling,
+  isOptionEnabling,
   filterOptionsByValue,
+  filterOptionsByValueAndIndex,
+  findOptionIndexByValue,
   updateOptionsValue,
   deleteFromOptions,
-  clearInput
+  clearInput,
+  setInputValidity
 }
