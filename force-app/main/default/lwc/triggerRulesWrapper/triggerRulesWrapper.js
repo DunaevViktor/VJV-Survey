@@ -40,6 +40,7 @@ export default class TriggerRulesWrapper extends LightningElement {
         id: 0
       });
     }
+    this.updateIsDeleteAvailableState();
   }
 
   handlePlusClick() {
