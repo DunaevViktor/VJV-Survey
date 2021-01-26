@@ -1,6 +1,7 @@
 import { LightningElement, wire, api, track } from 'lwc';
 import getMaxQuestionAmount from "@salesforce/apex/SurveySettingController.getMaxQuestionAmount";
 import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getPageQuestionAmount";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 import {label} from "./labels.js";
 import { findQuestionByPosition } from "c/formUtil";
@@ -141,15 +142,16 @@ export default class QuestionsBlock extends LightningElement {
   }
 
   handleQuestionsSearch() {
+    const keyword = this.template.querySelector('lightning-input[data-my-id="keyword"]').value;
+    if(this.isEmpty(keyword)) {
+      this.showToast('', label.search_keyword_cant_be_empty, 'error');
+    }
     this.currentPage = 1;
     if(!this.isSearchMode) {
       this.displayedQuestionsCopy = [];
       this.displayedQuestionsCopy = [...this.displayedQuestions];
     }
-    this.isSearchMode = true;
-    const keyword = this.template.querySelector(
-      'lightning-input[data-my-id="keyword"]'
-    ).value;
+    this.isSearchMode = true;    
     const questionSearchResult = this.displayedQuestions.filter(
       question => question.Label__c.includes(keyword)
     ); 
@@ -165,5 +167,14 @@ export default class QuestionsBlock extends LightningElement {
     this.displayedQuestions = [];
     this.displayedQuestions = [...this.displayedQuestionsCopy];
     this.resolveDisplayedQuestions();
+  }
+
+  isEmpty(value) {
+    return value === "";
+  }
+
+  showToast(title, message, variant) {
+    const event = new ShowToastEvent({title, message, variant, mode: "dismissable"});
+    this.dispatchEvent(event);
   }
 }

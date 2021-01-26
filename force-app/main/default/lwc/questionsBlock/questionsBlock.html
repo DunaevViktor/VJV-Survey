@@ -4,7 +4,7 @@
   
     <template if:true={hasQuestions}>
       <template if:true={isNeedSearchBar}>
-        <lightning-input type="text" label="Enter some text" data-my-id="keyword"></lightning-input>
+        <lightning-input type="text" label={label.enter_search_keyword} data-my-id="keyword"></lightning-input>
   
         <div class="slds-text-align_right slds-m-top_x-small">
           <lightning-button label={label.clear} onclick={handleClearQuestionSearch} class="slds-m-left_x-small"></lightning-button>
