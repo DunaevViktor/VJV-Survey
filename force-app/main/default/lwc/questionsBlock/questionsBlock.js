@@ -141,6 +141,7 @@ export default class QuestionsBlock extends LightningElement {
   }
 
   handleQuestionsSearch() {
+    this.currentPage = 1;
     if(!this.isSearchMode) {
       this.displayedQuestionsCopy = [];
       this.displayedQuestionsCopy = [...this.displayedQuestions];
@@ -158,6 +159,7 @@ export default class QuestionsBlock extends LightningElement {
   }
 
   handleClearQuestionSearch() {
+    this.currentPage = 1;
     this.template.querySelector('lightning-input[data-my-id="keyword"]').value = "";
     this.isSearchMode = false;
     this.displayedQuestions = [];
