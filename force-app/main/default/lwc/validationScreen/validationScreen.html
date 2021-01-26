@@ -1,4 +1,6 @@
 <template>
+  <c-screen-header header-text={label.validation_header}></c-screen-header>
+
   <template if:true={isError}>{label.errorMessage}</template>
 
   <template if:false={isError}>

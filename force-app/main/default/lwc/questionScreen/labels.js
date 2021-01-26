@@ -7,6 +7,7 @@ import unable_to_continue from "@salesforce/label/c.unable_to_continue";
 import should_have_two_questions from "@salesforce/label/c.should_have_two_questions";
 import limit_question_sexceeded from "@salesforce/label/c.limit_question_sexceeded"; 
 import errorMessage from "@salesforce/label/c.errorMessage";
+import question_header from "@salesforce/label/c.question_header";
 
 const label = {
   selected_survey_template,
@@ -17,7 +18,8 @@ const label = {
   no_template, 
   unable_to_continue,
   should_have_two_questions, 
-  limit_question_sexceeded
+  limit_question_sexceeded,
+  question_header
 };
 
 export {

@@ -18,6 +18,7 @@ import errorTitle from "@salesforce/label/c.error";
 import previous from "@salesforce/label/c.previous";
 import next from "@salesforce/label/c.next";
 import can_be_resending from "@salesforce/label/c.can_be_resending";
+import advance_setting_header from "@salesforce/label/c.advance_setting_header";
 
 const label = {
   type,
@@ -39,6 +40,7 @@ const label = {
   errorTitle,
   previous,
   next,
+  advance_setting_header,
   can_be_resending
 };
 

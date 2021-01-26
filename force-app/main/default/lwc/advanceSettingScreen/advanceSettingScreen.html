@@ -1,4 +1,6 @@
 <template>
+  <c-screen-header header-text={label.advance_setting_header}></c-screen-header>
+
   <template if:true={isError}>{label.errorTitle}</template>
 
   <template if:false={isError}>
@@ -15,7 +17,7 @@
       </div>
     </template>
 
-    <div class="slds-text-heading_medium">{label.add_new_receiver}</div>
+    <div class="slds-text-heading_small">{label.add_new_receiver}</div>
     <lightning-radio-group
       name="newReceiver"
       variant="label-hidden"

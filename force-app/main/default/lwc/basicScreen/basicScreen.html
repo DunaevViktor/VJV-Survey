@@ -1,11 +1,12 @@
 <template>
-  <c-saver-spinner if:true={loading}>
+  <c-saver-spinner if:true={loading} class="slds-text-align_center">
   </c-saver-spinner>
 
   <template if:false={loading}>
     <div class="slds-align_absolute-center">
       
       <div class="slds-m-horizontal_medium">
+        <c-screen-header header-text={label.basic_header}></c-screen-header>
         <lightning-input
           class="slds-m-vertical_medium"
           type="text"
