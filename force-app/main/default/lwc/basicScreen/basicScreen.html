@@ -1,46 +1,57 @@
 <template>
-  <div class="slds-align_absolute-center">
-    <div class="slds-m-horizontal_medium survey-info-form">
-      <lightning-input
-        class="slds-m-vertical_medium"
-        type="text"
-        label={label.survey_name}
-        placeholder={label.survey_name}
-        value={survey.Name}
-        onchange={handleNameChange}
-        disabled={loading}
-        required
-      >
-      </lightning-input>
+  <c-saver-spinner if:true={loading}>
+  </c-saver-spinner>
 
-      <c-image-upload 
-        default-url={survey.Logo__c}
-        loading={loading}
-        onupdateimageurl={handleImageUpdate}
-      ></c-image-upload>
+  <template if:false={loading}>
+    <div class="slds-align_absolute-center">
+      
+      <div class="slds-m-horizontal_medium">
+        <lightning-input
+          class="slds-m-vertical_medium"
+          type="text"
+          label={label.survey_name}
+          placeholder={label.type_survey_name}
+          value={survey.Name}
+          onchange={handleNameChange}
+          required
+        >
+        </lightning-input>
 
-      <lightning-input
-        class="slds-m-vertical_medium"
-        type="color"
-        label={label.survey_bg_color}
-        value={survey.Background_Color__c}
-        onchange={handleColorChange}
-        disabled={loading}
-      >
-      </lightning-input>
+        <c-image-upload 
+          default-url={survey.Logo__c}
+          loading={loading}
+          onupdateimageurl={handleImageUpdate}
+        ></c-image-upload>
+
+        <lightning-input
+          class="slds-m-vertical_medium"
+          type="color"
+          label={label.survey_bg_color}
+          value={survey.Background_Color__c}
+          onchange={handleColorChange}
+        >
+        </lightning-input>
+        
+        <lightning-textarea
+          max-length="255"
+          label={label.survey_description}
+          placeholder={label.type_description}
+          value={survey.Description__c}
+          onchange={handleDescriptionChange}
+        >
+        </lightning-textarea>
+      </div>
     </div>
-  </div>
 
-  <hr class="slds-m-bottom_small" />
-  
-  <div class="slds-text-align_right slds-m-bottom_small">
-    <lightning-button
-      variant="brand"
-      label={label.next}
-      onclick={clickNextButton}
-      class="slds-m-left_x-small"
-      disabled={loading}
-    ></lightning-button>
-  </div>
+    <hr class="slds-m-bottom_small" />
     
+    <div class="slds-text-align_right slds-m-bottom_small">
+      <lightning-button
+        variant="brand"
+        label={label.next}
+        onclick={clickNextButton}
+        class="slds-m-left_x-small"
+      ></lightning-button>
+    </div>
+  </template>
 </template>

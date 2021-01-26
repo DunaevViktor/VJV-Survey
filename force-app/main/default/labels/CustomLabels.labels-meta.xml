@@ -610,6 +610,13 @@
         <value>Survey created successfully!</value>
     </labels>
     <labels>
+        <fullName>survey_description</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Survey Description</shortDescription>
+        <value>Survey Description</value>
+    </labels>
+    <labels>
         <fullName>survey_name</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -650,6 +657,20 @@
         <protected>true</protected>
         <shortDescription>type</shortDescription>
         <value>Type</value>
+    </labels>
+    <labels>
+        <fullName>type_description</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Type survey description</shortDescription>
+        <value>Type your survey description</value>
+    </labels>
+    <labels>
+        <fullName>type_survey_name</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Type survey name</shortDescription>
+        <value>Type survey name here</value>
     </labels>
     <labels>
         <fullName>unable_to_continue</fullName>
