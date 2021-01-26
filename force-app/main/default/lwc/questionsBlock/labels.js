@@ -9,6 +9,8 @@ import first_page from '@salesforce/label/c.first_page';
 import previous_page from '@salesforce/label/c.previous_page';
 import next_page from '@salesforce/label/c.next_page';
 import last_page from '@salesforce/label/c.last_page';
+import number_of_found_items from '@salesforce/label/c.number_of_found_items';
+
 
 const label = {
   find,
@@ -21,7 +23,8 @@ const label = {
   first_page,
   previous_page,
   next_page,
-  last_page
+  last_page,
+  number_of_found_items
 }
 
 export {

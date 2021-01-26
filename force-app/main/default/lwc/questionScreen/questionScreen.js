@@ -247,7 +247,6 @@ export default class QuestionScreen extends LightningElement {
   }
 
   editQuestion(event) {
-    console.log(JSON.parse(JSON.stringify(event.detail)));
     this.questionForEdit = event.detail;
     this.editQuestionPosition = this.questionForEdit.Position__c
     this.isEditMode = true;

@@ -3,16 +3,22 @@
     <template if:false={hasQuestions}>{label.no_questions}</template>
   
     <template if:true={hasQuestions}>
-      <template if:true={isNeedPagination}>
-        <lightning-input type="text" label="Enter some text"></lightning-input>
+      <template if:true={isNeedSearchBar}>
+        <lightning-input type="text" label="Enter some text" data-my-id="keyword"></lightning-input>
   
         <div class="slds-text-align_right slds-m-top_x-small">
-          <lightning-button label={label.clear} class="slds-m-left_x-small"></lightning-button>
-          <lightning-button variant="brand-outline" label={label.find} class="slds-m-left_x-small"></lightning-button>
+          <lightning-button label={label.clear} onclick={handleClearQuestionSearch} class="slds-m-left_x-small"></lightning-button>
+          <lightning-button variant="brand-outline" label={label.find} onclick={handleQuestionsSearch} class="slds-m-left_x-small"></lightning-button>
         </div>
       </template>
           
-      <span>{labelOfAvailableItems}</span>
+      <template if:false={isSearchMode}>
+        <span>{labelOfAvailableItems}</span>
+      </template>
+      
+      <template if:true={isSearchMode}>
+        <span>{labelOfSearchedItems}</span>
+      </template>
   
       <template for:each={filteredDisplayedQuestions} for:item="displayedQuestion">
         <div key={displayedQuestion.Position__c}>

@@ -13,11 +13,13 @@ export default class QuestionsBlock extends LightningElement {
 
   @api questions;
 
-  @track displayedQuestions;
-  @track filteredDisplayedQuestions;
+  @track displayedQuestions = [];
+  displayedQuestionsCopy = [];
+  @track filteredDisplayedQuestions = [];
 
   @track hasQuestions = false;
   @track isNeedPagination = false;
+  @track isSearchMode = false;
 
   @track currentPage = 1;
   @track amountPages;
@@ -25,7 +27,6 @@ export default class QuestionsBlock extends LightningElement {
   @track isPreviousDisabled = true;
   @track isNextDisabled = true;
   @track isLastDisabled = true;
-
   
   connectedCallback() {
     this.displayedQuestions = this.questions;
@@ -46,6 +47,10 @@ export default class QuestionsBlock extends LightningElement {
     }
   }
 
+  get labelOfSearchedItems() {
+    return label.number_of_found_items + ': ' + this.displayedQuestions.length;
+  }
+
   get availableQuestionsAmount() {
     return +this.maxQuestionsAmount.data - +this.displayedQuestions.length;
   }
@@ -64,7 +69,7 @@ export default class QuestionsBlock extends LightningElement {
   }
 
   resolveQuestionsSubinfo() {
-    this.hasQuestions = this.displayedQuestions.length > 0;
+    this.hasQuestions = (this.displayedQuestions.length > 0) || (this.isSearchMode);
     this.amountPages =  Math.ceil(this.displayedQuestions.length / +this.pageQuestionsAmount.data);
     this.isNeedPagination = this.displayedQuestions.length > +this.pageQuestionsAmount.data;
 
@@ -129,5 +134,34 @@ export default class QuestionsBlock extends LightningElement {
       detail: question
     });
     this.dispatchEvent(addOptionalEvent);
+  }
+
+  get isNeedSearchBar() {
+    return (this.isSearchMode || this.isNeedPagination);
+  }
+
+  handleQuestionsSearch() {
+    if(!this.isSearchMode) {
+      this.displayedQuestionsCopy = [];
+      this.displayedQuestionsCopy = [...this.displayedQuestions];
+    }
+    this.isSearchMode = true;
+    const keyword = this.template.querySelector(
+      'lightning-input[data-my-id="keyword"]'
+    ).value;
+    const questionSearchResult = this.displayedQuestions.filter(
+      question => question.Label__c.includes(keyword)
+    ); 
+    this.displayedQuestions = [];    
+    this.displayedQuestions = [...questionSearchResult];
+    this.resolveDisplayedQuestions();
+  }
+
+  handleClearQuestionSearch() {
+    this.template.querySelector('lightning-input[data-my-id="keyword"]').value = "";
+    this.isSearchMode = false;
+    this.displayedQuestions = [];
+    this.displayedQuestions = [...this.displayedQuestionsCopy];
+    this.resolveDisplayedQuestions();
   }
 }
