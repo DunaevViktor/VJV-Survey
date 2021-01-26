@@ -115,6 +115,60 @@ const solveDependentQuestionPosition = (validations, question) => {
   return question.Position__c + "." + (+amount + 1);
 }
 
+const resolvePositionByDeleted = (position, leftPart, rightPart) => {
+  const index = leftPart.length;
+  const value = position[index]; 
+  if(value && value > +rightPart) {
+    position = position.slice(0, index) + (value - 1) + position.slice(index + 1);
+  }
+  return position;
+}
+
+const resolveQuestionsByDeleted = (questions, position) => {
+  const leftPart = position.slice(0, -1);
+  const rightPart = position.slice(-1);
+
+  return questions.filter((question) => {
+    return !question.Position__c.startsWith(position);
+  }).map((question) => {
+    if(question.Position__c.startsWith(leftPart)) {
+      question.Position__c = resolvePositionByDeleted(
+        question.Position__c, 
+        leftPart, rightPart);
+    }
+    return question;
+  });
+};
+
+const resolveValidationsByDeleted = (validations, position) => {
+  const leftPart = position.slice(0, -1);
+  const rightPart = position.slice(-1);
+
+  return validations.filter((validation) => {
+    return !validation.Related_Question__c.Position__c.startsWith(position) &&
+      !validation.Dependent_Question__c.Position__c.startsWith(position);
+  }).map((validation) => {
+    if(validation.Related_Question__c.Position__c.startsWith(leftPart)) {
+      validation.Related_Question__c.Position__c = resolvePositionByDeleted(
+        validation.Related_Question__c.Position__c, 
+        leftPart, rightPart);
+    } else if (validation.Dependent_Question__c.Position__c.startsWith(leftPart)) {
+      validation.Dependent_Question__c.Position__c = resolvePositionByDeleted(
+        validation.Dependent_Question__c.Position__c, 
+        leftPart, rightPart);
+    }
+    return validation;
+  });
+}
+
+const prepareValidationForPush = (validations, newValidation) => {
+  newValidation.Dependent_Question__c.Position__c = solveDependentQuestionPosition(
+    validations, newValidation.Related_Question__c);
+  newValidation.Dependent_Question__c.Editable = true;
+  newValidation.Related_Question__c.Editable = false;
+  return newValidation;
+}
+
 export {
   getQuestionsBySurveyId,
   updateQuestionByPosition,
@@ -123,5 +177,9 @@ export {
   resetOptionsIds,
   solveQuestionPosition,
   solveDependentQuestionPosition,
-  updateValidationByPosition
+  updateValidationByPosition,
+  resolvePositionByDeleted,
+  resolveQuestionsByDeleted,
+  resolveValidationsByDeleted,
+  prepareValidationForPush
 }
