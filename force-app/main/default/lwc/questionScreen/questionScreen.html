@@ -13,12 +13,16 @@
 
     <template if:true={isQuestionBlockOpened}>
       <c-questions-block
-        questions={displayedQuestions}>
+        questions={displayedQuestions}
+        onedit={editQuestion}
+        onaddoptional={addOptional}>
       </c-questions-block>
     </template>
 
     <template if:true={isFormOpened}>
       <c-question-form
+        is-edit-mode={isEditMode}
+        question-for-edit={questionForEdit}
         onadd={addQuestion}
         oncancelevent={cancelEditQuestion}
         onedit={updateQuestion}

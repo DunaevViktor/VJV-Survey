@@ -83,6 +83,8 @@ export default class QuestionScreen extends LightningElement {
   @wire(getMaxQuestionAmount) maxQuestionsAmount;
   @wire(getMinQuestionAmount) minQuestionsAmount;
 
+  @track isEditMode;
+  @track questionForEdit;
   @track editQuestionPosition;
   @track isError = false;
 
@@ -198,7 +200,7 @@ export default class QuestionScreen extends LightningElement {
     question.IsReusable__c = false;
     question.Id = null;
 
-    if(!!question.Question_Options__r) {
+    if(question.Question_Options__r) {
       question.Question_Options__r = resetOptionsIds(question.Question_Options__r);
     }
 
@@ -242,5 +244,30 @@ export default class QuestionScreen extends LightningElement {
 
   setError() {
     this.isError = true;
+  }
+
+  editQuestion(event) {
+    console.log(JSON.parse(JSON.stringify(event.detail)));
+    this.questionForEdit = event.detail;
+    this.editQuestionPosition = this.questionForEdit.Position__c
+    this.isEditMode = true;
+    this.openForm();
+  }
+
+  addOptional() {
+
+  }
+
+  updateQuestion(event) {
+    const updatedQuestion = event.detail;
+
+    this.displayedQuestions = updateQuestionByPosition(
+      this.questions, 
+      this.editQuestionPosition, 
+      updatedQuestion);
+
+    this.isEditMode = false;
+    this.editQuestionPosition = null;
+    this.openQuestionBlock();
   }
 }

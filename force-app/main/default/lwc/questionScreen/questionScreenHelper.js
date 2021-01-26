@@ -86,10 +86,19 @@ const findQuestionsForUpSwap = (questions, position) => {
   }
 }
 
+const solveQuestionPosition = (questions) => {
+  if (questions.length === 0) {
+    return "1";
+  } 
+
+  return +questions[questions.length - 1].Position__c[0] + 1;
+}
+
 export {
   getQuestionsBySurveyId,
   updateQuestionByPosition,
   findQuestionsForDownSwap,
   findQuestionsForUpSwap,
-  resetOptionsIds
+  resetOptionsIds,
+  solveQuestionPosition
 }

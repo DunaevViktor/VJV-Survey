@@ -3,6 +3,7 @@ import getMaxQuestionAmount from "@salesforce/apex/SurveySettingController.getMa
 import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getPageQuestionAmount";
 
 import {label} from "./labels.js";
+import { findQuestionByPosition } from "c/formUtil";
 
 export default class QuestionsBlock extends LightningElement {
   label = label;
@@ -78,26 +79,22 @@ export default class QuestionsBlock extends LightningElement {
   clickNextPage() {
     if(this.currentPage >= this.amountPages) return;
     this.currentPage++;
-
     this.resolveDisplayedQuestions();
   }
 
   clickPreviousPage() {
-    if(this.currentPage == 1) return;
-
+    if(this.currentPage === 1) return;
     this.currentPage--;
-
     this.resolveDisplayedQuestions();
   }
 
   clickLastPage() {
     this.currentPage = this.amountPages;
-
     this.resolveDisplayedQuestions();
   }
 
   repaintPaginationButtons() {
-    if(this.displayedCurrentPage == 1) {
+    if(this.displayedCurrentPage === 1) {
       this.isFirstDisabled = true;
       this.isPreviousDisabled = true;
     } else {
@@ -112,5 +109,25 @@ export default class QuestionsBlock extends LightningElement {
       this.isNextDisabled = false;
       this.isLastDisabled = false;
     }
+  }
+
+  editQuestion(event) {
+    const position = event.detail;
+    const question = findQuestionByPosition(this.displayedQuestions, position);
+
+    const editEvent = new CustomEvent("edit", {
+      detail: { ...question }
+    });
+    this.dispatchEvent(editEvent);
+  }
+
+  addOptional(event) {
+    const position = event.detail;
+    const question = findQuestionByPosition(this.displayedQuestions, position);
+
+    const addOptionalEvent = new CustomEvent("addoptional", {
+      detail: question
+    });
+    this.dispatchEvent(addOptionalEvent);
   }
 }

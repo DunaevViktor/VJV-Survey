@@ -18,6 +18,7 @@
         <div key={displayedQuestion.Position__c}>
           <c-question-card
             question={displayedQuestion}
+            onaddoptional={addOptional}
             ondelete={deleteQuestion}
             onedit={editQuestion}
             ondown={downQuestion}

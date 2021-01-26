@@ -34,6 +34,10 @@ export default class QuestionForm extends LightningElement {
 
   @track question;
 
+  @api isEditMode;
+  @api questionForEdit;
+  @api validationForForm;
+
   @wire(getObjectInfo, { objectApiName: QUESTION_OBJECT })
   surveyObjectInfo;
 
@@ -42,16 +46,20 @@ export default class QuestionForm extends LightningElement {
 
   @track isOptionsEnabled;
   @track isEditOption = false;
-  @track isEditMode = false;
   @track editOptionValue = "";
   @track editOptionIndex;
 
   displayedTypes;
 
   connectedCallback() {
-    this.isOptionsEnabled = false;
-    this.question = {};
-    this.question.Question_Options__r = [];
+    if(!this.isEditMode) {
+      this.isOptionsEnabled = false;
+      this.question = {};
+      this.question.Label__c = '';
+      this.question.Question_Options__r = [];
+    } else {
+      this.setQuestionForEdit(this.questionForEdit);
+    }
   }
 
   get questionSettingList() {
@@ -76,20 +84,12 @@ export default class QuestionForm extends LightningElement {
     }
   }
 
-  @api
-  clearQuestion() {
-    this.question = {};
-    this.question.Question_Options__r = [];
-    this.resetForm();
-  }
-
-  @api
   setQuestionForEdit(editQuestion) {
     this.question = JSON.parse(JSON.stringify(editQuestion));
 
-    const input = this.template.querySelector(".input");
-    clearInput(input);
-    input.value = this.question.Label__c;
+    // const input = this.template.querySelector(".input");
+    // clearInput(input);
+    // input.value = this.question.Label__c;
 
     this.selectedType = this.question.Type__c;
     this.selectedSettings = [];
@@ -99,8 +99,6 @@ export default class QuestionForm extends LightningElement {
       this.selectedSettings.push(this.REUSABLE_FIELD_API_NAME);
 
     this.setOptionsEnabling();
-
-    this.isEditMode = true;
   }
 
   handleLabel(event) {
@@ -191,7 +189,6 @@ export default class QuestionForm extends LightningElement {
     filterOptionsByValueAndIndex(this.question.Question_Options__r, input.value, this.editOptionIndex) :
     filterOptionsByValue(this.question.Question_Options__r, input.value);
 
-    
     if (filteredOptions.length > 0) {
       setInputValidity(input, label.option_already_exists);
       return false;
@@ -259,16 +256,16 @@ export default class QuestionForm extends LightningElement {
     return true;
   }
 
-  resetForm() {
-    const input = this.template.querySelector(".input");
-    clearInput(input);
-    this.selectedType = this.displayedTypes
-      ? this.displayedTypes[0].value
-      : "Text";
-    this.selectedSettings = [];
-    this.isEditMode = false;
-    this.setOptionsEnabling();
-  }
+  // resetForm() {
+  //   const input = this.template.querySelector(".input");
+  //   clearInput(input);
+  //   this.selectedType = this.displayedTypes
+  //     ? this.displayedTypes[0].value
+  //     : "Text";
+  //   this.selectedSettings = [];
+  //   this.isEditMode = false;
+  //   this.setOptionsEnabling();
+  // }
   
   sendErrorNotification() {
     const errorEvent = new CustomEvent("error", {});
