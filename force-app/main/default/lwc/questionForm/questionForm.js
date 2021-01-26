@@ -1,6 +1,8 @@
 import { LightningElement, wire, track, api } from "lwc";
 import QUESTION_OBJECT from "@salesforce/schema/Question__c";
 import TYPE_FIELD from "@salesforce/schema/Question__c.Type__c";
+import VALIDATION_OBJECT from "@salesforce/schema/Validation__c";
+import OPERATOR_FIELD from "@salesforce/schema/Validation__c.Operator__c";
 import { getPicklistValues } from "lightning/uiObjectInfoApi";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
@@ -15,8 +17,17 @@ import {
   updateOptionsValue,
   deleteFromOptions,
   clearInput,
-  setInputValidity
+  setInputValidity,
+  transformOperators,
+  isNeedPicklist,
+  resolveOperatorsByQuestionType
 } from "./questionFormHelper.js";
+
+import {
+  operatorTypes,
+  booleanPicklistOptions,
+} from "c/formUtil";
+import { generateRecordInputForCreate } from "lightning/uiRecordApi";
 
 export default class QuestionForm extends LightningElement {
   label = label;
@@ -33,13 +44,18 @@ export default class QuestionForm extends LightningElement {
   EMPTRY_STRING = "";
 
   @track question;
+  @track validation = {};
 
   @api isEditMode;
-  @api questionForEdit;
+  @api isDependentQuestion;
+  @api questionForForm;
   @api validationForForm;
 
   @wire(getObjectInfo, { objectApiName: QUESTION_OBJECT })
   surveyObjectInfo;
+
+  @wire(getObjectInfo, { objectApiName: VALIDATION_OBJECT })
+  validationObjectInfo;
 
   @track selectedType;
   @track selectedSettings = [];
@@ -51,14 +67,20 @@ export default class QuestionForm extends LightningElement {
 
   displayedTypes;
 
+  operators;
+  @track displayedOperators;
+  @track selectedOperator;
+  @track isFirstQuestionPicklist;
+
   connectedCallback() {
-    if(!this.isEditMode) {
+    if(this.isEditMode) {
+      this.setQuestionForEdit(this.questionForForm);
+      if(this.isDependentQuestion) this.selectedOperator = this.validationForForm.Operator__c;
+    } else {
       this.isOptionsEnabled = false;
       this.question = {};
       this.question.Label__c = '';
       this.question.Question_Options__r = [];
-    } else {
-      this.setQuestionForEdit(this.questionForEdit);
     }
   }
 
@@ -79,17 +101,63 @@ export default class QuestionForm extends LightningElement {
       this.selectedType = this.displayedTypes[0].value;
       this.setOptionsEnabling();
     } else if (error) {
-      console.log(error);
       this.sendErrorNotification();
     }
   }
 
+  @wire(getPicklistValues, {
+    recordTypeId: "$validationObjectInfo.data.defaultRecordTypeId",
+    fieldApiName: OPERATOR_FIELD
+  })
+  initOperators({ error, data }) {
+    if (data) {
+      this.operators = transformOperators(data.values);
+      if(this.isDependentQuestion) {
+        this.setDisplayedOperators();
+        this.isFirstQuestionPicklist = isNeedPicklist(
+          this.validationForForm.Related_Question__c, 
+          this.validationForForm.Operator__c);
+      }
+    } else if (error) {
+      this.sendErrorNotification();
+    }
+  }
+
+  setDisplayedOperators() {
+    const resolvedOperators = resolveOperatorsByQuestionType(
+      this.operators, 
+      this.validationForForm.Related_Question__c);
+
+    this.displayedOperators = [...resolvedOperators];
+  }
+
+  setSelectedOperator(event) {
+    this.selectedOperator = event.detail.value;
+    this.isFirstQuestionPicklist = isNeedPicklist(
+      this.validationForForm.Related_Question__c, 
+      this.selectedOperator);
+  }
+
+  get questionsOptions() {
+    if (
+      this.selectedOperator &&
+      this.selectedOperator
+        .toLowerCase()
+        .includes(operatorTypes.NULL.toLowerCase())
+    ) {
+      return booleanPicklistOptions;
+    }
+
+    return this.validationForForm.Related_Question__c.Question_Options__r.map((option) => {
+      return {
+        label: option.Value__c,
+        value: option.Value__c
+      };
+    });
+  }
+
   setQuestionForEdit(editQuestion) {
     this.question = JSON.parse(JSON.stringify(editQuestion));
-
-    // const input = this.template.querySelector(".input");
-    // clearInput(input);
-    // input.value = this.question.Label__c;
 
     this.selectedType = this.question.Type__c;
     this.selectedSettings = [];
@@ -201,10 +269,35 @@ export default class QuestionForm extends LightningElement {
     if(!this.isQuestionCorrect()) return;
     this.getQuestionAttributes();
 
-    const addEvent = new CustomEvent("add", {
-      detail: { ...this.question }
+    if(!this.isDependentQuestion) {
+      const addEvent = new CustomEvent("add", {
+        detail: { ...this.question }
+      });
+      this.dispatchEvent(addEvent);
+      return;
+    }
+    
+    const input = this.template.querySelector(".validationInput");
+    input.reportValidity();
+
+    if (!this.selectedOperator || !input.value) {
+      return;
+    }
+
+    const validation = {
+      ...this.validationForForm,
+      Dependent_Question__c: this.question,
+      Operator__c: this.selectedOperator,
+      Value__c: input.value
+    };
+    validation.Dependent_Question__c.VisibilityReason = 
+    "Visible if '" + validation.Related_Question__c.Label__c + "' " + validation.Operator__c.toLowerCase() + " " + validation.Value__c;
+
+    const addEvent = new CustomEvent("adddependant", {
+      detail: validation
     });
     this.dispatchEvent(addEvent);
+
   }
 
   cancelQuestionEdit() {
@@ -217,12 +310,35 @@ export default class QuestionForm extends LightningElement {
     if(!this.isQuestionCorrect()) return;
     this.getQuestionAttributes();
 
+    if(!this.isDependentQuestion) {
+      const editEvent = new CustomEvent("edit", {
+        detail: { ...this.question }
+      });
+      this.dispatchEvent(editEvent);
+      return;
+    }
+
+    const input = this.template.querySelector(".validationInput");
+    input.reportValidity();
+
+    if (!input.value) {
+      return;
+    }
+    
+    const validation = {
+      ...this.validationForForm,
+      Dependent_Question__c: this.question,
+      Operator__c: this.selectedOperator,
+      Value__c: input.value
+    };
+    validation.Dependent_Question__c.VisibilityReason = 
+    "Visible if '" + validation.Related_Question__c.Label__c + "' " + validation.Operator__c.toLowerCase() + " " + validation.Value__c;
+
     const editEvent = new CustomEvent("edit", {
-      detail: { ...this.question }
+      detail: { ...validation }
     });
     this.dispatchEvent(editEvent);
 
-    this.clearQuestion();
   }
 
   getQuestionAttributes() {
@@ -255,17 +371,6 @@ export default class QuestionForm extends LightningElement {
 
     return true;
   }
-
-  // resetForm() {
-  //   const input = this.template.querySelector(".input");
-  //   clearInput(input);
-  //   this.selectedType = this.displayedTypes
-  //     ? this.displayedTypes[0].value
-  //     : "Text";
-  //   this.selectedSettings = [];
-  //   this.isEditMode = false;
-  //   this.setOptionsEnabling();
-  // }
   
   sendErrorNotification() {
     const errorEvent = new CustomEvent("error", {});

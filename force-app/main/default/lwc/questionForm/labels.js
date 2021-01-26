@@ -15,6 +15,11 @@ import error_few_options from "@salesforce/label/c.error_few_options";
 import errorTitle from "@salesforce/label/c.error";
 import success from "@salesforce/label/c.success";
 import complete_this_field from "@salesforce/label/c.complete_this_field";
+import operator from "@salesforce/label/c.operator";
+import enter_compared_value from "@salesforce/label/c.enter_compared_value";
+import select_operator from "@salesforce/label/c.select_operator";
+import select_value from "@salesforce/label/c.select_value";
+import value from "@salesforce/label/c.value";
 
 const label = {
   edit_question_form_title,
@@ -33,7 +38,12 @@ const label = {
   error_few_options,
   errorTitle,
   success,
-  complete_this_field 
+  complete_this_field,
+  operator,
+  select_operator,
+  value,
+  select_value,
+  enter_compared_value
 }
 
 export {

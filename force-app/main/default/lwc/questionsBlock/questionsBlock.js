@@ -130,4 +130,11 @@ export default class QuestionsBlock extends LightningElement {
     });
     this.dispatchEvent(addOptionalEvent);
   }
+
+  deleteQuestion(event) {
+    const deleteEvent = new CustomEvent("delete", {
+      detail: event.detail
+    });
+    this.dispatchEvent(deleteEvent);
+  }
 }

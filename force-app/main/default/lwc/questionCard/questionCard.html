@@ -8,19 +8,21 @@
                     size="x-small" 
                     onclick={deleteQuestion}>
     </lightning-icon>
-    <lightning-icon icon-name="utility:edit" 
-                    alternative-text={label.edit} 
-                    title={label.edit} 
-                    class="slds-float_right" 
-                    size="x-small" 
-                    onclick={editQuestion}>
-    </lightning-icon>
+    <template if:true={question.Editable}>
+      <lightning-icon icon-name="utility:edit" 
+        alternative-text={label.edit} 
+        title={label.edit} 
+        class="slds-float_right" 
+        size="x-small" 
+        onclick={editQuestion}>
+      </lightning-icon>
+    </template>
     <lightning-icon icon-name="utility:add" 
                     alternative-text={label.edit} 
                     title={label.edit} 
                     class="slds-float_right" 
                     size="x-small" 
-                    onclick={editQuestion}>
+                    onclick={addOptionalQuestion}>
     </lightning-icon>
     <!-- <lightning-icon icon-name="utility:chevrondown" 
                     alternative-text={label.down} 
@@ -45,6 +47,11 @@
     <br />
 
     <lightning-badge label={question.Type__c}></lightning-badge>
+
+    <template if:true={question.VisibilityReason}>
+      <br />
+      <span>{question.VisibilityReason}</span>
+    </template>
 
     <template if:true={question.Question_Options__r}>
       <br />

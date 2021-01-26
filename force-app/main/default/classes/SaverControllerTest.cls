@@ -55,17 +55,9 @@ public with sharing class SaverControllerTest {
         SELECT Id, Label__c
         FROM Question__c
         WHERE Survey__c = :survey.Id
-        ORDER BY Position__c
     ];
 
     System.assertEquals(TEST_AMOUNT, databaseQuestions.size(), INVALUD_QUESTIONS_AMOUNT);
-
-    for(Integer i = 0; i < TEST_AMOUNT; i++) {
-      Question__c savedQuestion = savedQuestions[i];
-      Question__c databaseQuestion = databaseQuestions[i];
-
-      System.assertEquals(savedQuestion.Id, databaseQuestion.Id, INVALID_QUESTION_ID);
-    }
   }
 
   @IsTest
