@@ -6,6 +6,8 @@ export default class QuestionStandardSelector extends LightningElement {
 
   SELECT_OPTION_VARIANT = 'select';
 
+  label = label;
+
   @api standardQuestions;
   @track displayedQuestions;
 
@@ -35,6 +37,11 @@ export default class QuestionStandardSelector extends LightningElement {
       this.addStandardQuestion(row);
     }
       
+  }
+
+  handleBack() {
+    const backEvent = new CustomEvent("back");
+    this.dispatchEvent(backEvent);
   }
 
   addStandardQuestion(row) {

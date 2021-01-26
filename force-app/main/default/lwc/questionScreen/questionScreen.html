@@ -24,8 +24,9 @@
         is-edit-mode={isEditMode}
         question-for-edit={questionForEdit}
         onadd={addQuestion}
-        oncancelevent={cancelEditQuestion}
+        oncanceledit={cancelEditQuestion}
         onedit={updateQuestion}
+        onback={openQuestionBlock}
         onerror={setError}
       ></c-question-form>
     </template>
@@ -34,6 +35,7 @@
       <c-question-standard-selector
       standard-questions={displayedStandardQuestions}
       onselect={selectQuestion}
+      onback={openQuestionBlock}
       ></c-question-standard-selector>
     </template>
     
