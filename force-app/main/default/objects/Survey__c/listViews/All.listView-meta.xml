@@ -7,7 +7,6 @@
     <columns>Logo__c</columns>
     <columns>Background_Color__c</columns>
     <columns>IsStandard__c</columns>
-    <columns>IsResending__c</columns>
     <columns>Related_To__c</columns>
     <filterScope>Everything</filterScope>
     <label>All</label>

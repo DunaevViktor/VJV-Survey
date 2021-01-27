@@ -1,26 +1,38 @@
 public with sharing class TriggerRulesHandler {
+
+    private static final String RECEIVER_RECORD_TYPE = 'Record';
+    private static final String CASE_OBJECT_NAME = 'Case';
     
     public static void checkRuleCriterias(String sObjectName, List<ChangedFieldWrapper> changedFields){
         List<Trigger_Rule__c> triggerRules = getTriggerRules(sObjectName);
-        Set<Id> surveysToSend = new Set<Id>();
-        
+        List<Email_Receiver__c> receiverList = new List<Email_Receiver__c>();
+  
         for(ChangedFieldWrapper recordFields: changedFields){
             for(Trigger_Rule__c rule: triggerRules){
                 String ruleFieldName = rule.Field_Name__c.tolowercase();
                 
                 if(recordFields.fieldname == ruleFieldName){
                     if(compareFieldValues(recordFields, rule.Operator__c, rule.Field_Value__c)){
-                        surveysToSend.add(rule.Survey__c);
+                        Email_Receiver__c receiver = createReceiver(SObjectName, recordFields, rule.Survey__c);
+                        receiverList.add(receiver);
                     }  
                 }
             }
         }
-        
-        if(surveysToSend.size() > 0){
-            List<Email_Receiver__c> receiverList = getEmailReceivers(surveysToSend);
+
+        if(receiverList.size() > 0 && Email_Receiver__c.SObjectType.getDescribe().isCreateable()){
+            insert receiverList;
             SendEmailLogic.sendEmails(receiverList);
         }
-    }  
+    }
+    
+    public static Email_Receiver__c createReceiver(String sObjectName, ChangedFieldWrapper recordFields, String surveyId){
+        Id receiverId = SObjectName == CASE_OBJECT_NAME ? recordFields.ownerId : recordFields.recordId;
+        Email_Receiver__c receiver = new Email_Receiver__c(Type__c = RECEIVER_RECORD_TYPE,
+                                                            Survey__c = surveyId,
+                                                            Value__c = receiverId);
+        return receiver;
+    }
     
     public static Boolean compareFieldValues(ChangedFieldWrapper changedField, String operator, Object ruleFieldValue){
         Boolean isConditionMet = false;
@@ -83,14 +95,6 @@ public with sharing class TriggerRulesHandler {
         return [SELECT Id, Name, Field_Name__c, Operator__c, Field_Value__c, Survey__c, Object_Api_Name__c
                 FROM Trigger_Rule__c 
                 WHERE Object_Api_Name__c =: objectApiName
-                WITH SECURITY_ENFORCED];
-    }
-    
-    public static List<Email_Receiver__c> getEmailReceivers(Set<Id> surveyIds){
-        return [SELECT Id, Type__c, Value__c, Survey__c, IsSend__c 
-                FROM Email_Receiver__c
-                WHERE Survey__c
-                IN: surveyIds 
                 WITH SECURITY_ENFORCED];
     }
 }

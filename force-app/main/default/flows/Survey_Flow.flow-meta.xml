@@ -61,6 +61,12 @@
                     <elementReference>SurveyForConnectingList</elementReference>
                 </value>
             </inputParameters>
+            <inputParameters>
+                <name>campaigns</name>
+                <value>
+                    <elementReference>CampaignList</elementReference>
+                </value>
+            </inputParameters>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>EmailRecieverList</assignToReference>
@@ -77,6 +83,10 @@
             <outputParameters>
                 <assignToReference>SurveyForConnectingList</assignToReference>
                 <name>surveys</name>
+            </outputParameters>
+            <outputParameters>
+                <assignToReference>CampaignList</assignToReference>
+                <name>campaigns</name>
             </outputParameters>
         </fields>
         <showFooter>false</showFooter>
@@ -314,6 +324,14 @@
         </connector>
     </start>
     <status>Active</status>
+    <variables>
+        <name>CampaignList</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Campaign</objectType>
+    </variables>
     <variables>
         <name>EmailRecieverList</name>
         <dataType>SObject</dataType>
