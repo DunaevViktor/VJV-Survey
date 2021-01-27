@@ -166,20 +166,20 @@ export default class QuestionsBlock extends LightningElement {
     const questionSearchResult = this.displayedQuestionsCopy.filter(
       question => question.Label__c.includes(keyword)
     );
-    console.log('search res'); 
-    console.log(questionSearchResult);
     this.displayedQuestions = [];    
     this.displayedQuestions = [...questionSearchResult];
     this.resolveDisplayedQuestions();
   }
 
   handleClearQuestionSearch() {
-    this.currentPage = 1;
     this.template.querySelector('lightning-input[data-my-id="keyword"]').value = "";
-    this.isSearchMode = false;
-    this.displayedQuestions = [];
-    this.displayedQuestions = [...this.displayedQuestionsCopy];
-    this.resolveDisplayedQuestions();
+    if(this.isSearchMode) {
+      this.currentPage = 1;      
+      this.isSearchMode = false;
+      this.displayedQuestions = [];
+      this.displayedQuestions = [...this.displayedQuestionsCopy];
+      this.resolveDisplayedQuestions();
+    }    
   }
 
   isEmpty(value) {
