@@ -127,13 +127,6 @@
         <value>Clear trigger rule&apos;s fields</value>
     </labels>
     <labels>
-        <fullName>compared_value</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>compared value</shortDescription>
-        <value>Compared Value</value>
-    </labels>
-    <labels>
         <fullName>complete_this_field</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -174,13 +167,6 @@
         <protected>true</protected>
         <shortDescription>delete trigger rule title</shortDescription>
         <value>Delete trigger rule</value>
-    </labels>
-    <labels>
-        <fullName>dependent_question</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>dependent question</shortDescription>
-        <value>Dependent question</value>
     </labels>
     <labels>
         <fullName>done</fullName>
@@ -435,13 +421,6 @@
         <value>Don&apos;t have questions yet</value>
     </labels>
     <labels>
-        <fullName>no_questions_to_validation</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>no questions to validation</shortDescription>
-        <value>Don&apos;t have questions to create visibility validation</value>
-    </labels>
-    <labels>
         <fullName>no_records_found</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -533,13 +512,6 @@
         <value>Previous</value>
     </labels>
     <labels>
-        <fullName>previous_button_message</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>previous button message</shortDescription>
-        <value>If you will click this button you will lost all validations variables</value>
-    </labels>
-    <labels>
         <fullName>previous_page</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -575,11 +547,11 @@
         <value>questions</value>
     </labels>
     <labels>
-        <fullName>questions_connected</fullName>
+        <fullName>qustion</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>questions connected</shortDescription>
-        <value>These questions are already connected in another validation</value>
+        <shortDescription>qustion</shortDescription>
+        <value>question</value>
     </labels>
     <labels>
         <fullName>remove_image</fullName>
