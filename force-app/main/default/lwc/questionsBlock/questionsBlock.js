@@ -153,7 +153,9 @@ export default class QuestionsBlock extends LightningElement {
   handleQuestionsSearch() {
     const keyword = this.template.querySelector('lightning-input[data-my-id="keyword"]').value;
     if(this.isEmpty(keyword)) {
+      this.isSearchMode = false;
       this.showToast('', label.search_keyword_cant_be_empty, 'error');
+      return;
     }
     this.currentPage = 1;
     if(!this.isSearchMode) {
@@ -161,9 +163,11 @@ export default class QuestionsBlock extends LightningElement {
       this.displayedQuestionsCopy = [...this.displayedQuestions];
     }
     this.isSearchMode = true;    
-    const questionSearchResult = this.displayedQuestions.filter(
+    const questionSearchResult = this.displayedQuestionsCopy.filter(
       question => question.Label__c.includes(keyword)
-    ); 
+    );
+    console.log('search res'); 
+    console.log(questionSearchResult);
     this.displayedQuestions = [];    
     this.displayedQuestions = [...questionSearchResult];
     this.resolveDisplayedQuestions();
