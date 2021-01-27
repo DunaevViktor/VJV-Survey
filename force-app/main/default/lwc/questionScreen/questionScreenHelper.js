@@ -51,55 +51,6 @@ const updateValidationByPosition = (validations, updatedValidation) => {
   });
 }
 
-
-const findQuestionsForDownSwap = (questions, position) => {
-  let relocatableQuestion, relocatableIndex;
-  let lowerQuestion, lowerIndex;
-
-  for(let i = 0; i < questions.length - 1; i++) {
-    if (+questions[i].Position__c === position) {
-      relocatableQuestion = questions[i];
-      relocatableIndex = i;
-
-      lowerQuestion = questions[i + 1];
-      lowerIndex = i + 1;
-
-      break;
-    }
-  }
-
-  return {
-    relocatableQuestion,
-    relocatableIndex,
-    lowerQuestion,
-    lowerIndex
-  }
-}
-
-const findQuestionsForUpSwap = (questions, position) => {
-  let relocatableQuestion, relocatableIndex;
-  let upperQuestion, upperIndex;
-
-  for(let i = 1; i < questions.length; i++) {
-    if (+questions[i].Position__c === position) {
-      relocatableQuestion = questions[i];
-      relocatableIndex = i;
-
-      upperQuestion = questions[i - 1];
-      upperIndex = i - 1;
-
-      break;
-    }
-  }
-
-  return {
-    relocatableQuestion,
-    relocatableIndex,
-    upperQuestion,
-    upperIndex
-  }
-}
-
 const solveQuestionPosition = (questions) => {
   if (questions.length === 0) {
     return "1";
@@ -165,6 +116,7 @@ const prepareValidationForPush = (validations, newValidation) => {
   newValidation.Dependent_Question__c.Position__c = solveDependentQuestionPosition(
     validations, newValidation.Related_Question__c);
   newValidation.Dependent_Question__c.Editable = true;
+  newValidation.Dependent_Question__c.IsVisible__c = false;
   newValidation.Related_Question__c.Editable = false;
   return newValidation;
 }
@@ -172,11 +124,8 @@ const prepareValidationForPush = (validations, newValidation) => {
 export {
   getQuestionsBySurveyId,
   updateQuestionByPosition,
-  findQuestionsForDownSwap,
-  findQuestionsForUpSwap,
   resetOptionsIds,
   solveQuestionPosition,
-  solveDependentQuestionPosition,
   updateValidationByPosition,
   resolvePositionByDeleted,
   resolveQuestionsByDeleted,
