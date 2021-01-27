@@ -1,9 +1,7 @@
-const transformDisplayesTypes = (displayedTemplates) => {
-  return displayedTemplates.map((template) => {
-    return {
-      label: template.Name,
-      value: template.Id
-    };
+const resetOptionsIds = (options) => {
+  return options.map((option) => {
+    option.Id = null;
+    return option;
   });
 }
 
@@ -17,7 +15,8 @@ const getQuestionsBySurveyId = (templateQuestions, surveyId) => {
   ).map(
     (question, index) => {
       question.Id = null;
-      question.Position__c = index + 1;
+      question.Position__c = '' + (index + 1);
+      question.Editable = true;
 
       if(question.Question_Options__r) {
         question.Question_Options__r = resetOptionsIds(question.Question_Options__r);
@@ -28,16 +27,9 @@ const getQuestionsBySurveyId = (templateQuestions, surveyId) => {
   );
 }
 
-const resetOptionsIds = (options) => {
-  return options.map((option) => {
-    option.Id = null;
-    return option;
-  });
-}
-
 const updateQuestionByPosition = (questions, position, updatedQuestion) => {
   return questions.map((question) => {
-    if (+question.Position__c === +position) {
+    if (question.Position__c === position) {
       return {
         ...updatedQuestion,
         Position__c: position
@@ -47,59 +39,96 @@ const updateQuestionByPosition = (questions, position, updatedQuestion) => {
   });
 }
 
-const findQuestionsForDownSwap = (questions, position) => {
-  let relocatableQuestion, relocatableIndex;
-  let lowerQuestion, lowerIndex;
-
-  for(let i = 0; i < questions.length - 1; i++) {
-    if (+questions[i].Position__c === position) {
-      relocatableQuestion = questions[i];
-      relocatableIndex = i;
-
-      lowerQuestion = questions[i + 1];
-      lowerIndex = i + 1;
-
-      break;
+const updateValidationByPosition = (validations, updatedValidation) => {
+  return validations.map((validation) => {
+    if (validation.Related_Question__c.Position__c === updatedValidation.Related_Question__c.Position__c &&
+        validation.Dependent_Question__c.Position__c === updatedValidation.Dependent_Question__c.Position__c) {
+      return {
+        ...updatedValidation
+      };
     }
-  }
-
-  return {
-    relocatableQuestion,
-    relocatableIndex,
-    lowerQuestion,
-    lowerIndex
-  }
+    return validation;
+  });
 }
 
-const findQuestionsForUpSwap = (questions, position) => {
-  let relocatableQuestion, relocatableIndex;
-  let upperQuestion, upperIndex;
+const solveQuestionPosition = (questions) => {
+  if (questions.length === 0) {
+    return "1";
+  } 
 
-  for(let i = 1; i < questions.length; i++) {
-    if (+questions[i].Position__c === position) {
-      relocatableQuestion = questions[i];
-      relocatableIndex = i;
+  return ""  + (+questions[questions.length - 1].Position__c[0] + 1);
+}
 
-      upperQuestion = questions[i - 1];
-      upperIndex = i - 1;
+const solveDependentQuestionPosition = (validations, question) => {
+  const amount = validations.filter((validation) => {
+    return validation.Related_Question__c.Position__c === question.Position__c
+  }).length;
+  return question.Position__c + "." + (+amount + 1);
+}
 
-      break;
+const resolvePositionByDeleted = (position, leftPart, rightPart) => {
+  const index = leftPart.length;
+  const value = position[index]; 
+  if(value && value > +rightPart) {
+    position = position.slice(0, index) + (value - 1) + position.slice(index + 1);
+  }
+  return position;
+}
+
+const resolveQuestionsByDeleted = (questions, position) => {
+  const leftPart = position.slice(0, -1);
+  const rightPart = position.slice(-1);
+
+  return questions.filter((question) => {
+    return !question.Position__c.startsWith(position);
+  }).map((question) => {
+    if(question.Position__c.startsWith(leftPart)) {
+      question.Position__c = resolvePositionByDeleted(
+        question.Position__c, 
+        leftPart, rightPart);
     }
-  }
+    return question;
+  });
+};
 
-  return {
-    relocatableQuestion,
-    relocatableIndex,
-    upperQuestion,
-    upperIndex
-  }
+const resolveValidationsByDeleted = (validations, position) => {
+  const leftPart = position.slice(0, -1);
+  const rightPart = position.slice(-1);
+
+  return validations.filter((validation) => {
+    return !validation.Related_Question__c.Position__c.startsWith(position) &&
+      !validation.Dependent_Question__c.Position__c.startsWith(position);
+  }).map((validation) => {
+    if(validation.Related_Question__c.Position__c.startsWith(leftPart)) {
+      validation.Related_Question__c.Position__c = resolvePositionByDeleted(
+        validation.Related_Question__c.Position__c, 
+        leftPart, rightPart);
+    } else if (validation.Dependent_Question__c.Position__c.startsWith(leftPart)) {
+      validation.Dependent_Question__c.Position__c = resolvePositionByDeleted(
+        validation.Dependent_Question__c.Position__c, 
+        leftPart, rightPart);
+    }
+    return validation;
+  });
+}
+
+const prepareValidationForPush = (validations, newValidation) => {
+  newValidation.Dependent_Question__c.Position__c = solveDependentQuestionPosition(
+    validations, newValidation.Related_Question__c);
+  newValidation.Dependent_Question__c.Editable = true;
+  newValidation.Dependent_Question__c.IsVisible__c = false;
+  newValidation.Related_Question__c.Editable = false;
+  return newValidation;
 }
 
 export {
-  transformDisplayesTypes,
   getQuestionsBySurveyId,
   updateQuestionByPosition,
-  findQuestionsForDownSwap,
-  findQuestionsForUpSwap,
-  resetOptionsIds
+  resetOptionsIds,
+  solveQuestionPosition,
+  updateValidationByPosition,
+  resolvePositionByDeleted,
+  resolveQuestionsByDeleted,
+  resolveValidationsByDeleted,
+  prepareValidationForPush
 }
