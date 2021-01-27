@@ -46,8 +46,8 @@ export default class LwcLookup extends LightningElement {
 
   removeRecordOnLookup() {
     this.searchKey = "";
-    this._selectedValue = null;
-    this._selectedRecordId = null;
+    this._selectedValue = "";
+    this._selectedRecordId = "";
     this.recordsList = null;
     this.onSeletedRecordUpdate();
   }
@@ -74,10 +74,13 @@ export default class LwcLookup extends LightningElement {
   }
 
   onSeletedRecordUpdate() {
-    const detailObject = {
+    let detailObject = {
         selectedRecordId: this._selectedRecordId,
         selectedValue: this._selectedValue
-    }    
+    }   
+    if(!this._selectedRecordId || !this._selectedValue) {
+      detailObject = "";
+    } 
     const recordSelectionEvent = new CustomEvent("recordselection", {
       detail: detailObject
     });

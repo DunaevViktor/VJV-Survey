@@ -1,61 +1,96 @@
 import { LightningElement, track, api } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import getMaxTriggerRuleAmount from "@salesforce/apex/SurveySettingController.getMaxTriggerRuleAmount";
 
 import { importedLabels } from "./labels"
 
+import { 
+  areTriggerRulesFilledCompletely,
+  isEmpty,
+  areDuplicatesPresent
+ } from "./helper"
+
 export default class TriggerRulesWrapper extends LightningElement {
+
+  @track maxTriggerRulesAmount = 5;
 
   labels = importedLabels;
 
-  @track renderConditions = [
-    { cond: true, id: 0, isDeleteAvailable: false },
-    { cond: false, id: 1, isDeleteAvailable: true },
-    { cond: false, id: 2, isDeleteAvailable: true },
-    { cond: false, id: 3, isDeleteAvailable: true },
-    { cond: false, id: 4, isDeleteAvailable: true },
-  ];
+  @track triggerRules = [];
+
+  @track isDeleteAvailable = false;
 
   @api rules = [];
   @track _rules = [];
 
+  constructor() {
+    super();
+    getMaxTriggerRuleAmount()
+      .then((result) => {
+        this.maxTriggerRulesAmount = result;        
+      })
+      .catch((error) => {
+        this.error = error;
+        console.log(error);
+      });
+  }
+  
   connectedCallback() {
-    if (this.rules) {
+    if (this.rules && this.rules.length > 0) {
+      let newtriggerRules = [];
       this._rules = this.rules;
       let i = 0;
       this._rules.forEach((rule) => {
-        this.renderConditions[i].cond = true;
-        this.renderConditions[i].rule = rule;
+        newtriggerRules.push({
+          id: i,
+          rule: rule
+        });
         i++;
       });
+      this.triggerRules = newtriggerRules;
+    } else {
+      this.triggerRules.push({
+        id: 0
+      });
     }
+    this.updateIsDeleteAvailableState();
   }
 
   handlePlusClick() {
-    let flag = false;
-    this.renderConditions.forEach((el) => {
-      if (el.cond === false && !flag) {
-        el.cond = true;
-        flag = true;
-      }
-    });
+    const triggerRuleId = this.triggerRules.length;
+    const newTriggerRule = {
+      id: triggerRuleId
+    }
+    this.triggerRules.push(newTriggerRule);
+    this.updateIsDeleteAvailableState();
   }
 
   handleDeleteTriggerRule(event) {
     let childKey = event.detail;
-    this.renderConditions[childKey].cond = false;
+    this.triggerRules.splice(this.triggerRules.findIndex(rule => rule.id === childKey), 1);
+    this.updateIsDeleteAvailableState();
+  }
+
+  updateIsDeleteAvailableState() {
+    let visibleRulesAmount = this.triggerRules.length;
+    if(visibleRulesAmount === 1) {
+      this.isDeleteAvailable = false;
+    } else {
+      this.isDeleteAvailable = true;
+    }
   }
 
   get isPlusVisible() {
-    let filteredRenderConditions = this.renderConditions.filter(
-      (condition) => condition.cond === false
-    );
-    return filteredRenderConditions.length === 0 ? false : true;
+    const triggerRulesAmount = this.triggerRules.length;    
+    return triggerRulesAmount === this.maxTriggerRulesAmount ? false : true;
   }
 
   handleNavigateNext() {    
     this._rules = this.getNewTriggerRules();
-    if(!this.areTriggerRulesFilledCompletely(this._rules)) {
+    if(!areTriggerRulesFilledCompletely(this._rules)) {
       this.showToast("", this.labels.fill_trigger_rules, "error");
+    } else if(areDuplicatesPresent(this._rules)) {
+      this.showToast("", this.labels.restrict_duplicate_rules, "error");
     } else {
       const navigateNextEvent = new CustomEvent("navigatenext", {
         detail: { triggerRules: [...this._rules] },
@@ -66,8 +101,10 @@ export default class TriggerRulesWrapper extends LightningElement {
 
   handleNavigatePrev() {
     this._rules = this.getNewTriggerRules();
-    if(!this.areTriggerRulesFilledCompletely(this._rules)) {
+    if(!areTriggerRulesFilledCompletely(this._rules)) {
       this.showToast("", this.labels.fill_trigger_rules, "error");
+    } else if(areDuplicatesPresent(this._rules)) {
+      this.showToast("", this.labels.restrict_duplicate_rules, "error");
     } else {
       const navigatePrevEvent = new CustomEvent("navigateback", {
         detail: { triggerRules: [...this._rules] },
@@ -79,46 +116,19 @@ export default class TriggerRulesWrapper extends LightningElement {
   getNewTriggerRules() {
     let newTriggerRules = [];
 
-    this.renderConditions.forEach((condition) => {
-      if (condition.cond === true) {
-        let id = condition.id.toString();
+    this.triggerRules.forEach((rule) => {
+        let id = rule.id.toString();
         let element = this.template.querySelector(
           'c-single-trigger-rule[data-my-id="' + id + '"]'
         );
         let triggerRule = JSON.parse(JSON.stringify(element.getTriggerRule()));
-        if(!this.isEmpty(triggerRule)) {
+        if(!isEmpty(triggerRule)) {
           newTriggerRules.push(triggerRule);
-        }        
-      }
+        }    
     });
+
     return newTriggerRules;
-  }
-
-  isEmpty(obj) {
-    return Object.keys(obj).length === 0;
-  }
-
-  isFilledCompletely(obj) {
-    let filledCompletely = true;
-    for(let field in obj) { 
-      if(!obj[field] || obj[field] === "") {
-        filledCompletely = false;
-        break;
-      }
-    }
-    return filledCompletely;
-  }
-
-  areTriggerRulesFilledCompletely(triggerRules) {
-    let completelyFilled = true;
-    for (let i = 0; i < triggerRules.length; i++) {
-      if(!this.isFilledCompletely(triggerRules[i])) {
-        completelyFilled = false;
-        break;
-      }
-    }
-    return completelyFilled;
-  }
+  }  
 
   showToast(title, message, variant) {
     const event = new ShowToastEvent({title, message, variant, mode: "dismissable"});

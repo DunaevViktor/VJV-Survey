@@ -1,7 +1,9 @@
 public with sharing class SurveySettingController {
+  
   private static final String MAX_QUESTION_AMOUNT_SETTING_NAME = 'Max Question Amount';
   private static final String MIN_QUESTION_AMOUNT_SETTING_NAME = 'Min Question Amount';
   private static final String PAGE_QUESTION_AMOUNT_SETTING_NAME = 'Page Question Amount';
+  private static final String MAX_TRIGGER_RULE_ANOUNT_SETTING_NAME = 'Max Trigger Rule Amount';
 
   @AuraEnabled(cacheable=true)
   public static Integer getMaxQuestionAmount() {
@@ -18,6 +20,12 @@ public with sharing class SurveySettingController {
   @AuraEnabled(cacheable=true)
   public static Integer getPageQuestionAmount() {
     Survey_Setting__c setting = Survey_Setting__c.getValues(PAGE_QUESTION_AMOUNT_SETTING_NAME);
+    return Integer.valueOf(setting.Value__c);
+  }
+
+  @AuraEnabled(cacheable=true)
+  public static Integer getMaxTriggerRuleAmount() {
+    Survey_Setting__c setting = Survey_Setting__c.getValues(MAX_TRIGGER_RULE_ANOUNT_SETTING_NAME);
     return Integer.valueOf(setting.Value__c);
   }
 }

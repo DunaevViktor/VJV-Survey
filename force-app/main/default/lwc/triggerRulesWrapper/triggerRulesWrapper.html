@@ -1,18 +1,17 @@
 <template>
 
-  <template for:each={renderConditions} for:item="condition">
-    <template if:true={condition.cond}>
-      <c-single-trigger-rule
-        key={condition.id}
-        number={condition.id}
-        is-delete-available={condition.isDeleteAvailable}
-        ondeletetriggerrule={handleDeleteTriggerRule}
-        data-my-id={condition.id}
-        rule={condition.rule}
-      ></c-single-trigger-rule>
-    </template>
-  </template>
+  <div class="slds-p-left_x-small">{labels.tip_for_user}</div>
 
+  <template for:each={triggerRules} for:item="rule">
+      <c-single-trigger-rule
+        key={rule.id}
+        number={rule.id}
+        is-delete-available={isDeleteAvailable}
+        ondeletetriggerrule={handleDeleteTriggerRule}
+        data-my-id={rule.id}
+        rule={rule.rule}
+      ></c-single-trigger-rule>
+  </template>
 
   <template if:true={isPlusVisible}>
     <lightning-layout
@@ -29,7 +28,6 @@
     </lightning-layout>
   </template>
 
-  <p>{labels.tip_for_user}</p>
   <hr class="slds-m-bottom_small" />
 
   <div class="slds-text-align_right">

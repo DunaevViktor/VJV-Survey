@@ -24,18 +24,6 @@
                     size="x-small" 
                     onclick={addOptionalQuestion}>
     </lightning-icon>
-    <lightning-icon icon-name="utility:chevrondown" 
-                    alternative-text={label.down} 
-                    title={label.down} 
-                    class="slds-float_right" 
-                    size="x-small" >
-    </lightning-icon>
-    <lightning-icon icon-name="utility:chevronup" 
-                    alternative-text={label.up} 
-                    title={label.up} 
-                    class="slds-float_right" 
-                    size="x-small" >
-    </lightning-icon>
 
     <template if:true={question.Required__c}>
       <span class="required">*</span>
