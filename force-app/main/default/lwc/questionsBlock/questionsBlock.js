@@ -1,9 +1,14 @@
 import { LightningElement, wire, api, track } from 'lwc';
 import getMaxQuestionAmount from "@salesforce/apex/SurveySettingController.getMaxQuestionAmount";
 import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getPageQuestionAmount";
-import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 import {label} from "./labels.js";
+import {
+  isEmpty,
+  filterQuestionsByPage,
+  filterQuestionsBySearhTerm,
+  setInputValidation
+} from './questionsBlockHelper.js';
 import { findQuestionByPosition } from "c/formUtil";
 
 export default class QuestionsBlock extends LightningElement {
@@ -42,9 +47,11 @@ export default class QuestionsBlock extends LightningElement {
 
   get labelOfAvailableItems() {
     switch(this.availableQuestionsAmount) {
-      case 1: return this.label.you_can_create + " " + this.availableQuestionsAmount + " " + this.label.question;
+      case 1: return this.label.you_can_create + " " 
+        + this.availableQuestionsAmount + " " + this.label.question;
       case 0: return this.label.can_no_longer_create_questions;
-      default: return this.label.you_can_create + " " + this.availableQuestionsAmount + " " + this.label.questions;
+      default: return this.label.you_can_create + " " 
+        + this.availableQuestionsAmount + " " + this.label.questions;
     }
   }
 
@@ -62,9 +69,9 @@ export default class QuestionsBlock extends LightningElement {
   }
 
   resolveDisplayedQuestions() {
-    this.filteredDisplayedQuestions = this.displayedQuestions.filter((item, index) => {
-      return index >= (this.currentPage-1) * +this.pageQuestionsAmount.data && index < (this.currentPage) * +this.pageQuestionsAmount.data;
-    });
+    this.filteredDisplayedQuestions = filterQuestionsByPage(
+      this.displayedQuestions, this.currentPage, 
+      +this.pageQuestionsAmount.data);
 
     this.resolveQuestionsSubinfo();
   }
@@ -76,8 +83,6 @@ export default class QuestionsBlock extends LightningElement {
 
     this.repaintPaginationButtons();
   }
-
-  
 
   editQuestion(event) {
     const position = event.detail;
@@ -151,43 +156,37 @@ export default class QuestionsBlock extends LightningElement {
   }
 
   handleQuestionsSearch() {
-    const keyword = this.template.querySelector('lightning-input[data-my-id="keyword"]').value;
-    if(this.isEmpty(keyword)) {
-      this.isSearchMode = false;
-      this.showToast('', label.search_keyword_cant_be_empty, 'error');
+    const input = this.template.querySelector('lightning-input[data-my-id="keyword"]');
+    const keyword = input.value;
+
+    if(isEmpty(keyword)) {
+      setInputValidation(input, label.search_keyword_cant_be_empty);
       return;
     }
+
+    setInputValidation(input, "");
     this.currentPage = 1;
+
     if(!this.isSearchMode) {
-      this.displayedQuestionsCopy = [];
       this.displayedQuestionsCopy = [...this.displayedQuestions];
     }
+
     this.isSearchMode = true;    
-    const questionSearchResult = this.displayedQuestionsCopy.filter(
-      question => question.Label__c.includes(keyword)
-    );
-    console.log('search res'); 
-    console.log(questionSearchResult);
-    this.displayedQuestions = [];    
+    const questionSearchResult = filterQuestionsBySearhTerm(this.displayedQuestionsCopy, keyword);
     this.displayedQuestions = [...questionSearchResult];
     this.resolveDisplayedQuestions();
   }
 
   handleClearQuestionSearch() {
-    this.currentPage = 1;
-    this.template.querySelector('lightning-input[data-my-id="keyword"]').value = "";
-    this.isSearchMode = false;
-    this.displayedQuestions = [];
-    this.displayedQuestions = [...this.displayedQuestionsCopy];
-    this.resolveDisplayedQuestions();
-  }
+    const input = this.template.querySelector('lightning-input[data-my-id="keyword"]');
+    setInputValidation(input, "");
+    input.value = "";
 
-  isEmpty(value) {
-    return value === "";
-  }
-
-  showToast(title, message, variant) {
-    const event = new ShowToastEvent({title, message, variant, mode: "dismissable"});
-    this.dispatchEvent(event);
+    if(this.isSearchMode) {
+      this.isSearchMode = false;
+      this.currentPage = 1;
+      this.displayedQuestions = [...this.displayedQuestionsCopy];
+      this.resolveDisplayedQuestions();
+    }
   }
 }

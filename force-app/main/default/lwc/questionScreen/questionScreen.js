@@ -13,7 +13,6 @@ import {
   resetOptionsIds,
   updateValidationByPosition,
   solveQuestionPosition,
-  solveDependentQuestionPosition,
   resolveQuestionsByDeleted,
   resolveValidationsByDeleted,
   prepareValidationForPush
