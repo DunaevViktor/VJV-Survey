@@ -4,8 +4,8 @@
     <description>The position of the question in the survey.</description>
     <externalId>false</externalId>
     <label>Position</label>
-    <length>255</length>
-    <required>true</required>
+    <length>25</length>
+    <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Text</type>
     <unique>false</unique>

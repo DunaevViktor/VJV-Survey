@@ -7,6 +7,7 @@ import saveQuestions from "@salesforce/apex/SaverController.saveQuestions";
 import saveOptions from "@salesforce/apex/SaverController.saveOptions";
 import saveValidations from "@salesforce/apex/SaverController.saveValidations";
 import saveEmailReceivers from "@salesforce/apex/SaverController.saveEmailReceivers";
+import sendEmails from "@salesforce/apex/SendEmailLogic.sendEmails";
 
 import { transformRules,  
          transformQuestions,
@@ -48,7 +49,9 @@ export default class SaverScreen extends LightningElement {
   }
 
   sendSaveSurveyRequest() {
-    saveSurvey({survey : this.survey})
+      let copySurvey = {...this.survey};
+      copySurvey.URL__c = 'https://test.com';
+    saveSurvey({survey : copySurvey})
       .then((result) => {
         this.surveyId = result;
 
@@ -62,9 +65,10 @@ export default class SaverScreen extends LightningElement {
 
         this.sendSaveTriggerRulesRequest();
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         this.isError = true;
-      });
+      })
   }
 
   sendSaveTriggerRulesRequest() {
@@ -75,9 +79,10 @@ export default class SaverScreen extends LightningElement {
         this.increaseProgress();
         this.sendSaveQuestionsRequest();
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         this.isError = true;
-      });
+      })
   }
 
   sendSaveQuestionsRequest() {
@@ -88,9 +93,10 @@ export default class SaverScreen extends LightningElement {
         this.savedQuestions = result;
         this.sendSaveOptionsRequest();
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         this.isError = true;
-      });
+      })
   }
 
   sendSaveOptionsRequest() {
@@ -107,9 +113,10 @@ export default class SaverScreen extends LightningElement {
         this.increaseProgress();
         this.sendSaveValidationsRequest();
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         this.isError = true;
-      });
+      })
   }
 
   sendSaveValidationsRequest() {
@@ -126,9 +133,10 @@ export default class SaverScreen extends LightningElement {
         this.increaseProgress();
         this.sendSaveEmailReceiversRequest();
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         this.isError = true;
-      });
+      })
   }
 
   sendSaveEmailReceiversRequest() {
@@ -140,13 +148,25 @@ export default class SaverScreen extends LightningElement {
     }
 
     saveEmailReceivers({receivers : transformedEmailReceivers})
-      .then(() => {
+      .then((receiverList) => {
         this.increaseProgress();
+        this.sendImmediatelyEmails(receiverList);
       })
       .catch((error) => {
         console.log(error);
         this.isError = true;
       })
+  }
+
+  sendImmediatelyEmails(receiverList){
+    sendEmails({emailReceiverList: receiverList})
+    .then(() => {
+        console.log('All OK!');
+    })
+    .catch((error) => {
+        console.log(error);
+        this.isError = true;
+    })
   }
 
   increaseProgress() {

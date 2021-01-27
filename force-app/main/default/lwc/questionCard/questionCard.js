@@ -21,17 +21,10 @@ export default class QuestionCard extends LightningElement {
     this.dispatchEvent(editEvent);
   }
 
-  downQuestion() {
-    const downEvent = new CustomEvent("down", {
+  addOptionalQuestion() {
+    const addOptionalEvent = new CustomEvent("addoptional", {
       detail: this.question.Position__c
     });
-    this.dispatchEvent(downEvent);
-  }
-
-  upQuestion() {
-    const upEvent = new CustomEvent("up", {
-      detail: this.question.Position__c
-    });
-    this.dispatchEvent(upEvent);
+    this.dispatchEvent(addOptionalEvent);
   }
 }

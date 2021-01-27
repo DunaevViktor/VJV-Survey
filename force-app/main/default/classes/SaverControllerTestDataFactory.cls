@@ -4,6 +4,7 @@ public with sharing class SaverControllerTestDataFactory {
   private static final String TEST_SURVEY_NAME = 'Test Survey Name';
   private static final String TEST_QUESTION_NAME = 'Test Question Name';
   private static final String TEST_QUESTION_TYPE = 'Picklist';
+  private static final String TEST_POSITION = '1';
   private static final String TEST_OPTION_VALUE = 'Test Option value';
   private static final String TEST_FIELD_NAME = 'Test Field Name';
   private static final String TEST_RULE_OPERATOR = 'EQUALS';
@@ -32,7 +33,7 @@ public with sharing class SaverControllerTestDataFactory {
   public static List<Question__c> createQuestionList(Integer amount, String surveyId) {
     List<Question__c> questions = new List<Question__c>();
     for(Integer i = 0; i < amount; i++) {
-      Question__c question = SaverControllerTestDataFactory.createQuestion(surveyId, String.valueOf(i+ 1));
+      Question__c question = SaverControllerTestDataFactory.createQuestion(surveyId);
       questions.add(question);
     }
     return questions;
@@ -63,12 +64,12 @@ public with sharing class SaverControllerTestDataFactory {
     return option;
   }
 
-  private static Question__c createQuestion(String surveyId, String position) {
+  private static Question__c createQuestion(String surveyId) {
     Question__c question = new Question__c();
     question.Label__c =  TEST_QUESTION_NAME;
     question.Type__c = TEST_QUESTION_TYPE;
     question.Survey__c = surveyId;
-    question.Position__c = position;
+    question.Position__c = TEST_POSITION;
     return question;
   }
 

@@ -1,14 +1,20 @@
 ({
     launchFlow : function(component) {
-        component.set("v.showLaunch", true);
-        var flow = component.find("surveyFlow");
+        var modalBody;
         
-        flow.startFlow("Survey_Flow");
+        $A.createComponent(
+            "c:surveyConstructor",
+            {},
+            function (content, status) {
+                if (status === "SUCCESS") {
+                    modalBody = content;
+                    component.find("overlayLibButton").showCustomModal({
+                        body: modalBody,
+                        showCloseButton: true
+                    });
+                }
+            }
+        );
     },
     
-    handleStatusChange : function(component, event) {
-        if(event.getParam("status") === "FINISHED") {
-            component.set("v.showLaunch", false); 
-        }
-    },
 })

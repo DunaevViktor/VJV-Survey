@@ -10,7 +10,8 @@ import {
   generateBooleanField,
   filterOperatorList,
   generateFieldsDescriptionsList,
-  generateFieldOptions
+  generateFieldOptions,
+  getFieldOperatorType
 } from "./helper";
 
 import { importedLabels } from "./labels"
@@ -60,6 +61,14 @@ export default class SingleTriggerRule extends LightningElement {
 
   constructor() {
     super();
+    this.fetchFullOperatorList();     
+  }
+
+  connectedCallback() {
+    this._rule = this.rule;
+  }
+
+  generateObjectField() {
     getPicklistValues({objectApiName: this.triggerRuleObjectApiName, fieldApiName: this.object_Api_NameFieldName})
       .then((result) => {
         this.objectNames = generateFieldOptions(result);
@@ -71,22 +80,32 @@ export default class SingleTriggerRule extends LightningElement {
       .catch((error) => {
         this.error = error;
       });
+  }
 
+  fetchFullOperatorList() {
     getPicklistValues({objectApiName: this.triggerRuleObjectApiName, fieldApiName: this.operatorFieldName})
       .then((result) => {
         this.fullOperatorList = generateFieldOptions(result);
-        if (this._rule && this._rule.Operator__c) {
-          this.operatorValue = this._rule.Operator__c;
-        }
+        this.generateObjectField();
       })
       .catch((error) => {
         this.error = error;
         console.log(error);
-      }); 
+      });
   }
 
-  connectedCallback() {
-    this._rule = this.rule;
+  generateOperatorField() {
+    if(this._rule && this._rule.Field_Name__c) {
+      let receivedFieldObject = this.fieldNames.find(
+          (field) => field.value === this.fieldValue
+      );
+      receivedFieldObject.operatorType = getFieldOperatorType(receivedFieldObject); 
+      this.setOperatorsByType(receivedFieldObject); 
+      if(this._rule && this._rule.Operator__c) {
+        this.operatorValue = this._rule.Operator__c;
+        this.provideValueInput(receivedFieldObject);
+      }
+    } 
   }
 
   handleObjectChange(event) {
@@ -101,14 +120,8 @@ export default class SingleTriggerRule extends LightningElement {
       .then((result) => {
         this.fieldNames = generateFieldsDescriptionsList(result);
         if (this._rule && this._rule.Field_Name__c) {
-          let receivedFieldObject = this.fieldNames.find(
-            (field) => field.value === this._rule.Field_Name__c
-          );
-          this.fieldValue = JSON.parse(
-            JSON.stringify(receivedFieldObject)
-          ).value;
-
-          this.provideValueInput(receivedFieldObject);
+          this.fieldValue = this._rule.Field_Name__c;  
+          this.generateOperatorField();        
         }
       })
       .catch((error) => {
@@ -119,14 +132,19 @@ export default class SingleTriggerRule extends LightningElement {
 
   handleFieldChange(event) {
     this.fieldValue = event.detail.value;
-    this.operatorValue = "";
-    this.provideValueInput(event.detail);
+    this.operatorValue = "";    
     this.value = "";
+    this.field = {}; 
+    let chosenFieldObject = this.fieldNames.find(
+      (field) => field.value === this.fieldValue
+    );
+    chosenFieldObject.operatorType = getFieldOperatorType(chosenFieldObject);
+    this.setOperatorsByType(chosenFieldObject);
   }
 
-  provideValueInput(fieldObject) {
+  provideValueInput(chosenField) {
     let chosenFieldObject = this.fieldNames.find(
-      (field) => field.value === fieldObject.value
+      (field) => field.value === chosenField.value
     );
     this.value = "";
 
@@ -174,33 +192,28 @@ export default class SingleTriggerRule extends LightningElement {
         picklistOptions,
         settedValue
       );
-    }
-    this.setOperatorsByType();
+    }    
     this._rule = null;
   }
 
-  setOperatorsByType() {
+  setOperatorsByType(chosenFieldObject) {
     this.operators = filterOperatorList(
       this.fullOperatorList,
-      this.field.operatorType
+      chosenFieldObject.operatorType
     );
   }
 
   handleOperatorChange(event) {
     this.operatorValue = event.detail.value;
+    let chosenFieldObject = this.fieldNames.find(
+      (field) => field.value === this.fieldValue
+    );
     if (this.operatorValue === operatorTypes.NULL) {
-      let settedValue = "";
-      let chosenFieldObject = this.fieldNames.find(
-        (field) => field.value === this.fieldValue
-      );
+      let settedValue = "";      
       this.field = generateBooleanField(chosenFieldObject.label, settedValue);
       this.picklistFieldOptions = this.field.picklistValues;
-    } else {
-      let selectedFieldObject = this.fieldNames.find(
-        (field) => field.value === this.fieldValue
-      );
-      this.provideValueInput(selectedFieldObject);
     }
+      this.provideValueInput(chosenFieldObject);
   }
 
   handleClearRuleClick() {
@@ -221,6 +234,7 @@ export default class SingleTriggerRule extends LightningElement {
     this.value = "";
     this.operatorValue = "";
     this.operators = [];
+    this.fieldNames = [];
     this.fieldValue = "";
     this.fieldType = "";
     this.objectValue = "";

@@ -55,7 +55,8 @@ export default class BasicScreen extends LightningElement {
       this.survey = {
         Name: '',
         Background_Color__c: '',
-        Logo__c: ''
+        Logo__c: '',
+        Description__c: ''
       };
     }
 
@@ -70,6 +71,10 @@ export default class BasicScreen extends LightningElement {
 
   handleColorChange(event) {
     this.survey.Background_Color__c = event.target.value;
+  }
+
+  handleDescriptionChange(event) {
+    this.survey.Description__c = event.target.value;
   }
 
   handleImageUpdate(event) {

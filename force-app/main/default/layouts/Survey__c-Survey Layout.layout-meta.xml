@@ -18,10 +18,6 @@
                 <behavior>Edit</behavior>
                 <field>URL__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>IsResending__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -78,6 +74,7 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Value__c</fields>
         <relatedList>Email_Receiver__c.Survey__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -86,6 +83,7 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Label__c</fields>
         <relatedList>Question__c.Survey__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -98,7 +96,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h6D000001GolE</masterLabel>
+        <masterLabel>00h6D000001D7Qg</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

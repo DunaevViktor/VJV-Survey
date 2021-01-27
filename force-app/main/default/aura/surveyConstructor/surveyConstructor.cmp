@@ -1,0 +1,27 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global">
+    <aura:attribute name="headerText" type="String" default="Survey Constructor"/>
+    <lightning:overlayLibrary aura:id="overlayLibFlow" />
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    
+    <header class="slds-modal__header slds-theme_shade">
+        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+            {!v.headerText}
+        </h2>
+    </header>
+    
+    <lightning:card>
+        <lightning:flow aura:id="surveyFlow" class="slds-align_absolute-center"
+                        onstatuschange="{!c.handleStatusChange}"/>
+    </lightning:card>
+
+    <aura:html tag="style">
+      .modal-body{ 
+          padding: 0;
+      }
+      .flowRuntimeV2{ 
+          width: 100%;
+      }
+    </aura:html>
+    
+</aura:component>
