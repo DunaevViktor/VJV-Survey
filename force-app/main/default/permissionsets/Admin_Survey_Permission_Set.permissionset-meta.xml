@@ -4,6 +4,10 @@
         <application>Survey</application>
         <visible>true</visible>
     </applicationVisibilities>
+    <applicationVisibilities>
+        <application>Survey_Answer</application>
+        <visible>true</visible>
+    </applicationVisibilities>
     <description>Provides full access to custom objects, applications and flows.</description>
     <fieldPermissions>
         <editable>true</editable>
@@ -24,6 +28,11 @@
         <editable>true</editable>
         <field>Question__c.IsVisible__c</field>
         <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Question__c.Position__c</field>
+        <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -191,6 +200,10 @@
     </tabSettings>
     <tabSettings>
         <tab>Related_Object__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>Survey_Answer</tab>
         <visibility>Visible</visibility>
     </tabSettings>
     <tabSettings>

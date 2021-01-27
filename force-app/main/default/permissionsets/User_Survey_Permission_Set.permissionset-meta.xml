@@ -4,6 +4,10 @@
         <application>Survey</application>
         <visible>true</visible>
     </applicationVisibilities>
+    <applicationVisibilities>
+        <application>Survey_Answer</application>
+        <visible>true</visible>
+    </applicationVisibilities>
     <description>Provides the necessary access to work with the survey constructor.</description>
     <fieldPermissions>
         <editable>true</editable>
@@ -24,6 +28,11 @@
         <editable>true</editable>
         <field>Question__c.IsVisible__c</field>
         <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Question__c.Position__c</field>
+        <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -169,6 +178,10 @@
         <object>Validation__c</object>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
+    <tabSettings>
+        <tab>Survey_Answer</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
     <tabSettings>
         <tab>Survey_Constructor</tab>
         <visibility>Visible</visibility>
