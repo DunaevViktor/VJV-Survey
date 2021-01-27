@@ -101,7 +101,7 @@
     <hr class="slds-clearfix slds-m-bottom_x-small" />
 
     <template if:true={isDependentQuestion} class="slds-m-top_small">
-      This question will be visible if {validationForForm.Related_Question__c.Label__c}
+      {label.question_will_be_visible_if} {validationForForm.Related_Question__c.Label__c}
 
       <div class="slds-grid slds-wrap">
         <div class="slds-size_1-of-2">

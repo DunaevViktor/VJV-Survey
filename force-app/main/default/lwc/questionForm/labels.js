@@ -22,6 +22,7 @@ import enter_compared_value from "@salesforce/label/c.enter_compared_value";
 import select_operator from "@salesforce/label/c.select_operator";
 import select_value from "@salesforce/label/c.select_value";
 import value from "@salesforce/label/c.value";
+import question_will_be_visible_if from "@salesforce/label/c.question_will_be_visible_if";
 
 const label = {
   edit_question_form_title,
@@ -47,7 +48,8 @@ const label = {
   select_operator,
   value,
   select_value,
-  enter_compared_value
+  enter_compared_value,
+  question_will_be_visible_if
 }
 
 export {

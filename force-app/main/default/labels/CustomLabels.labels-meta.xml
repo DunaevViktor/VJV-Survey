@@ -29,6 +29,13 @@
         <value>Add</value>
     </labels>
     <labels>
+        <fullName>add_dependent_question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add dependent question</shortDescription>
+        <value>Add dependent question</value>
+    </labels>
+    <labels>
         <fullName>add_new_question</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -554,6 +561,13 @@
         <value>Question Setting</value>
     </labels>
     <labels>
+        <fullName>question_will_be_visible_if</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>This question will be visible if</shortDescription>
+        <value>This question will be visible if</value>
+    </labels>
+    <labels>
         <fullName>questions</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -566,13 +580,6 @@
         <protected>true</protected>
         <shortDescription>questions connected</shortDescription>
         <value>These questions are already connected in another validation</value>
-    </labels>
-    <labels>
-        <fullName>qustion</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>qustion</shortDescription>
-        <value>question</value>
     </labels>
     <labels>
         <fullName>remove_image</fullName>

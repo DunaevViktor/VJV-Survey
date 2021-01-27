@@ -10,16 +10,16 @@
     </lightning-icon>
     <template if:true={question.Editable}>
       <lightning-icon icon-name="utility:edit" 
-        alternative-text="Add dependant question"
-        title="Add dependant question"
+        alternative-text={label.edit}
+        title={label.edit}
         class="slds-float_right" 
         size="x-small" 
         onclick={editQuestion}>
       </lightning-icon>
     </template>
     <lightning-icon icon-name="utility:add" 
-                    alternative-text={label.edit} 
-                    title={label.edit} 
+                    alternative-text={label.add_dependent_question} 
+                    title={label.add_dependent_question} 
                     class="slds-float_right" 
                     size="x-small" 
                     onclick={addOptionalQuestion}>
