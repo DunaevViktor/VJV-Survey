@@ -252,6 +252,7 @@ export default class QuestionScreen extends LightningElement {
       this.openQuestionBlock();
     }
   }
+  
   editQuestion(event) {
     this.questionForForm = event.detail;
     this.editQuestionPosition = this.questionForForm.Position__c
@@ -327,9 +328,7 @@ export default class QuestionScreen extends LightningElement {
 
   showToastMessage(title, message, variant) {
     const event = new ShowToastEvent({
-      title,
-      message,
-      variant
+      title, message, variant
     });
     this.dispatchEvent(event);
   }

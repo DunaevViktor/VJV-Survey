@@ -155,11 +155,9 @@ export default class QuestionForm extends LightningElement {
   }
 
   setDisplayedOperators() {
-    const resolvedOperators = resolveOperatorsByQuestionType(
+    this.displayedOperators = [...resolveOperatorsByQuestionType(
       this.operators, 
-      this.validationForForm.Related_Question__c);
-
-    this.displayedOperators = [...resolvedOperators];
+      this.validationForForm.Related_Question__c)];
   }
 
   handleLabel(event) {
@@ -243,7 +241,8 @@ export default class QuestionForm extends LightningElement {
     if(this.editOptionValue.localeCompare(event.detail) === 0) {
       this.cancelOptionEdit();
     } else {
-      this.isEditOption--;
+      const index = findOptionIndexByValue(this.question.Question_Options__r, event.detail);
+      if(index < this.editOptionIndex) this.editOptionIndex--;
     }
   }
 
