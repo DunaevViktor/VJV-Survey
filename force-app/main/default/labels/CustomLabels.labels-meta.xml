@@ -15,11 +15,25 @@
         <value>Launch</value>
     </labels>
     <labels>
+        <fullName>Select_survey_for_connect</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select survey for connect</shortDescription>
+        <value>Select survey for connect</value>
+    </labels>
+    <labels>
         <fullName>Survey_Constructor</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Survey Constructor</shortDescription>
         <value>Survey Constructor</value>
+    </labels>
+    <labels>
+        <fullName>Template</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Template</shortDescription>
+        <value>Template</value>
     </labels>
     <labels>
         <fullName>add</fullName>
@@ -166,13 +180,6 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>delete</shortDescription>
-        <value>Delete</value>
-    </labels>
-    <labels>
-        <fullName>delete_button</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>delete button</shortDescription>
         <value>Delete</value>
     </labels>
     <labels>
@@ -713,13 +720,6 @@
         <protected>true</protected>
         <shortDescription>specify question</shortDescription>
         <value>Specify question</value>
-    </labels>
-    <labels>
-        <fullName>standard_survey</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>standard survey</shortDescription>
-        <value>Standard survey</value>
     </labels>
     <labels>
         <fullName>success</fullName>

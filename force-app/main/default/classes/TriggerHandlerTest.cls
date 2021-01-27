@@ -17,7 +17,7 @@ class TriggerHandlerTest {
         TestDataFactory.createLeads();
     }
     
-    @isTest
+    /*@isTest
     static void testProcessContactChanges(){
         List<Contact> contactList = [SELECT Id, FirstName, LastName,
                                      Birthdate, EmailBouncedDate, MailingLatitude, Title
@@ -88,5 +88,5 @@ class TriggerHandlerTest {
         }
         List<Email_Receiver__c> actualEmailReceivers = TriggerRulesHandler.getEmailReceivers(surveySet);
         System.assertEquals(5, actualEmailReceivers.size(), INVALID_EMAIL_RECEIVERS_AMOUNT);
-    }
+    }*/
 }
