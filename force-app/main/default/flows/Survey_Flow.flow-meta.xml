@@ -263,6 +263,12 @@
                     <elementReference>TemplateQuestionList</elementReference>
                 </value>
             </inputParameters>
+            <inputParameters>
+                <name>validations</name>
+                <value>
+                    <elementReference>ValidationList</elementReference>
+                </value>
+            </inputParameters>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>QuestionList</assignToReference>
@@ -283,6 +289,10 @@
             <outputParameters>
                 <assignToReference>TemplateQuestionList</assignToReference>
                 <name>templateQuestions</name>
+            </outputParameters>
+            <outputParameters>
+                <assignToReference>ValidationList</assignToReference>
+                <name>validations</name>
             </outputParameters>
         </fields>
         <showFooter>false</showFooter>
@@ -361,42 +371,6 @@
             <outputParameters>
                 <assignToReference>TriggerRuleList</assignToReference>
                 <name>triggerRules</name>
-            </outputParameters>
-        </fields>
-        <showFooter>false</showFooter>
-        <showHeader>false</showHeader>
-    </screens>
-    <screens>
-        <name>Validation_Screen</name>
-        <label>Validation Screen</label>
-        <locationX>176</locationX>
-        <locationY>998</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <connector>
-            <targetReference>Set_Advance_Header</targetReference>
-        </connector>
-        <fields>
-            <name>ValidationScreenComponent</name>
-            <extensionName>c:validationScreen</extensionName>
-            <fieldType>ComponentInstance</fieldType>
-            <inputParameters>
-                <name>questions</name>
-                <value>
-                    <elementReference>QuestionList</elementReference>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>validations</name>
-                <value>
-                    <elementReference>ValidationList</elementReference>
-                </value>
-            </inputParameters>
-            <isRequired>true</isRequired>
-            <outputParameters>
-                <assignToReference>ValidationList</assignToReference>
-                <name>validations</name>
             </outputParameters>
         </fields>
         <showFooter>false</showFooter>

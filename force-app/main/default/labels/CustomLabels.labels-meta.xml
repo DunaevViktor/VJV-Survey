@@ -29,6 +29,20 @@
         <value>Add</value>
     </labels>
     <labels>
+        <fullName>add_dependent_question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add dependent question</shortDescription>
+        <value>Add dependent question</value>
+    </labels>
+    <labels>
+        <fullName>add_new_question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>add new question</shortDescription>
+        <value>Add new question</value>
+    </labels>
+    <labels>
         <fullName>add_new_receiver</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -48,6 +62,13 @@
         <protected>true</protected>
         <shortDescription>add question</shortDescription>
         <value>Add Question</value>
+    </labels>
+    <labels>
+        <fullName>add_standard_question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>add standard question</shortDescription>
+        <value>Add standard question</value>
     </labels>
     <labels>
         <fullName>add_trigger_rule</fullName>
@@ -71,11 +92,32 @@
         <value>Enter Basic Survey Information</value>
     </labels>
     <labels>
+        <fullName>back</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Back</shortDescription>
+        <value>Back</value>
+    </labels>
+    <labels>
+        <fullName>back_title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Return to previous stage</shortDescription>
+        <value>Return to previous stage</value>
+    </labels>
+    <labels>
         <fullName>can_be_resending</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>can be resending</shortDescription>
         <value>Can be resending</value>
+    </labels>
+    <labels>
+        <fullName>can_no_longer_create_questions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>can no longer create questions</shortDescription>
+        <value>You can no longer create questions</value>
     </labels>
     <labels>
         <fullName>cancel_edit</fullName>
@@ -85,18 +127,18 @@
         <value>Cancel edit</value>
     </labels>
     <labels>
+        <fullName>clear</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>clear</shortDescription>
+        <value>Clear</value>
+    </labels>
+    <labels>
         <fullName>clear_trigger_rules_fields</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Clear trigger rule&apos;s fields</shortDescription>
         <value>Clear trigger rule&apos;s fields</value>
-    </labels>
-    <labels>
-        <fullName>compared_value</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>compared value</shortDescription>
-        <value>Compared Value</value>
     </labels>
     <labels>
         <fullName>complete_this_field</fullName>
@@ -139,13 +181,6 @@
         <protected>true</protected>
         <shortDescription>delete trigger rule title</shortDescription>
         <value>Delete trigger rule</value>
-    </labels>
-    <labels>
-        <fullName>dependent_question</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>dependent question</shortDescription>
-        <value>Dependent question</value>
     </labels>
     <labels>
         <fullName>done</fullName>
@@ -202,6 +237,13 @@
         <protected>true</protected>
         <shortDescription>enter option value</shortDescription>
         <value>Enter option value</value>
+    </labels>
+    <labels>
+        <fullName>enter_search_keyword</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Enter search keyword</shortDescription>
+        <value>Enter search keyword</value>
     </labels>
     <labels>
         <fullName>error</fullName>
@@ -288,6 +330,20 @@
         <value>Full incomplete trigger rules or clear(delete) them completely</value>
     </labels>
     <labels>
+        <fullName>find</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>find</shortDescription>
+        <value>Find</value>
+    </labels>
+    <labels>
+        <fullName>first_page</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>first_page</shortDescription>
+        <value>First</value>
+    </labels>
+    <labels>
         <fullName>group_name</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -330,6 +386,13 @@
         <value>Is reusable</value>
     </labels>
     <labels>
+        <fullName>last_page</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>last page</shortDescription>
+        <value>Last</value>
+    </labels>
+    <labels>
         <fullName>limit_question_sexceeded</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -358,18 +421,18 @@
         <value>Next</value>
     </labels>
     <labels>
+        <fullName>next_page</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>next_page</shortDescription>
+        <value>Next</value>
+    </labels>
+    <labels>
         <fullName>no_questions</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>no questions</shortDescription>
         <value>Don&apos;t have questions yet</value>
-    </labels>
-    <labels>
-        <fullName>no_questions_to_validation</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>no questions to validation</shortDescription>
-        <value>Don&apos;t have questions to create visibility validation</value>
     </labels>
     <labels>
         <fullName>no_records_found</fullName>
@@ -407,11 +470,25 @@
         <value>Don&apos;t have validations to display</value>
     </labels>
     <labels>
+        <fullName>none</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>none</shortDescription>
+        <value>None</value>
+    </labels>
+    <labels>
         <fullName>number</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>number</shortDescription>
         <value>number</value>
+    </labels>
+    <labels>
+        <fullName>number_of_found_items</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Number of found items</shortDescription>
+        <value>Number of found items</value>
     </labels>
     <labels>
         <fullName>object</fullName>
@@ -449,11 +526,11 @@
         <value>Previous</value>
     </labels>
     <labels>
-        <fullName>previous_button_message</fullName>
+        <fullName>previous_page</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>previous button message</shortDescription>
-        <value>If you will click this button you will lost all validations variables</value>
+        <shortDescription>previous_page</shortDescription>
+        <value>Previous</value>
     </labels>
     <labels>
         <fullName>question</fullName>
@@ -477,11 +554,25 @@
         <value>Question Setting</value>
     </labels>
     <labels>
-        <fullName>questions_connected</fullName>
+        <fullName>question_will_be_visible_if</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>questions connected</shortDescription>
-        <value>These questions are already connected in another validation</value>
+        <shortDescription>This question will be visible if</shortDescription>
+        <value>This question will be visible if</value>
+    </labels>
+    <labels>
+        <fullName>questions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>questions</shortDescription>
+        <value>questions</value>
+    </labels>
+    <labels>
+        <fullName>qustion</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>qustion</shortDescription>
+        <value>question</value>
     </labels>
     <labels>
         <fullName>remove_image</fullName>
@@ -566,6 +657,20 @@
         <protected>true</protected>
         <shortDescription>Search</shortDescription>
         <value>Search</value>
+    </labels>
+    <labels>
+        <fullName>search_keyword_cant_be_empty</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Search keyword can&apos;t be empty</shortDescription>
+        <value>Search keyword can&apos;t be empty</value>
+    </labels>
+    <labels>
+        <fullName>select</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>select</shortDescription>
+        <value>Select</value>
     </labels>
     <labels>
         <fullName>select_an_option</fullName>
@@ -741,5 +846,19 @@
         <protected>true</protected>
         <shortDescription>value</shortDescription>
         <value>Value</value>
+    </labels>
+    <labels>
+        <fullName>you_can_create</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>you can create</shortDescription>
+        <value>You can create</value>
+    </labels>
+    <labels>
+        <fullName>you_must_have_at_least</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>you must have at least</shortDescription>
+        <value>You must have at least</value>
     </labels>
 </CustomLabels>
