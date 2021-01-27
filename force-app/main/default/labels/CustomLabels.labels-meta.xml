@@ -547,6 +547,13 @@
         <value>Save validations</value>
     </labels>
     <labels>
+        <fullName>saver_header</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Saver header</shortDescription>
+        <value>Saving Your Survey</value>
+    </labels>
+    <labels>
         <fullName>saving_your_configurations</fullName>
         <language>en_US</language>
         <protected>true</protected>

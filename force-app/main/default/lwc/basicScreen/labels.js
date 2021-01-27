@@ -8,7 +8,6 @@ import unable_to_continue from "@salesforce/label/c.unable_to_continue";
 import survey_description from "@salesforce/label/c.survey_description";
 import type_description from "@salesforce/label/c.type_description";
 import type_survey_name from "@salesforce/label/c.type_survey_name";
-import basic_header from "@salesforce/label/c.basic_header";
 
 export const labels = {
   survey_name,
@@ -20,6 +19,5 @@ export const labels = {
   survey_description,
   type_description,
   type_survey_name,
-  basic_header,
   next
 }

@@ -6,7 +6,6 @@ import previous from "@salesforce/label/c.previous";
 import next from "@salesforce/label/c.next";
 import error_title from "@salesforce/label/c.error";
 import questions_connected from "@salesforce/label/c.questions_connected";
-import validation_header from "@salesforce/label/c.validation_header";
 
 const label = {
   no_questions_to_validation,
@@ -16,8 +15,7 @@ const label = {
   previous,
   next,
   error_title,
-  questions_connected,
-  validation_header
+  questions_connected
 };
 
 export {

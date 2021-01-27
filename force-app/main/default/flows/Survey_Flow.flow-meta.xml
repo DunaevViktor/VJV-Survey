@@ -1,6 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>50.0</apiVersion>
+    <assignments>
+        <name>Set_Advance_Header</name>
+        <label>Set Advance Header</label>
+        <locationX>176</locationX>
+        <locationY>1118</locationY>
+        <assignmentItems>
+            <assignToReference>CurrentScreenHeader</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Label.advance_setting_header</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>AdvanceSettingsScreen</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_Basic_Header</name>
+        <label>Set Basic Header</label>
+        <locationX>176</locationX>
+        <locationY>158</locationY>
+        <assignmentItems>
+            <assignToReference>CurrentScreenHeader</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Label.basic_header</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Basic_Screen</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_Question_Header</name>
+        <label>Set Question Header</label>
+        <locationX>176</locationX>
+        <locationY>638</locationY>
+        <assignmentItems>
+            <assignToReference>CurrentScreenHeader</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Label.question_header</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Questions_Screen</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_Saver_Header</name>
+        <label>Set Saver Header</label>
+        <locationX>176</locationX>
+        <locationY>1358</locationY>
+        <assignmentItems>
+            <assignToReference>CurrentScreenHeader</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Label.saver_header</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>SaverScreen</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_Trigger_Rule_Header</name>
+        <label>Set Trigger Rule Header</label>
+        <locationX>176</locationX>
+        <locationY>398</locationY>
+        <assignmentItems>
+            <assignToReference>CurrentScreenHeader</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Label.trigger_rule_header</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Trigger_Rule_Screen</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_Validation_Header</name>
+        <label>Set Validation Header</label>
+        <locationX>176</locationX>
+        <locationY>878</locationY>
+        <assignmentItems>
+            <assignToReference>CurrentScreenHeader</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Label.validation_header</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Validation_Screen</targetReference>
+        </connector>
+    </assignments>
     <interviewLabel>Survey Flow {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Survey Flow</label>
     <processMetadataValues>
@@ -26,12 +122,12 @@
         <name>AdvanceSettingsScreen</name>
         <label>AdvanceSettingsScreen</label>
         <locationX>176</locationX>
-        <locationY>638</locationY>
+        <locationY>1238</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>SaverScreen</targetReference>
+            <targetReference>Set_Saver_Header</targetReference>
         </connector>
         <fields>
             <name>AdvanceSettingsScreenComponent</name>
@@ -86,12 +182,12 @@
         <name>Basic_Screen</name>
         <label>Basic Screen</label>
         <locationX>176</locationX>
-        <locationY>158</locationY>
+        <locationY>278</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>Trigger_Rule_Screen</targetReference>
+            <targetReference>Set_Trigger_Rule_Header</targetReference>
         </connector>
         <fields>
             <name>BasicScreenComponent</name>
@@ -126,12 +222,12 @@
         <name>Questions_Screen</name>
         <label>Questions Screen</label>
         <locationX>176</locationX>
-        <locationY>398</locationY>
+        <locationY>758</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>Validation_Screen</targetReference>
+            <targetReference>Set_Validation_Header</targetReference>
         </connector>
         <fields>
             <name>QuestionScreenComponent</name>
@@ -196,7 +292,7 @@
         <name>SaverScreen</name>
         <label>SaverScreen</label>
         <locationX>176</locationX>
-        <locationY>758</locationY>
+        <locationY>1478</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -244,12 +340,12 @@
         <name>Trigger_Rule_Screen</name>
         <label>Trigger Rule Screen</label>
         <locationX>176</locationX>
-        <locationY>278</locationY>
+        <locationY>518</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>Questions_Screen</targetReference>
+            <targetReference>Set_Question_Header</targetReference>
         </connector>
         <fields>
             <name>TriggerRuleScreenComponent</name>
@@ -274,12 +370,12 @@
         <name>Validation_Screen</name>
         <label>Validation Screen</label>
         <locationX>176</locationX>
-        <locationY>518</locationY>
+        <locationY>998</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>AdvanceSettingsScreen</targetReference>
+            <targetReference>Set_Advance_Header</targetReference>
         </connector>
         <fields>
             <name>ValidationScreenComponent</name>
@@ -310,10 +406,17 @@
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Basic_Screen</targetReference>
+            <targetReference>Set_Basic_Header</targetReference>
         </connector>
     </start>
     <status>Active</status>
+    <variables>
+        <name>CurrentScreenHeader</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
     <variables>
         <name>EmailRecieverList</name>
         <dataType>SObject</dataType>
@@ -334,8 +437,8 @@
         <name>LogoContentDocumentId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
     </variables>
     <variables>
         <name>QuestionList</name>
@@ -357,8 +460,8 @@
         <name>Survey</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
         <objectType>Survey__c</objectType>
     </variables>
     <variables>
@@ -373,8 +476,8 @@
         <name>SurveyTemplateId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
     </variables>
     <variables>
         <name>SurveyTemplateList</name>
