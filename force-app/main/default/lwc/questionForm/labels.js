@@ -17,6 +17,11 @@ import success from "@salesforce/label/c.success";
 import complete_this_field from "@salesforce/label/c.complete_this_field";
 import back from "@salesforce/label/c.back";
 import back_title from "@salesforce/label/c.back_title";
+import operator from "@salesforce/label/c.operator";
+import enter_compared_value from "@salesforce/label/c.enter_compared_value";
+import select_operator from "@salesforce/label/c.select_operator";
+import select_value from "@salesforce/label/c.select_value";
+import value from "@salesforce/label/c.value";
 
 const label = {
   edit_question_form_title,
@@ -37,7 +42,12 @@ const label = {
   success,
   complete_this_field,
   back,
-  back_title
+  back_title,
+  operator,
+  select_operator,
+  value,
+  select_value,
+  enter_compared_value
 }
 
 export {

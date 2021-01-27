@@ -77,6 +77,35 @@ export default class QuestionsBlock extends LightningElement {
     this.repaintPaginationButtons();
   }
 
+  
+
+  editQuestion(event) {
+    const position = event.detail;
+    const question = findQuestionByPosition(this.displayedQuestions, position);
+
+    const editEvent = new CustomEvent("edit", {
+      detail: { ...question }
+    });
+    this.dispatchEvent(editEvent);
+  }
+
+  addOptional(event) {
+    const position = event.detail;
+    const question = findQuestionByPosition(this.displayedQuestions, position);
+
+    const addOptionalEvent = new CustomEvent("addoptional", {
+      detail: question
+    });
+    this.dispatchEvent(addOptionalEvent);
+  }
+
+  deleteQuestion(event) {
+    const deleteEvent = new CustomEvent("delete", {
+      detail: event.detail
+    });
+    this.dispatchEvent(deleteEvent);
+  }
+
   clickFirstPage() {
     this.currentPage = 1;
     this.resolveDisplayedQuestions();
@@ -115,26 +144,6 @@ export default class QuestionsBlock extends LightningElement {
       this.isNextDisabled = false;
       this.isLastDisabled = false;
     }
-  }
-
-  editQuestion(event) {
-    const position = event.detail;
-    const question = findQuestionByPosition(this.displayedQuestions, position);
-
-    const editEvent = new CustomEvent("edit", {
-      detail: { ...question }
-    });
-    this.dispatchEvent(editEvent);
-  }
-
-  addOptional(event) {
-    const position = event.detail;
-    const question = findQuestionByPosition(this.displayedQuestions, position);
-
-    const addOptionalEvent = new CustomEvent("addoptional", {
-      detail: question
-    });
-    this.dispatchEvent(addOptionalEvent);
   }
 
   get isNeedSearchBar() {

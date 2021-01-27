@@ -10,14 +10,14 @@ import {label} from "./labels";
 import {
   getQuestionsBySurveyId,
   updateQuestionByPosition,
-  findQuestionsForDownSwap,
-  findQuestionsForUpSwap,
-  resetOptionsIds
+  resetOptionsIds,
+  updateValidationByPosition,
+  solveQuestionPosition,
+  solveDependentQuestionPosition,
+  resolveQuestionsByDeleted,
+  resolveValidationsByDeleted,
+  prepareValidationForPush
 } from "./questionScreenHelper.js";
-
-import {
-  findQuestionByPosition
-} from "c/formUtil";
 
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 
@@ -33,6 +33,7 @@ export default class QuestionScreen extends LightningElement {
   @track displayedTemplates = [];
   @track displayedTemplateQuestions = [];
   @track displayedStandardQuestions = [];
+  @track displayedValidations = [];
   @track templateOptionsValue = this.NO_TEMPLATE_VALUE;
   
   get questions() {
@@ -53,6 +54,10 @@ export default class QuestionScreen extends LightningElement {
 
   get selectedTemplateName() {
     return this.templateOptionsValue;
+  }
+
+  get validations() {
+    return this.displayedValidations;
   }
 
   @api 
@@ -80,11 +85,18 @@ export default class QuestionScreen extends LightningElement {
     this.templateOptionsValue = value;
   }
 
+  @api
+  set validations(value) {
+    this.displayedValidations = JSON.parse(JSON.stringify(value));
+  }
+
   @wire(getMaxQuestionAmount) maxQuestionsAmount;
   @wire(getMinQuestionAmount) minQuestionsAmount;
 
-  @track isEditMode;
-  @track questionForEdit;
+  @track isEditMode = false;
+  @track isDependentQuestion = false;
+  @track questionForForm;
+  @track validationForForm;
   @track editQuestionPosition;
   @track isError = false;
 
@@ -182,21 +194,30 @@ export default class QuestionScreen extends LightningElement {
   }
 
   addQuestion(event) {
-    const question = event.detail;
-    question.Position__c = this.displayedQuestions.length + 1;
+    const question = JSON.parse(JSON.stringify(event.detail));
+    this.pushQuestion(question);
+  }
+
+  addDependantQuestion(event) {
+    const validation = prepareValidationForPush(this.validations, event.detail);
 
     if(this.displayedQuestions.length === this.maxQuestionsAmount.data) {
       this.showToastMessage(label.unable_to_continue, label.limit_question_sexceeded, this.ERROR_VARIANT);
       return;
     }
-    this.displayedQuestions.push(question);
 
+    this.displayedQuestions = updateQuestionByPosition(
+      this.questions, validation.Related_Question__c.Position__c, validation.Related_Question__c);
+    
+    this.displayedQuestions.push(validation.Dependent_Question__c);
+    this.displayedValidations.push(validation);
+
+    this.clearFormAttributes();
     this.updateQuestions();
   }
 
   selectQuestion(event) {
     const question = JSON.parse(JSON.stringify(event.detail));
-    question.Position__c = this.displayedQuestions.length + 1;
     question.IsReusable__c = false;
     question.Id = null;
 
@@ -204,17 +225,88 @@ export default class QuestionScreen extends LightningElement {
       question.Question_Options__r = resetOptionsIds(question.Question_Options__r);
     }
 
-    this.displayedQuestions.push(question);
+    this.pushQuestion(question);
+  }
 
+  pushQuestion(question) {
+    question.Position__c = solveQuestionPosition(this.displayedQuestions);
+    question.Editable = true;
+
+    if(this.displayedQuestions.length === this.maxQuestionsAmount.data) {
+      this.showToastMessage(label.unable_to_continue, label.limit_question_sexceeded, this.ERROR_VARIANT);
+      return;
+    }
+
+    this.displayedQuestions.push(question);
     this.updateQuestions();
   }
 
   updateQuestions() {
+    this.displayedQuestions.sort((firstItem, secondItem) => {
+      return firstItem.Position__c.localeCompare(secondItem.Position__c);
+    })
+
     if(this.isQuestionBlockOpened) {
       this.template.querySelectorAll("c-questions-block")[0].updateQuestions(this.displayedQuestions);
     } else {
       this.openQuestionBlock();
     }
+  }
+  editQuestion(event) {
+    this.questionForForm = event.detail;
+    this.editQuestionPosition = this.questionForForm.Position__c
+    this.isEditMode = true;
+
+    if(this.questionForForm.VisibilityReason) {
+      this.isDependentQuestion = true;
+      this.validationForForm = this.displayedValidations.filter((validation) => {
+        return validation.Dependent_Question__c.Position__c === this.questionForForm.Position__c;
+      })[0];
+    }
+
+    this.openForm();
+  }
+
+  addOptional(event) {
+    this.validationForForm = {
+      Related_Question__c: JSON.parse(JSON.stringify(event.detail))
+    };
+    this.isDependentQuestion = true;
+    this.openForm();
+  }
+
+  updateQuestion(event) {
+    let value = event.detail;
+
+    if(!this.isDependentQuestion) {
+      this.displayedQuestions = updateQuestionByPosition(
+        this.questions, this.editQuestionPosition, value);
+    } else {
+      this.displayedQuestions = updateQuestionByPosition(
+        this.questions, this.editQuestionPosition, value.Dependent_Question__c);
+
+      this.displayedValidations = updateValidationByPosition(this.validations, value);
+    }
+    
+    this.clearFormAttributes();
+    this.openQuestionBlock();
+  }
+
+  clearFormAttributes() {
+    this.isEditMode = false;
+    this.isDependentQuestion = false;
+    this.questionForForm = {};
+    this.validationForForm = {};
+    this.editQuestionPosition = null;
+  }
+
+  deleteQuestions(event) {
+    const position = event.detail;
+
+    this.displayedQuestions = resolveQuestionsByDeleted(this.questions, position);
+    this.displayedValidations = resolveValidationsByDeleted(this.validations, position);
+
+    this.updateQuestions();
   }
 
   clickPreviousButton() {
@@ -244,30 +336,6 @@ export default class QuestionScreen extends LightningElement {
 
   setError() {
     this.isError = true;
-  }
-
-  editQuestion(event) {
-    this.questionForEdit = event.detail;
-    this.editQuestionPosition = this.questionForEdit.Position__c
-    this.isEditMode = true;
-    this.openForm();
-  }
-
-  addOptional() {
-
-  }
-
-  updateQuestion(event) {
-    const updatedQuestion = event.detail;
-
-    this.displayedQuestions = updateQuestionByPosition(
-      this.questions, 
-      this.editQuestionPosition, 
-      updatedQuestion);
-
-    this.isEditMode = false;
-    this.editQuestionPosition = null;
-    this.openQuestionBlock();
   }
 
   cancelEditQuestion() {
