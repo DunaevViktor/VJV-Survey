@@ -340,4 +340,16 @@ export default class QuestionScreen extends LightningElement {
     this.clearFormAttributes();
     this.openQuestionBlock();
   }
+
+  downQuestion(event) {
+    const position = event.detail;
+  }
+
+  upQuestion(event) {
+    const position = event.detail;
+
+    if(+position[position.length - 1] === 1) {
+      return;
+    }
+  }
 }
