@@ -1,0 +1,28 @@
+<template>
+    <div class="slds-text-title slds-p-left_small slds-p-bottom_xx-small">
+        <template if:true={question.Required__c}>
+            <abbr title="required" class="slds-required">*</abbr>
+        </template>
+        {question.Label__c}
+    </div>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-grid slds-col slds-size_1-of-2 slds-gutters slds-p-left_small slds-gutters_direct-xx-small ">
+            <template for:each={rating} for:item="rate">
+                <div class="slds-col" key={rate.rate}>
+                    <template if:true={rate.filled}>
+                        <div onclick={handleStarPick}>
+                            <lightning-icon data-item={rate.rate} icon-name="utility:favorite"
+                                alternative-text="Utility image" class="selected-rate"></lightning-icon>
+                        </div>
+                    </template>
+                    <template if:false={rate.filled}>
+                        <div onclick={handleStarPick}>
+                            <lightning-icon data-item={rate.rate} icon-name="utility:favorite"
+                                alternative-text="Utility image" class="not-selected-rate"></lightning-icon>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

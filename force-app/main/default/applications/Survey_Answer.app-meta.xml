@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0070D2</headerColor>
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <formFactors>Small</formFactors>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <label>Survey Answer</label>
+    <navType>Standard</navType>
+    <tabs>Survey_Answer</tabs>
+    <tabs>Survey__c</tabs>
+    <tabs>Question__c</tabs>
+    <tabs>Question_Option__c</tabs>
+    <tabs>Answer__c</tabs>
+    <tabs>Group_Answer__c</tabs>
+    <tabs>Validation__c</tabs>
+    <tabs>Related_Object__c</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>Survey_Answer_UtilityBar</utilityBar>
+</CustomApplication>

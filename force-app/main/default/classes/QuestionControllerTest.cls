@@ -3,7 +3,7 @@ public with sharing class QuestionControllerTest {
   private static final String TEST_NAME = 'Test Name';
   private static final String TEST_LABEL = 'Test Label';
   private static final String TEST_VALUE = 'Test Value';
-  private static final Integer TEST_POSITION = 1;
+  private static final String TEST_POSITION = '1';
 
   private static final Integer AMOUNT = 5;
 

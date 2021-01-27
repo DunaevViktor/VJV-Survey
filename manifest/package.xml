@@ -98,11 +98,14 @@
     </types>
     <types>
         <members>Survey</members>
+        <members>Survey_Answer</members>
         <name>CustomApplication</name>
     </types>
     <types>
         <members>Survey_UtilityBar</members>
         <members>Survey_Constructor</members>
+        <members>Survey_Answer_UtilityBar</members>
+        <members>Survey_Answer</members>
         <name>FlexiPage</name>
     </types>
     <version>50.0</version>

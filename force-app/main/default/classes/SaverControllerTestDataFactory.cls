@@ -32,7 +32,7 @@ public with sharing class SaverControllerTestDataFactory {
   public static List<Question__c> createQuestionList(Integer amount, String surveyId) {
     List<Question__c> questions = new List<Question__c>();
     for(Integer i = 0; i < amount; i++) {
-      Question__c question = SaverControllerTestDataFactory.createQuestion(surveyId, i+ 1);
+      Question__c question = SaverControllerTestDataFactory.createQuestion(surveyId, String.valueOf(i+ 1));
       questions.add(question);
     }
     return questions;
@@ -63,7 +63,7 @@ public with sharing class SaverControllerTestDataFactory {
     return option;
   }
 
-  private static Question__c createQuestion(String surveyId, Integer position) {
+  private static Question__c createQuestion(String surveyId, String position) {
     Question__c question = new Question__c();
     question.Label__c =  TEST_QUESTION_NAME;
     question.Type__c = TEST_QUESTION_TYPE;
