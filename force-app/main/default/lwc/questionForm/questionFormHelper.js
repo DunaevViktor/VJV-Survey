@@ -173,6 +173,11 @@ const resolveOperatorsByQuestionType = (operators, question) => {
   return resolvedOperators;
 }
 
+const buildVisibilityMessage = (validation) => {
+  return "Visible if '" + validation.Related_Question__c.Label__c 
+    + "' " + validation.Operator__c.toLowerCase() + " " + validation.Value__c;
+}
+
 export {
   transformQuestionTypes,
   isOptionEnabling,
@@ -185,5 +190,6 @@ export {
   setInputValidity,
   transformOperators,
   isNeedPicklist,
-  resolveOperatorsByQuestionType
+  resolveOperatorsByQuestionType,
+  buildVisibilityMessage
 }

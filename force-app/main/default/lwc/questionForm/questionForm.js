@@ -20,14 +20,14 @@ import {
   setInputValidity,
   transformOperators,
   isNeedPicklist,
-  resolveOperatorsByQuestionType
+  resolveOperatorsByQuestionType,
+  buildVisibilityMessage
 } from "./questionFormHelper.js";
 
 import {
   operatorTypes,
   booleanPicklistOptions,
 } from "c/formUtil";
-import { generateRecordInputForCreate } from "lightning/uiRecordApi";
 
 export default class QuestionForm extends LightningElement {
   label = label;
@@ -43,7 +43,7 @@ export default class QuestionForm extends LightningElement {
 
   EMPTRY_STRING = "";
 
-  @track question;
+  @track question = {};
   @track validation = {};
 
   @api isEditMode;
@@ -70,7 +70,7 @@ export default class QuestionForm extends LightningElement {
   operators;
   @track displayedOperators;
   @track selectedOperator;
-  @track isFirstQuestionPicklist;
+  @track isMainQuestionPicklist;
 
   connectedCallback() {
     if(this.isEditMode) {
@@ -114,28 +114,13 @@ export default class QuestionForm extends LightningElement {
       this.operators = transformOperators(data.values);
       if(this.isDependentQuestion) {
         this.setDisplayedOperators();
-        this.isFirstQuestionPicklist = isNeedPicklist(
+        this.isMainQuestionPicklist = isNeedPicklist(
           this.validationForForm.Related_Question__c, 
           this.validationForForm.Operator__c);
       }
     } else if (error) {
       this.sendErrorNotification();
     }
-  }
-
-  setDisplayedOperators() {
-    const resolvedOperators = resolveOperatorsByQuestionType(
-      this.operators, 
-      this.validationForForm.Related_Question__c);
-
-    this.displayedOperators = [...resolvedOperators];
-  }
-
-  setSelectedOperator(event) {
-    this.selectedOperator = event.detail.value;
-    this.isFirstQuestionPicklist = isNeedPicklist(
-      this.validationForForm.Related_Question__c, 
-      this.selectedOperator);
   }
 
   get questionsOptions() {
@@ -169,6 +154,14 @@ export default class QuestionForm extends LightningElement {
     this.setOptionsEnabling();
   }
 
+  setDisplayedOperators() {
+    const resolvedOperators = resolveOperatorsByQuestionType(
+      this.operators, 
+      this.validationForForm.Related_Question__c);
+
+    this.displayedOperators = [...resolvedOperators];
+  }
+
   handleLabel(event) {
     this.question.Label__c = event.detail.value;
   }
@@ -186,6 +179,13 @@ export default class QuestionForm extends LightningElement {
     for (const value of event.detail.value) {
       this.question[value] = true;
     }
+  }
+
+  handleSelectOperator(event) {
+    this.selectedOperator = event.detail.value;
+    this.isMainQuestionPicklist = isNeedPicklist(
+      this.validationForForm.Related_Question__c, 
+      this.selectedOperator);
   }
 
   setOptionsEnabling() {
@@ -270,13 +270,20 @@ export default class QuestionForm extends LightningElement {
     this.getQuestionAttributes();
 
     if(!this.isDependentQuestion) {
-      const addEvent = new CustomEvent("add", {
-        detail: { ...this.question }
-      });
-      this.dispatchEvent(addEvent);
-      return;
+      this.sendMainQuestion("add");
+    } else {
+      this.sendDependatQuestion("adddependant");
     }
-    
+  }
+
+  sendMainQuestion(message) {
+    const questionEvent = new CustomEvent(message, {
+      detail: { ...this.question }
+    });
+    this.dispatchEvent(questionEvent);
+  }
+
+  sendDependatQuestion(message) {
     const input = this.template.querySelector(".validationInput");
     input.reportValidity();
 
@@ -290,14 +297,12 @@ export default class QuestionForm extends LightningElement {
       Operator__c: this.selectedOperator,
       Value__c: input.value
     };
-    validation.Dependent_Question__c.VisibilityReason = 
-    "Visible if '" + validation.Related_Question__c.Label__c + "' " + validation.Operator__c.toLowerCase() + " " + validation.Value__c;
+    validation.Dependent_Question__c.VisibilityReason = buildVisibilityMessage(validation);
 
-    const addEvent = new CustomEvent("adddependant", {
-      detail: validation
+    const addEvent = new CustomEvent(message, {
+      detail: { ...validation }
     });
     this.dispatchEvent(addEvent);
-
   }
 
   cancelQuestionEdit() {
@@ -311,34 +316,10 @@ export default class QuestionForm extends LightningElement {
     this.getQuestionAttributes();
 
     if(!this.isDependentQuestion) {
-      const editEvent = new CustomEvent("edit", {
-        detail: { ...this.question }
-      });
-      this.dispatchEvent(editEvent);
-      return;
+      this.sendMainQuestion("edit");
+    } else {
+      this.sendDependatQuestion("edit");
     }
-
-    const input = this.template.querySelector(".validationInput");
-    input.reportValidity();
-
-    if (!input.value) {
-      return;
-    }
-    
-    const validation = {
-      ...this.validationForForm,
-      Dependent_Question__c: this.question,
-      Operator__c: this.selectedOperator,
-      Value__c: input.value
-    };
-    validation.Dependent_Question__c.VisibilityReason = 
-    "Visible if '" + validation.Related_Question__c.Label__c + "' " + validation.Operator__c.toLowerCase() + " " + validation.Value__c;
-
-    const editEvent = new CustomEvent("edit", {
-      detail: { ...validation }
-    });
-    this.dispatchEvent(editEvent);
-
   }
 
   getQuestionAttributes() {

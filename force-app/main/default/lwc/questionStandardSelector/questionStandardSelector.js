@@ -33,8 +33,7 @@ export default class QuestionStandardSelector extends LightningElement {
 
     if(actionName === this.SELECT_OPTION_VARIANT) {
       this.addStandardQuestion(row);
-    }
-      
+    } 
   }
 
   addStandardQuestion(row) {

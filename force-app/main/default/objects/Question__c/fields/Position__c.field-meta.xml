@@ -4,10 +4,9 @@
     <description>The position of the question in the survey.</description>
     <externalId>false</externalId>
     <label>Position</label>
-    <precision>3</precision>
-    <required>true</required>
-    <scale>0</scale>
+    <length>25</length>
+    <required>false</required>
     <trackTrending>false</trackTrending>
-    <type>Number</type>
+    <type>Text</type>
     <unique>false</unique>
 </CustomField>
