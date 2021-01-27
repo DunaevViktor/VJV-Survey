@@ -81,22 +81,6 @@
             <targetReference>Trigger_Rule_Screen</targetReference>
         </connector>
     </assignments>
-    <assignments>
-        <name>Set_Validation_Header</name>
-        <label>Set Validation Header</label>
-        <locationX>176</locationX>
-        <locationY>878</locationY>
-        <assignmentItems>
-            <assignToReference>CurrentScreenHeader</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Label.validation_header</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Validation_Screen</targetReference>
-        </connector>
-    </assignments>
     <interviewLabel>Survey Flow {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Survey Flow</label>
     <processMetadataValues>
@@ -227,7 +211,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>Set_Validation_Header</targetReference>
+            <targetReference>Set_Advance_Header</targetReference>
         </connector>
         <fields>
             <name>QuestionScreenComponent</name>
