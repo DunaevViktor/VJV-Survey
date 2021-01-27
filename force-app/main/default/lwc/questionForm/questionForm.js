@@ -305,9 +305,13 @@ export default class QuestionForm extends LightningElement {
   }
 
   cancelQuestionEdit() {
-    const cancelEvent = new CustomEvent("canseledit");
+    const cancelEvent = new CustomEvent("canceledit");
     this.dispatchEvent(cancelEvent);
-    this.clearQuestion();
+  }
+
+  handleBack() {
+    const backEvent = new CustomEvent("back");
+    this.dispatchEvent(backEvent);
   }
 
   updateQuestion() {

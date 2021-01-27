@@ -1,6 +1,7 @@
 import { LightningElement, wire, api, track } from 'lwc';
 import getMaxQuestionAmount from "@salesforce/apex/SurveySettingController.getMaxQuestionAmount";
 import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getPageQuestionAmount";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 import {label} from "./labels.js";
 import { findQuestionByPosition } from "c/formUtil";
@@ -13,11 +14,13 @@ export default class QuestionsBlock extends LightningElement {
 
   @api questions;
 
-  @track displayedQuestions;
-  @track filteredDisplayedQuestions;
+  @track displayedQuestions = [];
+  displayedQuestionsCopy = [];
+  @track filteredDisplayedQuestions = [];
 
   @track hasQuestions = false;
   @track isNeedPagination = false;
+  @track isSearchMode = false;
 
   @track currentPage = 1;
   @track amountPages;
@@ -25,7 +28,6 @@ export default class QuestionsBlock extends LightningElement {
   @track isPreviousDisabled = true;
   @track isNextDisabled = true;
   @track isLastDisabled = true;
-
   
   connectedCallback() {
     this.displayedQuestions = this.questions;
@@ -46,6 +48,10 @@ export default class QuestionsBlock extends LightningElement {
     }
   }
 
+  get labelOfSearchedItems() {
+    return label.number_of_found_items + ': ' + this.displayedQuestions.length;
+  }
+
   get availableQuestionsAmount() {
     return +this.maxQuestionsAmount.data - +this.displayedQuestions.length;
   }
@@ -64,7 +70,7 @@ export default class QuestionsBlock extends LightningElement {
   }
 
   resolveQuestionsSubinfo() {
-    this.hasQuestions = this.displayedQuestions.length > 0;
+    this.hasQuestions = (this.displayedQuestions.length > 0) || (this.isSearchMode);
     this.amountPages =  Math.ceil(this.displayedQuestions.length / +this.pageQuestionsAmount.data);
     this.isNeedPagination = this.displayedQuestions.length > +this.pageQuestionsAmount.data;
 
@@ -138,5 +144,50 @@ export default class QuestionsBlock extends LightningElement {
       this.isNextDisabled = false;
       this.isLastDisabled = false;
     }
+  }
+
+  get isNeedSearchBar() {
+    return (this.isSearchMode || this.isNeedPagination);
+  }
+
+  handleQuestionsSearch() {
+    const keyword = this.template.querySelector('lightning-input[data-my-id="keyword"]').value;
+    if(this.isEmpty(keyword)) {
+      this.isSearchMode = false;
+      this.showToast('', label.search_keyword_cant_be_empty, 'error');
+      return;
+    }
+    this.currentPage = 1;
+    if(!this.isSearchMode) {
+      this.displayedQuestionsCopy = [];
+      this.displayedQuestionsCopy = [...this.displayedQuestions];
+    }
+    this.isSearchMode = true;    
+    const questionSearchResult = this.displayedQuestionsCopy.filter(
+      question => question.Label__c.includes(keyword)
+    );
+    console.log('search res'); 
+    console.log(questionSearchResult);
+    this.displayedQuestions = [];    
+    this.displayedQuestions = [...questionSearchResult];
+    this.resolveDisplayedQuestions();
+  }
+
+  handleClearQuestionSearch() {
+    this.currentPage = 1;
+    this.template.querySelector('lightning-input[data-my-id="keyword"]').value = "";
+    this.isSearchMode = false;
+    this.displayedQuestions = [];
+    this.displayedQuestions = [...this.displayedQuestionsCopy];
+    this.resolveDisplayedQuestions();
+  }
+
+  isEmpty(value) {
+    return value === "";
+  }
+
+  showToast(title, message, variant) {
+    const event = new ShowToastEvent({title, message, variant, mode: "dismissable"});
+    this.dispatchEvent(event);
   }
 }

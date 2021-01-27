@@ -15,6 +15,8 @@ import error_few_options from "@salesforce/label/c.error_few_options";
 import errorTitle from "@salesforce/label/c.error";
 import success from "@salesforce/label/c.success";
 import complete_this_field from "@salesforce/label/c.complete_this_field";
+import back from "@salesforce/label/c.back";
+import back_title from "@salesforce/label/c.back_title";
 import operator from "@salesforce/label/c.operator";
 import enter_compared_value from "@salesforce/label/c.enter_compared_value";
 import select_operator from "@salesforce/label/c.select_operator";
@@ -39,6 +41,8 @@ const label = {
   errorTitle,
   success,
   complete_this_field,
+  back,
+  back_title,
   operator,
   select_operator,
   value,

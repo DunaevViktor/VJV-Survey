@@ -336,4 +336,9 @@ export default class QuestionScreen extends LightningElement {
   setError() {
     this.isError = true;
   }
+
+  cancelEditQuestion() {
+    this.isEditMode = false;
+    this.currentMode = this.QUESTION_BLOCK;
+  }
 }

@@ -71,6 +71,20 @@
         <value>Add Trigger Rule</value>
     </labels>
     <labels>
+        <fullName>back</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Back</shortDescription>
+        <value>Back</value>
+    </labels>
+    <labels>
+        <fullName>back_title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Return to previous stage</shortDescription>
+        <value>Return to previous stage</value>
+    </labels>
+    <labels>
         <fullName>can_be_resending</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -216,6 +230,13 @@
         <protected>true</protected>
         <shortDescription>enter option value</shortDescription>
         <value>Enter option value</value>
+    </labels>
+    <labels>
+        <fullName>enter_search_keyword</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Enter search keyword</shortDescription>
+        <value>Enter search keyword</value>
     </labels>
     <labels>
         <fullName>error</fullName>
@@ -463,6 +484,13 @@
         <value>number</value>
     </labels>
     <labels>
+        <fullName>number_of_found_items</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Number of found items</shortDescription>
+        <value>Number of found items</value>
+    </labels>
+    <labels>
         <fullName>object</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -561,6 +589,13 @@
         <value>Remove selected option</value>
     </labels>
     <labels>
+        <fullName>restrict_duplicate_rules</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Duplicate trigger rules are not allowed.</shortDescription>
+        <value>Duplicate trigger rules are not allowed.</value>
+    </labels>
+    <labels>
         <fullName>save_changes</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -617,6 +652,13 @@
         <value>Search</value>
     </labels>
     <labels>
+        <fullName>search_keyword_cant_be_empty</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Search keyword can&apos;t be empty</shortDescription>
+        <value>Search keyword can&apos;t be empty</value>
+    </labels>
+    <labels>
         <fullName>select</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -650,6 +692,13 @@
         <protected>true</protected>
         <shortDescription>selected survey template</shortDescription>
         <value>Selected Survey Template</value>
+    </labels>
+    <labels>
+        <fullName>should_have_two_questions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>should have two questions</shortDescription>
+        <value>Your survey should have at least two questions</value>
     </labels>
     <labels>
         <fullName>specify_question</fullName>
