@@ -27,18 +27,4 @@ export default class QuestionCard extends LightningElement {
     });
     this.dispatchEvent(addOptionalEvent);
   }
-
-  downQuestion() {
-    const downEvent = new CustomEvent("down", {
-      detail: this.question.Position__c
-    });
-    this.dispatchEvent(downEvent);
-  }
-
-  upQuestion() {
-    const upEvent = new CustomEvent("up", {
-      detail: this.question.Position__c
-    });
-    this.dispatchEvent(upEvent);
-  }
 }

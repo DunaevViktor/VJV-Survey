@@ -63,6 +63,10 @@ export default class QuestionsBlock extends LightningElement {
     return +this.maxQuestionsAmount.data - +this.displayedQuestions.length;
   }
 
+  get isNeedSearchBar() {
+    return (this.isSearchMode || this.isNeedPagination);
+  }
+  
   changePage(event) {
     this.currentPage = event.detail;
     this.resolveDisplayedQuestions();
@@ -149,10 +153,6 @@ export default class QuestionsBlock extends LightningElement {
       this.isNextDisabled = false;
       this.isLastDisabled = false;
     }
-  }
-
-  get isNeedSearchBar() {
-    return (this.isSearchMode || this.isNeedPagination);
   }
 
   handleQuestionsSearch() {
