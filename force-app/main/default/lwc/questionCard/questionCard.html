@@ -8,36 +8,36 @@
                     size="x-small" 
                     onclick={deleteQuestion}>
     </lightning-icon>
-    <lightning-icon icon-name="utility:edit" 
-                    alternative-text={label.edit} 
-                    title={label.edit} 
+    <template if:true={question.Editable}>
+      <lightning-icon icon-name="utility:edit" 
+        alternative-text={label.edit}
+        title={label.edit}
+        class="slds-float_right" 
+        size="x-small" 
+        onclick={editQuestion}>
+      </lightning-icon>
+    </template>
+    <lightning-icon icon-name="utility:add" 
+                    alternative-text={label.add_dependent_question} 
+                    title={label.add_dependent_question} 
                     class="slds-float_right" 
                     size="x-small" 
-                    onclick={editQuestion}>
-    </lightning-icon>
-    <lightning-icon icon-name="utility:chevrondown" 
-                    alternative-text={label.down} 
-                    title={label.down} 
-                    class="slds-float_right" 
-                    size="x-small" 
-                    onclick={downQuestion}>
-    </lightning-icon>
-    <lightning-icon icon-name="utility:chevronup" 
-                    alternative-text={label.up} 
-                    title={label.up} 
-                    class="slds-float_right" 
-                    size="x-small" 
-                    onclick={upQuestion}>
+                    onclick={addOptionalQuestion}>
     </lightning-icon>
 
     <template if:true={question.Required__c}>
       <span class="required">*</span>
     </template>
 
-    <span>{question.Label__c}</span>
+    <span>{question.Position__c}. {question.Label__c}</span>
     <br />
 
     <lightning-badge label={question.Type__c}></lightning-badge>
+
+    <template if:true={question.VisibilityReason}>
+      <br />
+      <span>{question.VisibilityReason}</span>
+    </template>
 
     <template if:true={question.Question_Options__r}>
       <br />

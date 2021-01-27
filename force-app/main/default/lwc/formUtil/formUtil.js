@@ -31,7 +31,7 @@ const booleanPicklistOptions = [
 
 const findQuestionByPosition = (questions, position) => {
   return questions.filter((question) => {
-    return +question.Position__c === position;
+    return question.Position__c === position;
   })[0];
 }
 

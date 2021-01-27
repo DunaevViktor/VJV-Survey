@@ -12,7 +12,7 @@ public with sharing class AnswerControllerTest {
         Group_Answer__c testGroupAnswer = new Group_Answer__c(Survey__c = testSurvey.Id);
         insert testGroupAnswer;
 
-        Question__c testQuestion = new Question__c(Survey__c = testSurvey.Id, Label__c = 'Test label', Position__c = 2);
+        Question__c testQuestion = new Question__c(Survey__c = testSurvey.Id, Label__c = 'Test label', Position__c = '2');
         insert testQuestion;
     }
 
@@ -33,7 +33,7 @@ public with sharing class AnswerControllerTest {
     private static Id getTestQuestionId() {
         Question__c testQuestion = [SELECT Id
                                     FROM Question__c
-                                    WHERE Position__c = 2];
+                                    WHERE Position__c = '2'];
         return testQuestion.Id;      
     }
 

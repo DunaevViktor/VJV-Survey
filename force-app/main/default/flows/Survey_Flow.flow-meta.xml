@@ -26,7 +26,7 @@
         <name>AdvanceSettingsScreen</name>
         <label>AdvanceSettingsScreen</label>
         <locationX>176</locationX>
-        <locationY>638</locationY>
+        <locationY>518</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -131,7 +131,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>Validation_Screen</targetReference>
+            <targetReference>AdvanceSettingsScreen</targetReference>
         </connector>
         <fields>
             <name>QuestionScreenComponent</name>
@@ -167,6 +167,12 @@
                     <elementReference>TemplateQuestionList</elementReference>
                 </value>
             </inputParameters>
+            <inputParameters>
+                <name>validations</name>
+                <value>
+                    <elementReference>ValidationList</elementReference>
+                </value>
+            </inputParameters>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>QuestionList</assignToReference>
@@ -188,6 +194,10 @@
                 <assignToReference>TemplateQuestionList</assignToReference>
                 <name>templateQuestions</name>
             </outputParameters>
+            <outputParameters>
+                <assignToReference>ValidationList</assignToReference>
+                <name>validations</name>
+            </outputParameters>
         </fields>
         <showFooter>false</showFooter>
         <showHeader>true</showHeader>
@@ -196,7 +206,7 @@
         <name>SaverScreen</name>
         <label>SaverScreen</label>
         <locationX>176</locationX>
-        <locationY>758</locationY>
+        <locationY>638</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -265,42 +275,6 @@
             <outputParameters>
                 <assignToReference>TriggerRuleList</assignToReference>
                 <name>triggerRules</name>
-            </outputParameters>
-        </fields>
-        <showFooter>false</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
-        <name>Validation_Screen</name>
-        <label>Validation Screen</label>
-        <locationX>176</locationX>
-        <locationY>518</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <connector>
-            <targetReference>AdvanceSettingsScreen</targetReference>
-        </connector>
-        <fields>
-            <name>ValidationScreenComponent</name>
-            <extensionName>c:validationScreen</extensionName>
-            <fieldType>ComponentInstance</fieldType>
-            <inputParameters>
-                <name>questions</name>
-                <value>
-                    <elementReference>QuestionList</elementReference>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>validations</name>
-                <value>
-                    <elementReference>ValidationList</elementReference>
-                </value>
-            </inputParameters>
-            <isRequired>true</isRequired>
-            <outputParameters>
-                <assignToReference>ValidationList</assignToReference>
-                <name>validations</name>
             </outputParameters>
         </fields>
         <showFooter>false</showFooter>
