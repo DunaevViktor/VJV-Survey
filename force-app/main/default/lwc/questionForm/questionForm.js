@@ -14,7 +14,6 @@ import {
   filterOptionsByValue,
   filterOptionsByValueAndIndex,
   findOptionIndexByValue,
-  updateOptionsValue,
   deleteFromOptions,
   clearInput,
   setInputValidity,
@@ -66,7 +65,6 @@ export default class QuestionForm extends LightningElement {
   @track editOptionIndex;
 
   displayedTypes;
-
   operators;
   @track displayedOperators;
   @track selectedOperator;
@@ -227,23 +225,19 @@ export default class QuestionForm extends LightningElement {
     const input = this.template.querySelector(".option-input");
     if(!this.isOptionCorrect(input)) return;
 
-    this.question.Question_Options__r = updateOptionsValue(
-      this.question.Question_Options__r, 
-      this.editOptionValue, 
-      input.value);
-
+    this.question.Question_Options__r[this.editOptionIndex].Value__c = input.value;
     this.cancelOptionEdit();
   }
 
   deleteOption(event) {
-    this.question.Question_Options__r = deleteFromOptions(this.question.Question_Options__r, event.detail);
-
     if(this.editOptionValue.localeCompare(event.detail) === 0) {
       this.cancelOptionEdit();
     } else {
       const index = findOptionIndexByValue(this.question.Question_Options__r, event.detail);
       if(index < this.editOptionIndex) this.editOptionIndex--;
     }
+    
+    this.question.Question_Options__r = deleteFromOptions(this.question.Question_Options__r, event.detail);
   }
 
   isOptionCorrect(input) {
@@ -292,7 +286,7 @@ export default class QuestionForm extends LightningElement {
 
     const validation = {
       ...this.validationForForm,
-      Dependent_Question__c: this.question,
+      Dependent_Question__c: JSON.parse(JSON.stringify(this.question)),
       Operator__c: this.selectedOperator,
       Value__c: input.value
     };
@@ -304,14 +298,9 @@ export default class QuestionForm extends LightningElement {
     this.dispatchEvent(addEvent);
   }
 
-  cancelQuestionEdit() {
-    const cancelEvent = new CustomEvent("canceledit");
-    this.dispatchEvent(cancelEvent);
-  }
-
   handleBack() {
-    const backEvent = new CustomEvent("back");
-    this.dispatchEvent(backEvent);
+    const cancelEvent = new CustomEvent("back");
+    this.dispatchEvent(cancelEvent);
   }
 
   updateQuestion() {

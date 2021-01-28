@@ -48,80 +48,6 @@ const transformQuestionTypes = (types) => {
   });
 }
 
-const isOptionEnabling = (selectedType) => {
-  return selectedType.toLowerCase().localeCompare(questionTypes.CHECKBOX.toLowerCase()) === 0 ||
-         selectedType.toLowerCase().localeCompare(questionTypes.RADIOBUTTON.toLowerCase()) === 0 ||
-         selectedType.toLowerCase().localeCompare(questionTypes.PICKLIST.toLowerCase()) === 0;
-}
-
-const filterOptionsByValue = (options, value) => {
-  return options.filter(
-    (option) => {
-      return option.Value__c.localeCompare(value) === 0;
-    }
-  );
-}
-
-const filterOptionsByValueAndIndex = (options, value, editiIndex) => {
-  return options.filter(
-    (option, index) => {
-      return option.Value__c.localeCompare(value) === 0 && index !== editiIndex;
-    }
-  );
-}
-
-const findOptionIndexByValue = (options, value) => {
-  let idx;
-
-  options.forEach((option, index) => {
-    if(option.Value__c.localeCompare(value) === 0) {
-      idx = index;
-    }
-  });
-
-  return idx;
-}
-
-const updateOptionsValue = (options, oldValue, newValue) => {
-  return options.map(
-    (option) => {
-      if (option.Value__c.localeCompare(oldValue) === 0) {
-        option.Value__c = newValue;
-      }
-      return option;
-    }
-  );
-}
-
-const deleteFromOptions = (options, selectedValue) => {
-  return options.filter(
-    (option) => {
-      return option.Value__c.localeCompare(selectedValue) !== 0;
-    }
-  );
-}
-
-const clearInput = (input) => {
-  input.setCustomValidity("");
-  input.reportValidity();
-  input.value = "";
-  input.blur();
-}
-
-const setInputValidity = (input, message) => {
-  input.setCustomValidity(message);
-  input.reportValidity();
-}
-
-const transformOperators = (operators) => {
-  return operators.map((item) => {
-    return {
-      label: item.label,
-      value: item.value
-    };
-  });
-}
-
 const isNeedPicklist = (firstQuestion, selectedOperator) => {
   return (
     firstQuestion.Type__c.toLowerCase() ===
@@ -173,6 +99,69 @@ const resolveOperatorsByQuestionType = (operators, question) => {
   return resolvedOperators;
 }
 
+const isOptionEnabling = (selectedType) => {
+  return selectedType.toLowerCase().localeCompare(questionTypes.CHECKBOX.toLowerCase()) === 0 ||
+         selectedType.toLowerCase().localeCompare(questionTypes.RADIOBUTTON.toLowerCase()) === 0 ||
+         selectedType.toLowerCase().localeCompare(questionTypes.PICKLIST.toLowerCase()) === 0;
+}
+
+const filterOptionsByValue = (options, value) => {
+  return options.filter(
+    (option) => {
+      return option.Value__c.localeCompare(value) === 0;
+    }
+  );
+}
+
+const filterOptionsByValueAndIndex = (options, value, editiIndex) => {
+  return options.filter(
+    (option, index) => {
+      return option.Value__c.localeCompare(value) === 0 && index !== editiIndex;
+    }
+  );
+}
+
+const findOptionIndexByValue = (options, value) => {
+  let idx;
+
+  options.forEach((option, index) => {
+    if(option.Value__c.localeCompare(value) === 0) {
+      idx = index;
+    }
+  });
+
+  return idx;
+}
+
+const deleteFromOptions = (options, selectedValue) => {
+  return options.filter(
+    (option) => {
+      return option.Value__c.localeCompare(selectedValue) !== 0;
+    }
+  );
+}
+
+const clearInput = (input) => {
+  input.setCustomValidity("");
+  input.reportValidity();
+  input.value = "";
+  input.blur();
+}
+
+const setInputValidity = (input, message) => {
+  input.setCustomValidity(message);
+  input.reportValidity();
+}
+
+const transformOperators = (operators) => {
+  return operators.map((item) => {
+    return {
+      label: item.label,
+      value: item.value
+    };
+  });
+}
+
 const buildVisibilityMessage = (validation) => {
   return "Visible if '" + validation.Related_Question__c.Label__c 
     + "' " + validation.Operator__c.toLowerCase() + " " + validation.Value__c;
@@ -184,7 +173,6 @@ export {
   filterOptionsByValue,
   filterOptionsByValueAndIndex,
   findOptionIndexByValue,
-  updateOptionsValue,
   deleteFromOptions,
   clearInput,
   setInputValidity,

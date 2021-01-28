@@ -115,6 +115,20 @@ export default class QuestionsBlock extends LightningElement {
     this.dispatchEvent(deleteEvent);
   }
 
+  downQuestion(event) {
+    const deleteEvent = new CustomEvent("down", {
+      detail: event.detail
+    });
+    this.dispatchEvent(deleteEvent);
+  }
+
+  upQuestion(event) {
+    const deleteEvent = new CustomEvent("up", {
+      detail: event.detail
+    });
+    this.dispatchEvent(deleteEvent);
+  }
+
   clickFirstPage() {
     this.currentPage = 1;
     this.resolveDisplayedQuestions();
