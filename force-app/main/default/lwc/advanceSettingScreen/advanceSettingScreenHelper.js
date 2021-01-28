@@ -4,7 +4,7 @@ const TYPE_TEXT = "text"
 
 const columns = [
     { label: label.type, fieldName: "Type__c", type: TYPE_TEXT },
-    { label: "Value", fieldName: "Value__c", type: TYPE_TEXT },
+    { label: "Name", fieldName: "Name", type: TYPE_TEXT },
     {
         type: "button",
         initialWidth: 100,
