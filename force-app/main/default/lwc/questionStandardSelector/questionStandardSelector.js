@@ -1,5 +1,5 @@
 import { LightningElement, api, track } from 'lwc';
-import {transformStandardQuestions} from "./questionStandardSelectorHelper.js";
+import {columns, transformStandardQuestions} from "./questionStandardSelectorHelper.js";
 import {label} from "./labels.js";
 
 export default class QuestionStandardSelector extends LightningElement {
@@ -11,19 +11,7 @@ export default class QuestionStandardSelector extends LightningElement {
   @api standardQuestions;
   @track displayedQuestions;
 
-  columns = [
-    { label: label.question, fieldName: 'Label__c' },
-    { label: label.type, fieldName: 'Type__c'},
-    { label: label.options, fieldName: 'Question_Options__r'},
-    {
-        type: 'button',
-        initialWidth: 100,
-        typeAttributes: {
-            label: label.select,
-            name: 'select'
-        }
-    },
-  ];
+  columns = columns;
 
   connectedCallback() {
     this.displayedQuestions = transformStandardQuestions(this.standardQuestions);
