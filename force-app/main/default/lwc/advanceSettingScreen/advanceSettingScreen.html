@@ -1,7 +1,5 @@
 <template>
 
-    <c-screen-header header-text={label.advance_setting_header}></c-screen-header>
-
     <lightning-input type="checkbox" label={label.template} checked={__survey.IsStandard__c}
         onchange={handleIsStandardSurveyChange}></lightning-input>
 
@@ -96,7 +94,7 @@
     <template if:true={hasReceivers}>
         <div class="data-table">
             <div class="text">Email Receivers:</div>
-            <lightning-datatable key-field="Value__c" data={receivers} columns={columns} onrowaction={handleRowAction}
+            <lightning-datatable key-field="Value__c" data={copyReceivers} columns={columns} onrowaction={handleRowAction}
                 hide-checkbox-column>
             </lightning-datatable>
         </div>

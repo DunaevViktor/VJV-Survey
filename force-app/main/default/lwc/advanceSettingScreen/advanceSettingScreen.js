@@ -36,6 +36,8 @@ export default class AdvanceSettingScreen extends LightningElement {
     @track hasMembers = false;
     @track searchError = false;
 
+    copyReceivers = [];
+
     groupId = "";
     surveyId = "";
     campaignId = "";
@@ -203,7 +205,6 @@ export default class AdvanceSettingScreen extends LightningElement {
         this.hasReceivers = this.receivers && this.receivers.length > 0;
     }
 
-    //delete in table ER
     handleRowAction(event) {
         const actionName = event.detail.action.name;
         const row = event.detail.row;
@@ -219,6 +220,11 @@ export default class AdvanceSettingScreen extends LightningElement {
 
     deleteRow(row) {
         const { Value__c } = row;
+
+        this.copyReceivers = this.copyReceivers.filter((receiver) => {
+            return receiver.Value__c !== Value__c;
+        });
+
         this.receivers = this.receivers.filter((receiver) => {
             return receiver.Value__c !== Value__c;
         });
@@ -226,7 +232,6 @@ export default class AdvanceSettingScreen extends LightningElement {
         this.setIsHasReseivers();
     }
 
-    //change group and add group ER
     handleGroupChange(event) {
         this.groupId = event.detail.value;
     }
@@ -243,6 +248,11 @@ export default class AdvanceSettingScreen extends LightningElement {
         receiver.Value__c = this.displayedGroups.find((group) => {
             return this.groupId === group.Id;
         }).Name;
+
+        let copyReceiver = {};
+        copyReceiver = {...receiver};
+        copyReceiver.Name = receiver.Value__c;
+        this.copyReceivers = [...this.copyReceivers, copyReceiver];
 
         this.receivers = [...this.receivers, receiver];
 
@@ -268,15 +278,14 @@ export default class AdvanceSettingScreen extends LightningElement {
         return true;
     }
 
-    //methods for all validations
     callReportValidity(input, message) {
         input.setCustomValidity(message);
         input.reportValidity();
     }
-
-    //record logic 
+ 
     handleAddRecordReceiver(row){
         const { Id } = row;
+        const { Name } = row;
         
         if (!this.isRecordValid(Id)) {
             return;
@@ -285,6 +294,11 @@ export default class AdvanceSettingScreen extends LightningElement {
         const receiver = {};
         receiver.Type__c = this.SINGLE_RECORD_VARIANT;
         receiver.Value__c = Id;
+
+        let copyReceiver = {};
+        copyReceiver = {...receiver};
+        copyReceiver.Name = Name;
+        this.copyReceivers = [...this.copyReceivers, copyReceiver];
 
         this.receivers = [...this.receivers, receiver];
         this.setIsHasReseivers();
@@ -310,7 +324,6 @@ export default class AdvanceSettingScreen extends LightningElement {
         this.dispatchEvent(event);
     }
 
-    //campaign logic
     handleCampaignChange(event) {
         this.campaignId = event.detail.value;
     }
@@ -327,6 +340,11 @@ export default class AdvanceSettingScreen extends LightningElement {
         receiver.Value__c = this.displayedCampaigns.find((campaign) => {
             return this.campaignId === campaign.Id;
         }).Name;
+
+        let copyReceiver = {};
+        copyReceiver = {...receiver};
+        copyReceiver.Name = receiver.Value__c;
+        this.copyReceivers = [...this.copyReceivers, copyReceiver];
 
         this.receivers = [...this.receivers, receiver];
 
@@ -352,12 +370,10 @@ export default class AdvanceSettingScreen extends LightningElement {
         return true;
     }
 
-    //standard survey
     handleIsStandardSurveyChange(event) {
         this.__survey.IsStandard__c = event.target.checked;
     }
 
-    //connect to survey
     handleSurveyChange(event) {
         this.__survey.Related_To__c = event.detail.value;
         this.surveyId = event.detail.value;
@@ -371,7 +387,6 @@ export default class AdvanceSettingScreen extends LightningElement {
         }
     }
 
-    //pagination
     clickPreviousButton() {
         const backNavigationEvent = new FlowNavigationBackEvent();
         this.dispatchEvent(backNavigationEvent);
