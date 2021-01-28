@@ -10,7 +10,7 @@
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
     <label>Survey Answer</label>
     <navType>Standard</navType>
-    <tabs>Survey_Answer</tabs>
+    <tabs>Survey_Answer_Form</tabs>
     <tabs>Survey__c</tabs>
     <tabs>Question__c</tabs>
     <tabs>Question_Option__c</tabs>

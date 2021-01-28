@@ -30,9 +30,9 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
+        <editable>true</editable>
         <field>Question__c.Position__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -179,7 +179,7 @@
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
     <tabSettings>
-        <tab>Survey_Answer</tab>
+        <tab>Survey_Answer_Form</tab>
         <visibility>Visible</visibility>
     </tabSettings>
     <tabSettings>

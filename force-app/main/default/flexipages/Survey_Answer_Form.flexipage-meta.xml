@@ -9,7 +9,7 @@
         <name>main</name>
         <type>Region</type>
     </flexiPageRegions>
-    <masterLabel>Survey Answer</masterLabel>
+    <masterLabel>Survey Answer Form</masterLabel>
     <template>
         <name>flexipage:defaultAppHomeTemplate</name>
     </template>
