@@ -2,10 +2,10 @@
     outline: none;
 }
 
-.gray-background {
+.header-background {
     background-color: rgb(201, 63, 63);
 }
 
-.white-background {
-    background-color: white;
+.main-background {
+    background-color: rgb(245, 245, 245);
 }
