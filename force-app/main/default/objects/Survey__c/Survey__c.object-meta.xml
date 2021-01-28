@@ -166,7 +166,6 @@
         <searchResultsAdditionalFields>Logo__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Background_Color__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>IsStandard__c</searchResultsAdditionalFields>
-        <searchResultsAdditionalFields>IsResending__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Related_To__c</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
