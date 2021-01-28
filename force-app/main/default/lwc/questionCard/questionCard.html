@@ -28,13 +28,15 @@
                     alternative-text={label.down} 
                     title={label.down} 
                     class="slds-float_right" 
-                    size="x-small" >
+                    size="x-small"
+                    onclick={downQuestion}>
     </lightning-icon>
     <lightning-icon icon-name="utility:chevronup" 
                     alternative-text={label.up} 
                     title={label.up} 
                     class="slds-float_right" 
-                    size="x-small" >
+                    size="x-small"
+                    onclick={upQuestion}>
     </lightning-icon>
 
     <template if:true={question.Required__c}>

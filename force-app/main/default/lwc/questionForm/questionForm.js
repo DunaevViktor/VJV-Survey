@@ -292,7 +292,7 @@ export default class QuestionForm extends LightningElement {
 
     const validation = {
       ...this.validationForForm,
-      Dependent_Question__c: this.question,
+      Dependent_Question__c: JSON.parse(JSON.stringify(this.question)),
       Operator__c: this.selectedOperator,
       Value__c: input.value
     };

@@ -5,7 +5,11 @@ const resetOptionsIds = (options) => {
   });
 }
 
-const getQuestionsBySurveyId = (templateQuestions, surveyId) => {
+const getQuestionsBySurveyId = (templateQuestions, surveyId, noTemplateValue) => {
+  if (surveyId.localeCompare(noTemplateValue) === 0) {
+    return [];
+  } 
+
   return templateQuestions.filter(
     (question) => {
       return (
@@ -17,6 +21,7 @@ const getQuestionsBySurveyId = (templateQuestions, surveyId) => {
       question.Id = null;
       question.Position__c = '' + (index + 1);
       question.Editable = true;
+      question.IsVisible__c = true;
 
       if(question.Question_Options__r) {
         question.Question_Options__r = resetOptionsIds(question.Question_Options__r);
@@ -121,6 +126,55 @@ const prepareValidationForPush = (validations, newValidation) => {
   return newValidation;
 }
 
+const updatePosition = (position, upperPosition, downPosition) => {
+  if(position.startsWith(upperPosition)) {
+    const teil = position.slice(downPosition.length);
+    return downPosition + teil;
+  } else if(position.startsWith(downPosition)) {
+    const teil = position.slice(upperPosition.length);
+    return upperPosition + teil;
+  }
+  return position;
+}
+
+const swapQuestions = (questions, upperPosition, downPosition) => {
+  return questions.map((question) => {
+    question.Position__c = updatePosition(question.Position__c, upperPosition, downPosition)
+    return question;
+  });
+}
+
+const swapValidations = (validations, upperPosition, downPosition) => {
+  return validations.map((validation) => {
+    validation.Related_Question__c.Position__c = 
+    updatePosition(validation.Related_Question__c.Position__c, upperPosition, downPosition);
+    validation.Dependent_Question__c.Position__c = 
+    updatePosition(validation.Dependent_Question__c.Position__c, upperPosition, downPosition);
+    return validation;
+  });
+}
+
+const findSwapIndex = (questions, position, action) => {
+  const rightPart = position.slice(-1);
+  const leftPart = position.slice(0, -1);
+  let questionIndex;
+
+  for(let i = 0; i < questions.length; i++) {
+    const question = questions[i];
+
+    if(question.Position__c.startsWith(leftPart) && question.Position__c.length === position.length) {
+      const currentRightPart = +question.Position__c.slice(-1);
+
+      if(currentRightPart + (1 * action) === +rightPart) {
+        questionIndex = i;
+        break;
+      }
+    }
+  }
+
+  return questionIndex;
+}
+
 export {
   getQuestionsBySurveyId,
   updateQuestionByPosition,
@@ -130,5 +184,8 @@ export {
   resolvePositionByDeleted,
   resolveQuestionsByDeleted,
   resolveValidationsByDeleted,
-  prepareValidationForPush
+  prepareValidationForPush,
+  swapQuestions,
+  swapValidations,
+  findSwapIndex 
 }
