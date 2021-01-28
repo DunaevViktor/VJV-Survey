@@ -3,11 +3,6 @@
     <description>A set of permissions for working with reports and dashboards.</description>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Email_Receiver__c.IsSend__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>Group_Answer__c.IsLinked__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -24,6 +19,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Question__c.IsVisible__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Question__c.Position__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -59,11 +59,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Survey__c.Description__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Survey__c.IsResending__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>

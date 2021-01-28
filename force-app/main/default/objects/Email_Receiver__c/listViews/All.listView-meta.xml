@@ -4,7 +4,6 @@
     <columns>NAME</columns>
     <columns>Type__c</columns>
     <columns>Value__c</columns>
-    <columns>IsSend__c</columns>
     <columns>Survey__c</columns>
     <filterScope>Everything</filterScope>
     <label>All</label>

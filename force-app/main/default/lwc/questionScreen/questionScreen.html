@@ -16,7 +16,9 @@
         questions={displayedQuestions}
         onedit={editQuestion}
         onaddoptional={addOptional}
-        ondelete={deleteQuestions}>
+        ondelete={deleteQuestions}
+        ondown={downQuestion}
+        onup={upQuestion}>
       </c-questions-block>
     </template>    
 
@@ -27,7 +29,6 @@
         question-for-form={questionForForm}
         validation-for-form={validationForForm}
         onadd={addQuestion}
-        oncanceledit={cancelEditQuestion}
         onadddependant={addDependantQuestion}
         onedit={updateQuestion}
         onback={cancelEditQuestion}

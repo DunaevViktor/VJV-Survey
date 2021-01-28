@@ -12,7 +12,7 @@ public with sharing class TriggerHandler {
             for(String fieldName: fieldMap.keyset()){
                 if(newRecord.get(fieldName) != oldRecord.get(fieldName)){
                     Schema.DisplayType fieldType = fieldMap.get(fieldName).getDescribe().getType();
-                    changedField = new ChangedFieldWrapper(fieldName, newRecord.get(fieldName), fieldType);
+                    changedField = new ChangedFieldWrapper(fieldName, fieldType, newRecord);
                     changedRecordsFields.add(changedField);
                 }
             }

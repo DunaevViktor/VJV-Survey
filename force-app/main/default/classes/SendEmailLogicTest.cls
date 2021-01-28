@@ -8,7 +8,7 @@ public with sharing class SendEmailLogicTest {
     private static final String EMAIL_BODY_ERROR = 'No email body was created.';
     private static final String CONTAIN_ERROR = 'The specified object will not be found.';
     
-    @TestSetup
+    /*@TestSetup
     static void makeData(){
         SurveyEmailConfig__c config = new SurveyEmailConfig__c(Name = 'Main',
                                                                Display_Name__c = 'Display Name',
@@ -128,5 +128,5 @@ public with sharing class SendEmailLogicTest {
         Map<String, List<User>> userMap = SendEmailLogic.initializeUserByGroupMap();
         Boolean actualUser = userMap.containsKey('TestGroup');
         System.assertEquals(true, actualUser, CONTAIN_ERROR);
-    }
+    }*/
 }
