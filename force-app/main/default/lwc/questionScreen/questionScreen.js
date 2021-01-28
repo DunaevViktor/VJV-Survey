@@ -34,6 +34,8 @@ export default class QuestionScreen extends LightningElement {
   @track displayedStandardQuestions = [];
   @track displayedValidations = [];
   @track templateOptionsValue = this.NO_TEMPLATE_VALUE;
+
+  @track isDialogVisible = false;
   
   get questions() {
     return this.displayedQuestions;
@@ -339,5 +341,9 @@ export default class QuestionScreen extends LightningElement {
   cancelEditQuestion() {
     this.clearFormAttributes();
     this.openQuestionBlock();
+  }
+
+  handleCongirmationPopupClick() {
+
   }
 }

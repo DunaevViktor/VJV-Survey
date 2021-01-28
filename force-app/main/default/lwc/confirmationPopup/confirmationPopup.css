@@ -1,0 +1,11 @@
+.no-outline {
+    outline: none;
+}
+
+.gray-background {
+    background-color: rgb(206, 80, 80);
+}
+
+.white-background {
+    background-color: white;
+}

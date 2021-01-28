@@ -46,6 +46,8 @@ export default class QuestionForm extends LightningElement {
   @track question = {};
   @track validation = {};
 
+  @track isDialogVisible = false;
+
   @api isEditMode;
   @api isDependentQuestion;
   @api questionForForm;
@@ -236,6 +238,7 @@ export default class QuestionForm extends LightningElement {
   }
 
   deleteOption(event) {
+    
     this.question.Question_Options__r = deleteFromOptions(this.question.Question_Options__r, event.detail);
 
     if(this.editOptionValue.localeCompare(event.detail) === 0) {
