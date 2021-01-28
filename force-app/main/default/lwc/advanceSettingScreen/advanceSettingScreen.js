@@ -36,7 +36,7 @@ export default class AdvanceSettingScreen extends LightningElement {
     @track hasMembers = false;
     @track searchError = false;
 
-    copyReceivers = [];
+    @track copyReceivers = [];
 
     groupId = "";
     surveyId = "";
@@ -98,6 +98,10 @@ export default class AdvanceSettingScreen extends LightningElement {
         return this.receivers;
     }
 
+    get copySurveyReceivers() {
+        return this.copyReceivers;
+    }
+
     get groups() {
         return this.displayedGroups;
     }
@@ -141,6 +145,10 @@ export default class AdvanceSettingScreen extends LightningElement {
     @api set surveyReceivers(value) {
         this.receivers = JSON.parse(JSON.stringify(value));
     }
+    
+    @api set copySurveyReceivers(value) {
+        this.copyReceivers = JSON.parse(JSON.stringify(value));
+    }
 
     @api set groups(value) {
         this.displayedGroups = JSON.parse(JSON.stringify(value));
@@ -158,8 +166,8 @@ export default class AdvanceSettingScreen extends LightningElement {
         this.setIsHasMembers();
 
         this.isHasSurveys = this.displayedSurveys.length > 0;
-        this.isHasGroups = this.displayedGroups > 0;
-        this.isHasCampaigns = this.displayedCampaigns > 0;
+        this.isHasGroups = this.displayedGroups.length > 0;
+        this.isHasCampaigns = this.displayedCampaigns.length > 0;
     }
 
     initSurveys() {
@@ -249,8 +257,7 @@ export default class AdvanceSettingScreen extends LightningElement {
             return this.groupId === group.Id;
         }).Name;
 
-        let copyReceiver = {};
-        copyReceiver = {...receiver};
+        let copyReceiver = {...receiver};
         copyReceiver.Name = receiver.Value__c;
         this.copyReceivers = [...this.copyReceivers, copyReceiver];
 
@@ -284,8 +291,7 @@ export default class AdvanceSettingScreen extends LightningElement {
     }
  
     handleAddRecordReceiver(row){
-        const { Id } = row;
-        const { Name } = row;
+        const { Id, Name } = row;
         
         if (!this.isRecordValid(Id)) {
             return;
@@ -295,8 +301,7 @@ export default class AdvanceSettingScreen extends LightningElement {
         receiver.Type__c = this.SINGLE_RECORD_VARIANT;
         receiver.Value__c = Id;
 
-        let copyReceiver = {};
-        copyReceiver = {...receiver};
+        let copyReceiver = {...receiver};
         copyReceiver.Name = Name;
         this.copyReceivers = [...this.copyReceivers, copyReceiver];
 
@@ -341,8 +346,7 @@ export default class AdvanceSettingScreen extends LightningElement {
             return this.campaignId === campaign.Id;
         }).Name;
 
-        let copyReceiver = {};
-        copyReceiver = {...receiver};
+        let copyReceiver = {...receiver};
         copyReceiver.Name = receiver.Value__c;
         this.copyReceivers = [...this.copyReceivers, copyReceiver];
 
