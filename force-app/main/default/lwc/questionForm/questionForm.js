@@ -45,8 +45,6 @@ export default class QuestionForm extends LightningElement {
   @track question = {};
   @track validation = {};
 
-  @track isDialogVisible = false;
-
   @api isEditMode;
   @api isDependentQuestion;
   @api questionForForm;
