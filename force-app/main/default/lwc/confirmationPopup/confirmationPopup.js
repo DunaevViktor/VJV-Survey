@@ -2,11 +2,11 @@ import {LightningElement, api} from 'lwc';
 
 export default class ConfirmationDialog extends LightningElement {
     @api visible;
-    @api title; //modal title
-    @api name; //reference name of the component
-    @api message; //modal message
-    @api confirmLabel; //confirm button label
-    @api cancelLabel; //cancel button label
+    @api title; 
+    @api name;
+    @api message;
+    @api confirmLabel;
+    @api cancelLabel;
     @api originalMessage;
 
     handleClick(event){

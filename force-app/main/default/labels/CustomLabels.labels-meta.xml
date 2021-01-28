@@ -204,13 +204,6 @@
         <value>Delete</value>
     </labels>
     <labels>
-        <fullName>delete_button</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>delete button</shortDescription>
-        <value>Delete</value>
-    </labels>
-    <labels>
         <fullName>delete_trigger_rule</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -762,13 +755,6 @@
         <protected>true</protected>
         <shortDescription>specify question</shortDescription>
         <value>Specify question</value>
-    </labels>
-    <labels>
-        <fullName>standard_survey</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>standard survey</shortDescription>
-        <value>Standard survey</value>
     </labels>
     <labels>
         <fullName>success</fullName>
