@@ -71,6 +71,18 @@ const solveDependentQuestionPosition = (validations, question) => {
   return question.Position__c + "." + (+amount + 1);
 }
 
+const prepareSelectedQuestion = (selectedQuestion) => {
+  const question = JSON.parse(JSON.stringify(selectedQuestion));
+  question.IsReusable__c = false;
+  question.Id = null;
+
+  if(question.Question_Options__r) {
+    question.Question_Options__r = resetOptionsIds(question.Question_Options__r);
+  }
+
+  return question;
+}
+
 const resolvePositionByDeleted = (position, leftPart, rightPart) => {
   const index = leftPart.length;
   const value = position[index]; 
@@ -86,7 +98,8 @@ const resolveQuestionsByDeleted = (questions, position) => {
 
   return questions.filter((question) => {
     return !question.Position__c.startsWith(position);
-  }).map((question) => {
+  })
+  .map((question) => {
     if(question.Position__c.startsWith(leftPart)) {
       question.Position__c = resolvePositionByDeleted(
         question.Position__c, 
@@ -103,12 +116,14 @@ const resolveValidationsByDeleted = (validations, position) => {
   return validations.filter((validation) => {
     return !validation.Related_Question__c.Position__c.startsWith(position) &&
       !validation.Dependent_Question__c.Position__c.startsWith(position);
-  }).map((validation) => {
+  })
+  .map((validation) => {
     if(validation.Related_Question__c.Position__c.startsWith(leftPart)) {
       validation.Related_Question__c.Position__c = resolvePositionByDeleted(
         validation.Related_Question__c.Position__c, 
         leftPart, rightPart);
-    } else if (validation.Dependent_Question__c.Position__c.startsWith(leftPart)) {
+    }
+    if(validation.Dependent_Question__c.Position__c.startsWith(leftPart)) {
       validation.Dependent_Question__c.Position__c = resolvePositionByDeleted(
         validation.Dependent_Question__c.Position__c, 
         leftPart, rightPart);
@@ -181,6 +196,7 @@ export {
   resetOptionsIds,
   solveQuestionPosition,
   updateValidationByPosition,
+  prepareSelectedQuestion,
   resolvePositionByDeleted,
   resolveQuestionsByDeleted,
   resolveValidationsByDeleted,

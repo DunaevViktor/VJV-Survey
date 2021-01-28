@@ -10,9 +10,9 @@ import {label} from "./labels";
 import {
   getQuestionsBySurveyId,
   updateQuestionByPosition,
-  resetOptionsIds,
   updateValidationByPosition,
   solveQuestionPosition,
+  prepareSelectedQuestion,
   resolveQuestionsByDeleted,
   resolveValidationsByDeleted,
   prepareValidationForPush,
@@ -197,7 +197,7 @@ export default class QuestionScreen extends LightningElement {
   addDependantQuestion(event) {
     const validation = prepareValidationForPush(this.validations, event.detail);
 
-    if(this.displayedQuestions.length === this.maxQuestionsAmount.data) {
+    if(this.displayedQuestions.length === +this.maxQuestionsAmount.data) {
       this.showToastMessage(label.unable_to_continue, label.limit_question_sexceeded, this.ERROR_VARIANT);
       return;
     }
@@ -214,14 +214,7 @@ export default class QuestionScreen extends LightningElement {
   }
 
   selectQuestion(event) {
-    const question = JSON.parse(JSON.stringify(event.detail));
-    question.IsReusable__c = false;
-    question.Id = null;
-
-    if(question.Question_Options__r) {
-      question.Question_Options__r = resetOptionsIds(question.Question_Options__r);
-    }
-
+    const question = prepareSelectedQuestion(event.detail);
     this.pushQuestion(question);
   }
 
@@ -229,7 +222,7 @@ export default class QuestionScreen extends LightningElement {
     question.Position__c = solveQuestionPosition(this.displayedQuestions);
     question.Editable = true;
 
-    if(this.displayedQuestions.length === this.maxQuestionsAmount.data) {
+    if(this.displayedQuestions.length === +this.maxQuestionsAmount.data) {
       this.showToastMessage(label.unable_to_continue, label.limit_question_sexceeded, this.ERROR_VARIANT);
       return;
     }
@@ -274,7 +267,7 @@ export default class QuestionScreen extends LightningElement {
   }
 
   updateQuestion(event) {
-    let value = event.detail;
+    const value = event.detail;
 
     if(!this.isDependentQuestion) {
       this.displayedQuestions = updateQuestionByPosition(this.questions, this.editQuestionPosition, value);
@@ -324,9 +317,8 @@ export default class QuestionScreen extends LightningElement {
 
   upQuestion(event) {
     const position = event.detail;
-    const rightPart = position.slice(-1);
 
-    if(+rightPart === 1) {
+    if(+position.slice(-1) === 1) {
       return;
     }
 
