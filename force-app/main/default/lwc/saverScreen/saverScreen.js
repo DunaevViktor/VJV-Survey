@@ -161,9 +161,6 @@ export default class SaverScreen extends LightningElement {
 
   sendImmediatelyEmails(receiverList){
     sendEmails({emailReceiverList: receiverList})
-    .then(() => {
-        console.log('All OK!');
-    })
     .catch((error) => {
         console.log(error);
         this.isError = true;

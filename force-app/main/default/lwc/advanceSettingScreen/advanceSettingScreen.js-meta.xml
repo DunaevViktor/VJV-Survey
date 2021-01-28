@@ -14,6 +14,7 @@
             <property name="surveys" type="@salesforce/schema/Survey__c[]" label="Surveys for connecting"/>
             <property name="groups" type="@salesforce/schema/Group[]" label="Groups"/>
             <property name="campaigns" type="@salesforce/schema/Campaign[]" label="Campaigns"/>
+            <property name="copySurveyReceivers" type="@salesforce/schema/Email_Receiver__c[]" label="View Email Receivers"/>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

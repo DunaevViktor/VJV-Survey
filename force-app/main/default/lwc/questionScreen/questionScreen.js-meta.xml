@@ -12,7 +12,7 @@
             <property name="templates" type="@salesforce/schema/Survey__c[]" label="Survey Templates"/>
             <property name="templateQuestions" type="@salesforce/schema/Question__c[]" label="Template Questions"/>
             <property name="standardQuestions" type="@salesforce/schema/Question__c[]" label="Standard Questions"/>
-            <property name="questions" type="@salesforce/schema/Question__c[]" label="Questions"/>     
+            <property name="questions" type="@salesforce/schema/Question__c[]" label="Questions"/>
             <property name="validations" type="@salesforce/schema/Validation__c[]" label="Validation rules"/>
         </targetConfig>
     </targetConfigs>

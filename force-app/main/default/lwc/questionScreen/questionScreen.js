@@ -10,12 +10,15 @@ import {label} from "./labels";
 import {
   getQuestionsBySurveyId,
   updateQuestionByPosition,
-  resetOptionsIds,
   updateValidationByPosition,
   solveQuestionPosition,
+  prepareSelectedQuestion,
   resolveQuestionsByDeleted,
   resolveValidationsByDeleted,
-  prepareValidationForPush
+  prepareValidationForPush,
+  swapQuestions,
+  swapValidations,
+  findSwapIndex 
 } from "./questionScreenHelper.js";
 
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
@@ -180,14 +183,8 @@ export default class QuestionScreen extends LightningElement {
     }
 
     this.templateOptionsValue = event.detail;
-
-    if (this.templateOptionsValue.localeCompare(this.NO_TEMPLATE_VALUE) === 0) {
-      this.displayedQuestions = [];
-    } else {
-      this.displayedQuestions = getQuestionsBySurveyId(
-        this.templateQuestions, 
-        this.templateOptionsValue);
-    }
+    this.displayedQuestions = getQuestionsBySurveyId(
+      this.templateQuestions, this.templateOptionsValue, this.NO_TEMPLATE_VALUE);
 
     this.updateQuestions();
   }
@@ -200,15 +197,16 @@ export default class QuestionScreen extends LightningElement {
   addDependantQuestion(event) {
     const validation = prepareValidationForPush(this.validations, event.detail);
 
-    if(this.displayedQuestions.length === this.maxQuestionsAmount.data) {
+    if(this.displayedQuestions.length === +this.maxQuestionsAmount.data) {
       this.showToastMessage(label.unable_to_continue, label.limit_question_sexceeded, this.ERROR_VARIANT);
       return;
     }
 
     this.displayedQuestions = updateQuestionByPosition(
-      this.questions, validation.Related_Question__c.Position__c, validation.Related_Question__c);
+      this.questions, validation.Related_Question__c.Position__c, 
+      JSON.parse(JSON.stringify(validation.Related_Question__c)));
     
-    this.displayedQuestions.push(validation.Dependent_Question__c);
+    this.displayedQuestions.push(JSON.parse(JSON.stringify(validation.Dependent_Question__c)));
     this.displayedValidations.push(validation);
 
     this.clearFormAttributes();
@@ -216,14 +214,7 @@ export default class QuestionScreen extends LightningElement {
   }
 
   selectQuestion(event) {
-    const question = JSON.parse(JSON.stringify(event.detail));
-    question.IsReusable__c = false;
-    question.Id = null;
-
-    if(question.Question_Options__r) {
-      question.Question_Options__r = resetOptionsIds(question.Question_Options__r);
-    }
-
+    const question = prepareSelectedQuestion(event.detail);
     this.pushQuestion(question);
   }
 
@@ -231,7 +222,7 @@ export default class QuestionScreen extends LightningElement {
     question.Position__c = solveQuestionPosition(this.displayedQuestions);
     question.Editable = true;
 
-    if(this.displayedQuestions.length === this.maxQuestionsAmount.data) {
+    if(this.displayedQuestions.length === +this.maxQuestionsAmount.data) {
       this.showToastMessage(label.unable_to_continue, label.limit_question_sexceeded, this.ERROR_VARIANT);
       return;
     }
@@ -276,14 +267,13 @@ export default class QuestionScreen extends LightningElement {
   }
 
   updateQuestion(event) {
-    let value = event.detail;
+    const value = event.detail;
 
     if(!this.isDependentQuestion) {
-      this.displayedQuestions = updateQuestionByPosition(
-        this.questions, this.editQuestionPosition, value);
+      this.displayedQuestions = updateQuestionByPosition(this.questions, this.editQuestionPosition, value);
     } else {
       this.displayedQuestions = updateQuestionByPosition(
-        this.questions, this.editQuestionPosition, value.Dependent_Question__c);
+        this.questions, this.editQuestionPosition, JSON.parse(JSON.stringify(value.Dependent_Question__c)));
 
       this.displayedValidations = updateValidationByPosition(this.validations, value);
     }
@@ -305,6 +295,38 @@ export default class QuestionScreen extends LightningElement {
 
     this.displayedQuestions = resolveQuestionsByDeleted(this.questions, position);
     this.displayedValidations = resolveValidationsByDeleted(this.validations, position);
+
+    this.updateQuestions();
+  }
+
+  downQuestion(event) {
+    const position = event.detail;
+
+    const downQuestionIndex = findSwapIndex(this.questions, position, -1);
+    if(!downQuestionIndex) {
+      return;
+    }
+
+    const downPosition = this.questions[downQuestionIndex].Position__c;
+
+    this.displayedQuestions = swapQuestions(this.questions, position, downPosition);
+    this.displayedValidations = swapValidations(this.validations, position, downPosition);
+
+    this.updateQuestions();
+  }
+
+  upQuestion(event) {
+    const position = event.detail;
+
+    if(+position.slice(-1) === 1) {
+      return;
+    }
+
+    const upperQuestionIndex = findSwapIndex(this.questions, position, 1);
+    const upperPosition = this.questions[upperQuestionIndex].Position__c;
+
+    this.displayedQuestions = swapQuestions(this.questions, upperPosition, position);
+    this.displayedValidations = swapValidations(this.validations, upperPosition, position);
 
     this.updateQuestions();
   }

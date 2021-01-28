@@ -5,7 +5,7 @@
         <name>Set_Advance_Header</name>
         <label>Set Advance Header</label>
         <locationX>176</locationX>
-        <locationY>1118</locationY>
+        <locationY>878</locationY>
         <assignmentItems>
             <assignToReference>CurrentScreenHeader</assignToReference>
             <operator>Assign</operator>
@@ -53,7 +53,7 @@
         <name>Set_Saver_Header</name>
         <label>Set Saver Header</label>
         <locationX>176</locationX>
-        <locationY>1358</locationY>
+        <locationY>1118</locationY>
         <assignmentItems>
             <assignToReference>CurrentScreenHeader</assignToReference>
             <operator>Assign</operator>
@@ -106,7 +106,7 @@
         <name>AdvanceSettingsScreen</name>
         <label>AdvanceSettingsScreen</label>
         <locationX>176</locationX>
-        <locationY>1238</locationY>
+        <locationY>998</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -147,6 +147,12 @@
                     <elementReference>CampaignList</elementReference>
                 </value>
             </inputParameters>
+            <inputParameters>
+                <name>copySurveyReceivers</name>
+                <value>
+                    <elementReference>ViewERList</elementReference>
+                </value>
+            </inputParameters>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>EmailRecieverList</assignToReference>
@@ -167,6 +173,10 @@
             <outputParameters>
                 <assignToReference>CampaignList</assignToReference>
                 <name>campaigns</name>
+            </outputParameters>
+            <outputParameters>
+                <assignToReference>ViewERList</assignToReference>
+                <name>copySurveyReceivers</name>
             </outputParameters>
         </fields>
         <showFooter>false</showFooter>
@@ -296,7 +306,7 @@
         <name>SaverScreen</name>
         <label>SaverScreen</label>
         <locationX>176</locationX>
-        <locationY>1478</locationY>
+        <locationY>1238</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -486,5 +496,13 @@
         <isInput>true</isInput>
         <isOutput>true</isOutput>
         <objectType>Validation__c</objectType>
+    </variables>
+    <variables>
+        <name>ViewERList</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Email_Receiver__c</objectType>
     </variables>
 </Flow>

@@ -1,7 +1,6 @@
 import delete_button from "@salesforce/label/c.delete";
 import add from "@salesforce/label/c.add";
 import type from "@salesforce/label/c.type";
-import advance_setting_header from "@salesforce/label/c.advance_setting_header";
 import error_choose_some_group from "@salesforce/label/c.error_choose_some_group";
 import error_already_added_this_group from "@salesforce/label/c.error_already_added_this_group";
 import user_groups from "@salesforce/label/c.user_groups";
@@ -22,7 +21,6 @@ import next from "@salesforce/label/c.next";
 //import error_already_added_this_email from "@salesforce/label/c.error_already_added_this_email";
 
 const label = {
-    advance_setting_header,
     type,
     delete_button,
     error_choose_some_group,
