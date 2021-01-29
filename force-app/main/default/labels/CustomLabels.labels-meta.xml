@@ -890,19 +890,18 @@
         <value>Value</value>
     </labels>
     <labels>
-<<<<<<< HEAD
         <fullName>visible_if</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>visible if</shortDescription>
         <value>Visible if</value>
-=======
+    </labels>
+    <labels>
         <fullName>yes</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>yes</shortDescription>
         <value>yes</value>
->>>>>>> develop
     </labels>
     <labels>
         <fullName>you_can_create</fullName>
