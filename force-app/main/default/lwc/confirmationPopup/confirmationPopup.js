@@ -10,7 +10,7 @@ export default class ConfirmationDialog extends LightningElement {
     @api originalMessage;
 
     handleClick(event){
-        let finalEvent = {
+        const finalEvent = {
             originalMessage: this.originalMessage,
             status: event.target.name
         };
