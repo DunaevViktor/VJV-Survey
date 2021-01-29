@@ -414,6 +414,13 @@
         <value>Logo image</value>
     </labels>
     <labels>
+        <fullName>more</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>more</shortDescription>
+        <value>more</value>
+    </labels>
+    <labels>
         <fullName>msg_no_public_groups_found</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -846,6 +853,13 @@
         <protected>true</protected>
         <shortDescription>value</shortDescription>
         <value>Value</value>
+    </labels>
+    <labels>
+        <fullName>visible_if</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>visible if</shortDescription>
+        <value>Visible if</value>
     </labels>
     <labels>
         <fullName>you_can_create</fullName>

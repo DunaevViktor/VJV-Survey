@@ -1,4 +1,5 @@
 import {questionTypes, operatorTypes} from "c/formUtil";
+import { label } from "./labels.js";
 
 const typesDescription = [
   {
@@ -163,7 +164,7 @@ const transformOperators = (operators) => {
 }
 
 const buildVisibilityMessage = (validation) => {
-  return "Visible if '" + validation.Related_Question__c.Label__c 
+  return  label.visible_if + "'" + validation.Related_Question__c.Label__c 
     + "' " + validation.Operator__c.toLowerCase() + " " + validation.Value__c;
 }
 
