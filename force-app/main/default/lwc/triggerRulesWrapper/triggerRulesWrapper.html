@@ -1,17 +1,6 @@
 <template>
   <div class="slds-p-left_x-small">{labels.tip_for_user}</div>
 
-  <template for:each={triggerRules} for:item="rule">
-      <c-single-trigger-rule
-        key={rule.id}
-        number={rule.id}
-        is-delete-available={isDeleteAvailable}
-        ondeletetriggerrule={handleDeleteTriggerRule}
-        data-my-id={rule.id}
-        rule={rule.rule}
-      ></c-single-trigger-rule>
-  </template>
-
   <template if:true={isPlusVisible}>
     <lightning-layout
       horizontal-align="end"
@@ -26,6 +15,17 @@
       ></lightning-button>
     </lightning-layout>
   </template>
+
+  <template for:each={triggerRules} for:item="rule">
+      <c-single-trigger-rule
+        key={rule.id}
+        number={rule.id}
+        is-delete-available={isDeleteAvailable}
+        ondeletetriggerrule={handleDeleteTriggerRule}
+        data-my-id={rule.id}
+        rule={rule.rule}
+      ></c-single-trigger-rule>
+  </template>  
 
   <hr class="slds-m-bottom_small" />
 

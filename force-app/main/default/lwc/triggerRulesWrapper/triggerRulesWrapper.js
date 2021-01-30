@@ -35,7 +35,7 @@ export default class TriggerRulesWrapper extends LightningElement {
       });
   }
   
-  connectedCallback() {
+  connectedCallback() { 
     if (this.rules && this.rules.length > 0) {
       let newtriggerRules = [];
       this._rules = this.rules;
@@ -61,7 +61,7 @@ export default class TriggerRulesWrapper extends LightningElement {
     const newTriggerRule = {
       id: triggerRuleId
     }
-    this.triggerRules.push(newTriggerRule);
+    this.triggerRules.unshift(newTriggerRule);
     this.updateIsDeleteAvailableState();
   }
 
