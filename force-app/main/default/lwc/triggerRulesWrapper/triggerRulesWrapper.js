@@ -85,6 +85,16 @@ export default class TriggerRulesWrapper extends LightningElement {
     return triggerRulesAmount === this.maxTriggerRulesAmount ? false : true;
   }
 
+  get labelOfAvailableItems() {
+    const availableTriggerRulesAmount = this.maxTriggerRulesAmount - this.triggerRules.length;
+    switch(availableTriggerRulesAmount) {
+      case 1: return this.labels.you_can_create + " " 
+        + availableTriggerRulesAmount + " " + this.labels.more + " " + this.labels.trigger_rule + ".";
+      default: return this.labels.you_can_create + " " 
+        + availableTriggerRulesAmount + " " + this.labels.more + " " + this.labels.trigger_rules + ".";
+    }
+  }
+
   handleNavigateNext() {    
     this._rules = this.getNewTriggerRules();
     if(!areTriggerRulesFilledCompletely(this._rules)) {

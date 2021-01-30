@@ -1,17 +1,20 @@
 <template>
   <div class="slds-p-left_x-small">{labels.tip_for_user}</div>
 
+  <hr class="slds-m-bottom_small" />
+
   <template if:true={isPlusVisible}>
     <lightning-layout
-      horizontal-align="end"
-      vertical-align="centre"
-      class="slds-p-top_x-large"
+      class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center"
     >
+      <span class="slds-col slds-size_3-of-4 slds-p-around_x-small">{labelOfAvailableItems}</span>
+
       <lightning-button
         variant="brand-outline"
         label={labels.add_trigger_rule}
         title="Add trigger rule"
         onclick={handlePlusClick}
+        class="slds-col slds-size_1-of-4 slds-p-around_xx-small"
       ></lightning-button>
     </lightning-layout>
   </template>
