@@ -18,7 +18,9 @@ import {
   prepareValidationForPush,
   swapQuestions,
   swapValidations,
-  findSwapIndex 
+  findSwapIndex,
+  sortQuestionsFunction,
+  resolveEditableQuestions
 } from "./questionScreenHelper.js";
 
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
@@ -189,6 +191,17 @@ export default class QuestionScreen extends LightningElement {
     this.updateQuestions();
   }
 
+  openClearForm() {
+    this.clearFormAttributes();
+    
+    if(this.isFormOpened) {
+      this.template.querySelectorAll("c-question-form")[0].resetForm();
+      return;
+    }
+
+    this.openForm();
+  }
+
   addQuestion(event) {
     const question = JSON.parse(JSON.stringify(event.detail));
     this.pushQuestion(question);
@@ -232,9 +245,7 @@ export default class QuestionScreen extends LightningElement {
   }
 
   updateQuestions() {
-    this.displayedQuestions.sort((firstItem, secondItem) => {
-      return firstItem.Position__c.localeCompare(secondItem.Position__c);
-    })
+    this.displayedQuestions.sort(sortQuestionsFunction);
 
     if(this.isQuestionBlockOpened) {
       this.template.querySelectorAll("c-questions-block")[0].updateQuestions(this.displayedQuestions);
@@ -295,6 +306,7 @@ export default class QuestionScreen extends LightningElement {
 
     this.displayedQuestions = resolveQuestionsByDeleted(this.questions, position);
     this.displayedValidations = resolveValidationsByDeleted(this.validations, position);
+    this.displayedQuestions = resolveEditableQuestions(this.questions, this.validations);
 
     this.updateQuestions();
   }

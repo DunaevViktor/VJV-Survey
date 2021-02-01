@@ -139,6 +139,19 @@ export default class QuestionForm extends LightningElement {
     });
   }
 
+  @api
+  resetForm() {
+    const input = this.template.querySelector(".input");
+    clearInput(input);
+    this.selectedType = this.displayedTypes
+      ? this.displayedTypes[0].value
+      : "Text";
+    this.selectedSettings = [];
+    this.question = {};
+    this.question.Question_Options__r = [];
+    this.setOptionsEnabling();
+  }
+
   setQuestionForEdit(editQuestion) {
     this.question = JSON.parse(JSON.stringify(editQuestion));
 
