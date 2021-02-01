@@ -19,9 +19,16 @@ const setInputValidation = (input, message) => {
   input.reportValidity();
 }
 
+const filterQuestionsByPosition = (questions, position) => {
+  return questions.filter((question) => {
+    return !question.Position__c.startsWith(position);
+  });
+}
+
 export {
   isEmpty,
   filterQuestionsByPage,
   filterQuestionsBySearhTerm,
-  setInputValidation
+  setInputValidation,
+  filterQuestionsByPosition
 }
