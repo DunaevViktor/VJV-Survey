@@ -1,10 +1,13 @@
 import { label } from "./labels.js";
 
-const TYPE_TEXT = "text"
+const TYPE_TEXT = "text";
+const FIELD_NAME = "Name";
+const FIELD_STANDARD_TYPE = "Type";
+const FIELD_CUSTOM_TYPE = "Type__c";
 
 const columns = [
-    { label: label.type, fieldName: "Type__c", type: TYPE_TEXT },
-    { label: "Name", fieldName: "Name", type: TYPE_TEXT },
+    { label: label.type, fieldName: FIELD_CUSTOM_TYPE, type: TYPE_TEXT },
+    { label: label.Name, fieldName: FIELD_NAME, type: TYPE_TEXT },
     {
         type: "button",
         initialWidth: 100,
@@ -16,13 +19,13 @@ const columns = [
 ];
 
 const columnsMember = [
-    { label: "Type", fieldName: "Type", type: TYPE_TEXT },
-    { label: "Name", fieldName: "Name", type: TYPE_TEXT },
+    { label: label.type, fieldName: FIELD_STANDARD_TYPE, type: TYPE_TEXT },
+    { label: label.Name, fieldName: FIELD_NAME, type: TYPE_TEXT },
     {
         type: "button",
         initialWidth: 100,
         typeAttributes: {
-            label: "Add",
+            label: label.add,
             name: "add"
         }
     }

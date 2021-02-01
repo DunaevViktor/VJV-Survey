@@ -12,7 +12,10 @@ export default class AdvanceSettingScreen extends LightningElement {
 
     SINGLE_RECORD_VARIANT = "Record";
     GROUP_VARIANT = "User Group";
-    CAMPAIGN_VARIAN = "Campaign"
+    CAMPAIGN_VARIAN = "Campaign";
+    RECORD_TYPE_CONTACT = "Contact";
+    RECORD_TYPE_USER = "User";
+    RECORD_TYPE_LEAD = "Lead";
 
     label = label;
     columns = columns;
@@ -28,63 +31,18 @@ export default class AdvanceSettingScreen extends LightningElement {
     @track isHasGroups = false;
     @track getGroupError = false;
     @track getSurveyError = false;
-
     @track displayedCampaigns = [];
     @track getCampaignsError = false;
     @track isHasCampaigns = false;
-
     @track hasMembers = false;
     @track searchError = false;
-
     @track copyReceivers = [];
 
     groupId = "";
     surveyId = "";
     campaignId = "";
-
     queryTerm = "";
     memberList = [];
-    handleKeyUp(evt) {
-        const isEnterKey = evt.keyCode === 13;
-        if (isEnterKey) {
-            this.queryTerm = evt.target.value;
-            if (this.queryTerm && this.queryTerm.trim().length > 1) {
-                this.searchError = false;
-                searchMembers({ searchTerm: this.queryTerm })
-                    .then((result) => {
-                        this.memberList = [];
-                        result.forEach(memberListByType => {
-                            let recordType = "";
-                            if(memberListByType.length > 0){
-                                let uniquePrefix = memberListByType[0].Id.substr(0,3);
-                                switch (uniquePrefix){
-                                    case '005' :
-                                        recordType = 'User';
-                                        break;
-                                    case '00Q' :
-                                        recordType = 'Lead';
-                                        break;
-                                    default: recordType = 'Contact';
-                                }
-                            }
-                            memberListByType.forEach(member => {
-                                let copyMember = {...member};
-                                copyMember.Type = recordType;
-                                this.memberList.push(copyMember);
-                            });
-                        });
-                        this.setIsHasMembers();
-                    })
-                    .catch(() => {
-                        this.searchError = true;
-                    });
-            }
-        }
-    }
-
-    setIsHasMembers() {
-        this.hasMembers = this.memberList && this.memberList.length > 0;
-    }
 
     get survey() {
         return this.__survey;
@@ -209,6 +167,48 @@ export default class AdvanceSettingScreen extends LightningElement {
         }
     }
 
+    handleKeyUp(evt) {
+        const isEnterKey = evt.keyCode === 13;
+        if (isEnterKey) {
+            this.queryTerm = evt.target.value;
+            if (this.queryTerm && this.queryTerm.trim().length > 1) {
+                this.searchError = false;
+                searchMembers({ searchTerm: this.queryTerm })
+                    .then((result) => {
+                        this.memberList = [];
+                        result.forEach(memberListByType => {
+                            let recordType = "";
+                            if(memberListByType.length > 0){
+                                let uniquePrefix = memberListByType[0].Id.substr(0,3);
+                                switch (uniquePrefix){
+                                    case '005' :
+                                        recordType = this.RECORD_TYPE_USER;
+                                        break;
+                                    case '00Q' :
+                                        recordType = this.RECORD_TYPE_LEAD;
+                                        break;
+                                    default: recordType = this.RECORD_TYPE_CONTACT;
+                                }
+                            }
+                            memberListByType.forEach(member => {
+                                let copyMember = {...member};
+                                copyMember.Type = recordType;
+                                this.memberList.push(copyMember);
+                            });
+                        });
+                        this.setIsHasMembers();
+                    })
+                    .catch(() => {
+                        this.searchError = true;
+                    });
+            }
+        }
+    }
+
+    setIsHasMembers() {
+        this.hasMembers = this.memberList && this.memberList.length > 0;
+    }
+
     setIsHasReseivers() {
         this.hasReceivers = this.receivers && this.receivers.length > 0;
     }
@@ -322,8 +322,8 @@ export default class AdvanceSettingScreen extends LightningElement {
 
     showToast() {
         const event = new ShowToastEvent({
-            title: 'Error',
-            message: 'Duplicate record!',
+            title: label.error,
+            message: label.duplicate_record,
             variant: 'error'
         });
         this.dispatchEvent(event);
@@ -358,7 +358,7 @@ export default class AdvanceSettingScreen extends LightningElement {
 
     isCampaignValid(combobox) {
         if (this.campaignId.localeCompare("") === 0) {
-            this.callReportValidity(combobox, "Empty choose.");
+            this.callReportValidity(combobox, label.error_choose_some_campaign);
             return false;
         }
 
@@ -367,7 +367,7 @@ export default class AdvanceSettingScreen extends LightningElement {
         }).Name;
 
         if (isReceiverExist(this.receivers, value)) {
-            this.callReportValidity(combobox, "This campaign uze est.");
+            this.callReportValidity(combobox, label.error_already_added_campaign);
             return false;
         }
 
