@@ -1,7 +1,10 @@
-import { LightningElement, api, wire, track } from "lwc";
+import { LightningElement, wire, track } from "lwc";
 import { getRecord } from "lightning/uiRecordApi";
 import { CurrentPageReference } from "lightning/navigation";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import { label } from "./labels.js";
 import getQuestions from "@salesforce/apex/AnswerFormController.getQuestions";
+import getConnectedSurvey from "@salesforce/apex/AnswerFormController.getConnectedSurveyId";
 import saveGroupAnswer from "@salesforce/apex/GroupAnswerController.saveGroupAnswer";
 import saveAnswers from "@salesforce/apex/AnswerController.saveAnswers";
 
@@ -15,10 +18,14 @@ export default class AnswerForm extends LightningElement {
   currentPageReference;
   urlStateParameters;
   surveyId;
+  connectedSurveyId;
+  linkedRecordId;
+  error;
 
+  label = label;
+
+  @track showSurvey = true;
   @track answerInputs = [];
-
-  @api linkedRecordId;
 
   @wire(CurrentPageReference)
   getStateParameters(currentPageReference) {
@@ -31,44 +38,43 @@ export default class AnswerForm extends LightningElement {
   @wire(getRecord, { recordId: "$surveyId", fields: FIELDS })
   survey;
 
-  connectedCallback() {
-    this.getSurveyQuestions();
-  }
-
-  getSurveyQuestions() {
-    getQuestions({ surveyId: this.surveyId })
-      .then((result) => {
-        result.forEach((question) => {
-          this.answerInputs.push({ ...question });
-        });
-        this.answerInputs.forEach((question) => {
-          let fieldType = "is" + question.Type__c;
-          question[fieldType] = true;
-          let options = [];
-
-          switch (question.Type__c) {
-            case "Checkbox":
-              question.Answer = [];
-              break;
-            case "Picklist":
-              options = [{ label: "-- None --", value: null }];
-              break;
-            default:
-          }
-
-          if (question.Question_Options__r) {
-            question.Question_Options__r.forEach((option) => {
-              options.push({ label: option.Value__c, value: option.Value__c });
-            });
-            question.Question_Options__r = options;
-          }
-        });
-
-        this.answerInputs = sortQuestionsByPosition(this.answerInputs);
-      })
-      .catch((error) => {
-        this.error = error;
+  @wire(getQuestions, { surveyId: "$surveyId" })
+  questions({ data, error }) {
+    if (data) {
+      this.answerInputs = [];
+      data.forEach((question) => {
+        this.answerInputs.push({ ...question });
       });
+
+      this.answerInputs.forEach((question) => {
+        let fieldType = "is" + question.Type__c;
+        question[fieldType] = true;
+        let options = [];
+
+        switch (question.Type__c) {
+          case "Checkbox":
+            question.Answer = [];
+            break;
+          case "Picklist":
+            options = [{ label: "-- None --", value: null }];
+            break;
+          default:
+        }
+
+        if (question.Question_Options__r) {
+          question.Question_Options__r.forEach((option) => {
+            options.push({ label: option.Value__c, value: option.Value__c });
+          });
+
+          question.Question_Options__r = options;
+        }
+      });
+
+      this.answerInputs = sortQuestionsByPosition(this.answerInputs);
+    }
+    if (error) {
+      this.error = error;
+    }
   }
 
   get title() {
@@ -91,8 +97,25 @@ export default class AnswerForm extends LightningElement {
     );
   }
 
+  getConnectedSurveyId() {
+    getConnectedSurvey({ surveyId: this.surveyId })
+      .then((result) => {
+        if (result) {
+          this.surveyId = result;
+          this.showSurvey = true;
+        } else {
+          this.showSurvey = false;
+        }
+      })
+      .catch((error) => {
+        this.connectedSurveyId = undefined;
+        this.error = error;
+      });
+  }
+
   setParametersBasedOnUrl() {
     this.surveyId = this.urlStateParameters.c__surveyId;
+    this.linkedRecordId = this.urlStateParameters.c__linkedRecordId;
   }
 
   handleAnswerChange(event) {
@@ -100,12 +123,31 @@ export default class AnswerForm extends LightningElement {
   }
 
   saveAnswers(groupAnswerId) {
+    let answers = this.createAnswers(groupAnswerId);
+
+    saveAnswers({ answers: answers })
+      .then(() => {
+        this.showToast();
+        this.getConnectedSurveyId();
+      })
+      .catch((error) => {
+        this.error = error;
+      });
+  }
+
+  createAnswers(groupAnswerId) {
     let answers = [];
     this.answerInputs.forEach((question) => {
       if (question.Answer !== null && question.Answer !== undefined) {
         let singleAnswer = { SObjectType: "Answer__c" };
         singleAnswer.Group_Answer__c = groupAnswerId;
         singleAnswer.Question__c = question.Id;
+
+        if (this.linkedRecordId !== null) {
+          singleAnswer.IsLinked__c = true;
+        } else {
+          singleAnswer.IsLinked__c = false;
+        }
 
         if (question.Type__c === "Checkbox") {
           question.Answer.forEach((checkedBox) => {
@@ -120,32 +162,48 @@ export default class AnswerForm extends LightningElement {
       }
     });
 
-    saveAnswers({ answers: answers })
-      .then((result) => {
-        console.debug(result);
-      })
-      .catch((error) => {
-        this.error = error;
-        console.debug(error);
-      });
+    return answers;
   }
 
   saveGroupAnswer() {
-    let groupAnswer = { SObjectType: "Group_Answer__c" };
-    const surveyId = this.survey.data.fields.Id.value;
-    groupAnswer.Survey__c = surveyId;
-    if (this.linkedRecordId !== null) {
-      groupAnswer.IsLinked__c = true;
-      groupAnswer.Related_To__c = this.linkedRecordId;
-    }
+    if (this.validateFields()) {
+      let groupAnswer = { SObjectType: "Group_Answer__c" };
+      const surveyId = this.survey.data.fields.Id.value;
+      groupAnswer.Survey__c = surveyId;
 
-    saveGroupAnswer({ groupAnswer: groupAnswer })
-      .then((result) => {
-        this.saveAnswers(result);
-      })
-      .catch((error) => {
-        this.error = error;
-        console.debug(error);
-      });
+      if (this.linkedRecordId !== null) {
+        groupAnswer.IsLinked__c = true;
+        groupAnswer.Related_To__c = this.linkedRecordId;
+      }
+
+      saveGroupAnswer({ groupAnswer: groupAnswer })
+        .then((result) => {
+          this.saveAnswers(result);
+        })
+        .catch((error) => {
+          this.error = error;
+        });
+    }
+  }
+
+  showToast() {
+    const event = new ShowToastEvent({
+      title: label.successfulAnswerSave
+    });
+    this.dispatchEvent(event);
+  }
+
+  validateFields() {
+    const allValid = [
+      ...this.template.querySelectorAll("c-single-question")
+    ].reduce(function (validSoFar, inputCmp) {
+      return validSoFar && inputCmp.validate();
+    }, true);
+
+    return allValid;
+  }
+
+  handleCancel() {
+    this.showSurvey = false;
   }
 }

@@ -8,7 +8,7 @@
           type="text"
           value={question.Answer}
           required={question.Required__c}
-          class="slds-p-around_small"
+          class="slds-p-around_small validate-input"
           onchange={handleAnswerChange}
         ></lightning-input>
 
@@ -19,7 +19,7 @@
           label={question.Label__c}
           value={question.Answer}
           options={question.Question_Options__r}
-          class="slds-p-around_small"
+          class="slds-p-around_small validate-input"
           onchange={handleAnswerChange}
         ></lightning-checkbox-group>
 
@@ -32,7 +32,7 @@
           type="radio"
           value={question.Answer}
           required={question.Required__c}
-          class="slds-p-around_small"
+          class="slds-p-around_small validate-input"
           onchange={handleAnswerChange}
         >
         </lightning-radio-group>
@@ -45,11 +45,11 @@
           options={question.Question_Options__r}
           value={question.Answer}
           required={question.Required__c}
-          class="slds-p-around_small"
+          class="slds-p-around_small validate-input"
           onchange={handleAnswerChange}
         >
         </lightning-combobox>
 
-        <c-star-rating-input if:true={question.isRating} question={question} class="slds-p-around_small"></c-star-rating-input>
+        <c-star-rating-input if:true={question.isRating} question={question} class="slds-p-around_small validate-input"></c-star-rating-input>
       </template>
 </template>

@@ -25,4 +25,8 @@
             </template>
         </div>
     </div>
+    <template if:true={isInvalid}>
+        <div class="slds-p-top_small slds-p-left_small slds-text-color_destructive slds-text-title">{invalidMessage}
+        </div>
+    </template>
 </template>
