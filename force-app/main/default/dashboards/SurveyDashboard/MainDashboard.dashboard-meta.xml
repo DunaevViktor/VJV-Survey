@@ -206,7 +206,6 @@
     </dashboardGridLayout>
     <dashboardType>LoggedInUser</dashboardType>
     <isGridLayout>true</isGridLayout>
-    <runningUser>test-pdxivwrnuc7r@example.com</runningUser>
     <textColor>#000000</textColor>
     <title>MainDashboard</title>
     <titleColor>#000000</titleColor>
