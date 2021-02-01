@@ -240,6 +240,12 @@ export default class AdvanceSettingScreen extends LightningElement {
         this.setIsHasReseivers();
     }
 
+    createCopyReceiver(receiver, nameValue){
+        let copyReceiver = {...receiver};
+        copyReceiver.Name = nameValue;
+        this.copyReceivers = [...this.copyReceivers, copyReceiver];
+    }
+
     handleGroupChange(event) {
         this.groupId = event.detail.value;
     }
@@ -257,10 +263,7 @@ export default class AdvanceSettingScreen extends LightningElement {
             return this.groupId === group.Id;
         }).Name;
 
-        let copyReceiver = {...receiver};
-        copyReceiver.Name = receiver.Value__c;
-        this.copyReceivers = [...this.copyReceivers, copyReceiver];
-
+        this.createCopyReceiver(receiver, receiver.Value__c);
         this.receivers = [...this.receivers, receiver];
 
         this.callReportValidity(combobox, "");
@@ -301,11 +304,9 @@ export default class AdvanceSettingScreen extends LightningElement {
         receiver.Type__c = this.SINGLE_RECORD_VARIANT;
         receiver.Value__c = Id;
 
-        let copyReceiver = {...receiver};
-        copyReceiver.Name = Name;
-        this.copyReceivers = [...this.copyReceivers, copyReceiver];
-
+        this.createCopyReceiver(receiver, Name);
         this.receivers = [...this.receivers, receiver];
+
         this.setIsHasReseivers();
     }
 
@@ -346,10 +347,7 @@ export default class AdvanceSettingScreen extends LightningElement {
             return this.campaignId === campaign.Id;
         }).Name;
 
-        let copyReceiver = {...receiver};
-        copyReceiver.Name = receiver.Value__c;
-        this.copyReceivers = [...this.copyReceivers, copyReceiver];
-
+        this.createCopyReceiver(receiver, receiver.Value__c);
         this.receivers = [...this.receivers, receiver];
 
         this.callReportValidity(combobox, "");
