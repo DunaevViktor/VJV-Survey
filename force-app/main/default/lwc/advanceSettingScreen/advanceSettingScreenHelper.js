@@ -37,4 +37,10 @@ const isReceiverExist = (receivers, value) => {
     });
 };
 
-export { columns, columnsMember, isReceiverExist };
+const deleteReceiver = (receiverList, filterValue) => {
+    return receiverList.filter((receiver) => {
+        return receiver.Value__c !== filterValue;
+    });
+}
+
+export { columns, columnsMember, isReceiverExist, deleteReceiver};

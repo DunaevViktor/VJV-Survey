@@ -1,6 +1,6 @@
 import { LightningElement, track, api } from "lwc";
 import { label } from "./labels.js";
-import { columns, columnsMember, isReceiverExist } from "./advanceSettingScreenHelper.js";
+import { columns, columnsMember, isReceiverExist, deleteReceiver } from "./advanceSettingScreenHelper.js";
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getGroups from "@salesforce/apex/GroupController.getGroups";
@@ -229,13 +229,8 @@ export default class AdvanceSettingScreen extends LightningElement {
     deleteRow(row) {
         const { Value__c } = row;
 
-        this.copyReceivers = this.copyReceivers.filter((receiver) => {
-            return receiver.Value__c !== Value__c;
-        });
-
-        this.receivers = this.receivers.filter((receiver) => {
-            return receiver.Value__c !== Value__c;
-        });
+        this.copyReceivers = deleteReceiver(this.copyReceivers, Value__c);
+        this.receivers = deleteReceiver(this.receivers, Value__c);
 
         this.setIsHasReseivers();
     }
@@ -244,6 +239,11 @@ export default class AdvanceSettingScreen extends LightningElement {
         let copyReceiver = {...receiver};
         copyReceiver.Name = nameValue;
         this.copyReceivers = [...this.copyReceivers, copyReceiver];
+    }
+
+    callReportValidity(input, message) {
+        input.setCustomValidity(message);
+        input.reportValidity();
     }
 
     handleGroupChange(event) {
@@ -288,11 +288,6 @@ export default class AdvanceSettingScreen extends LightningElement {
         return true;
     }
 
-    callReportValidity(input, message) {
-        input.setCustomValidity(message);
-        input.reportValidity();
-    }
- 
     handleAddRecordReceiver(row){
         const { Id, Name } = row;
         
