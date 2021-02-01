@@ -14,7 +14,7 @@ public with sharing class ImageUploadControllerTest {
     private static final String FAILED_DELETION = 'Method has to delete ContentDocument';
     
     private static final String MINIMUM_ACCESS_PROFILE_NAME = 'Minimum Access - Salesforce';
-    
+
     @IsTest
     static void testUploadImage() {
         ContentVersion testCV = new ContentVersion();
@@ -79,10 +79,9 @@ public with sharing class ImageUploadControllerTest {
     static void testGetContentDocumentFail() {
         Profile profile = [SELECT Id, Name 
                            FROM Profile 
-                           WHERE Name = MINIMUM_ACCESS_PROFILE_NAME]; 
-        System.assertEquals(profile.Name, MINIMUM_ACCESS_PROFILE_NAME);
+                           WHERE Name = :MINIMUM_ACCESS_PROFILE_NAME];
         User testUser = new User(
-            Alias = 'Min Access User', 
+            Alias = 'MinAcc', 
             Email='myNewUserMailVasiliy@testorg.com', 
             EmailEncodingKey='UTF-8', 
             LastName='Testing', 
