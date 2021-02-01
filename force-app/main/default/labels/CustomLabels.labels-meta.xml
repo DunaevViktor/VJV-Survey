@@ -71,6 +71,13 @@
         <value>Add Option</value>
     </labels>
     <labels>
+        <fullName>add_optional_confirm_message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>The question editing option will be unavailable after adding dependent question</shortDescription>
+        <value>Main question editing option will be unavailable after adding dependent question.</value>
+    </labels>
+    <labels>
         <fullName>add_question</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -162,6 +169,20 @@
         <value>Complete this field</value>
     </labels>
     <labels>
+        <fullName>confirm_action</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Confirm Action</shortDescription>
+        <value>Confirm Action</value>
+    </labels>
+    <labels>
+        <fullName>confirm_question_delete</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>The question will be completely deleted and cannot be restored</shortDescription>
+        <value>The question will be completely deleted and cannot be restored.</value>
+    </labels>
+    <labels>
         <fullName>connect_to_another_survey</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -188,6 +209,13 @@
         <protected>true</protected>
         <shortDescription>delete trigger rule title</shortDescription>
         <value>Delete trigger rule</value>
+    </labels>
+    <labels>
+        <fullName>do_you_want_to_proceed</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Do you want to proceed?</shortDescription>
+        <value>Do you want to proceed?</value>
     </labels>
     <labels>
         <fullName>done</fullName>
@@ -414,6 +442,13 @@
         <value>Logo image</value>
     </labels>
     <labels>
+        <fullName>more</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>more</shortDescription>
+        <value>more</value>
+    </labels>
+    <labels>
         <fullName>msg_no_public_groups_found</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -433,6 +468,13 @@
         <protected>true</protected>
         <shortDescription>next_page</shortDescription>
         <value>Next</value>
+    </labels>
+    <labels>
+        <fullName>no</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No</shortDescription>
+        <value>no</value>
     </labels>
     <labels>
         <fullName>no_questions</fullName>
@@ -778,11 +820,25 @@
         <value>*Survey polling actions will occur when any of the created trigger rules work.</value>
     </labels>
     <labels>
+        <fullName>trigger_rule</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>trigger rule</shortDescription>
+        <value>trigger rule</value>
+    </labels>
+    <labels>
         <fullName>trigger_rule_header</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Trigger rule header</shortDescription>
         <value>Setup Trigger Rules</value>
+    </labels>
+    <labels>
+        <fullName>trigger_rules</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>trigger rules</shortDescription>
+        <value>trigger rules</value>
     </labels>
     <labels>
         <fullName>true</fullName>
@@ -846,6 +902,20 @@
         <protected>true</protected>
         <shortDescription>value</shortDescription>
         <value>Value</value>
+    </labels>
+    <labels>
+        <fullName>visible_if</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>visible if</shortDescription>
+        <value>Visible if</value>
+    </labels>
+    <labels>
+        <fullName>yes</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>yes</shortDescription>
+        <value>yes</value>
     </labels>
     <labels>
         <fullName>you_can_create</fullName>

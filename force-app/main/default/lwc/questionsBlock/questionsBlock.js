@@ -7,7 +7,8 @@ import {
   isEmpty,
   filterQuestionsByPage,
   filterQuestionsBySearhTerm,
-  setInputValidation
+  setInputValidation,
+  filterQuestionsByPosition
 } from './questionsBlockHelper.js';
 import { findQuestionByPosition } from "c/formUtil";
 
@@ -41,14 +42,19 @@ export default class QuestionsBlock extends LightningElement {
 
   @api
   updateQuestions(questions) {
-    this.displayedQuestions = questions;
+    if(this.isSearchMode) {
+      this.displayedQuestionsCopy = questions;
+    } else {
+      this.displayedQuestions = questions;
+    }
+    
     this.resolveDisplayedQuestions();
   }
 
   get labelOfAvailableItems() {
     switch(this.availableQuestionsAmount) {
       case 1: return this.label.you_can_create + " " 
-        + this.availableQuestionsAmount + " " + this.label.question;
+        + this.availableQuestionsAmount + " " + this.label.more + " " + this.label.question;
       case 0: return this.label.can_no_longer_create_questions;
       default: return this.label.you_can_create + " " 
         + this.availableQuestionsAmount + " " + this.label.questions;
@@ -82,6 +88,14 @@ export default class QuestionsBlock extends LightningElement {
 
   resolveQuestionsSubinfo() {
     this.hasQuestions = (this.displayedQuestions.length > 0) || (this.isSearchMode);
+
+    if(this.amountPages > 1 && 
+      this.currentPage === this.amountPages && 
+      this.filteredDisplayedQuestions.length === 0) {
+      this.currentPage--;
+      this.resolveDisplayedQuestions();
+    }
+
     this.amountPages =  Math.ceil(this.displayedQuestions.length / +this.pageQuestionsAmount.data);
     this.isNeedPagination = this.displayedQuestions.length > +this.pageQuestionsAmount.data;
 
@@ -109,6 +123,16 @@ export default class QuestionsBlock extends LightningElement {
   }
 
   deleteQuestion(event) {
+    this.displayedQuestions = filterQuestionsByPosition(this.displayedQuestions, event.detail);
+
+    if(this.isSearchMode && this.displayedQuestions.length === 0) {
+      this.displayedQuestionsCopy = filterQuestionsByPosition(
+        this.displayedQuestionsCopy, event.detail);
+      this.handleClearQuestionSearch();
+    } else {
+      this.resolveDisplayedQuestions();
+    }
+
     const deleteEvent = new CustomEvent("delete", {
       detail: event.detail
     });
@@ -152,7 +176,7 @@ export default class QuestionsBlock extends LightningElement {
   }
 
   repaintPaginationButtons() {
-    if(this.displayedCurrentPage === 1) {
+    if(this.currentPage === 1) {
       this.isFirstDisabled = true;
       this.isPreviousDisabled = true;
     } else {
@@ -160,7 +184,7 @@ export default class QuestionsBlock extends LightningElement {
       this.isPreviousDisabled = false;
     }
 
-    if(this.displayedCurrentPage >= this.displayedAmountPages) {
+    if(this.currentPage >= this.amountPages) {
       this.isNextDisabled = true;
       this.isLastDisabled = true;
     } else {

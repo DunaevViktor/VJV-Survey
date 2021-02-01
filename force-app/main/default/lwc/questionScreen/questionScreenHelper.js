@@ -57,11 +57,11 @@ const updateValidationByPosition = (validations, updatedValidation) => {
 }
 
 const solveQuestionPosition = (questions) => {
-  if (questions.length === 0) {
-    return "1";
-  } 
+  questions = questions.filter((question) => {
+    return !~question.Position__c.indexOf('.');
+  }) 
 
-  return ""  + (+questions[questions.length - 1].Position__c[0] + 1);
+  return '' + (+questions.length + 1);
 }
 
 const solveDependentQuestionPosition = (validations, question) => {
@@ -84,17 +84,25 @@ const prepareSelectedQuestion = (selectedQuestion) => {
 }
 
 const resolvePositionByDeleted = (position, leftPart, rightPart) => {
-  const index = leftPart.length;
-  const value = position[index]; 
-  if(value && value > +rightPart) {
-    position = position.slice(0, index) + (value - 1) + position.slice(index + 1);
+  const leftPartLength = leftPart.length > 0 ? leftPart.length + 1 : 0;
+  const itemPart = position.slice(leftPartLength);
+    
+  const itemIndex = itemPart.indexOf('.');
+  const value = !~itemIndex ? itemPart : itemPart.slice(0, itemIndex);
+    
+  if(+value > +rightPart) {
+    const itemRightPart = !~itemIndex ? '' : itemPart.slice(itemIndex);
+    const itemLeftPart = leftPart.length > 0 ? leftPart + '.' : '';
+        
+    position = itemLeftPart + Math.round(+value - 1) + itemRightPart;
   }
   return position;
 }
 
 const resolveQuestionsByDeleted = (questions, position) => {
-  const leftPart = position.slice(0, -1);
-  const rightPart = position.slice(-1);
+  const index = position.lastIndexOf('.');
+  const leftPart = !~index ? '' : position.slice(0, index);
+  const rightPart = !~index ? position : position.slice(index + 1);
 
   return questions.filter((question) => {
     return !question.Position__c.startsWith(position);
@@ -110,8 +118,9 @@ const resolveQuestionsByDeleted = (questions, position) => {
 };
 
 const resolveValidationsByDeleted = (validations, position) => {
-  const leftPart = position.slice(0, -1);
-  const rightPart = position.slice(-1);
+  const index = position.lastIndexOf('.');
+  const leftPart = !~index ? '' : position.slice(0, index);
+  const rightPart = !~index ? position : position.slice(index + 1);
 
   return validations.filter((validation) => {
     return !validation.Related_Question__c.Position__c.startsWith(position) &&
@@ -130,6 +139,19 @@ const resolveValidationsByDeleted = (validations, position) => {
     }
     return validation;
   });
+}
+
+const resolveEditableQuestions = (questions, validations) => {
+  return questions.map((question) => {
+
+    const filteredValidations = validations.filter((validation) => {
+      return validation.Related_Question__c.Position__c === question.Position__c;
+    })
+
+    if(filteredValidations.length === 0) question.Editable = true;
+
+    return question;
+  })
 }
 
 const prepareValidationForPush = (validations, newValidation) => {
@@ -190,6 +212,26 @@ const findSwapIndex = (questions, position, action) => {
   return questionIndex;
 }
 
+const sortQuestionsFunction = (firstItem, secondItem) => {
+  const firstPosition = firstItem.Position__c;
+  const secondPosition = secondItem.Position__c;
+
+  let firstIndex = firstPosition.indexOf('.');
+  let secondIndex = secondPosition.indexOf('.');
+  
+  if(!~firstIndex) firstIndex = firstPosition.length;
+  if(!~secondIndex) secondIndex = secondPosition.length;
+  
+  const firstNumber = +firstPosition.slice(0, firstIndex);
+  const secondNumber = +secondPosition.slice(0, secondIndex);
+
+  if(firstNumber === secondNumber) {
+    return firstPosition.localeCompare(secondPosition);
+  } 
+
+  return firstNumber - secondNumber;
+}
+
 export {
   getQuestionsBySurveyId,
   updateQuestionByPosition,
@@ -203,5 +245,7 @@ export {
   prepareValidationForPush,
   swapQuestions,
   swapValidations,
-  findSwapIndex 
+  findSwapIndex,
+  sortQuestionsFunction,
+  resolveEditableQuestions
 }

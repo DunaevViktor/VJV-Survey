@@ -12,6 +12,7 @@ import last_page from '@salesforce/label/c.last_page';
 import number_of_found_items from '@salesforce/label/c.number_of_found_items';
 import enter_search_keyword from '@salesforce/label/c.enter_search_keyword';
 import search_keyword_cant_be_empty from '@salesforce/label/c.search_keyword_cant_be_empty';
+import more from '@salesforce/label/c.more';
 
 const label = {
   find,
@@ -27,7 +28,8 @@ const label = {
   last_page,
   number_of_found_items,
   enter_search_keyword,
-  search_keyword_cant_be_empty
+  search_keyword_cant_be_empty,
+  more
 }
 
 export {

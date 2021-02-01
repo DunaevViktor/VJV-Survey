@@ -8,7 +8,7 @@
       has-standard-questions={hasStandardQuestions}
       onselect={handleTemplateChange}
       onaddstandard={openStandardSelector}
-      onadd={openForm}
+      onadd={openClearForm}
     ></c-question-bar>
 
     <template if:true={isQuestionBlockOpened}>
@@ -20,7 +20,7 @@
         ondown={downQuestion}
         onup={upQuestion}>
       </c-questions-block>
-    </template>
+    </template>    
 
     <template if:true={isFormOpened}>
       <c-question-form
