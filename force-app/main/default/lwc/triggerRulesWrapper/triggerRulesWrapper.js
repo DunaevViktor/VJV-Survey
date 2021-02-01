@@ -87,12 +87,12 @@ export default class TriggerRulesWrapper extends LightningElement {
 
   get labelOfAvailableItems() {
     const availableTriggerRulesAmount = this.maxTriggerRulesAmount - this.triggerRules.length;
-    switch(availableTriggerRulesAmount) {
-      case 1: return this.labels.you_can_create + " " 
+    if (availableTriggerRulesAmount === 1) {
+      return this.labels.you_can_create + " " 
         + availableTriggerRulesAmount + " " + this.labels.more + " " + this.labels.trigger_rule + ".";
-      default: return this.labels.you_can_create + " " 
-        + availableTriggerRulesAmount + " " + this.labels.more + " " + this.labels.trigger_rules + ".";
     }
+    return this.labels.you_can_create + " " 
+      + availableTriggerRulesAmount + " " + this.labels.more + " " + this.labels.trigger_rules + ".";
   }
 
   handleNavigateNext() {    
