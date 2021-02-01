@@ -13,6 +13,8 @@ public with sharing class ImageUploadControllerTest {
     private static final String NO_SUCH_CONTENTVERSION = 'ContentVersion was not created';
     private static final String FAILED_DELETION = 'Method has to delete ContentDocument';
     
+    private static final String MINIMUM_ACCESS_PROFILE_NAME = 'Minimum Access - Salesforce';
+    
     @IsTest
     static void testUploadImage() {
         ContentVersion testCV = new ContentVersion();
@@ -71,5 +73,29 @@ public with sharing class ImageUploadControllerTest {
                                                      FROM ContentDocument
                                                      WHERE Id = :testContentDocumentId];
         System.assertEquals(0, testContentDocument.size(), FAILED_DELETION);
+    }
+    
+    @IsTest
+    static void testGetContentDocumentFail() {
+        Profile profile = [SELECT Id, Name 
+                           FROM Profile 
+                           WHERE Name = MINIMUM_ACCESS_PROFILE_NAME]; 
+        System.assertEquals(profile.Name, MINIMUM_ACCESS_PROFILE_NAME);
+        User testUser = new User(
+            Alias = 'Min Access User', 
+            Email='myNewUserMailVasiliy@testorg.com', 
+            EmailEncodingKey='UTF-8', 
+            LastName='Testing', 
+            LanguageLocaleKey='en_US', 
+            LocaleSidKey='en_US', 
+            ProfileId = profile.Id, 
+            TimeZoneSidKey='America/Los_Angeles', 
+            UserName='testUserVasiliy@testorg.com'
+        );
+        ContentVersion testCV = ImageUploadController.createContentVersion(TEST_LOGO_NAME, TEST_LOGO_BODY, null);
+        System.runAs(testUser) {
+            ContentDocument testCD = ImageUploadController.getContentDocumentById(testCv.ContentDocumentId);
+            System.assertEquals(null, testCD);
+        }
     }
 }
