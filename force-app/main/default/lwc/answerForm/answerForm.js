@@ -4,7 +4,6 @@ import { CurrentPageReference } from "lightning/navigation";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { label } from "./labels.js";
 import getQuestions from "@salesforce/apex/AnswerFormController.getQuestions";
-import getConnectedSurvey from "@salesforce/apex/AnswerFormController.getConnectedSurveyId";
 import saveGroupAnswer from "@salesforce/apex/GroupAnswerController.saveGroupAnswer";
 import saveAnswers from "@salesforce/apex/AnswerController.saveAnswers";
 
@@ -71,20 +70,16 @@ export default class AnswerForm extends LightningElement {
     );
   }
 
+  get relatedSurveyId(){
+      return this.survey.data.fields.Related_To__c.value;
+  }
+
   getConnectedSurveyId() {
-    getConnectedSurvey({ surveyId: this.surveyId })
-      .then((result) => {
-        if (result) {
-          this.surveyId = result;
-          this.showSurvey = true;
-        } else {
-          this.showSurvey = false;
-        }
-      })
-      .catch((error) => {
-        this.connectedSurveyId = undefined;
-        this.error = error;
-      });
+      if(this.relatedSurveyId){
+          this.surveyId = this.relatedSurveyId;
+      } else{
+        this.showSurvey = false;
+      }
   }
 
   setParametersBasedOnUrl() {

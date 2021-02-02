@@ -5,7 +5,8 @@ const FIELDS = [
   "Survey__c.Name",
   "Survey__c.Description__c",
   "Survey__c.Logo__c",
-  "Survey__c.Background_Color__c"
+  "Survey__c.Background_Color__c",
+  "Survey__c.Related_To__c"
 ];
 
 const initQuestionFields = (questions, data) => {

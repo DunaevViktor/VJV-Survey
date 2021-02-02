@@ -8,16 +8,4 @@ public with sharing class AnswerFormController {
         WHERE Survey__c =: surveyId
         WITH SECURITY_ENFORCED];
     }
-
-    @AuraEnabled(cacheable=true)
-    public static Id getConnectedSurveyId(Id surveyId){
-        Survey__c relatedSurvey = [SELECT (SELECT Id FROM Surveys__r LIMIT 1)
-                                   FROM Survey__c WHERE Id =: surveyId WITH SECURITY_ENFORCED LIMIT 1];
-                                   
-        Id connectedSurveyId;
-        for(Survey__c connectedSurvey: relatedSurvey.Surveys__r){
-            connectedSurveyId = connectedSurvey.Id;
-        }
-        return connectedSurveyId;
-    }
 }
