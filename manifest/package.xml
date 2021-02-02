@@ -66,7 +66,7 @@
         <members>*</members>
         <name>GlobalValueSet</name>
     </types>
-    <types> 
+    <types>
       <members>*</members>
       <name>CustomLabels</name>
     </types>
