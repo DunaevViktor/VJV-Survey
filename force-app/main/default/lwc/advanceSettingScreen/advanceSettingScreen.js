@@ -1,6 +1,6 @@
 import { LightningElement, track, api } from "lwc";
 import { label } from "./labels.js";
-import { columns, columnsMember, isReceiverExist, deleteReceiver, createDisplayedMap } from "./advanceSettingScreenHelper.js";
+import { columns, columnsMember, isReceiverExist, deleteReceiver, createDisplayedMap, getObjectName } from "./advanceSettingScreenHelper.js";
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getGroups from "@salesforce/apex/GroupController.getGroups";
@@ -245,9 +245,7 @@ export default class AdvanceSettingScreen extends LightningElement {
 
         const receiver = {};
         receiver.Type__c = this.GROUP_VARIANT;
-        receiver.Value__c = this.displayedGroups.find((group) => {
-            return this.groupId === group.Id;
-        }).Name;
+        receiver.Value__c = getObjectName(this.displayedGroups, this.groupId);
 
         this.createCopyReceiver(receiver, receiver.Value__c);
         this.receivers = [...this.receivers, receiver];
@@ -262,9 +260,7 @@ export default class AdvanceSettingScreen extends LightningElement {
             return false;
         }
 
-        const value = this.displayedGroups.find((group) => {
-            return this.groupId === group.Id;
-        }).Name;
+        const value = getObjectName(this.displayedGroups, this.groupId);
 
         if (isReceiverExist(this.receivers, value)) {
             this.callReportValidity(combobox, label.error_already_added_this_group);
@@ -321,9 +317,7 @@ export default class AdvanceSettingScreen extends LightningElement {
 
         const receiver = {};
         receiver.Type__c = this.CAMPAIGN_VARIAN;
-        receiver.Value__c = this.displayedCampaigns.find((campaign) => {
-            return this.campaignId === campaign.Id;
-        }).Name;
+        receiver.Value__c = getObjectName(this.displayedCampaigns, this.campaignId);
 
         this.createCopyReceiver(receiver, receiver.Value__c);
         this.receivers = [...this.receivers, receiver];
@@ -338,9 +332,7 @@ export default class AdvanceSettingScreen extends LightningElement {
             return false;
         }
 
-        const value = this.displayedCampaigns.find((campaign) => {
-            return this.campaignId === campaign.Id;
-        }).Name;
+        const value = getObjectName(this.displayedCampaigns, this.campaignId);
 
         if (isReceiverExist(this.receivers, value)) {
             this.callReportValidity(combobox, label.error_already_added_campaign);

@@ -49,4 +49,10 @@ const createDisplayedMap = (objectList) => {
     });
 }
 
-export { columns, columnsMember, isReceiverExist, deleteReceiver, createDisplayedMap};
+const getObjectName = (objectList, objectId) =>{
+    return objectList.find((element) => {
+        return objectId === element.Id;
+    }).Name;
+}
+
+export { columns, columnsMember, isReceiverExist, deleteReceiver, createDisplayedMap, getObjectName};
