@@ -25,4 +25,10 @@ public with sharing class SurveySettingController {
     Survey_Setting__c setting = Survey_Setting__c.getValues(SURVEY_SETTING_RECORD_NAME);
     return setting.Max_Trigger_Rule_Amount__c;
   }
+
+  @AuraEnabled(cacheable=true)
+  public static String getDefaultBackgroundColor() {
+    Survey_Setting__c setting = Survey_Setting__c.getValues(SURVEY_SETTING_RECORD_NAME);
+    return setting.Background_Color__c;
+  }
 }

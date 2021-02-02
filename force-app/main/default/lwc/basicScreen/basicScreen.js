@@ -1,6 +1,7 @@
 import { LightningElement, api, track } from "lwc";
 import uploadImage from "@salesforce/apex/ImageUploadController.uploadImage";
 import deleteImageById from "@salesforce/apex/ImageUploadController.deleteImageById";
+import getDefaultBackgroundColor from "@salesforce/apex/SurveySettingController.getDefaultBackgroundColor";
 import { FlowAttributeChangeEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { labels } from './labels';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -58,11 +59,22 @@ export default class BasicScreen extends LightningElement {
         Logo__c: '',
         Description__c: ''
       };
+      this.setDefaultBackgroundColor();
     }
 
     if (!this.logoId) {
       this.logoId = null;
     }
+  }
+
+  setDefaultBackgroundColor() {
+    getDefaultBackgroundColor()
+      .then(result => {
+        this.survey.Background_Color__c = result;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   handleNameChange(event) {
