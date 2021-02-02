@@ -12,7 +12,7 @@ public with sharing class SaverControllerTestDataFactory {
   private static final String TEST_OBJECT_API_NAME = 'Contact';
   private static final String TEST_VALIDATION_OPERATOR = 'CONTAINS';
   private static final String TEST_VALUE = 'Test Value';
-  private static final String TEST_RECEIVER_TYPE = 'Email';
+  private static final String TEST_RECEIVER_TYPE = 'User Group';
   private static final String TEST_RECEIVER_VALUE = 'test@bk.ru';
 
   public static Survey__c createSurvey() {

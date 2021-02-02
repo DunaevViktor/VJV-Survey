@@ -32,7 +32,7 @@ public with sharing class SurveySettingControllerTest {
   @IsTest
   static void testGetMinQuestionAmount() {
     Survey_Setting__c setting = new Survey_Setting__c();
-    setting.Name = MAX_QUESTION_AMOUNT_SETTING_NAME;
+    setting.Name = MIN_QUESTION_AMOUNT_SETTING_NAME;
     setting.Value__c = TEST_AMOUNT;
     insert setting;
 

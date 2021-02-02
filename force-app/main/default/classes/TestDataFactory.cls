@@ -1,5 +1,8 @@
 @isTest
 public class TestDataFactory {
+    private static final String EMAIL_RECEIVER_TYPE_GROUP = 'User Group';
+    private static final String EMAIL_RECEIVER_TYPE_CAMPAIGN = 'Campaign';
+    private static final String EMAIL_RECEIVER_TYPE_RECORD = 'Record';
     
     static final List<String> NUMBER_DATE_OPERATORS = new List<String>{'IS NULL', 'EQUALS', 'NOT EQUALS', 'LESS THAN', 'GREATER THAN'};
     static final List<String> OTHER_FIELD_OPERATORS = new List<String>{'IS NULL', 'EQUALS', 'NOT EQUALS', 'CONTAINS', 'NOT CONTAINS'};
@@ -66,7 +69,7 @@ public class TestDataFactory {
     public static void createEmailReceivers(Id surveyId){
         List<Email_Receiver__c> emailReceivers = new List<Email_Receiver__c>();
         for(Integer i=0; i<5; i++){
-            Email_Receiver__c emailReceiver = new Email_Receiver__c(Survey__c = surveyId, Type__c='Email',
+            Email_Receiver__c emailReceiver = new Email_Receiver__c(Survey__c = surveyId, Type__c=EMAIL_RECEIVER_TYPE_GROUP,
                                                                     Value__c='mail' + i);
             emailReceivers.add(emailReceiver);
         }

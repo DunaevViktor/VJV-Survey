@@ -1,5 +1,4 @@
-//To do: change name
-public with sharing class searchHelper {
+public with sharing class SearchHelper {
     @AuraEnabled(cacheable=true)
     public static List<List<SObject>> searchMembers(String searchTerm) {
         List<List<SObject>> members = new List<List<SObject>>();

@@ -4,7 +4,7 @@ public with sharing class SurveyControllerTest {
 
   private static final Integer AMOUNT = 5;
 
-  private static final String INVALID_SURVEYS_AMOUNT = 'Actual length of surveus list doesn\'t equal to expected';
+  private static final String INVALID_SURVEYS_AMOUNT = 'Actual length of surveys list doesn\'t equal to expected';
   private static final String INVALID_SURVEY_NAME = 'Actual survey name doesn\'t equal to expected';
 
   @IsTest
