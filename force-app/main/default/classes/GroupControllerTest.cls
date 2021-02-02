@@ -18,18 +18,8 @@ public with sharing class GroupControllerTest {
     }
     insert groups;
 
-    Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User' WITH SECURITY_ENFORCED];
-    User testUser = new User(
-      Alias = 'standt',
-      Email = 'standarduser@testorg.com',
-      EmailEncodingKey = 'UTF-8',
-      LastName = 'Kashyrskiy',
-      LanguageLocaleKey = 'en_US',
-      LocaleSidKey = 'en_US',
-      ProfileId = p.Id,
-      TimeZoneSidKey = 'America/Los_Angeles',
-      UserName = 'lesha18.02.2001@gmail.com'
-    );
+    Profile profile = TestDataFactory.getStandardProfile();
+    User testUser = TestDataFactory.createStandardUser(profile);
     insert testUser;
 
     List<GroupMember> groupMembers = new List<GroupMember>();

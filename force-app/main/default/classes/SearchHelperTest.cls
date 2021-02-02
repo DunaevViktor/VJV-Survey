@@ -1,9 +1,6 @@
 @IsTest
 public with sharing class SearchHelperTest {
 
-    private static final String TEST_COMPANY_NAME = 'Test Company Name';
-    private static final String TEST_NAME = 'Test';
-
     private static final String INVALID_MEMBERS_AMOUNT = 'Actual amount of members doesn\'t equal to expected';
     private static final String INVALID_USERS_AMOUNT = 'Actual amount of users doesn\'t equal to expected';
     private static final String INVALID_CONTACTS_AMOUNT = 'Actual amount of contacts doesn\'t equal to expected';
@@ -11,22 +8,19 @@ public with sharing class SearchHelperTest {
 
     @TestSetup
     static void makeData(){
-        Lead lead = new Lead();
-        lead.Company = TEST_COMPANY_NAME;
-        lead.FirstName = TEST_NAME;
-        lead.LastName = TEST_NAME;
+        Lead lead = TestDataFactory.createLead();
         insert lead;
     }
 
     @IsTest
     static void testSearchMembers() {
-        Lead lead = [SELECT Id FROM Lead WHERE FirstName Like :TEST_NAME];
+        Lead lead = [SELECT Id FROM Lead WHERE LastName Like :TestDataFactory.TEST_VALUE];
         Id [] fixedSearchResults= new Id[1];
         fixedSearchResults[0] = lead.Id;
         Test.setFixedSearchResults(fixedSearchResults);
 
         Test.startTest();
-        List<List<SObject>> members = SearchHelper.searchMembers(TEST_NAME);
+        List<List<SObject>> members = SearchHelper.searchMembers(TestDataFactory.TEST_VALUE);
         Test.stopTest();
         System.assertEquals(3, members.size(), INVALID_MEMBERS_AMOUNT);
 

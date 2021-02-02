@@ -9,12 +9,14 @@ class TriggerHandlerTest {
     
     @testSetup
     static void makeData() {
-        Id surveyId = TestDataFactory.createSurvey();
-        TestDataFactory.createEmailReceivers(surveyId);
-        TestDataFactory.createTriggerRules(surveyId);
-        TestDataFactory.createContacts();
-        TestDataFactory.createCases();
-        TestDataFactory.createLeads();
+        Survey__c survey = TestDataFactory.createSurvey();
+        insert survey;
+
+        insert TestDataFactory.createEmailReceivers(survey.Id);
+        insert TestDataFactory.createTriggerRules(survey.Id);
+        insert TestDataFactory.createContacts();
+        insert TestDataFactory.createCases();
+        insert TestDataFactory.createLeads();
     }
     
     @isTest

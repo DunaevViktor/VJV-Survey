@@ -1,10 +1,10 @@
 @IsTest
 public with sharing class SendEmailLogicTest {
 
-    private static final String TEST_CAMPAIGN_NAME = 'Test Campaign Name';
-    private static final String TEST_COMPANY_NAME = 'Test Company Name';
-    private static final String TEST_LAST_NAME = 'Test';
     private static final String TEST_EMAIL = 'test@gmail.ru';
+    private static final String TEST_GROUP_NAME = 'TestGroup';
+    private static final String TEST_DEVELOPER_NAME = 'TestDeveloperGroup';
+    private static final String TEST_URL = 'https://test2.com';
 
     private static final String EMAIL_RECEIVER_TYPE_GROUP = 'User Group';
     private static final String EMAIL_RECEIVER_TYPE_CAMPAIGN = 'Campaign';
@@ -19,42 +19,31 @@ public with sharing class SendEmailLogicTest {
     
     @TestSetup
     static void makeData(){
-        SurveyEmailConfig__c config = new SurveyEmailConfig__c(Name = 'Main',
-                                                               Display_Name__c = 'Display Name',
-                                                               Subject__c = 'Subject',
-                                                               Template_Name__c = 'Main Template',
-                                                               Url_Config__c = 'URL',
-                                                               Company_Config__c = 'COMPANY');
+        SurveyEmailConfig__c config = TestDataFactory.createSurveyEmailConfig();
         insert config;
         
-        Profile profile = [SELECT Id, Name FROM Profile WHERE Name = 'Standard User' WITH SECURITY_ENFORCED LIMIT 1];
+        Profile profile = TestDataFactory.getStandardProfile();
         
-        User newUser = new User(LastName = 'TestName', Email = 'test@test.com', Alias = 'TName', 
-                                Username = 't1n3a3m7e@test.com', LocaleSidKey = 'en_US', TimeZoneSidKey = 'GMT', 
-                                ProfileID = profile.Id, LanguageLocaleKey = 'en_US', EmailEncodingKey = 'UTF-8');
+        User newUser = TestDataFactory.createStandardUser(profile);
+        newUser.Email = TEST_EMAIL;
         insert newUser;
 
-        Lead lead = new Lead();
-        lead.Company = TEST_COMPANY_NAME;
-        lead.LastName = TEST_LAST_NAME;
+        Lead lead = TestDataFactory.createLead();
         lead.Email = TEST_EMAIL;
         insert lead;
 
-        Contact contact = new Contact();
-        contact.LastName = TEST_LAST_NAME;
+        Contact contact = TestDataFactory.createContact(); 
         contact.Email = TEST_EMAIL;
         insert contact;
 
-        Campaign campaign = new Campaign(Name = TEST_CAMPAIGN_NAME);
+        Campaign campaign = TestDataFactory.createCampaign();
         insert campaign;
 
-        CampaignMember campaignMember = new CampaignMember();
-        campaignMember.CampaignId = campaign.Id;
-        campaignMember.LeadId = lead.Id;
+        CampaignMember campaignMember = TestDataFactory.createCampaignMember(campaign.Id, lead.Id);
         campaignMember.ContactId = contact.Id;
         insert campaignMember;
         
-        Group testGroup = new Group(Name = 'TestGroup', DeveloperName='TestDeveloperGroup');
+        Group testGroup = TestDataFactory.createGroup(TEST_GROUP_NAME, TEST_DEVELOPER_NAME);
         insert testGroup;
         
         System.runAs(new User(Id = UserInfo.getUserId())) {
@@ -62,55 +51,61 @@ public with sharing class SendEmailLogicTest {
             insert groupMember;
         }
         
-        Survey__c simpleSurvey = new Survey__c(Name = 'Simple Survey', URL__c = 'https://test2.com');
+        Survey__c simpleSurvey = TestDataFactory.createSurvey();
+        simpleSurvey.URL__c = TEST_URL;
         insert simpleSurvey;
         
-        Email_Receiver__c groupReceiver = new Email_Receiver__c(Type__c = EMAIL_RECEIVER_TYPE_GROUP, Value__c = 'TestGroup', 
-                                                                Survey__c = simpleSurvey.Id);
-        
-        Email_Receiver__c campaignReceiver = new Email_Receiver__c(Type__c = EMAIL_RECEIVER_TYPE_CAMPAIGN, Value__c = campaign.Name, 
-                                                                Survey__c = simpleSurvey.Id);
-
-        Email_Receiver__c recordReceiver = new Email_Receiver__c(Type__c = EMAIL_RECEIVER_TYPE_RECORD, Value__c = lead.Id, 
-                                                                Survey__c = simpleSurvey.Id);                                                        
-        insert campaignReceiver;
+        Email_Receiver__c groupReceiver = TestDataFactory.createReceiver(EMAIL_RECEIVER_TYPE_GROUP, TEST_GROUP_NAME, simpleSurvey.Id);
         insert groupReceiver;
+        
+        Email_Receiver__c campaignReceiver = TestDataFactory.createReceiver(EMAIL_RECEIVER_TYPE_CAMPAIGN, campaign.Name, simpleSurvey.Id);
+        insert campaignReceiver;
+
+        Email_Receiver__c recordReceiver = TestDataFactory.createReceiver(EMAIL_RECEIVER_TYPE_RECORD, lead.Id, simpleSurvey.Id);                                                        
         insert recordReceiver;
     }
     
     @IsTest
     static void testSendEmails(){
-        List<Email_Receiver__c> receiverList = [SELECT Id, Type__c, Value__c, Survey__c FROM Email_Receiver__c WITH SECURITY_ENFORCED];
+        List<Email_Receiver__c> receiverList = [SELECT Id, Type__c, Value__c, Survey__c 
+                                                FROM Email_Receiver__c WITH SECURITY_ENFORCED];
+
         Test.startTest();
         SendEmailLogic.sendEmails(receiverList);
         Integer invocations = Limits.getEmailInvocations();
         Test.stopTest();
+
         System.assertEquals(1, invocations, EMAIL_ERROR);
     } 
     
     @IsTest
     static void testCreateEmailMessages() {
-        List<Email_Receiver__c> receiverList = [SELECT Id, Type__c, Value__c, Survey__c FROM Email_Receiver__c WITH SECURITY_ENFORCED];
+        List<Email_Receiver__c> receiverList = [SELECT Id, Type__c, Value__c, Survey__c 
+                                                FROM Email_Receiver__c WITH SECURITY_ENFORCED];
+
         Map<Id, Survey__c> surveyMap = SendEmailLogicHelper.createSurveyMap();
         List<Messaging.SingleEmailMessage> messageList = SendEmailLogic.createEmailMessages(receiverList, surveyMap);
+
         System.assertEquals(4, messageList.size(), AMOUNT_ERROR);
     }
     
     @IsTest
     static void testCreateEmailBody(){
         Survey__c survey = [SELECT Id, Name, URL__c 
-                            FROM Survey__c WHERE Name = 'Simple Survey' WITH SECURITY_ENFORCED LIMIT 1];
+                            FROM Survey__c WHERE Name = :TestDataFactory.TEST_VALUE WITH SECURITY_ENFORCED LIMIT 1];
+
         Organization currentOrg = SendEmailLogicHelper.getOrganization();
         EmailTemplate template = SendEmailLogicHelper.getEmailTemplate();
         String body = SendEmailLogicHelper.createEmailBody(template.body, survey, currentOrg);
+
         System.assertNotEquals(null, body, EMAIL_BODY_ERROR);
     }
     
     @IsTest
     static void testGetMethods(){
-        Group currentGroup = [SELECT Id, Name FROM Group WHERE Name = 'TestGroup' WITH SECURITY_ENFORCED LIMIT 1];
+        Group currentGroup = [SELECT Id, Name FROM Group WHERE Name = :TEST_GROUP_NAME WITH SECURITY_ENFORCED LIMIT 1];
         GroupMember currentMember = [SELECT Id, GroupId, UserOrGroupId FROM GroupMember WHERE GroupId = :currentGroup.Id WITH SECURITY_ENFORCED LIMIT 1];
-        User currentUser = [SELECT Id, Name, Email FROM User WHERE Email = 'test@test.com' WITH SECURITY_ENFORCED LIMIT 1];
+        User currentUser = [SELECT Id, Name, Email FROM User WHERE Email = :TEST_EMAIL WITH SECURITY_ENFORCED LIMIT 1];
 
         List<User> userList = SendEmailLogicHelper.getUser();
         Boolean actualUser = userList.contains(currentUser);
@@ -136,14 +131,14 @@ public with sharing class SendEmailLogicTest {
     
     @IsTest
     static void testCreateMapMethods(){
-        Group currentGroup = [SELECT Id, Name FROM Group WHERE Name = 'TestGroup' WITH SECURITY_ENFORCED LIMIT 1];
+        Group currentGroup = [SELECT Id, Name FROM Group WHERE Name = :TEST_GROUP_NAME WITH SECURITY_ENFORCED LIMIT 1];
 
         Map<Id, Group> groupMap = SendEmailLogicHelper.createGroupMap();
         Boolean actualGroup = groupMap.containsKey(currentGroup.Id);
         System.assertEquals(true, actualGroup, CONTAIN_ERROR);
 
         Map<String, List<User>> userMap = SendEmailLogicHelper.createUserByGroupMap();
-        Boolean actualUser = userMap.containsKey('TestGroup');
+        Boolean actualUser = userMap.containsKey(TEST_GROUP_NAME);
         System.assertEquals(true, actualUser, CONTAIN_ERROR);
 
         Map<Id, Survey__c> surveyMap = SendEmailLogicHelper.createSurveyMap();
@@ -153,7 +148,7 @@ public with sharing class SendEmailLogicTest {
     @IsTest
     static void testInitializeUserByGroupMap(){
         Map<String, List<User>> userMap = SendEmailLogicHelper.initializeUserByGroupMap();
-        Boolean actualUser = userMap.containsKey('TestGroup');
+        Boolean actualUser = userMap.containsKey(TEST_GROUP_NAME);
         System.assertEquals(true, actualUser, CONTAIN_ERROR);
     }
 }
