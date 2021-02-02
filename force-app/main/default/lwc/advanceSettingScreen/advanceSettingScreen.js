@@ -204,13 +204,11 @@ export default class AdvanceSettingScreen extends LightningElement {
     handleRowAction(event) {
         const actionName = event.detail.action.name;
         const row = event.detail.row;
-
-        if (actionName === "delete") {
-            this.deleteRow(row);
-        }
-
-        if (actionName === "add"){
-            this.handleAddRecordReceiver(row);
+        switch (actionName){
+            case 'delete' :
+                this.deleteRow(row);
+                break;
+            default: this.handleAddRecordReceiver(row);
         }
     }
 
@@ -293,14 +291,11 @@ export default class AdvanceSettingScreen extends LightningElement {
         this.setIsHasReseivers();
     }
 
-    isRecordValid(Id){
-        const value = Id;
-
+    isRecordValid(value){
         if (isReceiverExist(this.receivers, value)) {
             this.showToast();
             return false;
         }
-
         return true;
     }
 
