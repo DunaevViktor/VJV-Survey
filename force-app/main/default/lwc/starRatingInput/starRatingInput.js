@@ -11,11 +11,9 @@ export default class StarRatingInput extends LightningElement {
   @api question;
 
   @api checkValidity() {
-      if(this.question.IsVisible__c){
-        if (this.question.Required__c && this.selectedRate === undefined) {
-            return false;
-          }
-      }
+    if (this.question.IsVisible__c && this.question.Required__c && this.selectedRate === undefined) {
+      return false;
+    }
     return true;
   }
 
