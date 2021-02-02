@@ -49,10 +49,23 @@ const createDisplayedMap = (objectList) => {
     });
 }
 
-const getObjectName = (objectList, objectId) =>{
+const getObjectName = (objectList, objectId) => {
     return objectList.find((element) => {
         return objectId === element.Id;
     }).Name;
 }
 
-export { columns, columnsMember, isReceiverExist, deleteReceiver, createDisplayedMap, getObjectName};
+const callReportValidity = (input, message) => {
+    input.setCustomValidity(message);
+    input.reportValidity();
+}
+
+export {
+    columns,
+    columnsMember,
+    isReceiverExist,
+    deleteReceiver,
+    createDisplayedMap,
+    getObjectName,
+    callReportValidity
+};

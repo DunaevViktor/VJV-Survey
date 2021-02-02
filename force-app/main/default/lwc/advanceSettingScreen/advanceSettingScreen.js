@@ -1,6 +1,6 @@
 import { LightningElement, track, api } from "lwc";
 import { label } from "./labels.js";
-import { columns, columnsMember, isReceiverExist, deleteReceiver, createDisplayedMap, getObjectName } from "./advanceSettingScreenHelper.js";
+import { columns, columnsMember, isReceiverExist, deleteReceiver, createDisplayedMap, getObjectName, callReportValidity } from "./advanceSettingScreenHelper.js";
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getGroups from "@salesforce/apex/GroupController.getGroups";
@@ -227,11 +227,6 @@ export default class AdvanceSettingScreen extends LightningElement {
         this.copyReceivers = [...this.copyReceivers, copyReceiver];
     }
 
-    callReportValidity(input, message) {
-        input.setCustomValidity(message);
-        input.reportValidity();
-    }
-
     handleGroupChange(event) {
         this.groupId = event.detail.value;
     }
@@ -250,20 +245,20 @@ export default class AdvanceSettingScreen extends LightningElement {
         this.createCopyReceiver(receiver, receiver.Value__c);
         this.receivers = [...this.receivers, receiver];
 
-        this.callReportValidity(combobox, "");
+        callReportValidity(combobox, "");
         this.setIsHasReseivers();
     }
 
     isGroupValid(combobox) {
         if (this.groupId.localeCompare("") === 0) {
-            this.callReportValidity(combobox, label.error_choose_some_group);
+            callReportValidity(combobox, label.error_choose_some_group);
             return false;
         }
 
         const value = getObjectName(this.displayedGroups, this.groupId);
 
         if (isReceiverExist(this.receivers, value)) {
-            this.callReportValidity(combobox, label.error_already_added_this_group);
+            callReportValidity(combobox, label.error_already_added_this_group);
             return false;
         }
 
@@ -322,20 +317,20 @@ export default class AdvanceSettingScreen extends LightningElement {
         this.createCopyReceiver(receiver, receiver.Value__c);
         this.receivers = [...this.receivers, receiver];
 
-        this.callReportValidity(combobox, "");
+        callReportValidity(combobox, "");
         this.setIsHasReseivers();
     }
 
     isCampaignValid(combobox) {
         if (this.campaignId.localeCompare("") === 0) {
-            this.callReportValidity(combobox, label.error_choose_some_campaign);
+            callReportValidity(combobox, label.error_choose_some_campaign);
             return false;
         }
 
         const value = getObjectName(this.displayedCampaigns, this.campaignId);
 
         if (isReceiverExist(this.receivers, value)) {
-            this.callReportValidity(combobox, label.error_already_added_campaign);
+            callReportValidity(combobox, label.error_already_added_campaign);
             return false;
         }
 
