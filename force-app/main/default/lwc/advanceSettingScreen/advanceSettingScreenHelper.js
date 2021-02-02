@@ -43,4 +43,10 @@ const deleteReceiver = (receiverList, filterValue) => {
     });
 }
 
-export { columns, columnsMember, isReceiverExist, deleteReceiver};
+const createDisplayedMap = (objectList) => {
+    return objectList.map((element) => {
+        return { label: element.Name, value: element.Id };
+    });
+}
+
+export { columns, columnsMember, isReceiverExist, deleteReceiver, createDisplayedMap};

@@ -1,6 +1,6 @@
 import { LightningElement, track, api } from "lwc";
 import { label } from "./labels.js";
-import { columns, columnsMember, isReceiverExist, deleteReceiver } from "./advanceSettingScreenHelper.js";
+import { columns, columnsMember, isReceiverExist, deleteReceiver, createDisplayedMap } from "./advanceSettingScreenHelper.js";
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getGroups from "@salesforce/apex/GroupController.getGroups";
@@ -69,31 +69,21 @@ export default class AdvanceSettingScreen extends LightningElement {
     }
 
     get groupOptions() {
-        return this.displayedGroups.map((group) => {
-            return { label: group.Name, value: group.Id };
-        });
+        return createDisplayedMap(this.displayedGroups);
     }
 
     get surveyOptions() {
-        return this.displayedSurveys.map((survey) => {
-            return { label: survey.Name, value: survey.Id };
-        });
+        return createDisplayedMap(this.displayedSurveys);
     }
 
     get campaignOptions() {
-        return this.displayedCampaigns.map((campaign) => {
-            return { label: campaign.Name, value: campaign.Id };
-        });
+        return createDisplayedMap(this.displayedCampaigns);
     }
 
     @api set survey(value) {
         this.__survey = JSON.parse(JSON.stringify(value));
-        if (this.__survey.Related_To__c === undefined) {
-            this.isConnectToSurvey = false;
-        } else {
-            this.isConnectToSurvey = true;
-            this.surveyId = this.__survey.Related_To__c;
-        }
+        this.isConnectToSurvey = this.__survey.Related_To__c !== undefined;
+        if(this.isConnectToSurvey) this.surveyId = this.__survey.Related_To__c;
     }
 
     @api set surveys(value) {
@@ -169,40 +159,38 @@ export default class AdvanceSettingScreen extends LightningElement {
 
     handleKeyUp(evt) {
         const isEnterKey = evt.keyCode === 13;
-        if (isEnterKey) {
-            this.queryTerm = evt.target.value;
-            if (this.queryTerm && this.queryTerm.trim().length > 1) {
-                this.searchError = false;
-                searchMembers({ searchTerm: this.queryTerm })
-                    .then((result) => {
-                        this.memberList = [];
-                        result.forEach(memberListByType => {
-                            let recordType = "";
-                            if(memberListByType.length > 0){
-                                let uniquePrefix = memberListByType[0].Id.substr(0,3);
-                                switch (uniquePrefix){
-                                    case '005' :
-                                        recordType = this.RECORD_TYPE_USER;
-                                        break;
-                                    case '00Q' :
-                                        recordType = this.RECORD_TYPE_LEAD;
-                                        break;
-                                    default: recordType = this.RECORD_TYPE_CONTACT;
-                                }
-                            }
-                            memberListByType.forEach(member => {
-                                let copyMember = {...member};
-                                copyMember.Type = recordType;
-                                this.memberList.push(copyMember);
-                            });
-                        });
-                        this.setIsHasMembers();
-                    })
-                    .catch(() => {
-                        this.searchError = true;
+        if (!isEnterKey) { return; }
+        this.queryTerm = evt.target.value;
+        if (!(this.queryTerm && this.queryTerm.trim().length > 1)) { return; }
+        this.searchError = false;
+        searchMembers({ searchTerm: this.queryTerm })
+            .then((result) => {
+                this.memberList = [];
+                result.forEach(memberListByType => {
+                    let recordType = "";
+                    if(memberListByType.length > 0){
+                        let uniquePrefix = memberListByType[0].Id.substr(0,3);
+                        switch (uniquePrefix){
+                            case '005' :
+                                recordType = this.RECORD_TYPE_USER;
+                                break;
+                            case '00Q' :
+                                recordType = this.RECORD_TYPE_LEAD;
+                                break;
+                            default: recordType = this.RECORD_TYPE_CONTACT;
+                        }
+                    }
+                    memberListByType.forEach(member => {
+                        let copyMember = {...member};
+                        copyMember.Type = recordType;
+                        this.memberList.push(copyMember);
                     });
-            }
-        }
+                });
+                this.setIsHasMembers();
+            })
+            .catch(() => {
+                this.searchError = true;
+            });
     }
 
     setIsHasMembers() {
