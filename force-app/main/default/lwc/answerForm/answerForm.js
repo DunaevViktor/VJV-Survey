@@ -11,7 +11,9 @@ import saveAnswers from "@salesforce/apex/AnswerController.saveAnswers";
 import {
   FIELDS,
   sortQuestionsByPosition,
-  checkDependentQuestion
+  checkDependentQuestion,
+  initQuestionFields,
+  createAnswers
 } from "./answerFormHelper";
 
 export default class AnswerForm extends LightningElement {
@@ -41,35 +43,7 @@ export default class AnswerForm extends LightningElement {
   @wire(getQuestions, { surveyId: "$surveyId" })
   questions({ data, error }) {
     if (data) {
-      this.answerInputs = [];
-      data.forEach((question) => {
-        this.answerInputs.push({ ...question });
-      });
-
-      this.answerInputs.forEach((question) => {
-        let fieldType = "is" + question.Type__c;
-        question[fieldType] = true;
-        let options = [];
-
-        switch (question.Type__c) {
-          case "Checkbox":
-            question.Answer = [];
-            break;
-          case "Picklist":
-            options = [{ label: "-- None --", value: null }];
-            break;
-          default:
-        }
-
-        if (question.Question_Options__r) {
-          question.Question_Options__r.forEach((option) => {
-            options.push({ label: option.Value__c, value: option.Value__c });
-          });
-
-          question.Question_Options__r = options;
-        }
-      });
-
+      this.answerInputs = initQuestionFields(this.answerInputs, data);
       this.answerInputs = sortQuestionsByPosition(this.answerInputs);
     }
     if (error) {
@@ -123,7 +97,11 @@ export default class AnswerForm extends LightningElement {
   }
 
   saveAnswers(groupAnswerId) {
-    let answers = this.createAnswers(groupAnswerId);
+    let answers = createAnswers(
+      this.answerInputs,
+      groupAnswerId,
+      this.linkedRecordId
+    );
 
     saveAnswers({ answers: answers })
       .then(() => {
@@ -133,36 +111,6 @@ export default class AnswerForm extends LightningElement {
       .catch((error) => {
         this.error = error;
       });
-  }
-
-  createAnswers(groupAnswerId) {
-    let answers = [];
-    this.answerInputs.forEach((question) => {
-      if (question.Answer !== null && question.Answer !== undefined) {
-        let singleAnswer = { SObjectType: "Answer__c" };
-        singleAnswer.Group_Answer__c = groupAnswerId;
-        singleAnswer.Question__c = question.Id;
-
-        if (this.linkedRecordId !== null) {
-          singleAnswer.IsLinked__c = true;
-        } else {
-          singleAnswer.IsLinked__c = false;
-        }
-
-        if (question.Type__c === "Checkbox") {
-          question.Answer.forEach((checkedBox) => {
-            let singleCheckboxAnswer = { ...singleAnswer };
-            singleCheckboxAnswer.Value__c = checkedBox;
-            answers.push(singleCheckboxAnswer);
-          });
-        } else {
-          singleAnswer.Value__c = question.Answer;
-          answers.push(singleAnswer);
-        }
-      }
-    });
-
-    return answers;
   }
 
   saveGroupAnswer() {
