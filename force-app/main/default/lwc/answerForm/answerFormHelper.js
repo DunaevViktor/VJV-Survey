@@ -1,3 +1,5 @@
+import { operatorTypes, questionTypes } from "c/formUtil";
+
 const FIELDS = [
   "Survey__c.Id",
   "Survey__c.Name",
@@ -18,10 +20,10 @@ const initQuestionFields = (questions, data) => {
     let options = [];
 
     switch (question.Type__c) {
-      case "Checkbox":
+      case questionTypes.CHECKBOX:
         question.Answer = [];
         break;
-      case "Picklist":
+      case questionTypes.PICKLIST:
         options = [{ label: "-- None --", value: null }];
         break;
       default:
@@ -52,29 +54,29 @@ const sortQuestionsByPosition = (questions) => {
 const compareValues = (answerValue, operator, validationValue) => {
   let isConditionMet;
   switch (operator) {
-    case "IS NULL":
+    case operatorTypes.NULL:
       isConditionMet =
         String(
           answerValue == null || answerValue === undefined || answerValue === ""
         ) === validationValue;
       break;
-    case "EQUALS":
+    case operatorTypes.EQUALS:
       // eslint-disable-next-line eqeqeq
       isConditionMet = answerValue == validationValue;
       break;
-    case "NOT EQUALS":
+    case operatorTypes.NOT_EQUALS:
       isConditionMet = answerValue !== validationValue;
       break;
-    case "CONTAINS":
+    case operatorTypes.CONTAINS:
       isConditionMet = answerValue.includes(validationValue);
       break;
-    case "NOT CONTAINS":
+    case operatorTypes.NOT_CONTAINS:
       isConditionMet = !answerValue.includes(validationValue);
       break;
-    case "LESS THAN":
+    case operatorTypes.LESS_THAN:
       isConditionMet = parseFloat(answerValue) < parseFloat(validationValue);
       break;
-    case "GREATER THAN":
+    case operatorTypes.GREATER_THAN:
       isConditionMet = parseFloat(answerValue) > parseFloat(validationValue);
       break;
     default:
@@ -90,7 +92,7 @@ const hideAnswerChain = (questions, validation) => {
   );
   questions[dependentQuestion].IsVisible__c = false;
   questions[dependentQuestion].Answer =
-    questions[dependentQuestion].Type__c === "Checkbox" ? [] : null;
+    questions[dependentQuestion].Type__c === questionTypes.CHECKBOX ? [] : null;
   if (questions[dependentQuestion].Related_Question_Validations__r != null) {
     questions[dependentQuestion].Related_Question_Validations__r.forEach(
       (nextValidation) => {
@@ -148,7 +150,7 @@ const createAnswers = (questions, groupAnswerId, linkedRecordId) => {
         singleAnswer.IsLinked__c = false;
       }
 
-      if (question.Type__c === "Checkbox") {
+      if (question.Type__c === questionTypes.CHECKBOX) {
         question.Answer.forEach((checkedBox) => {
           let singleCheckboxAnswer = { ...singleAnswer };
           singleCheckboxAnswer.Value__c = checkedBox;
