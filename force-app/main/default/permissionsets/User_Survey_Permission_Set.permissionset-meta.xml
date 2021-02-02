@@ -4,10 +4,6 @@
         <application>Survey</application>
         <visible>true</visible>
     </applicationVisibilities>
-    <applicationVisibilities>
-        <application>Survey_Answer</application>
-        <visible>true</visible>
-    </applicationVisibilities>
     <description>Provides the necessary access to work with the survey constructor.</description>
     <fieldPermissions>
         <editable>true</editable>

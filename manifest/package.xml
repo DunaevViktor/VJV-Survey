@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-    <!--<types>
+    <types>
         <members>*</members>
         <name>ApexClass</name>
     </types>
@@ -31,12 +31,12 @@
     <types>
         <members>*</members>
         <name>StaticResource</name>
-    </types>-->
+    </types>
     <types>
         <members>*</members>
         <name>CustomObject</name>
     </types>
-    <!--<types>
+    <types>
         <members>Survey_Report_Dashboard_Permission_Set</members>
         <members>Admin_Survey_Permission_Set</members>
         <members>User_Survey_Permission_Set</members>
@@ -99,15 +99,13 @@
     </types>
     <types>
         <members>Survey</members>
-        <members>Survey_Answer</members>
         <name>CustomApplication</name>
     </types>
     <types>
         <members>Survey_UtilityBar</members>
         <members>Survey_Constructor</members>
-        <members>Survey_Answer_UtilityBar</members>
         <members>Survey_Answer_Form</members>
         <name>FlexiPage</name>
-    </types>-->
+    </types>
     <version>50.0</version>
 </Package>
