@@ -34,11 +34,12 @@ public with sharing class MetadataFetcher {
   }
 
   private static Map<String, Schema.SObjectField> getObjectFieldMap(String objectApiName) {
-    SObjectType sobjectType = Schema.getGlobalDescribe().get(objectApiName);
-    if(sobjectType == null) {
+    Type objectType = Type.forName(objectApiName);
+    if(objectType == null) {
       return new Map<String, Schema.SObjectField>();
     }
-    Map<String, Schema.SObjectField> sobjectFields = sobjectType.getDescribe().fields.getMap();
+    SObjectType sObjType = ((SObject) objectType.newInstance()).getSObjectType();    
+    Map<String, Schema.SObjectField> sobjectFields = sObjType.getDescribe().fields.getMap();
     return sobjectFields;
   }
 
