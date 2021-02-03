@@ -162,7 +162,6 @@
     </nameField>
     <pluralLabel>Trigger Rules</pluralLabel>
     <searchLayouts>
-        <searchResultsAdditionalFields>Object_Api_Name__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Field_Name__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Operator__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Field_Value__c</searchResultsAdditionalFields>
