@@ -1,9 +1,5 @@
 @IsTest
 public with sharing class QuestionControllerTest {
-  private static final String TEST_NAME = 'Test Name';
-  private static final String TEST_LABEL = 'Test Label';
-  private static final String TEST_VALUE = 'Test Value';
-  private static final String TEST_POSITION = '1';
 
   private static final Integer AMOUNT = 5;
 
@@ -17,18 +13,13 @@ public with sharing class QuestionControllerTest {
     Survey__c survey = new Survey__c();
     insert survey;
 
-    Question__c question = new Question__c();
-    question.Label__c = TEST_LABEL;
-    question.Position__c = TEST_POSITION;
+    Question__c question = TestDataFactory.createQuestion(survey.Id);
     question.IsReusable__c = true;
-    question.Survey__c = survey.Id;
     insert question;
 
     List<Question_Option__c> options = new List<Question_Option__c>();
-    for (Integer i = 1; i <= 5; i++) {
-      Question_Option__c option = new Question_Option__c();
-      option.Value__c = TEST_VALUE + ' ' + i;
-      option.Question__c = question.Id;
+    for (Integer i = 1; i <= AMOUNT; i++) {
+      Question_Option__c option = TestDataFactory.createQuestionOption(question.Id);
       options.add(option);
     }
     insert options;
@@ -40,11 +31,6 @@ public with sharing class QuestionControllerTest {
     Question__c standardQuestion = standardQuestions[0];
 
     System.assertEquals(
-      TEST_LABEL,
-      standardQuestion.Label__c,
-      INVALID_QUESTION_NAME
-    );
-    System.assertEquals(
       options.size(),
       standardQuestion.Question_Options__r.size(),
       INVALID_OPTIONS_AMOUNT
@@ -54,9 +40,7 @@ public with sharing class QuestionControllerTest {
 
     for (Integer i = 1; i <= savedOptions.size(); i++) {
       System.assertEquals(
-        TEST_VALUE +
-        ' ' +
-        i,
+        TestDataFactory.TEST_VALUE,
         savedOptions[i - 1].Value__c,
         INVALID_OPTION_VALUE
       );
@@ -65,18 +49,14 @@ public with sharing class QuestionControllerTest {
 
   @IsTest
   static void testGetTemplatesQuestions() {
-    Survey__c survey = new Survey__c();
-    survey.Name = TEST_NAME;
+    Survey__c survey = TestDataFactory.createSurvey();
     survey.IsStandard__c = true;
     insert survey;
 
     List<Question__c> questions = new List<Question__c>();
     for (Integer i = 1; i <= AMOUNT; i++) {
-      Question__c question = new Question__c();
-      question.Label__c = TEST_LABEL;
-      question.Position__c = TEST_POSITION;
+      Question__c question = TestDataFactory.createQuestion(survey.Id);
       question.IsReusable__c = true;
-      question.Survey__c = survey.Id;
       questions.add(question);
     }
     insert questions;
@@ -84,9 +64,7 @@ public with sharing class QuestionControllerTest {
     List<Question_Option__c> options = new List<Question_Option__c>();
     for (Integer i = 0; i < AMOUNT; i++) {
       for (Integer j = 1; j <= AMOUNT; j++) {
-        Question_Option__c option = new Question_Option__c();
-        option.Value__c = TEST_VALUE + ' ' + j;
-        option.Question__c = questions[i].Id;
+        Question_Option__c option = TestDataFactory.createQuestionOption(questions[i].Id);
         options.add(option);
       }
     }
@@ -108,7 +86,7 @@ public with sharing class QuestionControllerTest {
     for (Integer i = 1; i <= AMOUNT; i++) {
       Question__c templateQuestion = templateQuestions[i - 1];
       System.assertEquals(
-        TEST_LABEL,
+        TestDataFactory.TEST_VALUE,
         templateQuestion.Label__c,
         INVALID_QUESTION_NAME
       );

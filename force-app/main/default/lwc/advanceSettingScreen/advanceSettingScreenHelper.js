@@ -1,10 +1,16 @@
 import { label } from "./labels.js";
 
-const TYPE_TEXT = "text"
+const TYPE_TEXT = "text";
+const FIELD_NAME = "Name";
+const FIELD_STANDARD_TYPE = "Type";
+const FIELD_CUSTOM_TYPE = "Type__c";
+const RECORD_TYPE_CONTACT = "Contact";
+const RECORD_TYPE_USER = "User";
+const RECORD_TYPE_LEAD = "Lead";
 
 const columns = [
-    { label: label.type, fieldName: "Type__c", type: TYPE_TEXT },
-    { label: "Name", fieldName: "Name", type: TYPE_TEXT },
+    { label: label.type, fieldName: FIELD_CUSTOM_TYPE, type: TYPE_TEXT },
+    { label: label.Name, fieldName: FIELD_NAME, type: TYPE_TEXT },
     {
         type: "button",
         initialWidth: 100,
@@ -16,13 +22,13 @@ const columns = [
 ];
 
 const columnsMember = [
-    { label: "Type", fieldName: "Type", type: TYPE_TEXT },
-    { label: "Name", fieldName: "Name", type: TYPE_TEXT },
+    { label: label.type, fieldName: FIELD_STANDARD_TYPE, type: TYPE_TEXT },
+    { label: label.Name, fieldName: FIELD_NAME, type: TYPE_TEXT },
     {
         type: "button",
         initialWidth: 100,
         typeAttributes: {
-            label: "Add",
+            label: label.add,
             name: "add"
         }
     }
@@ -34,4 +40,61 @@ const isReceiverExist = (receivers, value) => {
     });
 };
 
-export { columns, columnsMember, isReceiverExist };
+const deleteReceiver = (receiverList, filterValue) => {
+    return receiverList.filter((receiver) => {
+        return receiver.Value__c !== filterValue;
+    });
+}
+
+const createDisplayedMap = (objectList) => {
+    return objectList.map((element) => {
+        return { label: element.Name, value: element.Id };
+    });
+}
+
+const getObjectName = (objectList, objectId) => {
+    return objectList.find((element) => {
+        return objectId === element.Id;
+    }).Name;
+}
+
+const callReportValidity = (input, message) => {
+    input.setCustomValidity(message);
+    input.reportValidity();
+}
+
+const createMemberList = (result) => {
+    let memberList = [];
+    result.forEach(memberListByType => {
+        let recordType = "";
+        if(memberListByType.length > 0){
+            let uniquePrefix = memberListByType[0].Id.substr(0,3);
+            switch (uniquePrefix){
+                case '005' :
+                    recordType = RECORD_TYPE_USER;
+                    break;
+                case '00Q' :
+                    recordType = RECORD_TYPE_LEAD;
+                    break;
+                default: recordType = RECORD_TYPE_CONTACT;
+            }
+        }
+        memberListByType.forEach(member => {
+            let copyMember = {...member};
+            copyMember.Type = recordType;
+            memberList.push(copyMember);
+        });
+    });
+    return memberList;
+}
+
+export {
+    columns,
+    columnsMember,
+    isReceiverExist,
+    deleteReceiver,
+    createDisplayedMap,
+    getObjectName,
+    callReportValidity,
+    createMemberList
+};

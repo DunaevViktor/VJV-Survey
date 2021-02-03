@@ -13,21 +13,21 @@
                     required></lightning-combobox>
             </template>
             <template if:true={getSurveyError}>
-                <div class="text">Error with loading list of surveys.</div>
+                <div class="text">{label.error_loading_surveys}</div>
             </template>
         </template>
     </template>
 
     <br />
     <br />
-    <div class="slds-text-heading_x-small">Add immediate dispatch</div>
+    <div class="slds-text-heading_x-small">{label.add_immediate_dispatch}</div>
 
     <lightning-tabset>
 
-        <lightning-tab label="Single Record">
+        <lightning-tab label={label.Single_Record}>
             <div onkeyup={handleKeyUp}>
-                <lightning-input name="searchName" label="Enter Contact/Lead/User"
-                    placeholder="Type here(2+ symbols) and hit Enter..." class="slds-m-vertical_medium" type="search">
+                <lightning-input name="searchName" label={label.Single_Record_Label}
+                    placeholder={label.Single_Record_Placeholder} class="slds-m-vertical_medium" type="search">
                 </lightning-input>
             </div>
             <template if:false={searchError}>
@@ -39,27 +39,27 @@
                     </div>
                 </template>
                 <template if:false={hasMembers}>
-                    <div class="text">No search results.</div>
+                    <div class="text">{label.no_records_found}</div>
                 </template>
             </template>
             <template if:true={searchError}>
-                <div class="text">Error with search.</div>
+                <div class="text">{label.error_search}</div>
             </template>
         </lightning-tab>
 
-        <lightning-tab label="Public Group">
+        <lightning-tab label={label.Public_Group}>
             <template if:true={isHasGroups}>
                 <template if:false={getGroupError}>
                     <div class="slds-m-vertical_medium">
                         <lightning-combobox name="userGroups" label={label.user_groups} value=""
-                            placeholder="Select User Group" options={groupOptions} onchange={handleGroupChange}
+                            placeholder={label.Public_Group_Placeholder} options={groupOptions} onchange={handleGroupChange}
                             class="group-combobox" required></lightning-combobox>
                     </div>
                     <lightning-button variant="brand" label={label.add} onclick={handleAddGroupReceiver}>
                     </lightning-button>
                 </template>
                 <template if:true={getGroupError}>
-                    <div class="text">Error with loading list of groups.</div>
+                    <div class="text">{label.error_loading_groups}</div>
                 </template>
             </template>
 
@@ -68,11 +68,11 @@
             </template>
         </lightning-tab>
 
-        <lightning-tab label="Campaign">
+        <lightning-tab label={label.Campaign}>
             <template if:true={isHasCampaigns}>
                 <template if:false={getCampaignsError}>
                     <div class="slds-m-vertical_medium">
-                        <lightning-combobox name="campaigns" label="Campaigns" value="" placeholder="Select campaign"
+                        <lightning-combobox name="campaigns" label={label.Campaign_Label} value="" placeholder={label.Campaign_Placeholder}
                             options={campaignOptions} onchange={handleCampaignChange} class="campaign-combobox"
                             required></lightning-combobox>
                     </div>
@@ -80,12 +80,12 @@
                     </lightning-button>
                 </template>
                 <template if:true={getCampaignsError}>
-                    <div class="text">Error with loading list of campaign.</div>
+                    <div class="text">{label.error_loading_campaigns}</div>
                 </template>
             </template>
 
             <template if:false={isHasCampaigns}>
-                <div class="text">Dont have campaigns.</div>
+                <div class="text">{label.no_campaigns}</div>
             </template>
         </lightning-tab>
 
@@ -93,7 +93,7 @@
 
     <template if:true={hasReceivers}>
         <div class="data-table">
-            <div class="text">Email Receivers:</div>
+            <div class="text">{label.Email_Receiver}</div>
             <lightning-datatable key-field="Value__c" data={copyReceivers} columns={columns} onrowaction={handleRowAction}
                 hide-checkbox-column>
             </lightning-datatable>

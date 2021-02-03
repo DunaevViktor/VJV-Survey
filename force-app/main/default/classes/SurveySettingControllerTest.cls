@@ -10,14 +10,6 @@ public with sharing class SurveySettingControllerTest {
   private static final String INVALID_SETTING_VALUE = 'Actual value of setting doesn\'t equal to expected';
   private static final String INVALID_MAX_TRIGGER_RULE_AMOUNT_SETTING_VALUE = 'Actual value of max trigger rule amount setting doesn\'t equal to expected.';
 
-  @TestSetup
-  static void makeData(){
-    Survey_Setting__c setting = new Survey_Setting__c();
-    setting.Name = MAX_TRIGGER_RULES_AMOUNT_SETTING_NAME;
-    setting.Value__c = MAX_TRIGGER_RULES_TEST_AMOUNT;
-    insert setting;
-  }
-
   @IsTest
   static void testGetMaxQuestionAmount() {
     Survey_Setting__c setting = new Survey_Setting__c();
@@ -32,7 +24,7 @@ public with sharing class SurveySettingControllerTest {
   @IsTest
   static void testGetMinQuestionAmount() {
     Survey_Setting__c setting = new Survey_Setting__c();
-    setting.Name = MAX_QUESTION_AMOUNT_SETTING_NAME;
+    setting.Name = MIN_QUESTION_AMOUNT_SETTING_NAME;
     setting.Value__c = TEST_AMOUNT;
     insert setting;
 
@@ -52,7 +44,12 @@ public with sharing class SurveySettingControllerTest {
   }
 
   @IsTest
-  static void testGetMaxTriggerRuleAmount() {    
+  static void testGetMaxTriggerRuleAmount() { 
+    Survey_Setting__c setting = new Survey_Setting__c();
+    setting.Name = MAX_TRIGGER_RULES_AMOUNT_SETTING_NAME;
+    setting.Value__c = MAX_TRIGGER_RULES_TEST_AMOUNT;
+    insert setting;
+
     Integer fetchedValue = SurveySettingController.getMaxTriggerRuleAmount();
     System.assertEquals(Integer.valueOf(MAX_TRIGGER_RULES_TEST_AMOUNT), fetchedValue, INVALID_MAX_TRIGGER_RULE_AMOUNT_SETTING_VALUE);
   }
