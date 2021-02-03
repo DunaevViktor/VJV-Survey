@@ -5,6 +5,7 @@ import unable_to_continue from "@salesforce/label/c.unable_to_continue";
 import limit_question_sexceeded from "@salesforce/label/c.limit_question_sexceeded"; 
 import error_message from "@salesforce/label/c.errorMessage";
 import you_must_have_at_least from "@salesforce/label/c.you_must_have_at_least";
+import questions from "@salesforce/label/c.questions";
 
 const label = {
   error_message,
@@ -14,7 +15,7 @@ const label = {
   unable_to_continue,
   limit_question_sexceeded,
   you_must_have_at_least,
-  
+  questions
 };
 
 export {

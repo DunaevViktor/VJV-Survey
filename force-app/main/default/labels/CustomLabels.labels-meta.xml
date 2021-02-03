@@ -204,6 +204,13 @@
         <value>You can no longer create questions</value>
     </labels>
     <labels>
+        <fullName>cancel</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>cancel</shortDescription>
+        <value>Cancel</value>
+    </labels>
+    <labels>
         <fullName>cancel_edit</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -834,6 +841,13 @@
         <value>Selected Survey Template</value>
     </labels>
     <labels>
+        <fullName>send</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>send</shortDescription>
+        <value>Send</value>
+    </labels>
+    <labels>
         <fullName>should_have_two_questions</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -853,6 +867,13 @@
         <protected>true</protected>
         <shortDescription>success</shortDescription>
         <value>Success</value>
+    </labels>
+    <labels>
+        <fullName>successful_answer_save</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>successful answer save</shortDescription>
+        <value>Thanks! Your answer has been recorded.</value>
     </labels>
     <labels>
         <fullName>survey_bg_color</fullName>

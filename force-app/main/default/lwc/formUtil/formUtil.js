@@ -15,7 +15,8 @@ const operatorTypes = {
   NOT_CONTAINS : "NOT CONTAINS",
   LESS_THAN: "LESS THAN",
   GREATER_THAN: "GREATER THAN",
-  EQUALS: "EQUALS"
+  EQUALS: "EQUALS",
+  NOT_EQUALS: "NOT EQUALS"
 };
 
 const booleanPicklistOptions = [

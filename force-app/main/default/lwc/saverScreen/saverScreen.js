@@ -50,7 +50,8 @@ export default class SaverScreen extends LightningElement {
 
   sendSaveSurveyRequest() {
       let copySurvey = {...this.survey};
-      copySurvey.URL__c = 'https://test.com';
+      copySurvey.URL__c = this.getSurveyUrl();
+
     saveSurvey({survey : copySurvey})
       .then((result) => {
         this.surveyId = result;
@@ -169,5 +170,15 @@ export default class SaverScreen extends LightningElement {
   increaseProgress() {
     this.stepsOfSave[this.currentStep].isDone = true;
     this.currentStep++;
+  }
+
+  getSurveyUrl(){
+      return 'https://' + this.getOrgDomain() + '.lightning.force.com/lightning/n/Survey_Answer_Form';
+  }
+
+  getOrgDomain(){
+    const hostname = window.location.hostname;
+    const splitHostname = hostname.split(".");
+    return splitHostname[0];
   }
 }

@@ -175,6 +175,10 @@
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
     <tabSettings>
+        <tab>Survey_Answer_Form</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
         <tab>Survey_Constructor</tab>
         <visibility>Visible</visibility>
     </tabSettings>
