@@ -7,6 +7,8 @@ public with sharing class SendEmailLogic {
     available fields: Display_Name__c, Subject__c, Template_Name__c, Url_Config__c, Company_Config__c
     */
 
+    private static final String EMAIL_SETTINGS_NAME = 'Main';
+
     @AuraEnabled(cacheable=true)
     public static void sendEmails(List<Email_Receiver__c> emailReceiverList){
         Map<Id, Survey__c> surveyMap = SendEmailLogicHelper.createSurveyMap();
@@ -24,7 +26,7 @@ public with sharing class SendEmailLogic {
         Map<String, List<Id>> contactMap = SendEmailLogicHelper.initializeContactByCampaignMap();
         Map<String, List<Id>> leadMap = SendEmailLogicHelper.initializeLeadByCampaignMap();
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
-        SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues('Main');
+        SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues(EMAIL_SETTINGS_NAME);
         
         for(Email_Receiver__c receiver: receiverList){
             Survey__c survey = surveyMap.get(receiver.Survey__c);

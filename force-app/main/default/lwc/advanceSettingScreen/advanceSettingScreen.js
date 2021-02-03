@@ -1,6 +1,7 @@
 import { LightningElement, track, api } from "lwc";
 import { label } from "./labels.js";
-import { columns, columnsMember, isReceiverExist } from "./advanceSettingScreenHelper.js";
+import { columns, columnsMember, isReceiverExist, deleteReceiver, createDisplayedMap,
+         getObjectName, callReportValidity, createMemberList } from "./advanceSettingScreenHelper.js";
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getGroups from "@salesforce/apex/GroupController.getGroups";
@@ -12,7 +13,7 @@ export default class AdvanceSettingScreen extends LightningElement {
 
     SINGLE_RECORD_VARIANT = "Record";
     GROUP_VARIANT = "User Group";
-    CAMPAIGN_VARIAN = "Campaign"
+    CAMPAIGN_VARIAN = "Campaign";
 
     label = label;
     columns = columns;
@@ -28,63 +29,18 @@ export default class AdvanceSettingScreen extends LightningElement {
     @track isHasGroups = false;
     @track getGroupError = false;
     @track getSurveyError = false;
-
     @track displayedCampaigns = [];
     @track getCampaignsError = false;
     @track isHasCampaigns = false;
-
     @track hasMembers = false;
     @track searchError = false;
-
     @track copyReceivers = [];
 
     groupId = "";
     surveyId = "";
     campaignId = "";
-
     queryTerm = "";
     memberList = [];
-    handleKeyUp(evt) {
-        const isEnterKey = evt.keyCode === 13;
-        if (isEnterKey) {
-            this.queryTerm = evt.target.value;
-            if (this.queryTerm && this.queryTerm.trim().length > 1) {
-                this.searchError = false;
-                searchMembers({ searchTerm: this.queryTerm })
-                    .then((result) => {
-                        this.memberList = [];
-                        result.forEach(memberListByType => {
-                            let recordType = "";
-                            if(memberListByType.length > 0){
-                                let uniquePrefix = memberListByType[0].Id.substr(0,3);
-                                switch (uniquePrefix){
-                                    case '005' :
-                                        recordType = 'User';
-                                        break;
-                                    case '00Q' :
-                                        recordType = 'Lead';
-                                        break;
-                                    default: recordType = 'Contact';
-                                }
-                            }
-                            memberListByType.forEach(member => {
-                                let copyMember = {...member};
-                                copyMember.Type = recordType;
-                                this.memberList.push(copyMember);
-                            });
-                        });
-                        this.setIsHasMembers();
-                    })
-                    .catch(() => {
-                        this.searchError = true;
-                    });
-            }
-        }
-    }
-
-    setIsHasMembers() {
-        this.hasMembers = this.memberList && this.memberList.length > 0;
-    }
 
     get survey() {
         return this.__survey;
@@ -111,31 +67,21 @@ export default class AdvanceSettingScreen extends LightningElement {
     }
 
     get groupOptions() {
-        return this.displayedGroups.map((group) => {
-            return { label: group.Name, value: group.Id };
-        });
+        return createDisplayedMap(this.displayedGroups);
     }
 
     get surveyOptions() {
-        return this.displayedSurveys.map((survey) => {
-            return { label: survey.Name, value: survey.Id };
-        });
+        return createDisplayedMap(this.displayedSurveys);
     }
 
     get campaignOptions() {
-        return this.displayedCampaigns.map((campaign) => {
-            return { label: campaign.Name, value: campaign.Id };
-        });
+        return createDisplayedMap(this.displayedCampaigns);
     }
 
     @api set survey(value) {
         this.__survey = JSON.parse(JSON.stringify(value));
-        if (this.__survey.Related_To__c === undefined) {
-            this.isConnectToSurvey = false;
-        } else {
-            this.isConnectToSurvey = true;
-            this.surveyId = this.__survey.Related_To__c;
-        }
+        this.isConnectToSurvey = this.__survey.Related_To__c !== undefined;
+        if(this.isConnectToSurvey) this.surveyId = this.__survey.Related_To__c;
     }
 
     @api set surveys(value) {
@@ -209,6 +155,26 @@ export default class AdvanceSettingScreen extends LightningElement {
         }
     }
 
+    handleKeyUp(evt) {
+        const isEnterKey = evt.keyCode === 13;
+        if (!isEnterKey) { return; }
+        this.queryTerm = evt.target.value;
+        if (!(this.queryTerm && this.queryTerm.trim().length > 1)) { return; }
+        this.searchError = false;
+        searchMembers({ searchTerm: this.queryTerm })
+            .then((result) => {
+                this.memberList = createMemberList(result);
+                this.setIsHasMembers();
+            })
+            .catch(() => {
+                this.searchError = true;
+            });
+    }
+
+    setIsHasMembers() {
+        this.hasMembers = this.memberList && this.memberList.length > 0;
+    }
+
     setIsHasReseivers() {
         this.hasReceivers = this.receivers && this.receivers.length > 0;
     }
@@ -216,28 +182,25 @@ export default class AdvanceSettingScreen extends LightningElement {
     handleRowAction(event) {
         const actionName = event.detail.action.name;
         const row = event.detail.row;
-
-        if (actionName === "delete") {
-            this.deleteRow(row);
-        }
-
-        if (actionName === "add"){
-            this.handleAddRecordReceiver(row);
+        switch (actionName){
+            case 'delete' :
+                this.deleteRow(row);
+                break;
+            default: this.handleAddRecordReceiver(row);
         }
     }
 
     deleteRow(row) {
         const { Value__c } = row;
-
-        this.copyReceivers = this.copyReceivers.filter((receiver) => {
-            return receiver.Value__c !== Value__c;
-        });
-
-        this.receivers = this.receivers.filter((receiver) => {
-            return receiver.Value__c !== Value__c;
-        });
-
+        this.copyReceivers = deleteReceiver(this.copyReceivers, Value__c);
+        this.receivers = deleteReceiver(this.receivers, Value__c);
         this.setIsHasReseivers();
+    }
+
+    createCopyReceiver(receiver, nameValue){
+        let copyReceiver = {...receiver};
+        copyReceiver.Name = nameValue;
+        this.copyReceivers = [...this.copyReceivers, copyReceiver];
     }
 
     handleGroupChange(event) {
@@ -253,43 +216,29 @@ export default class AdvanceSettingScreen extends LightningElement {
 
         const receiver = {};
         receiver.Type__c = this.GROUP_VARIANT;
-        receiver.Value__c = this.displayedGroups.find((group) => {
-            return this.groupId === group.Id;
-        }).Name;
+        receiver.Value__c = getObjectName(this.displayedGroups, this.groupId);
 
-        let copyReceiver = {...receiver};
-        copyReceiver.Name = receiver.Value__c;
-        this.copyReceivers = [...this.copyReceivers, copyReceiver];
-
+        this.createCopyReceiver(receiver, receiver.Value__c);
         this.receivers = [...this.receivers, receiver];
 
-        this.callReportValidity(combobox, "");
+        callReportValidity(combobox, "");
         this.setIsHasReseivers();
     }
 
     isGroupValid(combobox) {
         if (this.groupId.localeCompare("") === 0) {
-            this.callReportValidity(combobox, label.error_choose_some_group);
+            callReportValidity(combobox, label.error_choose_some_group);
             return false;
         }
 
-        const value = this.displayedGroups.find((group) => {
-            return this.groupId === group.Id;
-        }).Name;
-
+        const value = getObjectName(this.displayedGroups, this.groupId);
         if (isReceiverExist(this.receivers, value)) {
-            this.callReportValidity(combobox, label.error_already_added_this_group);
+            callReportValidity(combobox, label.error_already_added_this_group);
             return false;
         }
-
         return true;
     }
 
-    callReportValidity(input, message) {
-        input.setCustomValidity(message);
-        input.reportValidity();
-    }
- 
     handleAddRecordReceiver(row){
         const { Id, Name } = row;
         
@@ -301,29 +250,24 @@ export default class AdvanceSettingScreen extends LightningElement {
         receiver.Type__c = this.SINGLE_RECORD_VARIANT;
         receiver.Value__c = Id;
 
-        let copyReceiver = {...receiver};
-        copyReceiver.Name = Name;
-        this.copyReceivers = [...this.copyReceivers, copyReceiver];
-
+        this.createCopyReceiver(receiver, Name);
         this.receivers = [...this.receivers, receiver];
+
         this.setIsHasReseivers();
     }
 
-    isRecordValid(Id){
-        const value = Id;
-
+    isRecordValid(value){
         if (isReceiverExist(this.receivers, value)) {
             this.showToast();
             return false;
         }
-
         return true;
     }
 
     showToast() {
         const event = new ShowToastEvent({
-            title: 'Error',
-            message: 'Duplicate record!',
+            title: label.error,
+            message: label.duplicate_record,
             variant: 'error'
         });
         this.dispatchEvent(event);
@@ -342,35 +286,26 @@ export default class AdvanceSettingScreen extends LightningElement {
 
         const receiver = {};
         receiver.Type__c = this.CAMPAIGN_VARIAN;
-        receiver.Value__c = this.displayedCampaigns.find((campaign) => {
-            return this.campaignId === campaign.Id;
-        }).Name;
+        receiver.Value__c = getObjectName(this.displayedCampaigns, this.campaignId);
 
-        let copyReceiver = {...receiver};
-        copyReceiver.Name = receiver.Value__c;
-        this.copyReceivers = [...this.copyReceivers, copyReceiver];
-
+        this.createCopyReceiver(receiver, receiver.Value__c);
         this.receivers = [...this.receivers, receiver];
 
-        this.callReportValidity(combobox, "");
+        callReportValidity(combobox, "");
         this.setIsHasReseivers();
     }
 
     isCampaignValid(combobox) {
         if (this.campaignId.localeCompare("") === 0) {
-            this.callReportValidity(combobox, "Empty choose.");
+            callReportValidity(combobox, label.error_choose_some_campaign);
             return false;
         }
 
-        const value = this.displayedCampaigns.find((campaign) => {
-            return this.campaignId === campaign.Id;
-        }).Name;
-
+        const value = getObjectName(this.displayedCampaigns, this.campaignId);
         if (isReceiverExist(this.receivers, value)) {
-            this.callReportValidity(combobox, "This campaign uze est.");
+            callReportValidity(combobox, label.error_already_added_campaign);
             return false;
         }
-
         return true;
     }
 

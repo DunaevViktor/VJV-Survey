@@ -1,11 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>Campaign</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Campaign</shortDescription>
+        <value>Campaign</value>
+    </labels>
+    <labels>
+        <fullName>Campaign_Label</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Campaign Label</shortDescription>
+        <value>Campaigns</value>
+    </labels>
+    <labels>
+        <fullName>Campaign_Placeholder</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Campaign Placeholder</shortDescription>
+        <value>Select campaign</value>
+    </labels>
+    <labels>
         <fullName>Create_Survey</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Create Survey</shortDescription>
         <value>Create Survey</value>
+    </labels>
+    <labels>
+        <fullName>Email_Receiver</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Email Receiver</shortDescription>
+        <value>Email Receivers:</value>
     </labels>
     <labels>
         <fullName>Launch</fullName>
@@ -15,11 +43,53 @@
         <value>Launch</value>
     </labels>
     <labels>
+        <fullName>Name</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Name</shortDescription>
+        <value>Name</value>
+    </labels>
+    <labels>
+        <fullName>Public_Group</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Public Group</shortDescription>
+        <value>Public Group</value>
+    </labels>
+    <labels>
+        <fullName>Public_Group_Placeholder</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Public Group Placeholder</shortDescription>
+        <value>Select User Group</value>
+    </labels>
+    <labels>
         <fullName>Select_survey_for_connect</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Select survey for connect</shortDescription>
         <value>Select survey for connect</value>
+    </labels>
+    <labels>
+        <fullName>Single_Record</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Single Record</shortDescription>
+        <value>Single Record</value>
+    </labels>
+    <labels>
+        <fullName>Single_Record_Label</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Single Record Label</shortDescription>
+        <value>Enter Contact/Lead/User</value>
+    </labels>
+    <labels>
+        <fullName>Single_Record_Placeholder</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Single Record Placeholder</shortDescription>
+        <value>Type here(2+ symbols) and hit Enter...</value>
     </labels>
     <labels>
         <fullName>Survey_Constructor</fullName>
@@ -50,18 +120,18 @@
         <value>Add dependent question</value>
     </labels>
     <labels>
+        <fullName>add_immediate_dispatch</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>add immediate dispatch</shortDescription>
+        <value>Add immediate dispatch</value>
+    </labels>
+    <labels>
         <fullName>add_new_question</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>add new question</shortDescription>
         <value>Add new question</value>
-    </labels>
-    <labels>
-        <fullName>add_new_receiver</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>add new receiver</shortDescription>
-        <value>Add new receiver</value>
     </labels>
     <labels>
         <fullName>add_option</fullName>
@@ -125,13 +195,6 @@
         <protected>true</protected>
         <shortDescription>Basic header</shortDescription>
         <value>Enter Basic Survey Information</value>
-    </labels>
-    <labels>
-        <fullName>can_be_resending</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>can be resending</shortDescription>
-        <value>Can be resending</value>
     </labels>
     <labels>
         <fullName>can_no_longer_create_questions</fullName>
@@ -239,6 +302,13 @@
         <value>Drag&apos;n&apos;drop your logo image</value>
     </labels>
     <labels>
+        <fullName>duplicate_record</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>duplicate record</shortDescription>
+        <value>Duplicate record!</value>
+    </labels>
+    <labels>
         <fullName>edit</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -251,13 +321,6 @@
         <protected>true</protected>
         <shortDescription>edit question form title</shortDescription>
         <value>Edit question form</value>
-    </labels>
-    <labels>
-        <fullName>email</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>email</shortDescription>
-        <value>Email</value>
     </labels>
     <labels>
         <fullName>enter_compared_value</fullName>
@@ -295,11 +358,11 @@
         <value>Error occured this page during to work</value>
     </labels>
     <labels>
-        <fullName>error_already_added_this_email</fullName>
+        <fullName>error_already_added_campaign</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>error already added this email</shortDescription>
-        <value>You&apos; ve already added this email!</value>
+        <shortDescription>error already added campaign</shortDescription>
+        <value>You&apos;ve already added this campaign!</value>
     </labels>
     <labels>
         <fullName>error_already_added_this_group</fullName>
@@ -309,6 +372,13 @@
         <value>You&apos;ve already added this group!</value>
     </labels>
     <labels>
+        <fullName>error_choose_some_campaign</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error choose some campaign</shortDescription>
+        <value>Choose some campaign to add!</value>
+    </labels>
+    <labels>
         <fullName>error_choose_some_group</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -316,18 +386,39 @@
         <value>Choose some group to add!</value>
     </labels>
     <labels>
-        <fullName>error_email_pattern_mismatch</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>error email pattern mismatch</shortDescription>
-        <value>Email pattern mismatch!</value>
-    </labels>
-    <labels>
         <fullName>error_few_options</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>error few options</shortDescription>
         <value>The number of options must be at least two</value>
+    </labels>
+    <labels>
+        <fullName>error_loading_campaigns</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error loading campaigns</shortDescription>
+        <value>Error with loading list of campaign</value>
+    </labels>
+    <labels>
+        <fullName>error_loading_groups</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error loading groups</shortDescription>
+        <value>Error with loading list of groups</value>
+    </labels>
+    <labels>
+        <fullName>error_loading_surveys</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error loading surveys</shortDescription>
+        <value>Error with loading list of surveys</value>
+    </labels>
+    <labels>
+        <fullName>error_search</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error search</shortDescription>
+        <value>Error with search</value>
     </labels>
     <labels>
         <fullName>failed_image_delete</fullName>
@@ -377,20 +468,6 @@
         <protected>true</protected>
         <shortDescription>first_page</shortDescription>
         <value>First</value>
-    </labels>
-    <labels>
-        <fullName>group_name</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>group name</shortDescription>
-        <value>Group Name</value>
-    </labels>
-    <labels>
-        <fullName>group_name_or_email</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>group name or email</shortDescription>
-        <value>Group Name or Email</value>
     </labels>
     <labels>
         <fullName>image_loading</fullName>
@@ -475,6 +552,13 @@
         <protected>true</protected>
         <shortDescription>No</shortDescription>
         <value>no</value>
+    </labels>
+    <labels>
+        <fullName>no_campaigns</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>no campaigns</shortDescription>
+        <value>Don&apos;t have campaigns</value>
     </labels>
     <labels>
         <fullName>no_questions</fullName>
