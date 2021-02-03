@@ -22,6 +22,7 @@ const getQuestionsBySurveyId = (templateQuestions, surveyId, noTemplateValue) =>
       question.Position__c = '' + (index + 1);
       question.Editable = true;
       question.IsVisible__c = true;
+      question.IsReusable__c = false;
 
       if(question.Question_Options__r) {
         question.Question_Options__r = resetOptionsIds(question.Question_Options__r);

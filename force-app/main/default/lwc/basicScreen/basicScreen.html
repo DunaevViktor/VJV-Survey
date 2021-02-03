@@ -1,6 +1,8 @@
 <template>
   <div if:true={loading} class="slds-text-align_center">
-    <c-saver-spinner></c-saver-spinner>
+    <div class="slds-m-around_xx-large">
+      <lightning-spinner></lightning-spinner>
+    </div>
   </div>
 
   <template if:false={loading}>
