@@ -1,6 +1,6 @@
 @IsTest
 public with sharing class SurveySettingControllerTest {
-  private static final Decimal TEST_AMOUNT = 5;
+  private static final Integer TEST_AMOUNT = 5;
   private static final String TEST_COLOR = '#5E8AC0';
 
   private static final String SURVEY_SETTING_RECORD_NAME = 'Main';
@@ -25,27 +25,27 @@ public with sharing class SurveySettingControllerTest {
   @IsTest
   static void testGetMaxQuestionAmount() {
     
-    Decimal savedAmount = SurveySettingController.getMaxQuestionAmount();
+    Integer savedAmount = SurveySettingController.getMaxQuestionAmount();
     System.assertEquals(TEST_AMOUNT, savedAmount, INVALID_MAX_QUESTION_AMOUNT_SETTING_VALUE);
   }
 
   @IsTest
   static void testGetMinQuestionAmount() {
 
-    Decimal savedAmount = SurveySettingController.getMinQuestionAmount();
+    Integer savedAmount = SurveySettingController.getMinQuestionAmount();
     System.assertEquals(TEST_AMOUNT, savedAmount, INVALID_MIN_QUESTION_AMOUNT_SETTING_VALUE);
   }
 
   @IsTest
   static void testGetPageQuestionAmount() {
 
-    Decimal savedAmount = SurveySettingController.getPageQuestionAmount();
+    Integer savedAmount = SurveySettingController.getPageQuestionAmount();
     System.assertEquals(TEST_AMOUNT, savedAmount, INVALID_PAGE_QUESTION_AMOUNT_SETTING_VALUE);
   }
 
   @IsTest
   static void testGetMaxTriggerRuleAmount() {    
-    Decimal fetchedValue = SurveySettingController.getMaxTriggerRuleAmount();
+    Integer fetchedValue = SurveySettingController.getMaxTriggerRuleAmount();
     System.assertEquals(TEST_AMOUNT, fetchedValue, INVALID_MAX_TRIGGER_RULE_AMOUNT_SETTING_VALUE);
   }
 
