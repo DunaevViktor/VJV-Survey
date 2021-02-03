@@ -1,6 +1,7 @@
 <template>
-  <c-saver-spinner if:true={loading} class="slds-text-align_center">
-  </c-saver-spinner>
+  <div if:true={loading} class="slds-text-align_center">
+    <c-saver-spinner></c-saver-spinner>
+  </div>
 
   <template if:false={loading}>
     <div class="slds-align_absolute-center">

@@ -14,7 +14,7 @@ export default class BasicScreen extends LightningElement {
   label = labels;
   imageName;
   imageBlobUrl;
-  
+  defaultColor = '#74c1ed';
   isNewLogo = false;
   
   errorVariant = 'error';
@@ -146,6 +146,9 @@ export default class BasicScreen extends LightningElement {
   }
 
   updateSurveyData() {
+    if (!this.survey.Background_Color__c) {
+      this.survey.Background_Color__c = this.defaultColor;
+    }
     const changeSurveyDataEvent = new FlowAttributeChangeEvent("surveydatachange", this.surveyData);
     const changeLogoIdEvent = new FlowAttributeChangeEvent("logoidchange", this.logoDocumentId);
     this.dispatchEvent(changeSurveyDataEvent);

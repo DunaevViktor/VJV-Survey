@@ -14,7 +14,7 @@ public with sharing class SaverControllerTest {
 
   @IsTest  
   static void testSaveSurvey() {
-    Survey__c survey = SaverControllerTestDataFactory.createSurvey();
+    Survey__c survey = TestDataFactory.createSurvey();
     
     String surveyId = SaverController.saveSurvey(survey);
     System.assertNotEquals(null, surveyId, EXPECTED_NOT_BE_NULL);
@@ -25,10 +25,10 @@ public with sharing class SaverControllerTest {
 
   @IsTest 
   static void testSaveTriggerRules() {
-    Survey__c survey = SaverControllerTestDataFactory.createSurvey();
+    Survey__c survey = TestDataFactory.createSurvey();
     insert survey;
 
-    List<Trigger_Rule__c> rules = SaverControllerTestDataFactory.createTriggerRuleList(TEST_AMOUNT, survey.Id);
+    List<Trigger_Rule__c> rules = TestDataFactory.createTriggerRules(survey.Id);
 
     List<Trigger_Rule__c> savedRules = SaverController.saveTriggerRules(rules);
 
@@ -38,16 +38,15 @@ public with sharing class SaverControllerTest {
     }
 
     List<Trigger_Rule__c> databaseRules = [SELECT Id FROM Trigger_Rule__c];
-    System.assertEquals(TEST_AMOUNT, databaseRules.size(), INVALID_RULES_AMOUNT);
+    System.assertEquals(rules.size(), databaseRules.size(), INVALID_RULES_AMOUNT);
   }
 
   @IsTest
   static void testSaveQuestions() {
-    Survey__c survey = SaverControllerTestDataFactory.createSurvey();
+    Survey__c survey = TestDataFactory.createSurvey();
     insert survey;
 
-    List<Question__c> questions = 
-      SaverControllerTestDataFactory.createQuestionList(TEST_AMOUNT, survey.Id);
+    List<Question__c> questions = TestDataFactory.createQuestions(TEST_AMOUNT, survey.Id);
 
     List<Question__c> savedQuestions = SaverController.saveQuestions(questions);
 
@@ -62,16 +61,15 @@ public with sharing class SaverControllerTest {
 
   @IsTest
   static void testSaveOptions() {
-    Survey__c survey = SaverControllerTestDataFactory.createSurvey();
+    Survey__c survey = TestDataFactory.createSurvey();
     insert survey;
 
-    List<Question__c> questions = 
-      SaverControllerTestDataFactory.createQuestionList(TEST_AMOUNT, survey.Id);
+    List<Question__c> questions = TestDataFactory.createQuestions(TEST_AMOUNT, survey.Id);
     insert questions;
 
     List<Question_Option__c> newOptions = new List<Question_Option__c>();
     for(Integer i = 0; i < TEST_AMOUNT; i++) {
-      newOptions.addAll(SaverControllerTestDataFactory.createOptionList(TEST_AMOUNT, questions[i].Id));
+      newOptions.addAll(TestDataFactory.createQuestionOptions(TEST_AMOUNT, questions[i].Id));
     }
 
     List<Question_Option__c> savedOptions = SaverController.saveOptions(newOptions);
@@ -87,16 +85,15 @@ public with sharing class SaverControllerTest {
 
   @IsTest
   static void testSaveValidations() {
-    Survey__c survey = SaverControllerTestDataFactory.createSurvey();
+    Survey__c survey = TestDataFactory.createSurvey();
     insert survey;
 
-    List<Question__c> questions = 
-      SaverControllerTestDataFactory.createQuestionList(TEST_AMOUNT * 2, survey.Id);
+    List<Question__c> questions = TestDataFactory.createQuestions(TEST_AMOUNT * 2, survey.Id);
     insert questions;
 
     List<Validation__c> validations = new List<Validation__c>();
     for(Integer i = 0; i < TEST_AMOUNT; i++) {
-      validation__c validation = SaverControllerTestDataFactory.createValidation(
+      validation__c validation = TestDataFactory.createValidation(
           questions[i * 2].Id,
           questions[i * 2 + 1].Id
       );
@@ -116,10 +113,10 @@ public with sharing class SaverControllerTest {
 
   @IsTest
   static void testSaveEmailReceivers() {
-    Survey__c survey = SaverControllerTestDataFactory.createSurvey();
+    Survey__c survey = TestDataFactory.createSurvey();
     insert survey;
 
-    List<Email_Receiver__c> receivers = SaverControllerTestDataFactory.createEmailReceiverList(TEST_AMOUNT, survey.Id);
+    List<Email_Receiver__c> receivers = TestDataFactory.createEmailReceivers(survey.Id);
 
     List<Email_Receiver__c> savedReceivers = SaverController.saveEmailReceivers(receivers);
 

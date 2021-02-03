@@ -7,7 +7,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getGroups from "@salesforce/apex/GroupController.getGroups";
 import getSurveys from "@salesforce/apex/SurveyController.getAllSurveys";
 import getCampaigns from "@salesforce/apex/CampaignController.getCampaigns";
-import searchMembers from "@salesforce/apex/searchHelper.searchMembers";
+import searchMembers from "@salesforce/apex/SearchHelper.searchMembers";
 
 export default class AdvanceSettingScreen extends LightningElement {
 
