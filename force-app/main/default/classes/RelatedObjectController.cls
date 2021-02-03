@@ -79,6 +79,7 @@ public with sharing class RelatedObjectController {
         return objectExists;
     }
 
+    @TestVisible
     private static String getSObjectNameById(String recordId){
         String objectApiName;
         String keyCode = recordId.subString(0,3);

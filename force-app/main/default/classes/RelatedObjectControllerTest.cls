@@ -96,7 +96,7 @@ public with sharing class RelatedObjectControllerTest {
         AuraHandledException auraExc = null;
         System.runAs(testUser) { 
             try {
-                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', secondTestCaseId);
+                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(secondTestCaseId);
             } catch(AuraHandledException exc) {
                 auraExc = exc;
             }
@@ -106,7 +106,7 @@ public with sharing class RelatedObjectControllerTest {
 
     @isTest
     static void testFirstPositiveGetRelatedObjectIdByStandardObjectId() {
-        Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', getFirstTestCaseId());
+        Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(getFirstTestCaseId());
         System.assertNotEquals(null, res, INVALID_RELATED_OBJECT_ID_RESULT);
     }
 
@@ -117,7 +117,7 @@ public with sharing class RelatedObjectControllerTest {
         Exception auraExc = null;
         System.runAs(testUser) { 
             try {
-                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', secondTestCaseId);
+                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(secondTestCaseId);
             } catch(Exception exc) {
                 auraExc = exc;
             }
@@ -132,7 +132,7 @@ public with sharing class RelatedObjectControllerTest {
         Exception auraExc = null;
         System.runAs(testUser) { 
             try {
-                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', TestDataFactory.getFakeId('Case'));
+                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(TestDataFactory.getFakeId('Case'));
             } catch(Exception exc) {
                 auraExc = exc;
             }
@@ -159,7 +159,7 @@ public with sharing class RelatedObjectControllerTest {
     static void testSecondNegativeGetRelatedObjectIdByStandardObjectId() {
         AuraHandledException auraExc = null;
         try {
-            Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', TestDataFactory.getFakeId('Case'));
+            Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(TestDataFactory.getFakeId('Case'));
         } catch(AuraHandledException exc) {
             auraExc = exc;
         }
@@ -168,7 +168,7 @@ public with sharing class RelatedObjectControllerTest {
 
     @isTest
     static void testPositiveGetRelatedObjectIdByStandardObjectId() {
-        Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', getSecondTestCaseId());
+        Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(getSecondTestCaseId());
         System.assertNotEquals(null, res, INVALID_RELATED_OBJECT_ID_RESULT);
     } 
     

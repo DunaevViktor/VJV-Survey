@@ -5,16 +5,10 @@ public with sharing class AnswerFormControllerTest {
 
     @TestSetup
     static void setup(){
-        Survey__c survey = new Survey__c(Name = 'Test', Background_Color__c = '#A3FF88');
+        Survey__c survey = TestDataFactory.createSurvey();
         insert survey;
 
-        List<Question__c> questions = new List<Question__c>();
-
-        for(Integer i=0; i < 10; i++){
-        Question__c testQuestion = new Question__c(Survey__c = survey.Id, Label__c = 'Test label' + i, Position__c = '2');
-        questions.add(testQuestion);
-        }
-
+        List<Question__c> questions = TestDataFactory.createQuestions(5, survey.Id);
         insert questions; 
     }
 

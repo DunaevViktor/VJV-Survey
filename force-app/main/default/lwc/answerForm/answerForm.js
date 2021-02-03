@@ -107,7 +107,7 @@ export default class AnswerForm extends LightningElement {
 
   createGroupAnswer() {
     if (this.validateFields()) {
-      let groupAnswer = { SObjectType: "Group_Answer__c" };
+      const groupAnswer = { SObjectType: "Group_Answer__c" };
       const surveyId = this.survey.data.fields.Id.value;
       groupAnswer.Survey__c = surveyId;
 
