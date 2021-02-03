@@ -18,10 +18,17 @@ global with sharing class PostInstallConfig implements InstallHandler {
         if(context.previousVersion() == null) {
             createSurveyCustomSettingRecord();
             createEmailCustomSettingRecord();
+        } else {
+            if(!isSurveySettingRecordExisting()) {
+                createSurveyCustomSettingRecord();
+            }
+            if(!isEmailSettingRecordExisting()) {
+                createEmailCustomSettingRecord();
+            }
         }
     }
 
-    private void createSurveyCustomSettingRecord() {
+    @testVisible private static void createSurveyCustomSettingRecord() {
         Survey_Setting__c surveySetting = new Survey_Setting__c(
             Name = CUSTOM_SETTING_RECORD_NAME,
             Max_Question_Amount__c = DEFAULT_MAX_QUESTIONS_AMOUNT,
@@ -34,7 +41,7 @@ global with sharing class PostInstallConfig implements InstallHandler {
         insert surveySetting;
     }
 
-    private void createEmailCustomSettingRecord() {
+    @testVisible private static void createEmailCustomSettingRecord() {
         SurveyEmailConfig__c surveySetting = new SurveyEmailConfig__c(
             Name = CUSTOM_SETTING_RECORD_NAME,
             Company_Config__c = DEFAULT_COMPANY_CONFIG,
@@ -46,5 +53,24 @@ global with sharing class PostInstallConfig implements InstallHandler {
 
         insert surveySetting;
     }
-    
+
+    private Boolean isSurveySettingRecordExisting() {
+        List<Survey_Setting__c> settings = [SELECT Id
+                                            FROM Survey_Setting__c
+                                            LIMIT 1];
+        if(settings.size() == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    private Boolean isEmailSettingRecordExisting() {
+        List<SurveyEmailConfig__c> settings = [SELECT Id
+                                               FROM SurveyEmailConfig__c
+                                               LIMIT 1];
+        if(settings.size() == 0) {
+            return false;
+        }
+        return true;
+    }    
 }
