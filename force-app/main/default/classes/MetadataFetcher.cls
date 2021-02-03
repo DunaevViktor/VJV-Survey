@@ -45,9 +45,6 @@ public with sharing class MetadataFetcher {
 
   @TestVisible
   private static void populateListWithReferencedObjectNames(Schema.DescribeFieldResult result, List<String> destination) {
-    if (destination == null) {
-      destination = new List<String>();
-    }
     for (Schema.SObjectType reference : result.getReferenceTo()) {
       destination.add(reference.getDescribe().getName());
     }

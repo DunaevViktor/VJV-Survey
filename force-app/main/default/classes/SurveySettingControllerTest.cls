@@ -4,9 +4,11 @@ public with sharing class SurveySettingControllerTest {
   private static final String TEST_COLOR = '#5E8AC0';
 
   private static final String SURVEY_SETTING_RECORD_NAME = 'Main';
-  private static final String INVALID_SETTING_VALUE = 'Actual value of setting doesn\'t equal to expected';
   private static final String INVALID_MAX_TRIGGER_RULE_AMOUNT_SETTING_VALUE = 'Actual value of max trigger rule amount setting doesn\'t equal to expected.';
   private static final String INVALID_BACKGROUND_COLOR_VALUE = 'Actual value of background color doesn\'t equal to expected.';
+  private static final String INVALID_MAX_QUESTION_AMOUNT_SETTING_VALUE = 'Actual value of max question amount setting doesn\'t equal to expected.';
+  private static final String INVALID_MIN_QUESTION_AMOUNT_SETTING_VALUE = 'Actual value of min question rule amount setting doesn\'t equal to expected.';
+  private static final String INVALID_PAGE_QUESTION_AMOUNT_SETTING_VALUE = 'Actual value of page question amount setting doesn\'t equal to expected.';
 
   @TestSetup
   static void makeData(){
@@ -22,23 +24,23 @@ public with sharing class SurveySettingControllerTest {
 
   @IsTest
   static void testGetMaxQuestionAmount() {
-
+    
     Decimal savedAmount = SurveySettingController.getMaxQuestionAmount();
-    System.assertEquals(TEST_AMOUNT, savedAmount, INVALID_SETTING_VALUE);
+    System.assertEquals(TEST_AMOUNT, savedAmount, INVALID_MAX_QUESTION_AMOUNT_SETTING_VALUE);
   }
 
   @IsTest
   static void testGetMinQuestionAmount() {
 
     Decimal savedAmount = SurveySettingController.getMinQuestionAmount();
-    System.assertEquals(TEST_AMOUNT, savedAmount, INVALID_SETTING_VALUE);
+    System.assertEquals(TEST_AMOUNT, savedAmount, INVALID_MIN_QUESTION_AMOUNT_SETTING_VALUE);
   }
 
   @IsTest
   static void testGetPageQuestionAmount() {
 
     Decimal savedAmount = SurveySettingController.getPageQuestionAmount();
-    System.assertEquals(TEST_AMOUNT, savedAmount, INVALID_SETTING_VALUE);
+    System.assertEquals(TEST_AMOUNT, savedAmount, INVALID_PAGE_QUESTION_AMOUNT_SETTING_VALUE);
   }
 
   @IsTest

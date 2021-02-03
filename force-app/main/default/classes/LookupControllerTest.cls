@@ -5,10 +5,10 @@ public with sharing class LookupControllerTest {
 
   @testSetup
   static void setup() {
-    Contact testContact = new Contact(LastName = 'Happy Contact');
+    Contact testContact = TestDataFactory.createContact();
     insert testContact;
 
-    Lead testLead = new Lead(LastName = 'Happy Lead', Company = 'Test Company');
+    Lead testLead = TestDataFactory.createLead();
     insert testLead;
 
     Case testCase = new Case();
@@ -20,7 +20,7 @@ public with sharing class LookupControllerTest {
     List<String> objectApiNames = new List<String>();
     objectApiNames.add('Contact');
     objectApiNames.add('Lead');
-    List<SObject> result = LookupController.findRecords('Happy', objectApiNames);
+    List<SObject> result = LookupController.findRecords(TestDataFactory.TEST_VALUE, objectApiNames);
     System.assertEquals(2, result.size(), INVALID_FOUND_RECORDS_AMOUNT);
   }
 
@@ -29,15 +29,15 @@ public with sharing class LookupControllerTest {
     List<String> objectApiNames = new List<String>();
     objectApiNames.add('Contact');
     objectApiNames.add('Lead');
-    List<SObject> res = LookupController.findRecords('Harry', objectApiNames);
+    List<SObject> res = LookupController.findRecords(TestDataFactory.TEST_VALUE + TestDataFactory.TEST_VALUE, objectApiNames);
     System.assertEquals(0, res.size(), INVALID_FOUND_RECORDS_AMOUNT);
   }
 
   @isTest
   static void testNegativeFindRecordsMissingObjectName() {
     List<String> objectApiNames = new List<String>();
-    objectApiNames.add('Test');
-    List<SObject> res = LookupController.findRecords('Happy', objectApiNames);
+    objectApiNames.add(TestDataFactory.TEST_VALUE);
+    List<SObject> res = LookupController.findRecords(TestDataFactory.TEST_VALUE, objectApiNames);
     System.assertEquals(0, res.size(), INVALID_FOUND_RECORDS_AMOUNT);
   }
 
@@ -45,7 +45,7 @@ public with sharing class LookupControllerTest {
   static void testNegativeFindRecordsMissingFieldName() {
     List<String> objectApiNames = new List<String>();
     objectApiNames.add('Case');
-    List<SObject> res = LookupController.findRecords('Happy', objectApiNames);
+    List<SObject> res = LookupController.findRecords(TestDataFactory.TEST_VALUE, objectApiNames);
     System.assertEquals(0, res.size(), INVALID_FOUND_RECORDS_AMOUNT);
   }
 }
