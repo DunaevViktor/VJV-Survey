@@ -137,19 +137,13 @@ const checkDependentQuestion = (event, questions) => {
   }
 };
 
-const createAnswers = (questions, groupAnswerId, linkedRecordId) => {
+const createAnswers = (questions, groupAnswerId) => {
   let answers = [];
   questions.forEach((question) => {
     if (question.Answer !== null && question.Answer !== undefined) {
       let singleAnswer = { SObjectType: "Answer__c" };
       singleAnswer.Group_Answer__c = groupAnswerId;
       singleAnswer.Question__c = question.Id;
-
-      if (linkedRecordId !== null) {
-        singleAnswer.IsLinked__c = true;
-      } else {
-        singleAnswer.IsLinked__c = false;
-      }
 
       if (question.Type__c === questionTypes.CHECKBOX) {
         question.Answer.forEach((checkedBox) => {

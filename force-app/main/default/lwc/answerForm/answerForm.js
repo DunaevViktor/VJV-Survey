@@ -3,6 +3,7 @@ import { getRecord } from "lightning/uiRecordApi";
 import { CurrentPageReference } from "lightning/navigation";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { label } from "./labels.js";
+import getRelatedObjectId from "@salesforce/apex/RelatedObjectController.getRelatedObjectIdByStandardObjectId";
 import getQuestions from "@salesforce/apex/AnswerFormController.getQuestions";
 import saveGroupAnswer from "@salesforce/apex/GroupAnswerController.saveGroupAnswer";
 import saveAnswers from "@salesforce/apex/AnswerController.saveAnswers";
@@ -70,16 +71,16 @@ export default class AnswerForm extends LightningElement {
     );
   }
 
-  get relatedSurveyId(){
-      return this.survey.data.fields.Related_To__c.value;
+  get relatedSurveyId() {
+    return this.survey.data.fields.Related_To__c.value;
   }
 
   getConnectedSurveyId() {
-      if(this.relatedSurveyId){
-          this.surveyId = this.relatedSurveyId;
-      } else{
-        this.showSurvey = false;
-      }
+    if (this.relatedSurveyId) {
+      this.surveyId = this.relatedSurveyId;
+    } else {
+      this.showSurvey = false;
+    }
   }
 
   setParametersBasedOnUrl() {
@@ -92,11 +93,7 @@ export default class AnswerForm extends LightningElement {
   }
 
   saveAnswers(groupAnswerId) {
-    let answers = createAnswers(
-      this.answerInputs,
-      groupAnswerId,
-      this.linkedRecordId
-    );
+    let answers = createAnswers(this.answerInputs, groupAnswerId);
 
     saveAnswers({ answers: answers })
       .then(() => {
@@ -108,25 +105,39 @@ export default class AnswerForm extends LightningElement {
       });
   }
 
-  saveGroupAnswer() {
+  createGroupAnswer() {
     if (this.validateFields()) {
       let groupAnswer = { SObjectType: "Group_Answer__c" };
       const surveyId = this.survey.data.fields.Id.value;
       groupAnswer.Survey__c = surveyId;
 
-      if (this.linkedRecordId !== null) {
-        groupAnswer.IsLinked__c = true;
-        groupAnswer.Related_To__c = this.linkedRecordId;
-      }
+      this.getRelatedObject(groupAnswer);
+    }
+  }
 
-      saveGroupAnswer({ groupAnswer: groupAnswer })
+  getRelatedObject(groupAnswer) {
+    if (this.linkedRecordId !== null && this.linkedRecordId !== undefined) {
+      groupAnswer.IsLinked__c = true;
+
+      getRelatedObjectId({ standardObjectId: this.linkedRecordId })
         .then((result) => {
-          this.saveAnswers(result);
+          groupAnswer.Related_To__c = result;
+          this.saveGroupAnswer(groupAnswer);
         })
         .catch((error) => {
           this.error = error;
         });
     }
+  }
+
+  saveGroupAnswer(groupAnswer) {
+    saveGroupAnswer({ groupAnswer: groupAnswer })
+      .then((result) => {
+        this.saveAnswers(result);
+      })
+      .catch((error) => {
+        this.error = error;
+      });
   }
 
   showToast() {

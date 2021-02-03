@@ -5,8 +5,11 @@ public with sharing class RelatedObjectController {
     private static final String RELATED_OBJECT_IS_NOT_ACCESSIBLE = 'Related_Object__c is\'t accessible.';
 
     @AuraEnabled(cacheable=true)
-    public static Id getRelatedObjectIdByStandardObjectId(String standardObjectApiName, Id standardObjectId) { 
+    public static Id getRelatedObjectIdByStandardObjectId(Id standardObjectId) { 
         try {
+
+            String standardObjectApiName = getSObjectNameById(String.valueOf(standardObjectId));
+
             //this will throw exception if record with standardObjectId doesn't exist
             checkStandardObjectRecordExisting(standardObjectApiName, standardObjectId);
 
@@ -74,5 +77,19 @@ public with sharing class RelatedObjectController {
             throw new AuraHandledException(JSON.serialize(excData));
         }
         return objectExists;
+    }
+
+    private static String getSObjectNameById(String recordId){
+        String objectApiName;
+        String keyCode = recordId.subString(0,3);
+
+        Map<String, Schema.SObjectType> sObjectDescribe = Schema.getGlobalDescribe();
+        for(Schema.SObjectType objectInstance : sObjectDescribe.values()){
+            if(objectInstance.getDescribe().getKeyPrefix() == keyCode){
+                objectApiName = objectInstance.getDescribe().getName();
+            }
+        }
+
+        return objectApiName;
     }
 }
