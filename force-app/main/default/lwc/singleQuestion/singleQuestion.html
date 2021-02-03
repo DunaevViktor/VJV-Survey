@@ -1,0 +1,55 @@
+<template>
+    <template if:true={question.IsVisible__c}>
+        <lightning-input
+          key={question.Id}
+          data-item={question.Id}
+          if:true={question.isText}
+          label={question.Label__c}
+          type="text"
+          value={question.Answer}
+          required={question.Required__c}
+          class="slds-p-around_small validate-input"
+          onchange={handleAnswerChange}
+        ></lightning-input>
+
+        <lightning-checkbox-group
+          key={question.Id}
+          data-item={question.Id}
+          if:true={question.isCheckbox}
+          label={question.Label__c}
+          value={question.Answer}
+          options={question.Question_Options__r}
+          class="slds-p-around_small validate-input"
+          onchange={handleAnswerChange}
+        ></lightning-checkbox-group>
+
+        <lightning-radio-group
+          key={question.Id}
+          data-item={question.Id}
+          if:true={question.isRadioButton}
+          label={question.Label__c}
+          options={question.Question_Options__r}
+          type="radio"
+          value={question.Answer}
+          required={question.Required__c}
+          class="slds-p-around_small validate-input"
+          onchange={handleAnswerChange}
+        >
+        </lightning-radio-group>
+
+        <lightning-combobox
+          key={question.Id}
+          data-item={question.Id}
+          if:true={question.isPicklist}
+          label={question.Label__c}
+          options={question.Question_Options__r}
+          value={question.Answer}
+          required={question.Required__c}
+          class="slds-p-around_small validate-input"
+          onchange={handleAnswerChange}
+        >
+        </lightning-combobox>
+
+        <c-star-rating-input if:true={question.isRating} question={question} class="slds-p-around_small validate-input"></c-star-rating-input>
+      </template>
+</template>
