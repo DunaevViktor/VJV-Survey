@@ -2,6 +2,8 @@ public with sharing class SaverController {
   @AuraEnabled
   public static String saveSurvey(Survey__c survey) {
     insert survey;
+    survey.URL__c = survey.URL__c + '?c__surveyId=' + survey.Id;
+    update survey;
     return survey.Id;
   }
 

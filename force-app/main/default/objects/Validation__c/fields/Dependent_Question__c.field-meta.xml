@@ -6,7 +6,7 @@
     <label>Dependent Question</label>
     <referenceTo>Question__c</referenceTo>
     <relationshipLabel>Validations</relationshipLabel>
-    <relationshipName>Validations</relationshipName>
+    <relationshipName>Dependent_Question_Validations</relationshipName>
     <relationshipOrder>0</relationshipOrder>
     <reparentableMasterDetail>false</reparentableMasterDetail>
     <trackTrending>false</trackTrending>
