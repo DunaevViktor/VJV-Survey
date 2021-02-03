@@ -1,6 +1,7 @@
 import { LightningElement, track, api } from "lwc";
 import { label } from "./labels.js";
-import { columns, columnsMember, isReceiverExist, deleteReceiver, createDisplayedMap, getObjectName, callReportValidity } from "./advanceSettingScreenHelper.js";
+import { columns, columnsMember, isReceiverExist, deleteReceiver, createDisplayedMap,
+         getObjectName, callReportValidity, createMemberList } from "./advanceSettingScreenHelper.js";
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getGroups from "@salesforce/apex/GroupController.getGroups";
@@ -13,9 +14,6 @@ export default class AdvanceSettingScreen extends LightningElement {
     SINGLE_RECORD_VARIANT = "Record";
     GROUP_VARIANT = "User Group";
     CAMPAIGN_VARIAN = "Campaign";
-    RECORD_TYPE_CONTACT = "Contact";
-    RECORD_TYPE_USER = "User";
-    RECORD_TYPE_LEAD = "Lead";
 
     label = label;
     columns = columns;
@@ -165,27 +163,7 @@ export default class AdvanceSettingScreen extends LightningElement {
         this.searchError = false;
         searchMembers({ searchTerm: this.queryTerm })
             .then((result) => {
-                this.memberList = [];
-                result.forEach(memberListByType => {
-                    let recordType = "";
-                    if(memberListByType.length > 0){
-                        let uniquePrefix = memberListByType[0].Id.substr(0,3);
-                        switch (uniquePrefix){
-                            case '005' :
-                                recordType = this.RECORD_TYPE_USER;
-                                break;
-                            case '00Q' :
-                                recordType = this.RECORD_TYPE_LEAD;
-                                break;
-                            default: recordType = this.RECORD_TYPE_CONTACT;
-                        }
-                    }
-                    memberListByType.forEach(member => {
-                        let copyMember = {...member};
-                        copyMember.Type = recordType;
-                        this.memberList.push(copyMember);
-                    });
-                });
+                this.memberList = createMemberList(result);
                 this.setIsHasMembers();
             })
             .catch(() => {
@@ -214,10 +192,8 @@ export default class AdvanceSettingScreen extends LightningElement {
 
     deleteRow(row) {
         const { Value__c } = row;
-
         this.copyReceivers = deleteReceiver(this.copyReceivers, Value__c);
         this.receivers = deleteReceiver(this.receivers, Value__c);
-
         this.setIsHasReseivers();
     }
 
@@ -256,12 +232,10 @@ export default class AdvanceSettingScreen extends LightningElement {
         }
 
         const value = getObjectName(this.displayedGroups, this.groupId);
-
         if (isReceiverExist(this.receivers, value)) {
             callReportValidity(combobox, label.error_already_added_this_group);
             return false;
         }
-
         return true;
     }
 
@@ -328,12 +302,10 @@ export default class AdvanceSettingScreen extends LightningElement {
         }
 
         const value = getObjectName(this.displayedCampaigns, this.campaignId);
-
         if (isReceiverExist(this.receivers, value)) {
             callReportValidity(combobox, label.error_already_added_campaign);
             return false;
         }
-
         return true;
     }
 

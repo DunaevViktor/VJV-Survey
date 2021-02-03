@@ -4,6 +4,9 @@ const TYPE_TEXT = "text";
 const FIELD_NAME = "Name";
 const FIELD_STANDARD_TYPE = "Type";
 const FIELD_CUSTOM_TYPE = "Type__c";
+const RECORD_TYPE_CONTACT = "Contact";
+const RECORD_TYPE_USER = "User";
+const RECORD_TYPE_LEAD = "Lead";
 
 const columns = [
     { label: label.type, fieldName: FIELD_CUSTOM_TYPE, type: TYPE_TEXT },
@@ -60,6 +63,31 @@ const callReportValidity = (input, message) => {
     input.reportValidity();
 }
 
+const createMemberList = (result) => {
+    let memberList = [];
+    result.forEach(memberListByType => {
+        let recordType = "";
+        if(memberListByType.length > 0){
+            let uniquePrefix = memberListByType[0].Id.substr(0,3);
+            switch (uniquePrefix){
+                case '005' :
+                    recordType = RECORD_TYPE_USER;
+                    break;
+                case '00Q' :
+                    recordType = RECORD_TYPE_LEAD;
+                    break;
+                default: recordType = RECORD_TYPE_CONTACT;
+            }
+        }
+        memberListByType.forEach(member => {
+            let copyMember = {...member};
+            copyMember.Type = recordType;
+            memberList.push(copyMember);
+        });
+    });
+    return memberList;
+}
+
 export {
     columns,
     columnsMember,
@@ -67,5 +95,6 @@ export {
     deleteReceiver,
     createDisplayedMap,
     getObjectName,
-    callReportValidity
+    callReportValidity,
+    createMemberList
 };
