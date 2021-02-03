@@ -9,15 +9,17 @@ class TriggerHandlerTest {
     
     @testSetup
     static void makeData() {
-        Id surveyId = TestDataFactory.createSurvey();
-        TestDataFactory.createEmailReceivers(surveyId);
-        TestDataFactory.createTriggerRules(surveyId);
-        TestDataFactory.createContacts();
-        TestDataFactory.createCases();
-        TestDataFactory.createLeads();
+        Survey__c survey = TestDataFactory.createSurvey();
+        insert survey;
+
+        insert TestDataFactory.createEmailReceivers(survey.Id);
+        insert TestDataFactory.createTriggerRules(survey.Id);
+        insert TestDataFactory.createContacts();
+        insert TestDataFactory.createCases();
+        insert TestDataFactory.createLeads();
     }
     
-    /*@isTest
+    @isTest
     static void testProcessContactChanges(){
         List<Contact> contactList = [SELECT Id, FirstName, LastName,
                                      Birthdate, EmailBouncedDate, MailingLatitude, Title
@@ -78,15 +80,4 @@ class TriggerHandlerTest {
         List<Trigger_Rule__c> actualTriggerRules = TriggerRulesHandler.getTriggerRules('Contact');
         System.assertEquals(15, actualTriggerRules.size(), INVALID_TRIGGER_RULES_AMOUNT);
     }
-    
-    @isTest
-    static void testGetEmailReceivers(){
-        List<Survey__c> surveyList = [SELECT Id FROM Survey__c];
-        Set<Id> surveySet = new Set<Id>();
-        for(Survey__c survey: surveyList){
-            surveySet.add(survey.Id);
-        }
-        List<Email_Receiver__c> actualEmailReceivers = TriggerRulesHandler.getEmailReceivers(surveySet);
-        System.assertEquals(5, actualEmailReceivers.size(), INVALID_EMAIL_RECEIVERS_AMOUNT);
-    }*/
 }

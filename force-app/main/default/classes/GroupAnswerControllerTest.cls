@@ -5,14 +5,14 @@ public with sharing class GroupAnswerControllerTest {
 
     @TestSetup
     static void setup() {
-        Survey__c testSurvey = new Survey__c(Name = 'Test', Background_Color__c = '#A3FF88');
+        Survey__c testSurvey = TestDataFactory.createSurvey();
         insert testSurvey;
     }
 
     private static Id getTestSurveyId() {
         Survey__c testSurvey = [SELECT Id
                                 FROM Survey__c
-                                WHERE Name = 'Test'];
+                                WHERE Name = :TestDataFactory.TEST_VALUE];
         return testSurvey.Id;      
     }
     
