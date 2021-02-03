@@ -22,7 +22,6 @@ export default class AnswerForm extends LightningElement {
   surveyId;
   connectedSurveyId;
   linkedRecordId;
-  error;
 
   label = label;
 
@@ -47,7 +46,7 @@ export default class AnswerForm extends LightningElement {
       this.answerInputs = sortQuestionsByPosition(this.answerInputs);
     }
     if (error) {
-      this.error = error;
+      this.showToast(label.errorMessage);
     }
   }
 
@@ -97,11 +96,11 @@ export default class AnswerForm extends LightningElement {
 
     saveAnswers({ answers: answers })
       .then(() => {
-        this.showToast();
+        this.showToast(label.successfulAnswerSave);
         this.getConnectedSurveyId();
       })
-      .catch((error) => {
-        this.error = error;
+      .catch(() => {
+        this.showToast(label.errorMessage);
       });
   }
 
@@ -124,9 +123,12 @@ export default class AnswerForm extends LightningElement {
           groupAnswer.Related_To__c = result;
           this.saveGroupAnswer(groupAnswer);
         })
-        .catch((error) => {
-          this.error = error;
+        .catch(() => {
+          this.showToast(label.errorMessage);
         });
+    } else {
+        groupAnswer.IsLinked__c = false;
+        this.saveGroupAnswer(groupAnswer);
     }
   }
 
@@ -135,14 +137,14 @@ export default class AnswerForm extends LightningElement {
       .then((result) => {
         this.saveAnswers(result);
       })
-      .catch((error) => {
-        this.error = error;
+      .catch(() => {
+        this.showToast(label.errorMessage);
       });
   }
 
-  showToast() {
+  showToast(message) {
     const event = new ShowToastEvent({
-      title: label.successfulAnswerSave
+      title: message
     });
     this.dispatchEvent(event);
   }
