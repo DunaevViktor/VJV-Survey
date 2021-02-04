@@ -15,12 +15,11 @@ public with sharing class SendEmailLogic {
     public static List<Messaging.SingleEmailMessage> createEmailMessages(List<Email_Receiver__c> receiverList, Map<Id, Survey__c> surveyMap){
         Organization currentOrg = SendEmailLogicHelper.getOrganization();
         EmailTemplate template = SendEmailLogicHelper.getEmailTemplate();
-        Map<String, List<User>> userMap = SendEmailLogicHelper.initializeUserByGroupMap();
-        Map<String, List<Id>> contactMap = SendEmailLogicHelper.initializeContactByCampaignMap();
-        Map<String, List<Id>> leadMap = SendEmailLogicHelper.initializeLeadByCampaignMap();
+        List<CampaignMember> allCampaignMember = SendEmailLogicHelper.getCampaignMember();
+        List<GroupMember> allGroupMember = SendEmailLogicHelper.getGroupMemeber();
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
         SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues(EMAIL_SETTINGS_NAME);
-        
+
         for(Email_Receiver__c receiver: receiverList){
             Survey__c survey = surveyMap.get(receiver.Survey__c);
             String body = SendEmailLogicHelper.createEmailBody(template.Body, survey, currentOrg);
@@ -28,30 +27,26 @@ public with sharing class SendEmailLogic {
 
             switch on receiver.Type__c {
                 when 'User Group' {
-                    String groupName = receiver.Value__c;
-                    List<User> userForSend = userMap.get(groupName);
-                    for(User user: userForSend){
-                        mail = createSingleEmail(user.Id, body, config);
+                    Id groupId = receiver.Value__c;
+                    List<Id> userForSend = SendEmailLogicHelper.getUserByGroup(allGroupMember, groupId);
+                    for(Id userId: userForSend){
+                        mail = createSingleEmail(userId, body, config);
                         emails.add(mail);
                     }
                 }
                 when 'Campaign' {
-                    String campaignName = receiver.Value__c;
-                    List<Id> contactForSend = contactMap.get(campaignName);
-                    List<Id> leadForSend = leadMap.get(campaignName);
+                    Id campaignId = receiver.Value__c;
+                    List<Id> contactForSend = SendEmailLogicHelper.getContactByCampaign(allCampaignMember, campaignId);
+                    List<Id> leadForSend = SendEmailLogicHelper.getLeadByCampaign(allCampaignMember, campaignId);
 
-                    if(contactForSend.size() > 0){
-                        for(Id contactId: contactForSend){
-                            mail = createSingleEmail(contactId, body, config);
-                            emails.add(mail);
-                        }
+                    for(Id contactId: contactForSend){
+                        mail = createSingleEmail(contactId, body, config);
+                        emails.add(mail);
                     }
 
-                    if(leadForSend.size() > 0){
-                        for(Id leadId: leadForSend){
-                            mail = createSingleEmail(leadId, body, config);
-                            emails.add(mail);
-                        }
+                    for(Id leadId: leadForSend){
+                        mail = createSingleEmail(leadId, body, config);
+                        emails.add(mail);
                     }
                 }
                 when 'Record'{

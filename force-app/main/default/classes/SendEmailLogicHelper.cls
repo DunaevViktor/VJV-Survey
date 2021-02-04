@@ -1,64 +1,65 @@
 public with sharing class SendEmailLogicHelper {
 
-    public static Map<String, List<User>> initializeUserByGroupMap(){
-        List<User> userList = getUser();
-        List<GroupMember> memberGroup = getGroupMember();
-        Map<Id, Group> groupMap = createGroupMap();
-        Map<String, List<User>> userMap = createUserByGroupMap();
-        
-        for(User user: userList){
-            for(GroupMember member: memberGroup){
-                if(user.Id == member.UserOrGroupId){
-                    Group currentGroup = groupMap.get(member.GroupId);
-                    List<User> listForUpdate = userMap.get(currentGroup.Name);
-                    listForUpdate.add(user);
-                    userMap.put(currentGroup.Name, listForUpdate);
-                }
-            }
+    private static final String EMAIL_SETTINGS_NAME = 'Main';
+    private static final String REGULAR_TYPE = 'Regular';
+    private static final String QUEUE_TYPE = 'Queue';
+
+    public static List<GroupMember> getGroupMemeber(){
+        List<Group> groupList = [SELECT Id, Name, Type FROM Group WHERE Type = :REGULAR_TYPE OR Type = :QUEUE_TYPE];
+        List<Id> groupId = new List<Id>();
+        for(Group groupItem: groupList){
+            groupId.add(groupItem.Id);
         }
-        return userMap;
+        List<GroupMember> memberList = [SELECT Id, GroupId, UserOrGroupId
+                                        FROM GroupMember WHERE GroupId IN :groupId
+                                        WITH SECURITY_ENFORCED];
+        return memberList;
     }
 
-    public static Map<String, List<Id>> initializeContactByCampaignMap(){
-        List<Contact> contactList = getContact();
-        List<CampaignMember> memberCampaign = getCampaignMember();
-        Map<Id, Campaign> campaignMap = createCampaignMap();
-        Map<String, List<Id>> contactMap = createContactByCampaignMap();
-
-        for(Contact contact: contactList){
-            for(CampaignMember member: memberCampaign){
-                if(contact.Id == member.ContactId){
-                    Campaign currentCampaign = campaignMap.get(member.CampaignId);
-                    List<Id> listForUpdate = contactMap.get(currentCampaign.Name);
-                    listForUpdate.add(contact.Id);
-                    contactMap.put(currentCampaign.Name, listForUpdate);
-                }
-            }
+    public static List<CampaignMember> getCampaignMember(){
+        List<Campaign> campaignList = [SELECT Id, Name FROM Campaign WITH SECURITY_ENFORCED];
+        List<Id> campaignId = new List<Id>();
+        for(Campaign campaignItem: campaignList){
+            campaignId.add(campaignItem.Id);
         }
-        return contactMap;
+        List<CampaignMember> membersList = [SELECT Id, ContactId, LeadId, CampaignId 
+                                            FROM CampaignMember WHERE CampaignId IN :campaignId
+                                            WITH SECURITY_ENFORCED];
+        return membersList;
     }
 
-    public static Map<String, List<Id>> initializeLeadByCampaignMap(){
-        List<Lead> leadList = getLead();
-        List<CampaignMember> memberCampaign = getCampaignMember();
-        Map<Id, Campaign> campaignMap = createCampaignMap();
-        Map<String, List<Id>> leadMap = createLeadByCampaignMap();
-
-        for(Lead lead: leadList){
-            for(CampaignMember member: memberCampaign){
-                if(lead.Id == member.LeadId){
-                    Campaign currentCampaign = campaignMap.get(member.CampaignId);
-                    List<Id> listForUpdate = leadMap.get(currentCampaign.Name);
-                    listForUpdate.add(lead.Id);
-                    leadMap.put(currentCampaign.Name, listForUpdate);
-                }
+    public static List<Id> getUserByGroup(List<GroupMember> memberList, Id groupId){
+        List<Id> userIds = new List<Id>();
+        for(GroupMember member: memberList){
+            if(member.GroupId == groupId && member.UserOrGroupId != null){
+                userIds.add(member.UserOrGroupId);
             }
         }
-        return leadMap;
+        return userIds;
     }
-    
+
+    public static List<Id> getContactByCampaign(List<CampaignMember> memberList, Id campaignId){
+        List<Id> contactIds = new List<Id>();
+        for(CampaignMember member: memberList){
+            if(member.CampaignId == campaignId && member.ContactId != null){
+                contactIds.add(member.ContactId);
+            }
+        }
+        return contactIds;
+    }
+
+    public static List<Id> getLeadByCampaign(List<CampaignMember> memberList, Id campaignId){
+        List<Id> leadIds = new List<Id>();
+        for(CampaignMember member: memberList){
+            if(member.CampaignId == campaignId && member.LeadId != null){
+                leadIds.add(member.LeadId);
+            }
+        }
+        return leadIds;
+    }
+
     public static String createEmailBody(String templateBody, Survey__c currentSurvey, Organization currentOrg){
-        SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues('Main');
+        SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues(EMAIL_SETTINGS_NAME);
         String surveyURL = currentSurvey.URL__c;
         String bodyWithUrl =  templateBody.replace(config.Url_Config__c, surveyURL);
         String organizationName = currentOrg.Name;
@@ -74,79 +75,6 @@ public with sharing class SendEmailLogicHelper {
         return surveyMap;
     }
 
-    public static Map<Id, Campaign> createCampaignMap(){
-        List<Campaign> campaignList = getCampaign();
-        Map<Id, Campaign> campaignMap = new Map<Id, Campaign>();
-        for(Campaign campItem: campaignList){
-            campaignMap.put(campItem.Id, campItem);
-        }
-        return campaignMap;
-    }
-    
-    public static Map<Id, Group> createGroupMap(){
-        List<Group> groupList = getGroup();
-        Map<Id, Group> groupMap = new Map<Id, Group>();
-        for(Group groupItem: groupList){
-            groupMap.put(groupItem.Id, groupItem);
-        }
-        return groupMap;
-    }
-    
-    public static Map<String, List<User>> createUserByGroupMap(){
-        List<Group> groupList = getGroup();
-        Map<String, List<User>> userMap = new Map<String, List<User>>();
-        for(Group groupItem: groupList){
-            userMap.put(groupItem.Name, new List<User>());
-        }
-        return userMap;
-    }
-
-    public static Map<String, List<Id>> createContactByCampaignMap(){
-        List<Campaign> campaignList = getCampaign();
-        Map<String, List<Id>> contactMap = new Map<String, List<Id>>();
-        for(Campaign campItem: campaignList){
-            contactMap.put(campItem.Name, new List<Id>());
-        }
-        return contactMap;
-    }
-
-    public static Map<String, List<Id>> createLeadByCampaignMap(){
-        List<Campaign> campaignList = getCampaign();
-        Map<String, List<Id>> leadMap = new Map<String, List<Id>>();
-        for(Campaign campItem: campaignList){
-            leadMap.put(campItem.Name, new List<Id>());
-        }
-        return leadMap;
-    }
-
-    public static List<Campaign> getCampaign(){
-        return [SELECT Id, Name FROM Campaign WITH SECURITY_ENFORCED];
-    }
-
-    public static List<CampaignMember> getCampaignMember(){
-        return [SELECT Id, ContactId, LeadId, CampaignId FROM CampaignMember WITH SECURITY_ENFORCED];
-    }
-    
-    public static List<Contact> getContact(){
-        return [SELECT Id, Name FROM Contact WITH SECURITY_ENFORCED];
-    }
-
-    public static List<Lead> getLead(){
-        return [SELECT Id, Name FROM Lead WITH SECURITY_ENFORCED];
-    }
-
-    public static List<Group> getGroup(){
-        return [SELECT Id, Name FROM Group WITH SECURITY_ENFORCED];
-    }
-    
-    public static List<User> getUser(){
-        return [SELECT Id, Name, Email FROM User WITH SECURITY_ENFORCED];
-    }
-    
-    public static List<GroupMember> getGroupMember(){
-        return [SELECT Id, GroupId, UserOrGroupId FROM GroupMember WITH SECURITY_ENFORCED];
-    }
-    
     public static List<Survey__c> getSurvey(){
         return [SELECT Id, Name, URL__c FROM Survey__c WITH SECURITY_ENFORCED];
     }
@@ -156,7 +84,7 @@ public with sharing class SendEmailLogicHelper {
     }
     
     public static EmailTemplate getEmailTemplate(){
-        SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues('Main');
+        SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues(EMAIL_SETTINGS_NAME);
         return [SELECT Id, Name, Body FROM EmailTemplate WHERE Name = :config.Template_Name__c WITH SECURITY_ENFORCED LIMIT 1];
     }
 }
