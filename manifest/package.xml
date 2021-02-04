@@ -111,5 +111,6 @@
         <members>SurveyLetterhead</members>
         <name>Letterhead</name>
     </types>
+    <postInstallClass>postInstallConfig</postInstallClass>
     <version>50.0</version>
 </Package>
