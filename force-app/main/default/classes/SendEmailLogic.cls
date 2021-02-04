@@ -13,13 +13,15 @@ public with sharing class SendEmailLogic {
     }
     
     public static List<Messaging.SingleEmailMessage> createEmailMessages(List<Email_Receiver__c> receiverList, Map<Id, Survey__c> surveyMap){
+        List<Id> allCurrentGroup = SendEmailLogicHelper.getCurrentGroups(receiverList);
+        List<Id> allCurrentCampaign = SendEmailLogicHelper.gerCurrentCampaigns(receiverList);
+        List<GroupMember> currentGroupMember = SendEmailLogicHelper.getGroupMemeber(allCurrentGroup);
+        List<CampaignMember> currentCampaignMember = SendEmailLogicHelper.getCampaignMember(allCurrentCampaign);
         Organization currentOrg = SendEmailLogicHelper.getOrganization();
         EmailTemplate template = SendEmailLogicHelper.getEmailTemplate();
-        List<CampaignMember> allCampaignMember = SendEmailLogicHelper.getCampaignMember();
-        List<GroupMember> allGroupMember = SendEmailLogicHelper.getGroupMemeber();
-        List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
         SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues(EMAIL_SETTINGS_NAME);
-
+        List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
+        
         for(Email_Receiver__c receiver: receiverList){
             Survey__c survey = surveyMap.get(receiver.Survey__c);
             String body = SendEmailLogicHelper.createEmailBody(template.Body, survey, currentOrg);
@@ -28,7 +30,7 @@ public with sharing class SendEmailLogic {
             switch on receiver.Type__c {
                 when 'User Group' {
                     Id groupId = receiver.Value__c;
-                    List<Id> userForSend = SendEmailLogicHelper.getUserByGroup(allGroupMember, groupId);
+                    List<Id> userForSend = SendEmailLogicHelper.getUserByGroup(currentGroupMember, groupId);
                     for(Id userId: userForSend){
                         mail = createSingleEmail(userId, body, config);
                         emails.add(mail);
@@ -36,8 +38,8 @@ public with sharing class SendEmailLogic {
                 }
                 when 'Campaign' {
                     Id campaignId = receiver.Value__c;
-                    List<Id> contactForSend = SendEmailLogicHelper.getContactByCampaign(allCampaignMember, campaignId);
-                    List<Id> leadForSend = SendEmailLogicHelper.getLeadByCampaign(allCampaignMember, campaignId);
+                    List<Id> contactForSend = SendEmailLogicHelper.getContactByCampaign(currentCampaignMember, campaignId);
+                    List<Id> leadForSend = SendEmailLogicHelper.getLeadByCampaign(currentCampaignMember, campaignId);
 
                     for(Id contactId: contactForSend){
                         mail = createSingleEmail(contactId, body, config);
