@@ -9,7 +9,6 @@ public with sharing class MetadataFetcherTest {
   private static final String NON_EXISTENT_OBJECT_API_NAME  = 'Undefined';
   private static final String NAME_FIELD = 'Name';
 
-
   private static final String INVALID_OBJECT_API_NAMES_AMOUNT = 'Actual length of object api names is less than expected.';
   private static final String INVALID_OBJECT_FIELD_AMOUNT = 'Actual amount of object fields is less than expected.';
   private static final String INVALID_OBJECT_FIELD_DESCRIPTION_RESULT = 'Invalid object field description result.';
@@ -36,14 +35,14 @@ public with sharing class MetadataFetcherTest {
 
   @isTest
   static void testPositiveGetObjectFieldsDescriptionList() {
-    List<List<String>> result = MetadataFetcher.getObjectFieldsDescriptionList(CONTACT_OBJECT_API_NAME);
+    List<FieldDescriptionWrapper> result = MetadataFetcher.getObjectFieldsDescriptionList(CONTACT_OBJECT_API_NAME);
+    System.assertNotEquals(null, result, INVALID_OBJECT_FIELD_DESCRIPTION_RESULT);
     System.assert(result.size() >= 29, INVALID_OBJECT_FIELD_AMOUNT);
   }
 
   @isTest
   static void testNegativeGetObjectFieldsDescriptionList() {
-    List<List<String>> result = MetadataFetcher.getObjectFieldsDescriptionList(NON_EXISTENT_OBJECT_API_NAME);
+    List<FieldDescriptionWrapper> result = MetadataFetcher.getObjectFieldsDescriptionList(NON_EXISTENT_OBJECT_API_NAME);
     System.assertEquals(0, result.size(), INVALID_OBJECT_FIELD_DESCRIPTION_RESULT);
   } 
-  
 }
