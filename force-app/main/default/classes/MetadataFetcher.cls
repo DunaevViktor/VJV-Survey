@@ -24,11 +24,11 @@ public with sharing class MetadataFetcher {
       String fieldApiName = String.valueOf(sobjectfields.get(key));
       String fieldLabel = String.valueOf(sobjectfields.get(key).getDescribe().getLabel());
       String fieldDatatype = String.valueOf(sobjectfields.get(key).getDescribe().getType());
-      FieldDescriptionWrapper fieldDescription = new FieldDescriptionWrapper(fieldApiName, fieldLabel, fieldDatatype);
+      List<String> referencedObjectsApiNames = new List<String>();      
       if (fieldDatatype == REFERENCE_DATATYPE) {
-        List<String> referencedObjectsApiNames = getListOfReferencedObjectNames(sobjectfields.get(key).getDescribe());
-        fieldDescription.referencedObjects = referencedObjectsApiNames;
+        referencedObjectsApiNames = getListOfReferencedObjectNames(sobjectfields.get(key).getDescribe());
       }
+      FieldDescriptionWrapper fieldDescription = new FieldDescriptionWrapper(fieldApiName, fieldLabel, fieldDatatype, referencedObjectsApiNames);
       fieldDescriptionsList.add(fieldDescription);
     }        
     return fieldDescriptionsList;
