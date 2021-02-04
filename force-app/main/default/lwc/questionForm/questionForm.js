@@ -96,7 +96,7 @@ export default class QuestionForm extends LightningElement {
   initTypes({ error, data: types }) {
     if (types) {
       this.displayedTypes = transformQuestionTypes(types);
-      this.selectedType = this.displayedTypes[0].value;
+      if(!this.isEditMode) this.selectedType = this.displayedTypes[0].value;
       this.setOptionsEnabling();
     } else if (error) {
       this.sendErrorNotification();
