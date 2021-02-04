@@ -31,11 +31,11 @@ public with sharing class MetadataFetcherTest {
     List<FieldDescriptionWrapper> result = MetadataFetcher.getObjectFieldsDescriptionList(CONTACT_OBJECT_API_NAME);
     System.assertNotEquals(null, result, INVALID_OBJECT_FIELD_DESCRIPTION_RESULT);
     for(FieldDescriptionWrapper fieldDescription: result) {
-      System.assertNotEquals(null, fieldDescription.getFieldApiName(), INVALID_OBJECT_FIELD_DESCRIPTION_RESULT);
-      System.assertNotEquals(null, fieldDescription.getFieldLabel(), INVALID_OBJECT_FIELD_DESCRIPTION_RESULT);
-      System.assertNotEquals(null, fieldDescription.getFieldDatatype(), INVALID_OBJECT_FIELD_DESCRIPTION_RESULT);
-      if(fieldDescription.getFieldDatatype() == 'REFERENCE') {
-        System.assertNotEquals(0, fieldDescription.getReferencedObjectsApiNames().size(), INVALID_OBJECT_FIELD_DESCRIPTION_RESULT);
+      System.assertNotEquals(null, fieldDescription.value, INVALID_OBJECT_FIELD_DESCRIPTION_RESULT);
+      System.assertNotEquals(null, fieldDescription.label, INVALID_OBJECT_FIELD_DESCRIPTION_RESULT);
+      System.assertNotEquals(null, fieldDescription.datatype, INVALID_OBJECT_FIELD_DESCRIPTION_RESULT);
+      if(fieldDescription.datatype == MetadataFetcher.REFERENCE_DATATYPE) {
+        System.assertNotEquals(0, fieldDescription.referencedObjects.size(), INVALID_OBJECT_FIELD_DESCRIPTION_RESULT);
       }
     }
     System.assert(result.size() >= 29, INVALID_OBJECT_FIELD_AMOUNT);

@@ -1,5 +1,7 @@
 public with sharing class MetadataFetcher {
 
+  @TestVisible private static final String REFERENCE_DATATYPE = 'REFERENCE';
+
   @AuraEnabled(cacheable=true)
   public static Map<String, String> getPicklistValues(String objectApiName, String fieldApiName) {
     Map<String, String> pickListValuesMap = new Map<String, String>();
@@ -23,12 +25,12 @@ public with sharing class MetadataFetcher {
       String fieldLabel = String.valueOf(sobjectfields.get(key).getDescribe().getLabel());
       String fieldDatatype = String.valueOf(sobjectfields.get(key).getDescribe().getType());
       FieldDescriptionWrapper fieldDescription = new FieldDescriptionWrapper(fieldApiName, fieldLabel, fieldDatatype);
-      if (fieldDatatype == 'REFERENCE') {
+      if (fieldDatatype == REFERENCE_DATATYPE) {
         List<String> referencedObjectsApiNames = getListOfReferencedObjectNames(sobjectfields.get(key).getDescribe());
-        fieldDescription.setReferencedObjectsApiNames(referencedObjectsApiNames);
+        fieldDescription.referencedObjects = referencedObjectsApiNames;
       }
       fieldDescriptionsList.add(fieldDescription);
-    }
+    }        
     return fieldDescriptionsList;
   }
 

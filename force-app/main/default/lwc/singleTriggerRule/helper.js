@@ -215,20 +215,6 @@ const setReferencedObjectNames = (objectFieldsDescriptionList, fieldObject) => {
   }
 };
 
-const generateFieldsDescriptionsList = (result) => {
-  let comboboxFieldsOptions = [];
-  result.forEach((fieldDescriptionList) => {
-    let fieldObject = {
-      value: fieldDescriptionList[0],
-      label: fieldDescriptionList[1],      
-      datatype: fieldDescriptionList[2]
-    };
-    setReferencedObjectNames(fieldDescriptionList, fieldObject);
-    comboboxFieldsOptions.push(fieldObject);
-  });
-  return comboboxFieldsOptions;
-};
-
 const generateFieldOptions = (result) => {
   let fieldOptions = [];
   for (let key in result) {
@@ -247,7 +233,6 @@ export {
   getFieldAttributes,
   setReferencedObjectNames,
   generateBooleanField,
-  generateFieldsDescriptionsList,
   filterOperatorList,
   operatorGroups,
   generateFieldOptions,
