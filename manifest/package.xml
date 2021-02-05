@@ -107,5 +107,6 @@
         <members>Survey_Answer_Form</members>
         <name>FlexiPage</name>
     </types>
+    <postInstallClass>postInstallConfig</postInstallClass>
     <version>50.0</version>
 </Package>
