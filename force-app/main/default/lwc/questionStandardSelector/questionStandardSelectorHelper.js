@@ -50,6 +50,8 @@ const transformStandardQuestions = (standardQuestions) => {
     }
   
     return displayedQuestion;
+  }).sort((firstQuestion, secondQuestion) => {
+    return firstQuestion.Label__c.toLowerCase().localeCompare(secondQuestion.Label__c.toLowerCase());
   });
 }
 
