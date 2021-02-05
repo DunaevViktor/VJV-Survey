@@ -34,6 +34,22 @@ const columnsMember = [
     }
 ];
 
+const getResultTableStyle = () => {
+    const resultStyle = document.createElement('style');
+    resultStyle.innerText = '.resultTable .slds-th__action{background-color: #b9b4ff; color: white;} ' + 
+    '.slds-table_header-fixed_container {overflow: hidden} ' + 
+    '.resultTable .slds-has-focus .slds-th__action, .resultTable .slds-th__action:hover {background-color: #b9b4ff !important;}';
+    return resultStyle;
+}
+
+const getReceiversTableStyle = () => {
+    const receiversStyle = document.createElement('style');
+    receiversStyle.innerText = '.emailTable .slds-th__action{background-color:#409fff; color: white;} ' + 
+    '.slds-table_header-fixed_container {overflow: hidden} ' + 
+    '.emailTable .slds-has-focus .slds-th__action, .emailTable .slds-th__action:hover {background-color: #409fff !important;}';
+    return receiversStyle;
+}
+
 const isReceiverExist = (receivers, value) => {
     return receivers.find((receiver) => {
         return receiver.Value__c.localeCompare(value) === 0
@@ -91,6 +107,8 @@ const createMemberList = (result) => {
 export {
     columns,
     columnsMember,
+    getResultTableStyle,
+    getReceiversTableStyle,
     isReceiverExist,
     deleteReceiver,
     createDisplayedMap,

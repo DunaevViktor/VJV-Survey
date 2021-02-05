@@ -1,14 +1,4 @@
 <template>
-  <div class="slds-m-top_x-small">
-    <lightning-datatable
-      key-field="id"
-      data={displayedQuestions}
-      columns={columns}
-      onrowaction={handleRowAction}
-      hide-checkbox-column>
-    </lightning-datatable>
-  </div>
-
   <div class="slds-m-top_medium">
     <lightning-button
       variant="brand-outline" 
@@ -16,6 +6,21 @@
       title={label.back_title}
       onclick={handleBack}>
     </lightning-button>
+  </div>
+
+  <div class="slds-m-top_x-small">
+    <div class="slds-m-bottom_xx-small">
+      <lightning-icon icon-name="action:question_post_action" size="x-small" class="questionIcon"></lightning-icon>
+      <span class="slds-m-left_xx-small">{label.standard_questions}</span>
+    </div>
+    <lightning-datatable
+      key-field="id"
+      data={displayedQuestions}
+      columns={columns}
+      onrowaction={handleRowAction}
+      class="questionsTable"
+      hide-checkbox-column>
+    </lightning-datatable>
   </div>
 
 </template>
