@@ -39,9 +39,16 @@
                     <lightning-icon icon-name="action:new_group" size="x-small" class="resultIcon"></lightning-icon>
                     <span class="slds-m-left_xx-small">{label.search_result}</span>
                   </div>
-                  <lightning-datatable key-field="Id" data={memberList} columns={columnsMember}
+                  <lightning-datatable key-field="Id" data={memberPage} columns={columnsMember}
                     onrowaction={handleRowAction} class="slds-scrollable_none resultTable" hide-checkbox-column>
                   </lightning-datatable>
+
+                  <template if:true={isNeedPagination}>
+                    <lightning-button-group class="slds-m-top_x-small">
+                      <lightning-button label={label.previous_page} disabled={isPreviousDisabled} onclick={clickPreviousTableButton}></lightning-button>
+                      <lightning-button label={label.next_page} disabled={isNextDisabled} onclick={clickNextTableButton}></lightning-button>
+                    </lightning-button-group>
+                  </template>
                 </div>
               </template>
               <template if:false={hasMembers}>
