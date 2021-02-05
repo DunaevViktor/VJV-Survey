@@ -659,6 +659,13 @@
         <value>Options</value>
     </labels>
     <labels>
+        <fullName>preview_header</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>preview header</shortDescription>
+        <value>Survey Preview</value>
+    </labels>
+    <labels>
         <fullName>previous</fullName>
         <language>en_US</language>
         <protected>true</protected>
