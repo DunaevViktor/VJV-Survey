@@ -1,110 +1,123 @@
 <template>
 
-    <lightning-input type="checkbox" label={label.template} checked={__survey.IsStandard__c}
+    <div class="slds-box slds-box_x-small">
+        <lightning-input type="checkbox" label={label.template} checked={__survey.IsStandard__c}
         onchange={handleIsStandardSurveyChange}></lightning-input>
 
-    <template if:true={isHasSurveys}>
-        <lightning-input type="checkbox" label={label.connect_to_another_survey} checked={isConnectToSurvey}
-            onchange={handleConnectToAnotherSurveyChange}></lightning-input>
-        <template if:true={isConnectToSurvey}>
-            <template if:false={getSurveyError}>
-                <lightning-combobox name="surveys" label={label.surveys} value={surveyId}
-                    placeholder={label.select_survey_for_connect} options={surveyOptions} onchange={handleSurveyChange}
-                    required></lightning-combobox>
-            </template>
-            <template if:true={getSurveyError}>
-                <div class="text">{label.error_loading_surveys}</div>
+        <template if:true={isHasSurveys}>
+            <lightning-input type="checkbox" label={label.connect_to_another_survey} checked={isConnectToSurvey}
+                onchange={handleConnectToAnotherSurveyChange}></lightning-input>
+            <template if:true={isConnectToSurvey}>
+                <template if:false={getSurveyError}>
+                    <lightning-combobox name="surveys" label={label.surveys} value={surveyId}
+                        placeholder={label.select_survey_for_connect} options={surveyOptions} onchange={handleSurveyChange}
+                        required></lightning-combobox>
+                </template>
+                <template if:true={getSurveyError}>
+                    <div class="text">{label.error_loading_surveys}</div>
+                </template>
             </template>
         </template>
-    </template>
+    </div>
 
-    <br />
-    <br />
-    <div class="slds-text-heading_x-small">{label.add_immediate_dispatch}</div>
+    <div class="slds-box slds-box_x-small slds-m-top_small">
+      <div class="slds-text-heading_x-small">{label.add_immediate_dispatch}</div>
 
-    <lightning-tabset>
-
-        <lightning-tab label={label.Single_Record}>
+        <lightning-tabset>
+    
+          <lightning-tab label={label.Single_Record}>
             <div onkeyup={handleKeyUp}>
-                <lightning-input name="searchName" label={label.Single_Record_Label}
-                    placeholder={label.Single_Record_Placeholder} class="slds-m-vertical_medium" type="search">
-                </lightning-input>
+              <lightning-input name="searchName" label={label.Single_Record_Label}
+                placeholder={label.Single_Record_Placeholder} class="slds-m-bottom_medium" type="search">
+              </lightning-input>
             </div>
+            
             <template if:false={searchError}>
-                <template if:true={hasMembers}>
-                    <div class="data-table">
-                        <lightning-datatable key-field="Id" data={memberList} columns={columnsMember}
-                            onrowaction={handleRowAction} hide-checkbox-column>
-                        </lightning-datatable>
-                    </div>
-                </template>
-                <template if:false={hasMembers}>
-                    <div class="text">{label.no_records_found}</div>
-                </template>
+              <template if:true={hasMembers}>
+                <div class="data-table">
+                  <div class="text">
+                    <lightning-icon icon-name="action:new_group" size="x-small" class="resultIcon"></lightning-icon>
+                    <span class="slds-m-left_xx-small">{label.search_result}</span>
+                  </div>
+                  <lightning-datatable key-field="Id" data={memberList} columns={columnsMember}
+                    onrowaction={handleRowAction} class="slds-scrollable_none resultTable" hide-checkbox-column>
+                  </lightning-datatable>
+                </div>
+              </template>
+              <template if:false={hasMembers}>
+                <div class="text">{label.no_records_found}</div>
+              </template>
             </template>
             <template if:true={searchError}>
-                <div class="text">{label.error_search}</div>
+              <div class="text">{label.error_search}</div>
             </template>
-        </lightning-tab>
-
-        <lightning-tab label={label.Public_Group}>
+          </lightning-tab>
+    
+          <lightning-tab label={label.Public_Group}>
             <template if:true={isHasGroups}>
-                <template if:false={getGroupError}>
-                    <div class="slds-m-vertical_medium">
-                        <lightning-combobox name="userGroups" label={label.user_groups} value=""
-                            placeholder={label.Public_Group_Placeholder} options={groupOptions} onchange={handleGroupChange}
-                            class="group-combobox" required></lightning-combobox>
-                    </div>
-                    <lightning-button variant="brand" label={label.add} onclick={handleAddGroupReceiver}>
-                    </lightning-button>
-                </template>
-                <template if:true={getGroupError}>
-                    <div class="text">{label.error_loading_groups}</div>
-                </template>
+              <template if:false={getGroupError}>
+                <div class="slds-m-vertical_medium">
+                  <lightning-combobox name="userGroups" label={label.user_groups} value=""
+                    placeholder={label.Public_Group_Placeholder} options={groupOptions} onchange={handleGroupChange}
+                    class="group-combobox" required></lightning-combobox>
+                </div>
+                <lightning-button variant="brand" label={label.add} onclick={handleAddGroupReceiver}>
+                </lightning-button>
+              </template>
+              
+              <template if:true={getGroupError}>
+                <div class="text">{label.error_loading_groups}</div>
+              </template>
             </template>
-
+    
             <template if:false={isHasGroups}>
-                <div class="text">{label.msg_no_public_groups_found}</div>
+              <div class="text">{label.msg_no_public_groups_found}</div>
             </template>
-        </lightning-tab>
-
-        <lightning-tab label={label.Campaign}>
+          </lightning-tab>
+    
+          <lightning-tab label={label.Campaign}>
             <template if:true={isHasCampaigns}>
-                <template if:false={getCampaignsError}>
-                    <div class="slds-m-vertical_medium">
-                        <lightning-combobox name="campaigns" label={label.Campaign_Label} value="" placeholder={label.Campaign_Placeholder}
-                            options={campaignOptions} onchange={handleCampaignChange} class="campaign-combobox"
-                            required></lightning-combobox>
-                    </div>
-                    <lightning-button variant="brand" label={label.add} onclick={handleAddCampaignReceiver}>
-                    </lightning-button>
-                </template>
-                <template if:true={getCampaignsError}>
-                    <div class="text">{label.error_loading_campaigns}</div>
-                </template>
+              <template if:false={getCampaignsError}>
+                <div class="slds-m-vertical_medium">
+                  <lightning-combobox name="campaigns" label={label.Campaign_Label} value="" placeholder={label.Campaign_Placeholder}
+                    options={campaignOptions} onchange={handleCampaignChange} class="campaign-combobox"
+                    required>
+                  </lightning-combobox>
+                </div>
+                <lightning-button variant="brand" label={label.add} onclick={handleAddCampaignReceiver}>
+                </lightning-button>
+              </template>
+              <template if:true={getCampaignsError}>
+                <div class="text">{label.error_loading_campaigns}</div>
+              </template>
             </template>
-
+    
             <template if:false={isHasCampaigns}>
-                <div class="text">{label.no_campaigns}</div>
+             <div class="text">{label.no_campaigns}</div>
             </template>
-        </lightning-tab>
-
-    </lightning-tabset>
-
-    <template if:true={hasReceivers}>
-        <div class="data-table">
-            <div class="text">{label.Email_Receiver}</div>
-            <lightning-datatable key-field="Value__c" data={copyReceivers} columns={columns} onrowaction={handleRowAction}
-                hide-checkbox-column>
-            </lightning-datatable>
-        </div>
-    </template>
-
-    <hr class="slds-m-bottom_small" />
-    <div class="slds-text-align_right">
-        <lightning-button label={label.previous} onclick={clickPreviousButton}></lightning-button>
-        <lightning-button variant="brand" label={label.next} onclick={clickNextButton} class="slds-m-left_x-small">
-        </lightning-button>
+          </lightning-tab>
+    
+        </lightning-tabset>
+    
+        <template if:true={hasReceivers}>
+          <div class="data-table">
+            <div class="text">
+                <lightning-icon icon-name="action:email" size="x-small" class="emailIcon"></lightning-icon>
+                <span class="slds-m-left_xx-small">{label.Email_Receiver}</span>
+            </div>
+             <lightning-datatable key-field="Value__c" data={copyReceivers} columns={columns} onrowaction={handleRowAction}
+                class="slds-scrollable_none emailTable" hide-checkbox-column>
+              </lightning-datatable>
+          </div>
+        </template>
     </div>
+    
+
+  <hr class="slds-m-bottom_small" />
+  <div class="slds-text-align_right">
+    <lightning-button label={label.previous} onclick={clickPreviousButton}></lightning-button>
+    <lightning-button variant="brand" label={label.next} onclick={clickNextButton} class="slds-m-left_x-small">
+    </lightning-button>
+  </div>
     
 </template>

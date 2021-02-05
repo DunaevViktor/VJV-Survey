@@ -806,6 +806,13 @@
         <value>Search keyword can&apos;t be empty</value>
     </labels>
     <labels>
+        <fullName>search_result</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>search result</shortDescription>
+        <value>Search result:</value>
+    </labels>
+    <labels>
         <fullName>select</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -860,6 +867,13 @@
         <protected>true</protected>
         <shortDescription>specify question</shortDescription>
         <value>Specify question</value>
+    </labels>
+    <labels>
+        <fullName>standard_questions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>standard questions</shortDescription>
+        <value>Standard questions</value>
     </labels>
     <labels>
         <fullName>success</fullName>

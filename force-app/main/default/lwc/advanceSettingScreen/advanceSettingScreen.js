@@ -1,6 +1,6 @@
 import { LightningElement, track, api } from "lwc";
 import { label } from "./labels.js";
-import { columns, columnsMember, isReceiverExist, deleteReceiver, createDisplayedMap,
+import { columns, columnsMember, getResultTableStyle, getReceiversTableStyle, isReceiverExist, deleteReceiver, createDisplayedMap,
          getObjectName, callReportValidity, createMemberList } from "./advanceSettingScreenHelper.js";
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -114,6 +114,11 @@ export default class AdvanceSettingScreen extends LightningElement {
         this.isHasSurveys = this.displayedSurveys.length > 0;
         this.isHasGroups = this.displayedGroups.length > 0;
         this.isHasCampaigns = this.displayedCampaigns.length > 0;
+    }
+
+    renderedCallback() {
+        this.template.querySelector('.resultTable').appendChild(getResultTableStyle());
+        this.template.querySelector('.emailTable').appendChild(getReceiversTableStyle());
     }
 
     initSurveys() {

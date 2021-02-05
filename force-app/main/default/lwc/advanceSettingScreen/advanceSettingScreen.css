@@ -6,3 +6,13 @@
   margin-top: 10pt;
   margin-bottom: 10pt;
 }
+
+.resultIcon {
+  --sds-c-icon-color-foreground-default: white;
+  --sds-c-icon-color-background:  #b9b4ff;
+}
+
+.emailIcon {
+  --sds-c-icon-color-foreground-default: white;
+  --sds-c-icon-color-background:  #409fff;
+}

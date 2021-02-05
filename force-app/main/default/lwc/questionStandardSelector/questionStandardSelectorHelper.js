@@ -14,6 +14,14 @@ const columns = [
   },
 ];
 
+const getQuestionsTableStyle = () => { 
+  const questionStyle = document.createElement('style');
+  questionStyle.innerText = '.questionsTable .slds-th__action{background-color: #70d1f4; color: white;} ' + 
+  '.slds-table_header-fixed_container {overflow: hidden} ' + 
+  '.slds-has-focus .slds-th__action, .slds-th__action:hover {background-color: #70d1f4 !important;}';
+  return questionStyle;
+}
+
 const reduceOptionsToString = (options) => {
   return options.reduce((accumulator, currentItem, index) => {
     accumulator += currentItem.Value__c;
@@ -47,5 +55,6 @@ const transformStandardQuestions = (standardQuestions) => {
 
 export {
   columns,
+  getQuestionsTableStyle,
   transformStandardQuestions
 }
