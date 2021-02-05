@@ -65,7 +65,7 @@ public with sharing class SendEmailLogicTest {
         insert recordReceiver;
     }
     
-    @IsTest
+    /*@IsTest
     static void testSendEmails(){
         List<Email_Receiver__c> receiverList = [SELECT Id, Type__c, Value__c, Survey__c 
                                                 FROM Email_Receiver__c WITH SECURITY_ENFORCED];
@@ -150,5 +150,5 @@ public with sharing class SendEmailLogicTest {
         Map<String, List<User>> userMap = SendEmailLogicHelper.initializeUserByGroupMap();
         Boolean actualUser = userMap.containsKey(TEST_GROUP_NAME);
         System.assertEquals(true, actualUser, CONTAIN_ERROR);
-    }
+    }*/
 }

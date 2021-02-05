@@ -1,5 +1,5 @@
 import { LightningElement, api, track } from 'lwc';
-import {columns, transformStandardQuestions} from "./questionStandardSelectorHelper.js";
+import {columns, getQuestionsTableStyle, transformStandardQuestions} from "./questionStandardSelectorHelper.js";
 import {label} from "./labels.js";
 
 export default class QuestionStandardSelector extends LightningElement {
@@ -15,6 +15,10 @@ export default class QuestionStandardSelector extends LightningElement {
 
   connectedCallback() {
     this.displayedQuestions = transformStandardQuestions(this.standardQuestions);
+  }
+
+  renderedCallback() {
+    this.template.querySelector('.questionsTable').appendChild(getQuestionsTableStyle());
   }
 
   handleRowAction(event) {

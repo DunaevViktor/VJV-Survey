@@ -1,6 +1,6 @@
 import { LightningElement, track, api } from "lwc";
 import { label } from "./labels.js";
-import { columns, columnsMember, isReceiverExist, deleteReceiver, createDisplayedMap,
+import { columns, columnsMember, getResultTableStyle, getReceiversTableStyle, isReceiverExist, deleteReceiver, createDisplayedMap,
          getObjectName, callReportValidity, createMemberList } from "./advanceSettingScreenHelper.js";
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -116,6 +116,11 @@ export default class AdvanceSettingScreen extends LightningElement {
         this.isHasCampaigns = this.displayedCampaigns.length > 0;
     }
 
+    renderedCallback() {
+        this.template.querySelector('.resultTable').appendChild(getResultTableStyle());
+        this.template.querySelector('.emailTable').appendChild(getReceiversTableStyle());
+    }
+
     initSurveys() {
         if (this.displayedSurveys.length === 0) {
             getSurveys()
@@ -216,9 +221,10 @@ export default class AdvanceSettingScreen extends LightningElement {
 
         const receiver = {};
         receiver.Type__c = this.GROUP_VARIANT;
-        receiver.Value__c = getObjectName(this.displayedGroups, this.groupId);
+        receiver.Value__c = this.groupId;
 
-        this.createCopyReceiver(receiver, receiver.Value__c);
+        let groupName = getObjectName(this.displayedGroups, this.groupId);
+        this.createCopyReceiver(receiver, groupName);
         this.receivers = [...this.receivers, receiver];
 
         callReportValidity(combobox, "");
@@ -231,8 +237,7 @@ export default class AdvanceSettingScreen extends LightningElement {
             return false;
         }
 
-        const value = getObjectName(this.displayedGroups, this.groupId);
-        if (isReceiverExist(this.receivers, value)) {
+        if (isReceiverExist(this.receivers, this.groupId)) {
             callReportValidity(combobox, label.error_already_added_this_group);
             return false;
         }
@@ -286,9 +291,10 @@ export default class AdvanceSettingScreen extends LightningElement {
 
         const receiver = {};
         receiver.Type__c = this.CAMPAIGN_VARIAN;
-        receiver.Value__c = getObjectName(this.displayedCampaigns, this.campaignId);
+        receiver.Value__c = this.campaignId;
 
-        this.createCopyReceiver(receiver, receiver.Value__c);
+        let campaignName = getObjectName(this.displayedCampaigns, this.campaignId);
+        this.createCopyReceiver(receiver, campaignName);
         this.receivers = [...this.receivers, receiver];
 
         callReportValidity(combobox, "");
@@ -301,8 +307,7 @@ export default class AdvanceSettingScreen extends LightningElement {
             return false;
         }
 
-        const value = getObjectName(this.displayedCampaigns, this.campaignId);
-        if (isReceiverExist(this.receivers, value)) {
+        if (isReceiverExist(this.receivers, this.campaignId)) {
             callReportValidity(combobox, label.error_already_added_campaign);
             return false;
         }

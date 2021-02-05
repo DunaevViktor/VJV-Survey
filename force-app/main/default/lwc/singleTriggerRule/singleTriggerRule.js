@@ -9,7 +9,6 @@ import {
   getFieldAttributes,
   generateBooleanField,
   filterOperatorList,
-  generateFieldsDescriptionsList,
   generateFieldOptions,
   getFieldOperatorType
 } from "./helper";
@@ -118,7 +117,7 @@ export default class SingleTriggerRule extends LightningElement {
   getObjectFields(objectApiName) {
     getObjectFieldsDescriptionList({ objectApiName: objectApiName })
       .then((result) => {
-        this.fieldNames = generateFieldsDescriptionsList(result);
+        this.fieldNames = JSON.parse(JSON.stringify(result));
         if (this._rule && this._rule.Field_Name__c) {
           this.fieldValue = this._rule.Field_Name__c;  
           this.generateOperatorField();        

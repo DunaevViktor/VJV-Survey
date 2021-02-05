@@ -1,11 +1,10 @@
 public with sharing class GroupController {
-  @AuraEnabled(cacheable=true)
-  public static List<Group> getGroups() {
-    Set<Id> groupIds = new Set<Id>();
-    for (GroupMember groupMember : [SELECT GroupId FROM GroupMember WITH SECURITY_ENFORCED]) {
-      groupIds.add(groupMember.GroupId);
-    }
 
-    return [SELECT Id, Name FROM Group WHERE Id IN :groupIds WITH SECURITY_ENFORCED];
-  }
+    private static final String REGULAR_TYPE = 'Regular';
+    private static final String QUEUE_TYPE = 'Queue';
+
+    @AuraEnabled(cacheable=true)
+    public static List<Group> getGroups() {
+        return [SELECT Id, Name, Type FROM Group WHERE Type = :REGULAR_TYPE OR Type = :QUEUE_TYPE WITH SECURITY_ENFORCED];
+    }
 }

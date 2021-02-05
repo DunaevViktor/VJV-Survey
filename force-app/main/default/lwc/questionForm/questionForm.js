@@ -40,8 +40,6 @@ export default class QuestionForm extends LightningElement {
   REQUIRED_FIELD_API_NAME = "Required__c";
   REUSABLE_FIELD_API_NAME = "IsReusable__c";
 
-  EMPTRY_STRING = "";
-
   @track question = {};
   @track validation = {};
 
@@ -96,7 +94,7 @@ export default class QuestionForm extends LightningElement {
   initTypes({ error, data: types }) {
     if (types) {
       this.displayedTypes = transformQuestionTypes(types);
-      this.selectedType = this.displayedTypes[0].value;
+      if(!this.isEditMode) this.selectedType = this.displayedTypes[0].value;
       this.setOptionsEnabling();
     } else if (error) {
       this.sendErrorNotification();
@@ -254,7 +252,7 @@ export default class QuestionForm extends LightningElement {
   }
 
   isOptionCorrect(input) {
-    if (input.value === this.EMPTRY_STRING) {
+    if (input.value.trim().length === 0) {
       setInputValidity(input, label.complete_this_field);
       return false;
     }
@@ -340,7 +338,7 @@ export default class QuestionForm extends LightningElement {
   isQuestionCorrect() {
     const input = this.template.querySelector(".input");
 
-    if (input.value === this.EMPTRY_STRING) {
+    if (input.value.trim().length === 0) {
       setInputValidity(input, label.complete_this_field);
       return false;
     } else if (
