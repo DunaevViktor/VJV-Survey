@@ -1,47 +1,34 @@
 import { LightningElement, api, track } from "lwc";
-import {
-  FlowNavigationBackEvent,
-  FlowNavigationNextEvent
-} from "lightning/flowSupport";
+import { FlowNavigationBackEvent,FlowNavigationNextEvent } from "lightning/flowSupport";
 import { label } from "./labels.js";
-
-import {
-    initQuestionFields
-  } from "./previewScreenHelper";
+import { initQuestionFields } from "./previewScreenHelper.js";
 
 export default class PreviewScreen extends LightningElement {
-  @api survey;
-
-  @track _questions;
-
   label = label;
 
-  get previewSurvey(){
-      return this.survey;
+  @track _survey;
+  @track _questions = [];
+
+  @api
+  get questions() {
+    return this._questions;
   }
 
-  get questions(){
-      return this._questions;
+  set questions(value) {
+    this._questions = initQuestionFields(JSON.parse(JSON.stringify(value)));
   }
 
   @api
-  set questions(questions = []){
-      this._questions = [...questions];
+  get survey() {
+    return this._survey;
   }
 
-  get previewQuestions() {
-    let newInputs = initQuestionFields(JSON.parse(JSON.stringify(this._questions)));
-          console.log('in get:', newInputs);
-
-      return newInputs;
-}
+  set survey(value) {
+    this._survey = JSON.parse(JSON.stringify(value));
+  }
 
   get backgroundColor() {
-    return (
-      "background-color: " +
-      this.survey.Background_Color__c +
-      ";"
-    );
+    return "background-color: " + this.survey.Background_Color__c + ";";
   }
 
   clickPreviousButton() {

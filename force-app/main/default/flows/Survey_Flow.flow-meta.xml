@@ -254,19 +254,18 @@
             <extensionName>c:previewScreen</extensionName>
             <fieldType>ComponentInstance</fieldType>
             <inputParameters>
-                <name>survey</name>
-                <value>
-                    <elementReference>Survey</elementReference>
-                </value>
-            </inputParameters>
-            <inputParameters>
                 <name>questions</name>
                 <value>
                     <elementReference>QuestionList</elementReference>
                 </value>
             </inputParameters>
+            <inputParameters>
+                <name>survey</name>
+                <value>
+                    <elementReference>Survey</elementReference>
+                </value>
+            </inputParameters>
             <isRequired>true</isRequired>
-            <storeOutputAutomatically>true</storeOutputAutomatically>
         </fields>
         <showFooter>false</showFooter>
         <showHeader>false</showHeader>
