@@ -1,0 +1,53 @@
+<template>
+    <template if:true={showSurvey}>
+        <template if:true={survey.data}>
+            <div class="slds-align_absolute-center">
+                <div class="slds-box slds-box_x-small slds-m-around_x-small form-background" style={backgroundColor}>
+
+                    <h2 slot="title" class="slds-p-horizontal_large">
+                        <div class="slds-grid slds-wrap slds-p-left_large slds-p-bottom_large">
+
+                            <div class="slds-col slds-size_10-of-12">
+                                <div class="slds-text-heading_large slds-p-top_medium">{title}</div>
+                            </div>
+
+                            <div class="slds-col slds-size_2-of-12">
+                                <img class="fill image-block" src={logo} />
+                            </div>
+                        </div>
+
+                        <div class="slds-p-top_small">{description}</div>
+                    </h2>
+
+                    <div class="slds-box slds-box_x-small slds-m-around_large inner-box">
+                        <div class="scrollable-area slds-scrollable--y">
+                            <template if:true={answerInputs}>
+                                <template for:each={answerInputs} for:item="question">
+
+                                    <c-single-question key={question.Id} question={question}
+                                        onanswerchange={handleAnswerChange}>
+                                    </c-single-question>
+
+                                </template>
+                            </template>
+                        </div>
+
+                        <div slot="footer">
+                            <lightning-layout class="slds-grid slds-p-horizontal_large slds-p-top_large"
+                                horizontal-align="spread">
+
+                                <lightning-button class="slds-col slds-size_1-of-8 slds-align-small"
+                                    label={label.cancel} variant="destructive-text" onclick={handleCancel}>
+                                </lightning-button>
+
+                                <lightning-button class="slds-col slds-size_1-of-9 slds-align-small" label={label.send}
+                                    variant="brand" onclick={createGroupAnswer}></lightning-button>
+
+                            </lightning-layout>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </template>
+</template>

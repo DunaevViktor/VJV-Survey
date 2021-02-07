@@ -7,6 +7,7 @@ import saveQuestions from "@salesforce/apex/SaverController.saveQuestions";
 import saveOptions from "@salesforce/apex/SaverController.saveOptions";
 import saveValidations from "@salesforce/apex/SaverController.saveValidations";
 import saveEmailReceivers from "@salesforce/apex/SaverController.saveEmailReceivers";
+import sendEmails from "@salesforce/apex/SendEmailLogic.sendEmails";
 
 import { transformRules,  
          transformQuestions,
@@ -48,7 +49,10 @@ export default class SaverScreen extends LightningElement {
   }
 
   sendSaveSurveyRequest() {
-    saveSurvey({survey : this.survey})
+      let copySurvey = {...this.survey};
+      copySurvey.URL__c = this.getSurveyUrl();
+
+    saveSurvey({survey : copySurvey})
       .then((result) => {
         this.surveyId = result;
 
@@ -145,8 +149,9 @@ export default class SaverScreen extends LightningElement {
     }
 
     saveEmailReceivers({receivers : transformedEmailReceivers})
-      .then(() => {
+      .then((receiverList) => {
         this.increaseProgress();
+        this.sendImmediatelyEmails(receiverList);
       })
       .catch((error) => {
         console.log(error);
@@ -154,8 +159,26 @@ export default class SaverScreen extends LightningElement {
       })
   }
 
+  sendImmediatelyEmails(receiverList){
+    sendEmails({emailReceiverList: receiverList})
+    .catch((error) => {
+        console.log(error);
+        this.isError = true;
+    })
+  }
+
   increaseProgress() {
     this.stepsOfSave[this.currentStep].isDone = true;
     this.currentStep++;
+  }
+
+  getSurveyUrl(){
+      return 'https://' + this.getOrgDomain() + '.lightning.force.com/lightning/n/Survey_Answer_Form';
+  }
+
+  getOrgDomain(){
+    const hostname = window.location.hostname;
+    const splitHostname = hostname.split(".");
+    return splitHostname[0];
   }
 }

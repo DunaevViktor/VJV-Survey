@@ -15,7 +15,8 @@ const operatorTypes = {
   NOT_CONTAINS : "NOT CONTAINS",
   LESS_THAN: "LESS THAN",
   GREATER_THAN: "GREATER THAN",
-  EQUALS: "EQUALS"
+  EQUALS: "EQUALS",
+  NOT_EQUALS: "NOT EQUALS"
 };
 
 const booleanPicklistOptions = [
@@ -31,7 +32,7 @@ const booleanPicklistOptions = [
 
 const findQuestionByPosition = (questions, position) => {
   return questions.filter((question) => {
-    return +question.Position__c === position;
+    return question.Position__c === position;
   })[0];
 }
 

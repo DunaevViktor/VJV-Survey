@@ -1,0 +1,28 @@
+.form-background {
+    width: 60%;
+}
+
+.inner-box {
+    background-color: white;
+}
+
+.image-block {
+    height: 60%;
+    width: 60%;
+}
+
+.fill {
+    object-fit: cover;
+}
+
+.heading {
+    font-size: large;
+}
+
+.slds-text-heading_large {
+    font-size: 35px;
+}
+
+.scrollable-area {
+    height: 70vh;
+}

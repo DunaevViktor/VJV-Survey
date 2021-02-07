@@ -1,0 +1,7 @@
+.selected-rate{
+    --sds-c-icon-color-foreground-default: yellow ;
+}
+
+.not-selected-rate{
+    --sds-c-icon-color-foreground-default: lightgray;
+}

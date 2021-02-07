@@ -72,7 +72,7 @@
     </types>
     <types>
         <members>SurveyTemplates</members>
-        <members>SurveyTemplates/Main_Template</members>
+        <members>SurveyTemplates/HTML_Template</members>
         <name>EmailTemplate</name>
     </types>
     <types>
@@ -104,11 +104,16 @@
     <types>
         <members>Survey_UtilityBar</members>
         <members>Survey_Constructor</members>
+        <members>Survey_Answer_Form</members>
         <name>FlexiPage</name>
     </types>
     <types>
        <members>*</members>
         <name>Translations</name>
     </types>
+        <members>SurveyLetterhead</members>
+        <name>Letterhead</name>
+    </types>
+    <postInstallClass>postInstallConfig</postInstallClass>
     <version>50.0</version>
 </Package>

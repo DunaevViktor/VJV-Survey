@@ -1,150 +1,77 @@
 public with sharing class SendEmailLogic {
     
-    /**
-    A record of the SurveyEmailConfig__c object with the necessary settings will be created in
-    "global class PostInstallClass implements InstallHandler"
-    at the moment, to test the code, you can create an entry (Name = 'Main') manually via Setup
-    available fields: Display_Name__c, Subject__c, Template_Name__c, Url_Config__c, Company_Config__c
-    */
-    
+    private static final String EMAIL_SETTINGS_NAME = 'Main';
+
+    @AuraEnabled(cacheable=true)
     public static void sendEmails(List<Email_Receiver__c> emailReceiverList){
-        Map<Id, Survey__c> surveyMap = createSurveyMap();
-        List<Email_Receiver__c> receiverForProcessing = new List<Email_Receiver__c>();
-        
-        for(Email_Receiver__c receiver: emailReceiverList){
-            Survey__c survey = surveyMap.get(receiver.Survey__c);
-            if(survey.IsResending__c == false){
-                if(receiver.IsSend__c == false){
-                    receiverForProcessing.add(receiver);
-                }
-            }
-            else{
-                receiverForProcessing.add(receiver);
-            }
-        }
-        
-        List<Messaging.SingleEmailMessage> emailsForSend = createEmailMessages(receiverForProcessing, surveyMap);
+        Map<Id, Survey__c> surveyMap = SendEmailLogicHelper.createSurveyMap();
+ 
+        List<Messaging.SingleEmailMessage> emailsForSend = createEmailMessages(emailReceiverList, surveyMap);
         if(emailsForSend.size() > 0){
             Messaging.sendEmail(emailsForSend);
         }
     }
     
     public static List<Messaging.SingleEmailMessage> createEmailMessages(List<Email_Receiver__c> receiverList, Map<Id, Survey__c> surveyMap){
-        Organization currentOrg = getOrganization();
-        EmailTemplate template = getEmailTemplate();
-        Map<String, List<User>> userMap = initializeUserByGroupMap();
+        List<Id> allCurrentGroup = SendEmailLogicHelper.getCurrentGroups(receiverList);
+        List<Id> allCurrentCampaign = SendEmailLogicHelper.gerCurrentCampaigns(receiverList);
+        List<GroupMember> currentGroupMember = SendEmailLogicHelper.getGroupMemeber(allCurrentGroup);
+        List<CampaignMember> currentCampaignMember = SendEmailLogicHelper.getCampaignMember(allCurrentCampaign);
+        Organization currentOrg = SendEmailLogicHelper.getOrganization();
+        EmailTemplate template = SendEmailLogicHelper.getEmailTemplate();
+        SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues(EMAIL_SETTINGS_NAME);
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
-        SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues('Main');
         
         for(Email_Receiver__c receiver: receiverList){
             Survey__c survey = surveyMap.get(receiver.Survey__c);
+            String body = SendEmailLogicHelper.createEmailBody(template.Body, survey, currentOrg);
             Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
-            
-            if(receiver.Type__c == 'Email'){
-                List<String> toAddresses = new List<String>{receiver.Value__c};
-                    mail.setToAddresses(toAddresses);
-            }
-            else{
-                String groupName = receiver.Value__c;
-                List<User> userForSend = userMap.get(groupName);
-                for(User user: userForSend){
-                    mail.setTargetObjectId(user.Id);
-                    mail.setSaveAsActivity(false);
-                }         
-            }
-            
-            mail.setSenderDisplayName(config.Display_Name__c);
-            mail.setSubject(config.Subject__c);
-            mail.setBccSender(false);
-            mail.setUseSignature(false);
-            mail.setPlainTextBody(createEmailBody(template.Body, survey, currentOrg));
-            
-            emails.add(mail);
-            receiver.IsSend__c = true;
-        }
-        
-        if(Schema.sObjectType.Email_Receiver__c.isUpdateable()){
-            update receiverList;
-        }
-        return emails;
-    }
-    
-    public static Map<String, List<User>> initializeUserByGroupMap(){
-        List<User> userList = getUser();
-        List<GroupMember> memberGroup = getGroupMember();
-        Map<Id, Group> groupMap = createGroupMap();
-        Map<String, List<User>> userMap = createUserByGroupMap();
-        
-        for(User user: userList){
-            for(GroupMember member: memberGroup){
-                if(user.Id == member.UserOrGroupId){
-                    Group currentGroup = groupMap.get(member.GroupId);
-                    List<User> listForUpdate = userMap.get(currentGroup.Name);
-                    listForUpdate.add(user);
-                    userMap.put(currentGroup.Name, listForUpdate);
+
+            switch on receiver.Type__c {
+                when 'User Group' {
+                    Id groupId = receiver.Value__c;
+                    List<Id> userForSend = SendEmailLogicHelper.getUserByGroup(currentGroupMember, groupId);
+                    for(Id userId: userForSend){
+                        mail = createSingleEmail(userId, body, config);
+                        emails.add(mail);
+                    }
+                }
+                when 'Campaign' {
+                    Id campaignId = receiver.Value__c;
+                    List<Id> contactForSend = SendEmailLogicHelper.getContactByCampaign(currentCampaignMember, campaignId);
+                    List<Id> leadForSend = SendEmailLogicHelper.getLeadByCampaign(currentCampaignMember, campaignId);
+
+                    for(Id contactId: contactForSend){
+                        mail = createSingleEmail(contactId, body, config);
+                        emails.add(mail);
+                    }
+
+                    for(Id leadId: leadForSend){
+                        mail = createSingleEmail(leadId, body, config);
+                        emails.add(mail);
+                    }
+                }
+                when 'Record'{
+                    mail = createSingleEmail(receiver.Value__c, body, config);
+                    emails.add(mail);
                 }
             }
         }
-        return userMap;
+        
+        return emails;
     }
-    
-    public static String createEmailBody(String templateBody, Survey__c currentSurvey, Organization currentOrg){
-        SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues('Main');
-        String surveyURL = currentSurvey.URL__c;
-        String bodyWithUrl =  templateBody.replace(config.Url_Config__c, surveyURL);
-        String organizationName = currentOrg.Name;
-        return bodyWithUrl.replace(config.Company_Config__c, organizationName);
-    }
-    
-    public static Map<Id, Survey__c> createSurveyMap(){
-        List<Survey__c> surveyList = getSurvey();
-        Map<Id, Survey__c> surveyMap = new Map<Id, Survey__c>();
-        for(Survey__c surveyItem: surveyList){
-            surveyMap.put(surveyItem.Id, surveyItem);
-        }
-        return surveyMap;
-    }
-    
-    public static Map<Id, Group> createGroupMap(){
-        List<Group> groupList = getGroup();
-        Map<Id, Group> groupMap = new Map<Id, Group>();
-        for(Group groupItem: groupList){
-            groupMap.put(groupItem.Id, groupItem);
-        }
-        return groupMap;
-    }
-    
-    public static Map<String, List<User>> createUserByGroupMap(){
-        List<Group> groupList = getGroup();
-        Map<String, List<User>> userMap = new Map<String, List<User>>();
-        for(Group groupItem: groupList){
-            userMap.put(groupItem.Name, new List<User>());
-        }
-        return userMap;
-    }
-    
-    public static List<Group> getGroup(){
-        return [SELECT Id, Name FROM Group WITH SECURITY_ENFORCED];
-    }
-    
-    public static List<User> getUser(){
-        return [SELECT Id, Name, Email FROM User WITH SECURITY_ENFORCED];
-    }
-    
-    public static List<GroupMember> getGroupMember(){
-        return [SELECT Id, GroupId, UserOrGroupId FROM GroupMember WITH SECURITY_ENFORCED];
-    }
-    
-    public static List<Survey__c> getSurvey(){
-        return [SELECT Id, Name, URL__c, IsResending__c FROM Survey__c WITH SECURITY_ENFORCED];
-    }
-    
-    public static Organization getOrganization(){
-        return [SELECT Id, Name FROM Organization WITH SECURITY_ENFORCED LIMIT 1];
-    }
-    
-    public static EmailTemplate getEmailTemplate(){
-        SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues('Main');
-        return [SELECT Id, Name, Body FROM EmailTemplate WHERE Name = :config.Template_Name__c WITH SECURITY_ENFORCED LIMIT 1];
+
+    public static Messaging.SingleEmailMessage createSingleEmail(Id idForSent, String mailBody, SurveyEmailConfig__c config){
+        Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+
+        mail.setTargetObjectId(idForSent);
+        mail.setSaveAsActivity(false);
+        mail.setSenderDisplayName(config.Display_Name__c);
+        mail.setSubject(config.Subject__c);
+        mail.setBccSender(false);
+        mail.setUseSignature(false);
+        mail.setPlainTextBody(mailBody);
+
+        return mail;
     }
 }

@@ -7,11 +7,6 @@
     <description>Provides full access to custom objects, applications and flows.</description>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Email_Receiver__c.IsSend__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Group_Answer__c.IsLinked__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -28,6 +23,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Question__c.IsVisible__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Question__c.Position__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -63,11 +63,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Survey__c.Description__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Survey__c.IsResending__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -201,6 +196,10 @@
     </tabSettings>
     <tabSettings>
         <tab>Related_Object__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>Survey_Answer_Form</tab>
         <visibility>Visible</visibility>
     </tabSettings>
     <tabSettings>

@@ -6,20 +6,21 @@ public with sharing class AnswerControllerTest {
 
     @TestSetup
     static void setup() {
-        Survey__c testSurvey = new Survey__c(Name = 'Test', Background_Color__c = '#A3FF88');
+        Survey__c testSurvey = TestDataFactory.createSurvey();
         insert testSurvey;
 
-        Group_Answer__c testGroupAnswer = new Group_Answer__c(Survey__c = testSurvey.Id);
+        Group_Answer__c testGroupAnswer = new Group_Answer__c();
+        testGroupAnswer.Survey__c = testSurvey.Id;
         insert testGroupAnswer;
 
-        Question__c testQuestion = new Question__c(Survey__c = testSurvey.Id, Label__c = 'Test label', Position__c = 2);
+        Question__c testQuestion = TestDataFactory.createQuestion(testSurvey.Id);
         insert testQuestion;
     }
 
     private static Id getTestSurveyId() {
         Survey__c testSurvey = [SELECT Id
                                 FROM Survey__c
-                                WHERE Name = 'Test'];
+                                WHERE Name = :TestDataFactory.TEST_VALUE];
         return testSurvey.Id;      
     }
 
@@ -33,7 +34,7 @@ public with sharing class AnswerControllerTest {
     private static Id getTestQuestionId() {
         Question__c testQuestion = [SELECT Id
                                     FROM Question__c
-                                    WHERE Position__c = 2];
+                                    WHERE Position__c = :TestDataFactory.TEST_POSITION];
         return testQuestion.Id;      
     }
 

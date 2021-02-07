@@ -14,29 +14,23 @@ public with sharing class RelatedObjectControllerTest {
     static void setup(){
         Case testCaseFirst = new Case(Subject = FIRST_TEST_CASE_SUBJECT);
         insert testCaseFirst;
+
         Related_Object__c testCaseRelatedObject = new Related_Object__c(Related_Case__c = testCaseFirst.Id);
         insert testCaseRelatedObject;
 
         Case testCaseSecond = new Case(Subject = SECOND_TEST_CASE_SUBJECT);
         insert testCaseSecond; 
 
-        Profile p = [SELECT Id 
-                     FROM Profile 
-                     WHERE Name = 'Standard User']; 
-                     Blob b = Crypto.GenerateAESKey(128);
-                     String h = EncodingUtil.ConvertTohex(b);
-                     String uid = h.SubString(0,8);
-        User testUser = new User(Alias = uid, Email = uid + '@myorg.com', 
-                                 EmailEncodingKey = 'UTF-8', LastName = 'Testing', LanguageLocaleKey = 'en_US', 
-                                 LocaleSidKey = 'en_US', ProfileId = p.Id, 
-                                 TimeZoneSidKey = 'America/New_York', UserName = uid + '@myorg.com');
+        Profile profile = TestDataFactory.getStandardProfile();
+        User testUser = TestDataFactory.createStandardUser(profile);
+        testUser.LastName = TestDataFactory.TEST_VALUE;
         insert testUser; 
     }  
 
     private static User getTestUser() {
         User testUser = [SELECT Id
                          FROM User
-                         WHERE LastName = 'Testing'
+                         WHERE LastName = :TestDataFactory.TEST_VALUE
                          LIMIT 1];
         return testUser;
     }
@@ -70,7 +64,6 @@ public with sharing class RelatedObjectControllerTest {
     @isTest
     static void testFirstGetRelatedObjectIdByRelatedStandardObject() {
         Id testCaseId = getFirstTestCaseId();
-        System.debug(testCaseId);
         Id result = RelatedObjectController.getRelatedObjectIdByRelatedStandardObject('Case', testCaseId);
         System.assertNotEquals(null, result, INVALID_RELATED_OBJECT_ID_RESULT);
     }
@@ -103,7 +96,7 @@ public with sharing class RelatedObjectControllerTest {
         AuraHandledException auraExc = null;
         System.runAs(testUser) { 
             try {
-                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', secondTestCaseId);
+                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(secondTestCaseId);
             } catch(AuraHandledException exc) {
                 auraExc = exc;
             }
@@ -113,7 +106,7 @@ public with sharing class RelatedObjectControllerTest {
 
     @isTest
     static void testFirstPositiveGetRelatedObjectIdByStandardObjectId() {
-        Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', getFirstTestCaseId());
+        Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(getFirstTestCaseId());
         System.assertNotEquals(null, res, INVALID_RELATED_OBJECT_ID_RESULT);
     }
 
@@ -124,7 +117,7 @@ public with sharing class RelatedObjectControllerTest {
         Exception auraExc = null;
         System.runAs(testUser) { 
             try {
-                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', secondTestCaseId);
+                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(secondTestCaseId);
             } catch(Exception exc) {
                 auraExc = exc;
             }
@@ -139,7 +132,7 @@ public with sharing class RelatedObjectControllerTest {
         Exception auraExc = null;
         System.runAs(testUser) { 
             try {
-                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', TestUtility.getFakeId('Case'));
+                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(TestDataFactory.getFakeId('Case'));
             } catch(Exception exc) {
                 auraExc = exc;
             }
@@ -166,7 +159,7 @@ public with sharing class RelatedObjectControllerTest {
     static void testSecondNegativeGetRelatedObjectIdByStandardObjectId() {
         AuraHandledException auraExc = null;
         try {
-            Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', TestUtility.getFakeId('Case'));
+            Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(TestDataFactory.getFakeId('Case'));
         } catch(AuraHandledException exc) {
             auraExc = exc;
         }
@@ -175,7 +168,7 @@ public with sharing class RelatedObjectControllerTest {
 
     @isTest
     static void testPositiveGetRelatedObjectIdByStandardObjectId() {
-        Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId('Case', getSecondTestCaseId());
+        Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(getSecondTestCaseId());
         System.assertNotEquals(null, res, INVALID_RELATED_OBJECT_ID_RESULT);
     } 
     

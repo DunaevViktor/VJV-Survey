@@ -1,0 +1,15 @@
+.no-outline {
+    outline: none;
+}
+
+.header-background {
+    background-color: rgb(238, 237, 237);
+}
+
+.main-background {
+    background-color: rgb(243, 243, 243);
+}
+
+.center-align {
+    vertical-align: middle;
+}

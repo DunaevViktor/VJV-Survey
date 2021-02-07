@@ -1,6 +1,7 @@
 import { LightningElement, api, track } from "lwc";
 import uploadImage from "@salesforce/apex/ImageUploadController.uploadImage";
 import deleteImageById from "@salesforce/apex/ImageUploadController.deleteImageById";
+import getDefaultBackgroundColor from "@salesforce/apex/SurveySettingController.getDefaultBackgroundColor";
 import { FlowAttributeChangeEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { labels } from './labels';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -14,7 +15,7 @@ export default class BasicScreen extends LightningElement {
   label = labels;
   imageName;
   imageBlobUrl;
-  
+  defaultColor = '#74c1ed';
   isNewLogo = false;
   
   errorVariant = 'error';
@@ -55,13 +56,25 @@ export default class BasicScreen extends LightningElement {
       this.survey = {
         Name: '',
         Background_Color__c: '',
-        Logo__c: ''
+        Logo__c: '',
+        Description__c: ''
       };
+      this.setDefaultBackgroundColor();
     }
 
     if (!this.logoId) {
       this.logoId = null;
     }
+  }
+
+  setDefaultBackgroundColor() {
+    getDefaultBackgroundColor()
+      .then(result => {
+        this.survey.Background_Color__c = result;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   handleNameChange(event) {
@@ -70,6 +83,10 @@ export default class BasicScreen extends LightningElement {
 
   handleColorChange(event) {
     this.survey.Background_Color__c = event.target.value;
+  }
+
+  handleDescriptionChange(event) {
+    this.survey.Description__c = event.target.value;
   }
 
   handleImageUpdate(event) {
@@ -141,6 +158,9 @@ export default class BasicScreen extends LightningElement {
   }
 
   updateSurveyData() {
+    if (!this.survey.Background_Color__c) {
+      this.survey.Background_Color__c = this.defaultColor;
+    }
     const changeSurveyDataEvent = new FlowAttributeChangeEvent("surveydatachange", this.surveyData);
     const changeLogoIdEvent = new FlowAttributeChangeEvent("logoidchange", this.logoDocumentId);
     this.dispatchEvent(changeSurveyDataEvent);
