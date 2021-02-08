@@ -110,7 +110,7 @@
             value={validationForForm.Operator__c}
             placeholder={label.select_operator}
             options={displayedOperators}
-            class="slds-m-right_small"
+            class="slds-m-right_small validation-operator"
             onchange={handleSelectOperator}
           >
           </lightning-combobox>
@@ -124,7 +124,7 @@
             options={questionsOptions}
             class="slds-m-left_small validationInput"
             value={validationForForm.Value__c}
-            required
+            disabled={isDisabled}
           >
           </lightning-combobox>
 
@@ -134,7 +134,7 @@
             label={label.enter_compared_value}
             class="slds-m-left_small validationInput"
             value={validationForForm.Value__c}
-            required
+            disabled={isDisabled}
           ></lightning-input>
         </div>
       </div>

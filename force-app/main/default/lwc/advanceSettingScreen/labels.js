@@ -33,6 +33,8 @@ import error_choose_some_campaign from "@salesforce/label/c.error_choose_some_ca
 import error_already_added_campaign from "@salesforce/label/c.error_already_added_campaign";
 import Name from "@salesforce/label/c.Name";
 import search_result from "@salesforce/label/c.search_result";
+import previous_page from '@salesforce/label/c.previous_page';
+import next_page from '@salesforce/label/c.next_page';
 
 const label = {
     Name,
@@ -69,7 +71,9 @@ const label = {
     next,
     template,
     select_survey_for_connect,
-    search_result
+    search_result,
+    previous_page,
+    next_page
 };
 
 export { label };
