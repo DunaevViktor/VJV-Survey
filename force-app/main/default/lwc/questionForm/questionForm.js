@@ -24,15 +24,13 @@ import {
 } from "./questionFormHelper.js";
 
 import {
+  questionTypes,
   operatorTypes,
   booleanPicklistOptions,
 } from "c/formUtil";
 
 export default class QuestionForm extends LightningElement {
   label = label;
-
-  SUCCESS_TITLE = label.success;
-  SUCCESS_VARIANT = "success";
 
   ERROR_TITLE = label.errorTitle;
   ERROR_VARIANT = "error";
@@ -67,6 +65,7 @@ export default class QuestionForm extends LightningElement {
   @track displayedOperators;
   @track selectedOperator;
   @track isMainQuestionPicklist;
+  @track isDisabled = true;
 
   connectedCallback() {
     if(this.isEditMode) {
@@ -176,6 +175,7 @@ export default class QuestionForm extends LightningElement {
   handleTypeChange(event) {
     this.selectedType = event.detail.value;
     this.question.Type__c = event.detail.value;
+    this.question.Question_Options__r = [];
     this.setOptionsEnabling();
   }
 
@@ -193,14 +193,15 @@ export default class QuestionForm extends LightningElement {
     this.isMainQuestionPicklist = isNeedPicklist(
       this.validationForForm.Related_Question__c, 
       this.selectedOperator);
+    this.isDisabled = false;
   }
 
   setOptionsEnabling() {
     this.isOptionsEnabled = isOptionEnabling(this.selectedType);
 
-    if(this.isOptionsEnabled && !this.question.Question_Options__r) {
-      this.question.Question_Options__r = [];
-    }
+    // if(this.isOptionsEnabled && !this.question.Question_Options__r) {
+    //   this.question.Question_Options__r = [];
+    // }
   }
 
   addOption() {
@@ -289,11 +290,6 @@ export default class QuestionForm extends LightningElement {
 
   sendDependatQuestion(message) {
     const input = this.template.querySelector(".validationInput");
-    input.reportValidity();
-
-    if (!this.selectedOperator || !input.value) {
-      return;
-    }
 
     const validation = {
       ...this.validationForForm,
@@ -336,24 +332,48 @@ export default class QuestionForm extends LightningElement {
   }
 
   isQuestionCorrect() {
+    let isValid = true;
     const input = this.template.querySelector(".input");
 
     if (input.value.trim().length === 0) {
       setInputValidity(input, label.complete_this_field);
-      return false;
-    } else if (
-      this.isOptionsEnabled &&
-      this.question.Question_Options__r.length < 2
-    ) {
+      isValid = false;
+    } else {
+      setInputValidity(input, "");
+    }
+    
+    if (this.isOptionsEnabled &&this.question.Question_Options__r.length < 2) {
       this.showToastMessage(
         this.ERROR_TITLE,
         label.error_few_options,
         this.ERROR_VARIANT
       );
-      return false;
+      isValid = false;
     }
 
-    return true;
+    if(this.isDependentQuestion) {
+      const operatorCombobox = this.template.querySelector(".validation-operator");
+      if(!this.selectedOperator) {
+        setInputValidity(operatorCombobox, label.select_operator);
+        isValid = false;
+      } else {
+        setInputValidity(operatorCombobox, "");
+      }
+      
+
+      const validationInput = this.template.querySelector(".validationInput");
+      if (validationInput.value.trim().length === 0) {
+        setInputValidity(validationInput, label.complete_this_field);
+        isValid = false;
+      } else if(this.validationForForm.Related_Question__c.Type__c === questionTypes.RATING && +validationInput.value > 10) {
+        setInputValidity(validationInput, label.rating_can_not_be_greater_ten);
+        isValid = false;
+      } else {
+        setInputValidity(validationInput, "");
+      }
+    }
+
+    return isValid;
   }
   
   sendErrorNotification() {

@@ -3,9 +3,7 @@ const isEmpty = (value) => {
 }
 
 const filterQuestionsByPage = (questions, currentPage, amountOnPage) => {
-  return questions.filter((item, index) => {
-    return index >= (currentPage-1) * amountOnPage && index < (currentPage) * amountOnPage;
-  });
+  return questions.slice((currentPage-1) * amountOnPage, (currentPage) * amountOnPage);
 }
 
 const filterQuestionsBySearhTerm = (questions, keyword) => {

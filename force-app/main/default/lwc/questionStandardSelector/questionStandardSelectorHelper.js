@@ -18,7 +18,7 @@ const getQuestionsTableStyle = () => {
   const questionStyle = document.createElement('style');
   questionStyle.innerText = '.questionsTable .slds-th__action{background-color: #70d1f4; color: white;} ' + 
   '.slds-table_header-fixed_container {overflow: hidden} ' + 
-  '.slds-has-focus .slds-th__action, .slds-th__action:hover {background-color: #70d1f4 !important;}';
+  '.slds-has-focus .slds-th__action, .slds-th__action:hover {background-color: #53b7da !important;}';
   return questionStyle;
 }
 
@@ -58,5 +58,5 @@ const transformStandardQuestions = (standardQuestions) => {
 export {
   columns,
   getQuestionsTableStyle,
-  transformStandardQuestions
+  transformStandardQuestions,
 }

@@ -108,7 +108,7 @@
         <name>FlexiPage</name>
     </types>
     <types>
-       <members>*</members>
+        <members>*</members>
         <name>Translations</name>
     </types>
     <types>

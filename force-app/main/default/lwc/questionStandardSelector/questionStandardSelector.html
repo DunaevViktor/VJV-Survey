@@ -15,12 +15,19 @@
     </div>
     <lightning-datatable
       key-field="id"
-      data={displayedQuestions}
+      data={questionsPage}
       columns={columns}
       onrowaction={handleRowAction}
       class="questionsTable"
       hide-checkbox-column>
     </lightning-datatable>
+
+    <template if:true={isNeedPagination}>
+      <lightning-button-group class="slds-m-top_x-small">
+        <lightning-button label={label.previous_page} disabled={isPreviousDisabled} onclick={clickPreviousButton}></lightning-button>
+        <lightning-button label={label.next_page} disabled={isNextDisabled} onclick={clickNextButton}></lightning-button>
+      </lightning-button-group>
+    </template>
   </div>
 
 </template>
