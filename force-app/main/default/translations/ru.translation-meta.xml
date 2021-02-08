@@ -1,0 +1,746 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customApplications>
+        <label><!-- Survey --></label>
+        <name>Survey</name>
+    </customApplications>
+    <customLabels>
+        <label><!-- Campaign --></label>
+        <name>Campaign</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Campaign Label --></label>
+        <name>Campaign_Label</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Campaign Placeholder --></label>
+        <name>Campaign_Placeholder</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Create Survey --></label>
+        <name>Create_Survey</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Email Receiver --></label>
+        <name>Email_Receiver</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Launch --></label>
+        <name>Launch</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Name --></label>
+        <name>Name</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Public Group --></label>
+        <name>Public_Group</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Public Group Placeholder --></label>
+        <name>Public_Group_Placeholder</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Select survey for connect --></label>
+        <name>Select_survey_for_connect</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Single Record --></label>
+        <name>Single_Record</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Single Record Label --></label>
+        <name>Single_Record_Label</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Single Record Placeholder --></label>
+        <name>Single_Record_Placeholder</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Survey Constructor --></label>
+        <name>Survey_Constructor</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Template --></label>
+        <name>Template</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- add --></label>
+        <name>add</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Add dependent question --></label>
+        <name>add_dependent_question</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- add immediate dispatch --></label>
+        <name>add_immediate_dispatch</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- add new question --></label>
+        <name>add_new_question</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- add option --></label>
+        <name>add_option</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- The question editing option will be unavailable after adding dependent question --></label>
+        <name>add_optional_confirm_message</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- add question --></label>
+        <name>add_question</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- add standard question --></label>
+        <name>add_standard_question</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- add trugger rule --></label>
+        <name>add_trigger_rule</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Advance setting header --></label>
+        <name>advance_setting_header</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Back --></label>
+        <name>back</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Return to previous stage --></label>
+        <name>back_title</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Basic header --></label>
+        <name>basic_header</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- can no longer create questions --></label>
+        <name>can_no_longer_create_questions</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- cancel --></label>
+        <name>cancel</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- cancel edit --></label>
+        <name>cancel_edit</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- clear --></label>
+        <name>clear</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Clear trigger rule&apos;s fields --></label>
+        <name>clear_trigger_rules_fields</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- complete this field --></label>
+        <name>complete_this_field</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Confirm Action --></label>
+        <name>confirm_action</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- The question will be completely deleted and cannot be restored --></label>
+        <name>confirm_question_delete</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- connect to another survey --></label>
+        <name>connect_to_another_survey</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- create question form title --></label>
+        <name>create_question_form_title</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- delete --></label>
+        <name>delete</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- delete trigger rule title --></label>
+        <name>delete_trigger_rule</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Do you want to proceed? --></label>
+        <name>do_you_want_to_proceed</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- done --></label>
+        <name>done</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- down --></label>
+        <name>down</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- drag-n-drop-logo --></label>
+        <name>drag_n_drop_logo</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- duplicate record --></label>
+        <name>duplicate_record</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- edit --></label>
+        <name>edit</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- edit question form title --></label>
+        <name>edit_question_form_title</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- enter compared value --></label>
+        <name>enter_compared_value</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- enter option value --></label>
+        <name>enter_option_value</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Enter search keyword --></label>
+        <name>enter_search_keyword</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- error --></label>
+        <name>error</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- errorMessage --></label>
+        <name>errorMessage</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- error already added campaign --></label>
+        <name>error_already_added_campaign</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- error already added this group --></label>
+        <name>error_already_added_this_group</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- error choose some campaign --></label>
+        <name>error_choose_some_campaign</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- error choose some group --></label>
+        <name>error_choose_some_group</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- error few options --></label>
+        <name>error_few_options</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- error loading campaigns --></label>
+        <name>error_loading_campaigns</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- error loading groups --></label>
+        <name>error_loading_groups</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- error loading surveys --></label>
+        <name>error_loading_surveys</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- error search --></label>
+        <name>error_search</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Failed Image Delete --></label>
+        <name>failed_image_delete</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- failed image upload --></label>
+        <name>failed_image_upload</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- false --></label>
+        <name>false</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Field --></label>
+        <name>field</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Clear(delete) or full trigger rules completely --></label>
+        <name>fill_trigger_rules</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- find --></label>
+        <name>find</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- first_page --></label>
+        <name>first_page</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- image loading --></label>
+        <name>image_loading</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- in progress --></label>
+        <name>in_progress</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- is_required --></label>
+        <name>is_required</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- is reusable --></label>
+        <name>is_reusable</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- last page --></label>
+        <name>last_page</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- limit question sexceeded --></label>
+        <name>limit_question_sexceeded</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- logo image --></label>
+        <name>logo_image</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- more --></label>
+        <name>more</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- no public groups on org --></label>
+        <name>msg_no_public_groups_found</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- next --></label>
+        <name>next</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- next_page --></label>
+        <name>next_page</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- No --></label>
+        <name>no</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- no campaigns --></label>
+        <name>no_campaigns</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- no questions --></label>
+        <name>no_questions</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- No records found --></label>
+        <name>no_records_found</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- no relevant questions --></label>
+        <name>no_relevant_questions</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- no standard questions --></label>
+        <name>no_standard_questions</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- no template --></label>
+        <name>no_template</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- no validations --></label>
+        <name>no_validations</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- none --></label>
+        <name>none</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- number --></label>
+        <name>number</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Number of found items --></label>
+        <name>number_of_found_items</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Object --></label>
+        <name>object</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- operator --></label>
+        <name>operator</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- option already exists --></label>
+        <name>option_already_exists</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- options --></label>
+        <name>options</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- previous --></label>
+        <name>previous</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- previous_page --></label>
+        <name>previous_page</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- question --></label>
+        <name>question</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Question header --></label>
+        <name>question_header</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- question settings --></label>
+        <name>question_settings</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- This question will be visible if --></label>
+        <name>question_will_be_visible_if</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- questions --></label>
+        <name>questions</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- qustion --></label>
+        <name>qustion</name>
+    </customLabels>
+    <customLabels>
+        <label>Значение рейтинг поля не может быть больше 10</label>
+        <name>rating_can_not_be_greater_ten</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- remove image --></label>
+        <name>remove_image</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Remove selected option --></label>
+        <name>remove_selected_option</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Duplicate trigger rules are not allowed. --></label>
+        <name>restrict_duplicate_rules</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- save changes --></label>
+        <name>save_changes</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- save email rules label --></label>
+        <name>save_email_rules_label</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- save main survey info label --></label>
+        <name>save_main_survey_info_label</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- save questions label --></label>
+        <name>save_questions_label</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- save trigger rules label --></label>
+        <name>save_trigger_rules_label</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- save validations label --></label>
+        <name>save_validations_label</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Saver header --></label>
+        <name>saver_header</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- saving your configurations --></label>
+        <name>saving_your_configurations</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Search --></label>
+        <name>search</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Search keyword can&apos;t be empty --></label>
+        <name>search_keyword_cant_be_empty</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- search result --></label>
+        <name>search_result</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- select --></label>
+        <name>select</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Select an option --></label>
+        <name>select_an_option</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- select operator --></label>
+        <name>select_operator</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- select value --></label>
+        <name>select_value</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- selected survey template --></label>
+        <name>selected_survey_template</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- send --></label>
+        <name>send</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- should have two questions --></label>
+        <name>should_have_two_questions</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- specify question --></label>
+        <name>specify_question</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- standard questions --></label>
+        <name>standard_questions</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- success --></label>
+        <name>success</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- successful answer save --></label>
+        <name>successful_answer_save</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- survey bg color --></label>
+        <name>survey_bg_color</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- survey created successfully --></label>
+        <name>survey_created_successfully</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Survey Description --></label>
+        <name>survey_description</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- survey name --></label>
+        <name>survey_name</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- surveys --></label>
+        <name>surveys</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- text --></label>
+        <name>text</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Tip for user about trigger rules execution --></label>
+        <name>tip_for_user</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- trigger rule --></label>
+        <name>trigger_rule</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Trigger rule header --></label>
+        <name>trigger_rule_header</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- trigger rules --></label>
+        <name>trigger_rules</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- true --></label>
+        <name>true</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- type --></label>
+        <name>type</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Type survey description --></label>
+        <name>type_description</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Type survey name --></label>
+        <name>type_survey_name</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- unable to continue --></label>
+        <name>unable_to_continue</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- up --></label>
+        <name>up</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- user groups --></label>
+        <name>user_groups</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- Validation header --></label>
+        <name>validation_header</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- value --></label>
+        <name>value</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- visible if --></label>
+        <name>visible_if</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- yes --></label>
+        <name>yes</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- you can create --></label>
+        <name>you_can_create</name>
+    </customLabels>
+    <customLabels>
+        <label><!-- you must have at least --></label>
+        <name>you_must_have_at_least</name>
+    </customLabels>
+    <customTabs>
+        <label><!-- Survey Answer Form --></label>
+        <name>Survey_Answer_Form</name>
+    </customTabs>
+    <customTabs>
+        <label><!-- Survey Constructor --></label>
+        <name>Survey_Constructor</name>
+    </customTabs>
+    <flowDefinitions>
+        <flows>
+            <screens>
+                <fields>
+                    <name>AdvanceSettingsScreenComponent</name>
+                </fields>
+                <name>AdvanceSettingsScreen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>BasicScreenComponent</name>
+                </fields>
+                <name>Basic_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>QuestionScreenComponent</name>
+                </fields>
+                <name>Questions_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>SaverScreenComponent</name>
+                </fields>
+                <name>SaverScreen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>TriggerRuleScreenComponent</name>
+                </fields>
+                <name>Trigger_Rule_Screen</name>
+            </screens>
+        </flows>
+        <fullName>Survey_Flow</fullName>
+    </flowDefinitions>
+    <quickActions>
+        <label><!-- LogACall --></label>
+        <name>LogACall</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewAccount --></label>
+        <name>NewAccount</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewCase --></label>
+        <name>NewCase</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewContact --></label>
+        <name>NewContact</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewEvent --></label>
+        <name>NewEvent</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewGroup --></label>
+        <name>NewGroup</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewLead --></label>
+        <name>NewLead</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewNote --></label>
+        <name>NewNote</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewOpportunity --></label>
+        <name>NewOpportunity</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- NewTask --></label>
+        <name>NewTask</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- SendEmail --></label>
+        <name>SendEmail</name>
+    </quickActions>
+    <reportTypes>
+        <description><!-- Surveys --></description>
+        <label><!-- Surveys --></label>
+        <name>Surveys</name>
+        <sections>
+            <label><!-- Surveys --></label>
+            <name>Surveys</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Surveys with Email Receivers --></description>
+        <label><!-- Surveys with Email Receivers --></label>
+        <name>Surveys_with_Email_Receivers</name>
+        <sections>
+            <label><!-- Surveys --></label>
+            <name>Surveys</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Surveys with Questions with Answers --></description>
+        <label><!-- Surveys with Questions with Answers --></label>
+        <name>Surveys_with_Questions_with_Answers</name>
+        <sections>
+            <label><!-- Anwers --></label>
+            <name>Anwers</name>
+        </sections>
+        <sections>
+            <label><!-- Questions --></label>
+            <name>Questions</name>
+        </sections>
+        <sections>
+            <label><!-- Surveys --></label>
+            <name>Surveys</name>
+        </sections>
+    </reportTypes>
+    <reportTypes>
+        <description><!-- Screen Flows --></description>
+        <label><!-- Screen Flows --></label>
+        <name>screen_flows_prebuilt_crt</name>
+        <sections>
+            <label><!-- Flow Interview Log Entries --></label>
+            <name>Flow Interview Log Entries</name>
+        </sections>
+        <sections>
+            <label><!-- Flow Interview Logs --></label>
+            <name>Flow Interview Logs</name>
+        </sections>
+    </reportTypes>
+</Translations>

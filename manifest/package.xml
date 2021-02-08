@@ -111,6 +111,10 @@
         <members>SurveyLetterhead</members>
         <name>Letterhead</name>
     </types>
+    <types> 
+        <members>*</members> 
+        <name>Translations</name> 
+    </types>
     <postInstallClass>postInstallConfig</postInstallClass>
     <version>50.0</version>
 </Package>

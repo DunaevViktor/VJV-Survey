@@ -57,7 +57,7 @@ export default class QuestionsBlock extends LightningElement {
         + this.availableQuestionsAmount + " " + this.label.more + " " + this.label.question;
       case 0: return this.label.can_no_longer_create_questions;
       default: return this.label.you_can_create + " " 
-        + this.availableQuestionsAmount + " " + this.label.questions;
+        + this.availableQuestionsAmount + " " + this.label.more + " " + this.label.questions;
     }
   }
 

@@ -24,6 +24,7 @@ import select_value from "@salesforce/label/c.select_value";
 import value from "@salesforce/label/c.value";
 import visible_if from "@salesforce/label/c.visible_if";
 import question_will_be_visible_if from "@salesforce/label/c.question_will_be_visible_if";
+import rating_can_not_be_greater_ten from "@salesforce/label/c.rating_can_not_be_greater_ten";
 
 const label = {
   edit_question_form_title,
@@ -51,7 +52,8 @@ const label = {
   select_value,
   enter_compared_value,
   question_will_be_visible_if,
-  visible_if
+  visible_if,
+  rating_can_not_be_greater_ten
 }
 
 export {
