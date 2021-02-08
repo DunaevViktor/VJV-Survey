@@ -281,6 +281,13 @@
         <value>Delete trigger rule</value>
     </labels>
     <labels>
+        <fullName>dependent_question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>dependent question</shortDescription>
+        <value>Dependent question</value>
+    </labels>
+    <labels>
         <fullName>do_you_want_to_proceed</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -650,6 +657,13 @@
         <protected>true</protected>
         <shortDescription>options</shortDescription>
         <value>Options</value>
+    </labels>
+    <labels>
+        <fullName>preview_header</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>preview header</shortDescription>
+        <value>Survey Preview</value>
     </labels>
     <labels>
         <fullName>previous</fullName>

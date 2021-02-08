@@ -10,6 +10,7 @@
           required={question.Required__c}
           class="slds-p-around_small validate-input"
           onchange={handleAnswerChange}
+          disabled={question.IsDisabled}
         ></lightning-input>
 
         <lightning-checkbox-group
@@ -21,6 +22,7 @@
           options={question.Question_Options__r}
           class="slds-p-around_small validate-input"
           onchange={handleAnswerChange}
+          disabled={question.IsDisabled}
         ></lightning-checkbox-group>
 
         <lightning-radio-group
@@ -34,6 +36,7 @@
           required={question.Required__c}
           class="slds-p-around_small validate-input"
           onchange={handleAnswerChange}
+          disabled={question.IsDisabled}
         >
         </lightning-radio-group>
 
@@ -47,6 +50,7 @@
           required={question.Required__c}
           class="slds-p-around_small validate-input"
           onchange={handleAnswerChange}
+          disabled={question.IsDisabled}
         >
         </lightning-combobox>
 

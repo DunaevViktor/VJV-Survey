@@ -1,0 +1,42 @@
+<template>
+    <template if:true={survey}>
+        <div class="slds-align_absolute-center" style={backgroundColor}>
+            <div class="slds-box form-background">
+
+                <h2 slot="title" class="slds-p-horizontal_large">
+                    <div class="slds-grid slds-wrap slds-p-left_large slds-p-bottom_large">
+
+                        <div class="slds-col slds-size_10-of-12">
+                            <div class="slds-text-heading_large slds-p-top_medium">{survey.Name}</div>
+                        </div>
+
+                        <div class="slds-col slds-size_2-of-12">
+                            <img class="fill image-block" src={survey.Logo__c} />
+                        </div>
+                    </div>
+
+                    <div class="slds-p-top_small">{survey.Description__c}</div>
+                </h2>
+
+                <div class="slds-box slds-box_x-small slds-m-around_large inner-box">
+                    <div class="scrollable-area slds-scrollable--y">
+                        <template if:true={questions}>
+                            <template for:each={questions} for:item="question">
+
+                                <c-single-question key={question.Position__c} single-question={question}>
+                                </c-single-question>
+
+                            </template>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <hr class="slds-m-bottom_small" />
+    <div class="slds-text-align_right">
+        <lightning-button label={label.previous} onclick={clickPreviousButton}></lightning-button>
+        <lightning-button variant="brand" label={label.next} onclick={clickNextButton} class="slds-m-left_x-small">
+        </lightning-button>
+    </div>
+</template>

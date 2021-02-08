@@ -612,6 +612,12 @@
             </screens>
             <screens>
                 <fields>
+                    <name>PreviewScreenComponent</name>
+                </fields>
+                <name>PreviewScreen</name>
+            </screens>
+            <screens>
+                <fields>
                     <name>QuestionScreenComponent</name>
                 </fields>
                 <name>Questions_Screen</name>

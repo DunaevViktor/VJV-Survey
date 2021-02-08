@@ -108,9 +108,10 @@
         <name>FlexiPage</name>
     </types>
     <types>
-       <members>*</members>
+        <members>*</members>
         <name>Translations</name>
     </types>
+    <types>
         <members>SurveyLetterhead</members>
         <name>Letterhead</name>
     </types>
