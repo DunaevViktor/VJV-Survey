@@ -21,7 +21,7 @@
         <name>Create_Survey</name>
     </customLabels>
     <customLabels>
-        <label>Получатель по Email</label>
+        <label>Получатели рассылки:</label>
         <name>Email_Receiver</name>
     </customLabels>
     <customLabels>
@@ -37,7 +37,7 @@
         <name>Public_Group</name>
     </customLabels>
     <customLabels>
-        <label>Выберите Публичную Группу</label>
+        <label>Выберите публичную группу</label>
         <name>Public_Group_Placeholder</name>
     </customLabels>
     <customLabels>
@@ -45,11 +45,11 @@
         <name>Select_survey_for_connect</name>
     </customLabels>
     <customLabels>
-        <label>Одиночная Запись</label>
+        <label>Одиночная запись</label>
         <name>Single_Record</name>
     </customLabels>
     <customLabels>
-        <label>Введите Contact/Lead/User</label>
+        <label>Введите Контакт/Интерес/Пользователь</label>
         <name>Single_Record_Label</name>
     </customLabels>
     <customLabels>
@@ -73,7 +73,7 @@
         <name>add_dependent_question</name>
     </customLabels>
     <customLabels>
-        <label>Добавить немедленную отправку</label>
+        <label>Отправить немедленно</label>
         <name>add_immediate_dispatch</name>
     </customLabels>
     <customLabels>
@@ -101,7 +101,7 @@
         <name>add_trigger_rule</name>
     </customLabels>
     <customLabels>
-        <label>Расширенные Настройки Опроса</label>
+        <label>Расширенные настройки опроса</label>
         <name>advance_setting_header</name>
     </customLabels>
     <customLabels>
@@ -113,7 +113,7 @@
         <name>back_title</name>
     </customLabels>
     <customLabels>
-        <label>Ввод Общей Информации об Опросе</label>
+        <label>Ввод общей информации об опросе</label>
         <name>basic_header</name>
     </customLabels>
     <customLabels>
@@ -121,11 +121,11 @@
         <name>can_no_longer_create_questions</name>
     </customLabels>
     <customLabels>
-        <label>Отменить</label>
+        <label>Отмена</label>
         <name>cancel</name>
     </customLabels>
     <customLabels>
-        <label>Отменить редактирование</label>
+        <label>Не изменять</label>
         <name>cancel_edit</name>
     </customLabels>
     <customLabels>
@@ -133,7 +133,7 @@
         <name>clear</name>
     </customLabels>
     <customLabels>
-        <label>Очистить поля правил триггеров</label>
+        <label>Очистить все поля</label>
         <name>clear_trigger_rules_fields</name>
     </customLabels>
     <customLabels>
@@ -141,7 +141,7 @@
         <name>complete_this_field</name>
     </customLabels>
     <customLabels>
-        <label>Подтвердите Действие</label>
+        <label>Подтвердите действие</label>
         <name>confirm_action</name>
     </customLabels>
     <customLabels>
@@ -161,7 +161,7 @@
         <name>delete</name>
     </customLabels>
     <customLabels>
-        <label>Удалить правило для триггера</label>
+        <label>Удалить правило</label>
         <name>delete_trigger_rule</name>
     </customLabels>
     <customLabels>
@@ -185,7 +185,7 @@
         <name>duplicate_record</name>
     </customLabels>
     <customLabels>
-        <label>Изменить</label>
+        <label>Редактировать</label>
         <name>edit</name>
     </customLabels>
     <customLabels>
@@ -197,7 +197,7 @@
         <name>enter_compared_value</name>
     </customLabels>
     <customLabels>
-        <label>Введите значение варианта</label>
+        <label>Введите значение</label>
         <name>enter_option_value</name>
     </customLabels>
     <customLabels>
@@ -205,7 +205,7 @@
         <name>enter_search_keyword</name>
     </customLabels>
     <customLabels>
-        <label>Уважаемый, ошибка!</label>
+        <label>Ошибка!</label>
         <name>error</name>
     </customLabels>
     <customLabels>
@@ -257,7 +257,7 @@
         <name>failed_image_upload</name>
     </customLabels>
     <customLabels>
-        <label>Ложь</label>
+        <label>False</label>
         <name>false</name>
     </customLabels>
     <customLabels>
@@ -265,7 +265,7 @@
         <name>field</name>
     </customLabels>
     <customLabels>
-        <label>Неполные правила триггеров</label>
+        <label>Правила не полностью заполнены</label>
         <name>fill_trigger_rules</name>
     </customLabels>
     <customLabels>
@@ -277,7 +277,7 @@
         <name>first_page</name>
     </customLabels>
     <customLabels>
-        <label>Загрузка картинки</label>
+        <label>Загрузка изображения</label>
         <name>image_loading</name>
     </customLabels>
     <customLabels>
@@ -289,7 +289,7 @@
         <name>is_required</name>
     </customLabels>
     <customLabels>
-        <label>Многоразовый</label>
+        <label>Переиспользуемый</label>
         <name>is_reusable</name>
     </customLabels>
     <customLabels>
@@ -377,7 +377,7 @@
         <name>option_already_exists</name>
     </customLabels>
     <customLabels>
-        <label>Варианты</label>
+        <label>Варианты ответов</label>
         <name>options</name>
     </customLabels>
     <customLabels>
@@ -393,7 +393,7 @@
         <name>question</name>
     </customLabels>
     <customLabels>
-        <label>Добавление Вопросов для Опроса</label>
+        <label>Добавление вопросов для опроса</label>
         <name>question_header</name>
     </customLabels>
     <customLabels>
@@ -417,7 +417,7 @@
         <name>remove_selected_option</name>
     </customLabels>
     <customLabels>
-        <label>Нельзя дублировать правила для триггеров</label>
+        <label>Найден дубликат правила</label>
         <name>restrict_duplicate_rules</name>
     </customLabels>
     <customLabels>
@@ -445,7 +445,7 @@
         <name>save_validations_label</name>
     </customLabels>
     <customLabels>
-        <label>Сохранение Вашего Опроса</label>
+        <label>Сохранение вашего опроса</label>
         <name>saver_header</name>
     </customLabels>
     <customLabels>
@@ -457,7 +457,7 @@
         <name>search</name>
     </customLabels>
     <customLabels>
-        <label>Ключевое слово не может отсутствовать</label>
+        <label>Ключевое слово не может быть пустым</label>
         <name>search_keyword_cant_be_empty</name>
     </customLabels>
     <customLabels>
@@ -493,7 +493,7 @@
         <name>should_have_two_questions</name>
     </customLabels>
     <customLabels>
-        <label>Уточнить вопрос</label>
+        <label>Введите вопрос</label>
         <name>specify_question</name>
     </customLabels>
     <customLabels>
@@ -541,7 +541,7 @@
         <name>trigger_rule</name>
     </customLabels>
     <customLabels>
-        <label>Настройка Правил для Триггеров</label>
+        <label>Настройка правил для триггеров</label>
         <name>trigger_rule_header</name>
     </customLabels>
     <customLabels>
@@ -549,7 +549,7 @@
         <name>trigger_rules</name>
     </customLabels>
     <customLabels>
-        <label>Истина</label>
+        <label>True</label>
         <name>true</name>
     </customLabels>
     <customLabels>
@@ -577,7 +577,7 @@
         <name>user_groups</name>
     </customLabels>
     <customLabels>
-        <label>Установка Проверок для Вопросов</label>
+        <label>Установка проверок для вопросов</label>
         <name>validation_header</name>
     </customLabels>
     <customLabels>
@@ -601,7 +601,7 @@
         <name>you_must_have_at_least</name>
     </customLabels>
     <customTabs>
-        <label>Форма Опроса</label>
+        <label>Форма опроса</label>
         <name>Survey_Answer_Form</name>
     </customTabs>
     <customTabs>
