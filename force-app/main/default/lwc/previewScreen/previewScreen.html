@@ -23,7 +23,7 @@
                         <template if:true={questions}>
                             <template for:each={questions} for:item="question">
 
-                                <c-single-question key={question.Id} single-question={question}>
+                                <c-single-question key={question.Position__c} single-question={question}>
                                 </c-single-question>
 
                             </template>

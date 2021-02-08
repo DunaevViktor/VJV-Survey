@@ -1,12 +1,12 @@
 import { questionTypes } from "c/formUtil";
+import { label } from "./labels.js";
 
 const initQuestionFields = (data) => {
   let questions = [];
   data.forEach((question) => {
     let previewInput = { ...JSON.parse(JSON.stringify(question)) };
-    previewInput.Id = previewInput.Position__c;
     if (previewInput.IsVisible__c === false) {
-      previewInput.Label__c += " (Dependent question)";
+      previewInput.Label__c += " (" + label.dependentQuestion + ")";
     }
     previewInput.IsVisible__c = true;
     previewInput.IsDisabled = true;
@@ -23,7 +23,7 @@ const initQuestionFields = (data) => {
         question.Answer = [];
         break;
       case questionTypes.PICKLIST:
-        options = [{ label: "-- None --", value: null }];
+        options = [{ label: "--" + label.none + "--", value: null }];
         break;
       default:
     }
