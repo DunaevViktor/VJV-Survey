@@ -93,7 +93,7 @@
         <name>edit</name>
     </customLabels>
     <customLabels>
-        <label>Форма изменения вопроса</label>
+        <label>Форма редактирования вопроса</label>
         <name>edit_question_form_title</name>
     </customLabels>
     <customLabels>
@@ -133,7 +133,7 @@
         <name>error_email_pattern_mismatch</name>
     </customLabels>
     <customLabels>
-        <label>Количество вариантов должно быть не меньше двух</label>
+        <label>Количество вариантов ответа должно быть не меньше двух</label>
         <name>error_few_options</name>
     </customLabels>
     <customLabels>
@@ -335,10 +335,6 @@
     <customLabels>
         <label>Шаблонный опрос</label>
         <name>standard_survey</name>
-    </customLabels>
-    <customLabels>
-        <label>Успех</label>
-        <name>success</name>
     </customLabels>
     <customLabels>
         <label>Фон опроса</label>

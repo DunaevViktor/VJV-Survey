@@ -582,13 +582,6 @@
         <value>Standard survey</value>
     </labels>
     <labels>
-        <fullName>success</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>success</shortDescription>
-        <value>Success</value>
-    </labels>
-    <labels>
         <fullName>survey_bg_color</fullName>
         <language>en_US</language>
         <protected>true</protected>
