@@ -1,4 +1,4 @@
-import { LightningElement, track, api } from "lwc";
+import { LightningElement, track, api, wire } from "lwc";
 import { label } from "./labels.js";
 import { columns, columnsMember, getResultTableStyle, getReceiversTableStyle, isReceiverExist, deleteReceiver, createDisplayedMap,
          getObjectName, callReportValidity, createMemberList } from "./advanceSettingScreenHelper.js";
@@ -8,9 +8,11 @@ import getGroups from "@salesforce/apex/GroupController.getGroups";
 import getSurveys from "@salesforce/apex/SurveyController.getAllSurveys";
 import getCampaigns from "@salesforce/apex/CampaignController.getCampaigns";
 import searchMembers from "@salesforce/apex/SearchHelper.searchMembers";
+import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getPageQuestionAmount";
 
 export default class AdvanceSettingScreen extends LightningElement {
 
+    MULTIPLIER = 1;
     SINGLE_RECORD_VARIANT = "Record";
     GROUP_VARIANT = "User Group";
     CAMPAIGN_VARIAN = "Campaign";
@@ -18,6 +20,8 @@ export default class AdvanceSettingScreen extends LightningElement {
     label = label;
     columns = columns;
     columnsMember = columnsMember;
+
+    @wire(getPageQuestionAmount) amountItems;
 
     @track isConnectToSurvey;
     @track hasReceivers;
@@ -35,6 +39,10 @@ export default class AdvanceSettingScreen extends LightningElement {
     @track hasMembers = false;
     @track searchError = false;
     @track copyReceivers = [];
+
+    @track memberPage;
+    @track isNeedPagination = false;
+    @track currentPage = 0;
 
     groupId = "";
     surveyId = "";
@@ -117,8 +125,14 @@ export default class AdvanceSettingScreen extends LightningElement {
     }
 
     renderedCallback() {
-        this.template.querySelector('.resultTable').appendChild(getResultTableStyle());
-        this.template.querySelector('.emailTable').appendChild(getReceiversTableStyle());
+        if(this.template.querySelector('.resultTable')) {
+            this.template.querySelector('.resultTable').appendChild(getResultTableStyle());
+        }
+
+        if(this.template.querySelector('.emailTable')) {
+            this.template.querySelector('.emailTable').appendChild(getReceiversTableStyle());
+        }
+        
     }
 
     initSurveys() {
@@ -169,11 +183,47 @@ export default class AdvanceSettingScreen extends LightningElement {
         searchMembers({ searchTerm: this.queryTerm })
             .then((result) => {
                 this.memberList = createMemberList(result);
+                this.currentPage = 0;
+                this.resolveMembersPage();
                 this.setIsHasMembers();
             })
             .catch(() => {
                 this.searchError = true;
             });
+    }
+
+    resolveMembersPage() {
+      this.isNeedPagination = this.memberList.length > (this.amountItems.data * this.MULTIPLIER);
+      if(this.isNeedPagination) {
+        this.memberPage = this.memberList.slice(
+          this.currentPage *  (this.amountItems.data * this.MULTIPLIER), 
+          (this.currentPage + 1 )*  (this.amountItems.data * this.MULTIPLIER)
+        );
+      } else {
+        this.memberPage = [...this.memberList];
+      }
+    }
+
+    get isPreviousDisabled() {
+      return this.currentPage === 0;
+    }
+    
+    get isNextDisabled() {
+      return this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER));
+    }
+
+    clickPreviousTableButton() {
+      if(this.currentPage === 0) return;
+    
+      this.currentPage--;
+      this.resolveMembersPage();
+    }
+    
+    clickNextTableButton() {
+      if(this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER))) return;
+    
+      this.currentPage++;
+      this.resolveMembersPage();
     }
 
     setIsHasMembers() {
