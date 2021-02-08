@@ -16,7 +16,8 @@ const operatorTypes = {
   LESS_THAN: "LESS THAN",
   GREATER_THAN: "GREATER THAN",
   EQUALS: "EQUALS",
-  NOT_EQUALS: "NOT EQUALS"
+  NOT_EQUALS: "NOT EQUALS",
+  ANY_CHANGE: "ANY CHANGE"
 };
 
 const booleanPicklistOptions = [
