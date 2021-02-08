@@ -265,7 +265,7 @@
         <name>field</name>
     </customLabels>
     <customLabels>
-        <label>Правила не полностью заполнены</label>
+        <label>Правила заполнены не полностью</label>
         <name>fill_trigger_rules</name>
     </customLabels>
     <customLabels>
