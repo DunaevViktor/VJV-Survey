@@ -35,7 +35,7 @@ export default class TriggerRulesWrapper extends LightningElement {
       });
   }
   
-  connectedCallback() {
+  connectedCallback() { 
     if (this.rules && this.rules.length > 0) {
       let newtriggerRules = [];
       this._rules = this.rules;
@@ -61,7 +61,7 @@ export default class TriggerRulesWrapper extends LightningElement {
     const newTriggerRule = {
       id: triggerRuleId
     }
-    this.triggerRules.push(newTriggerRule);
+    this.triggerRules.unshift(newTriggerRule);
     this.updateIsDeleteAvailableState();
   }
 
@@ -83,6 +83,16 @@ export default class TriggerRulesWrapper extends LightningElement {
   get isPlusVisible() {
     const triggerRulesAmount = this.triggerRules.length;    
     return triggerRulesAmount === this.maxTriggerRulesAmount ? false : true;
+  }
+
+  get labelOfAvailableItems() {
+    const availableTriggerRulesAmount = this.maxTriggerRulesAmount - this.triggerRules.length;
+    if (availableTriggerRulesAmount === 1) {
+      return this.labels.you_can_create + " " 
+        + availableTriggerRulesAmount + " " + this.labels.more + " " + this.labels.trigger_rule + ".";
+    }
+    return this.labels.you_can_create + " " 
+      + availableTriggerRulesAmount + " " + this.labels.more + " " + this.labels.trigger_rules + ".";
   }
 
   handleNavigateNext() {    

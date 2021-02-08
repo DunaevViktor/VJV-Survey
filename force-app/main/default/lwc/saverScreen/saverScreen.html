@@ -6,9 +6,13 @@
   <template if:false={isError}>
     <template if:false={isComplete}>
       <div class="slds-text-align_center">
-        <c-saver-spinner></c-saver-spinner>
+        <div class="spinner">
+          <lightning-spinner></lightning-spinner>
+        </div>
         <br/>
-        {label.saving_your_configurations}
+        <div class="slds-m-top_large">
+          {label.saving_your_configurations}
+        </div>
       </div>
     </template>
     

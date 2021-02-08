@@ -1,0 +1,33 @@
+<template>
+  <div class="slds-m-top_medium">
+    <lightning-button
+      variant="brand-outline" 
+      label={label.back}
+      title={label.back_title}
+      onclick={handleBack}>
+    </lightning-button>
+  </div>
+
+  <div class="slds-m-top_x-small">
+    <div class="slds-m-bottom_xx-small">
+      <lightning-icon icon-name="action:question_post_action" size="x-small" class="questionIcon"></lightning-icon>
+      <span class="slds-m-left_xx-small">{label.standard_questions}</span>
+    </div>
+    <lightning-datatable
+      key-field="id"
+      data={questionsPage}
+      columns={columns}
+      onrowaction={handleRowAction}
+      class="questionsTable"
+      hide-checkbox-column>
+    </lightning-datatable>
+
+    <template if:true={isNeedPagination}>
+      <lightning-button-group class="slds-m-top_x-small">
+        <lightning-button label={label.previous_page} disabled={isPreviousDisabled} onclick={clickPreviousButton}></lightning-button>
+        <lightning-button label={label.next_page} disabled={isNextDisabled} onclick={clickNextButton}></lightning-button>
+      </lightning-button-group>
+    </template>
+  </div>
+
+</template>

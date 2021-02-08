@@ -164,7 +164,6 @@
     <searchLayouts>
         <searchResultsAdditionalFields>Type__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Value__c</searchResultsAdditionalFields>
-        <searchResultsAdditionalFields>IsSend__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Survey__c</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>

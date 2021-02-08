@@ -6,7 +6,7 @@
     <label>Related Question</label>
     <referenceTo>Question__c</referenceTo>
     <relationshipLabel>Validations (Related Question)</relationshipLabel>
-    <relationshipName>Validations1</relationshipName>
+    <relationshipName>Related_Question_Validations</relationshipName>
     <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>

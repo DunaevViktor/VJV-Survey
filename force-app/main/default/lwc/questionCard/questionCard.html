@@ -1,4 +1,5 @@
-<template>
+<template>   
+
   <div class="slds-box slds-box_x-small slds-m-around_x-small">
 
     <lightning-icon icon-name="utility:delete" 
@@ -6,27 +7,36 @@
                     title={label.deleteTitle} 
                     class="slds-float_right" 
                     size="x-small" 
-                    onclick={deleteQuestion}>
+                    onclick={deleteQuestionClick}>
     </lightning-icon>
-    <lightning-icon icon-name="utility:edit" 
-                    alternative-text={label.edit} 
-                    title={label.edit} 
+    <template if:true={question.Editable}>
+      <lightning-icon icon-name="utility:edit" 
+        alternative-text={label.edit}
+        title={label.edit}
+        class="slds-float_right" 
+        size="x-small" 
+        onclick={editQuestion}>
+      </lightning-icon>
+    </template>
+    <lightning-icon icon-name="utility:add" 
+                    alternative-text={label.add_dependent_question} 
+                    title={label.add_dependent_question} 
                     class="slds-float_right" 
                     size="x-small" 
-                    onclick={editQuestion}>
+                    onclick={addOptionalQuestionClick}>
     </lightning-icon>
     <lightning-icon icon-name="utility:chevrondown" 
                     alternative-text={label.down} 
                     title={label.down} 
                     class="slds-float_right" 
-                    size="x-small" 
+                    size="x-small"
                     onclick={downQuestion}>
     </lightning-icon>
     <lightning-icon icon-name="utility:chevronup" 
                     alternative-text={label.up} 
                     title={label.up} 
                     class="slds-float_right" 
-                    size="x-small" 
+                    size="x-small"
                     onclick={upQuestion}>
     </lightning-icon>
 
@@ -34,12 +44,17 @@
       <span class="required">*</span>
     </template>
 
-    <span>{question.Label__c}</span>
+    <span>{question.Position__c}. {question.Label__c}</span>
     <br />
 
     <lightning-badge label={question.Type__c}></lightning-badge>
 
-    <template if:true={question.Question_Options__r}>
+    <template if:true={question.VisibilityReason}>
+      <br />
+      <span>{question.VisibilityReason}</span>
+    </template>
+
+    <template if:true={isHasOptions}>
       <br />
       <div class="slds-m-top_x-small">
         {label.options}:
@@ -57,4 +72,16 @@
       </div>
     </template>
   </div>
+
+  <c-confirmation-popup
+    title={label.confirm_action}
+    message={message}
+    confirm-label={label.yes}
+    cancel-label={label.no}
+    visible={isDialogVisible}
+    name="confirmModal"
+    original-message={originalMessage}
+    onpopupclick={handleCongirmationPopupClick}>
+  </c-confirmation-popup>
+
 </template>

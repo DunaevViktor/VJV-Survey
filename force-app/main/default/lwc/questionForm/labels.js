@@ -14,6 +14,16 @@ import option_already_exists from "@salesforce/label/c.option_already_exists";
 import error_few_options from "@salesforce/label/c.error_few_options";
 import errorTitle from "@salesforce/label/c.error";
 import complete_this_field from "@salesforce/label/c.complete_this_field";
+import back from "@salesforce/label/c.back";
+import back_title from "@salesforce/label/c.back_title";
+import operator from "@salesforce/label/c.operator";
+import enter_compared_value from "@salesforce/label/c.enter_compared_value";
+import select_operator from "@salesforce/label/c.select_operator";
+import select_value from "@salesforce/label/c.select_value";
+import value from "@salesforce/label/c.value";
+import visible_if from "@salesforce/label/c.visible_if";
+import question_will_be_visible_if from "@salesforce/label/c.question_will_be_visible_if";
+import rating_can_not_be_greater_ten from "@salesforce/label/c.rating_can_not_be_greater_ten";
 
 const label = {
   edit_question_form_title,
@@ -31,7 +41,17 @@ const label = {
   option_already_exists,
   error_few_options,
   errorTitle,
-  complete_this_field 
+  complete_this_field,
+  back,
+  back_title,
+  operator,
+  select_operator,
+  value,
+  select_value,
+  enter_compared_value,
+  question_will_be_visible_if,
+  visible_if,
+  rating_can_not_be_greater_ten
 }
 
 export {

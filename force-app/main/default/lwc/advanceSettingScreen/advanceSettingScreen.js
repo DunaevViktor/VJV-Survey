@@ -1,265 +1,393 @@
-import { LightningElement, track, api } from "lwc";
+import { LightningElement, track, api, wire } from "lwc";
+import { label } from "./labels.js";
+import { columns, columnsMember, getResultTableStyle, getReceiversTableStyle, isReceiverExist, deleteReceiver, createDisplayedMap,
+         getObjectName, callReportValidity, createMemberList } from "./advanceSettingScreenHelper.js";
+import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getGroups from "@salesforce/apex/GroupController.getGroups";
 import getSurveys from "@salesforce/apex/SurveyController.getAllSurveys";
-import { label } from "./labels.js";
-import { columns, receiverOptions, isReceiverExist } from "./advanceSettingScreenHelper.js";
-import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
+import getCampaigns from "@salesforce/apex/CampaignController.getCampaigns";
+import searchMembers from "@salesforce/apex/SearchHelper.searchMembers";
+import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getPageQuestionAmount";
 
 export default class AdvanceSettingScreen extends LightningElement {
-  TYPE_EMAIL = "email";
-  TYPE_GROUP = "groupName";
-  EMAIL_PATTERN = /\w+@\w+\.\w+/;
 
-  EMAIL_VARIANT = "Email";
-  GROUP_VARIANT = "User Group";
+    MULTIPLIER = 1;
+    SINGLE_RECORD_VARIANT = "Record";
+    GROUP_VARIANT = "User Group";
+    CAMPAIGN_VARIAN = "Campaign";
 
-  label = label;
-  columns = columns;
-  receiverOptions = receiverOptions;
+    label = label;
+    columns = columns;
+    columnsMember = columnsMember;
 
-  @track hasReceiers;
-  @track receivers = [];
-  @track isEmailReceiver = true;
-  @track isConnectToSurvey;
+    @wire(getPageQuestionAmount) amountItems;
 
-  @track __survey = {};
-  @track displayedSurveys = [];
-  @track displayedGroups = [];
+    @track isConnectToSurvey;
+    @track hasReceivers;
+    @track __survey = {};
+    @track receivers = [];
+    @track displayedSurveys = [];
+    @track displayedGroups = [];
+    @track isHasSurveys = false;
+    @track isHasGroups = false;
+    @track getGroupError = false;
+    @track getSurveyError = false;
+    @track displayedCampaigns = [];
+    @track getCampaignsError = false;
+    @track isHasCampaigns = false;
+    @track hasMembers = false;
+    @track searchError = false;
+    @track copyReceivers = [];
 
-  @track isHasSurveys = false;
-  @track isHasGroups = false;
-  @track isError = false;
+    @track memberPage;
+    @track isNeedPagination = false;
+    @track currentPage = 0;
 
-  get surveyReceivers() {
-    return this.receivers;
-  }
+    groupId = "";
+    surveyId = "";
+    campaignId = "";
+    queryTerm = "";
+    memberList = [];
 
-  get survey() {
-    return this.__survey;
-  }
-
-  get surveys() {
-    return this.displayedSurveys;
-  }
-
-  get groups() {
-    return this.displayedSurveys;
-  }
-
-  @api set survey(value) {
-    this.__survey = JSON.parse(JSON.stringify(value));
-    if (this.__survey.Related_To__c === undefined) {
-      this.isConnectToSurvey = false;
-    } else {
-      this.isConnectToSurvey = true;
-      this.surveyId = this.__survey.Related_To__c;
+    get survey() {
+        return this.__survey;
     }
-  }
 
-  @api set surveyReceivers(value) {
-    this.receivers = JSON.parse(JSON.stringify(value));
-  }
+    get surveys() {
+        return this.displayedSurveys;
+    }
 
-  @api set surveys(value) {
-    this.displayedSurveys = JSON.parse(JSON.stringify(value));
-  }
+    get surveyReceivers() {
+        return this.receivers;
+    }
 
-  @api set groups(value) {
-    this.displayedGroups = JSON.parse(JSON.stringify(value));
-  }
+    get copySurveyReceivers() {
+        return this.copyReceivers;
+    }
 
-  groupId = "";
-  surveyId = "";
+    get groups() {
+        return this.displayedGroups;
+    }
 
-  connectedCallback() {
-    this.initSurveys();
-    this.initGroups();
-    this.setIsHasReseivers();
+    get campaigns() {
+        return this.displayedCampaigns;
+    }
 
-    this.isHasSurveys = this.displayedSurveys.length > 0;
-    this.isHasGroups = this.displayedGroups > 0;
-  }
+    get groupOptions() {
+        return createDisplayedMap(this.displayedGroups);
+    }
 
-  initSurveys() {
-    if(this.displayedSurveys.length === 0) {
-      getSurveys()
-      .then((result) => {
-        this.displayedSurveys = result.length > 0 ? result : [];
+    get surveyOptions() {
+        return createDisplayedMap(this.displayedSurveys);
+    }
+
+    get campaignOptions() {
+        return createDisplayedMap(this.displayedCampaigns);
+    }
+
+    @api set survey(value) {
+        this.__survey = JSON.parse(JSON.stringify(value));
+        this.isConnectToSurvey = this.__survey.Related_To__c !== undefined;
+        if(this.isConnectToSurvey) this.surveyId = this.__survey.Related_To__c;
+    }
+
+    @api set surveys(value) {
+        this.displayedSurveys = JSON.parse(JSON.stringify(value));
+    }
+
+    @api set surveyReceivers(value) {
+        this.receivers = JSON.parse(JSON.stringify(value));
+    }
+    
+    @api set copySurveyReceivers(value) {
+        this.copyReceivers = JSON.parse(JSON.stringify(value));
+    }
+
+    @api set groups(value) {
+        this.displayedGroups = JSON.parse(JSON.stringify(value));
+    }
+
+    @api set campaigns(value) {
+        this.displayedCampaigns = JSON.parse(JSON.stringify(value));
+    }
+
+    connectedCallback() {
+        this.initSurveys();
+        this.initGroups();
+        this.initCampaigns();
+        this.setIsHasReseivers();
+        this.setIsHasMembers();
+
         this.isHasSurveys = this.displayedSurveys.length > 0;
-      })
-      .catch(() => {
-        this.isError = true;
-      });
-    }
-  }
-
-  initGroups() {
-    if(this.displayedGroups.length === 0) {
-      getGroups()
-      .then((result) => {
-        this.displayedGroups = result.length > 0 ? result : [];
         this.isHasGroups = this.displayedGroups.length > 0;
-      })
-      .catch(() => {
-        this.isError = true;
-      });
-    }
-  } 
-
-  get groupOptions() {
-    return this.displayedGroups.map((group) => {
-      return { label: group.Name, value: group.Id };
-    });
-  }
-
-  get surveyOptions() {
-    return this.displayedSurveys.map((survey) => {
-      return { label: survey.Name, value: survey.Id };
-    });
-  }
-
-
-  setIsHasReseivers() {
-    this.hasReceiers = this.receivers && this.receivers.length > 0;
-  }
-
-  handleRowAction(event) {
-    const actionName = event.detail.action.name;
-    const row = event.detail.row;
-
-    if(actionName === "delete") {
-      this.deleteRow(row);
-    }
-  }
-
-  deleteRow(row) {
-    const { Value__c } = row;
-    this.receivers = this.receivers.filter((receiver) => {
-      return receiver.Value__c !== Value__c;
-    });
-
-    this.setIsHasReseivers();
-  }
-
-  handleIsNewReceiverChange(event) {
-    const selectedReceiver = event.detail.value;
-    this.isEmailReceiver = selectedReceiver === this.TYPE_EMAIL;
-
-    if(!this.isEmailReceiver) {
-      this.groupId = "";
-    }
-  }
-
-  handleGroupChange(event) {
-    this.groupId = event.detail.value;
-  }
-
-  handleAddEmailReceiver() {
-    const input = this.template.querySelector(".email-input");
-    
-    if(!this.isEmailValid(input)) {
-      return;
-    }
-    
-    const receiver = {};
-    receiver.Type__c = this.EMAIL_VARIANT;
-    receiver.Value__c = input.value;
-    this.receivers = [...this.receivers, receiver];
-
-    input.setCustomValidity("");
-    input.reportValidity();
-    input.value = "";
-
-    this.setIsHasReseivers();
-  }
-
-  isEmailValid(input) {
-    const result = input.value.match(this.EMAIL_PATTERN);
-    if (result === null) {
-      this.callReportValidity(input, label.error_email_pattern_mismatch);
-      return false;
+        this.isHasCampaigns = this.displayedCampaigns.length > 0;
     }
 
-    if(isReceiverExist(this.receivers, input.value)) {
-      this.callReportValidity(input, label.error_already_added_this_email);
-      return false;
+    renderedCallback() {
+        if(this.template.querySelector('.resultTable')) {
+            this.template.querySelector('.resultTable').appendChild(getResultTableStyle());
+        }
+
+        if(this.template.querySelector('.emailTable')) {
+            this.template.querySelector('.emailTable').appendChild(getReceiversTableStyle());
+        }
+        
     }
 
-    return true;
-  }
+    initSurveys() {
+        if (this.displayedSurveys.length === 0) {
+            getSurveys()
+                .then((result) => {
+                    this.displayedSurveys = result.length > 0 ? result : [];
+                    this.isHasSurveys = this.displayedSurveys.length > 0;
+                })
+                .catch(() => {
+                    this.getSurveyError = true;
+                });
+        }
+    }
 
-  callReportValidity(input, message) {
-    input.setCustomValidity(message);
-    input.reportValidity();
-  }
+    initGroups() {
+        if (this.displayedGroups.length === 0) {
+            getGroups()
+                .then((result) => {
+                    this.displayedGroups = result.length > 0 ? result : [];
+                    this.isHasGroups = this.displayedGroups.length > 0;
+                })
+                .catch(() => {
+                    this.getGroupError = true;
+                });
+        }
+    }
 
-  handleAddGroupReceiver() {
-    const combobox = this.template.querySelector(".group-combobox");
+    initCampaigns() {
+        if (this.displayedCampaigns.length === 0) {
+            getCampaigns()
+                .then((result) => {
+                    this.displayedCampaigns = result.length > 0 ? result : [];
+                    this.isHasCampaigns = this.displayedCampaigns.length > 0;
+                })
+                .catch(() => {
+                    this.getCampaignsError = true;
+                });
+        }
+    }
 
-    if(!this.isGroupValid(combobox)) {
-      return;
+    handleKeyUp(evt) {
+        const isEnterKey = evt.keyCode === 13;
+        if (!isEnterKey) { return; }
+        this.queryTerm = evt.target.value;
+        if (!(this.queryTerm && this.queryTerm.trim().length > 1)) { return; }
+        this.searchError = false;
+        searchMembers({ searchTerm: this.queryTerm })
+            .then((result) => {
+                this.memberList = createMemberList(result);
+                this.currentPage = 0;
+                this.resolveMembersPage();
+                this.setIsHasMembers();
+            })
+            .catch(() => {
+                this.searchError = true;
+            });
+    }
+
+    resolveMembersPage() {
+      this.isNeedPagination = this.memberList.length > (this.amountItems.data * this.MULTIPLIER);
+      if(this.isNeedPagination) {
+        this.memberPage = this.memberList.slice(
+          this.currentPage *  (this.amountItems.data * this.MULTIPLIER), 
+          (this.currentPage + 1 )*  (this.amountItems.data * this.MULTIPLIER)
+        );
+      } else {
+        this.memberPage = [...this.memberList];
+      }
+    }
+
+    get isPreviousDisabled() {
+      return this.currentPage === 0;
     }
     
-    const receiver = {};
-    receiver.Type__c = this.GROUP_VARIANT;
-    receiver.Value__c = this.displayedGroups.find((group) => {
-      return this.groupId === group.Id;
-    }).Name;
-
-    this.receivers = [...this.receivers, receiver];
-
-    combobox.setCustomValidity("");
-    combobox.reportValidity();
-
-    this.setIsHasReseivers();
-  }
-
-  isGroupValid(combobox) {
-    if (this.groupId.localeCompare("") === 0) {
-      this.callReportValidity(combobox, label.error_choose_some_group);
-      return false;
+    get isNextDisabled() {
+      return this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER));
     }
 
-    const value = this.displayedGroups.find((group) => {
-      return this.groupId === group.Id;
-    }).Name;
-
-    if(isReceiverExist(this.receivers, value)) {
-      this.callReportValidity(combobox, label.error_already_added_this_group);
-      return false;
+    clickPreviousTableButton() {
+      if(this.currentPage === 0) return;
+    
+      this.currentPage--;
+      this.resolveMembersPage();
+    }
+    
+    clickNextTableButton() {
+      if(this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER))) return;
+    
+      this.currentPage++;
+      this.resolveMembersPage();
     }
 
-    return true;
-  }
-
-  handleIsStandardSurveyChange(event) {
-    this.__survey.IsStandard__c = event.target.checked;
-  }
-
-  handleIsResendingChange(event) {
-    this.__survey.IsResending__c = event.target.checked;
-  }
-
-  handleSurveyChange(event) {
-    this.__survey.Related_To__c = event.detail.value;
-    this.surveyId = event.detail.value;
-  }
-
-  handleConnectToAnotherSurveyChange(event) {
-    this.isConnectToSurvey = event.target.checked;
-    if (!this.isConnectToSurvey) {
-      this.surveyId = "";
-      this.__survey.Related_To__c = undefined;
+    setIsHasMembers() {
+        this.hasMembers = this.memberList && this.memberList.length > 0;
     }
-  }
 
-  clickPreviousButton() {
-    const backNavigationEvent = new FlowNavigationBackEvent();
-    this.dispatchEvent(backNavigationEvent);
-  }
+    setIsHasReseivers() {
+        this.hasReceivers = this.receivers && this.receivers.length > 0;
+    }
 
-  clickNextButton() {
-    const nextNavigationEvent = new FlowNavigationNextEvent();
-    this.dispatchEvent(nextNavigationEvent);
-  }
+    handleRowAction(event) {
+        const actionName = event.detail.action.name;
+        const row = event.detail.row;
+        switch (actionName){
+            case 'delete' :
+                this.deleteRow(row);
+                break;
+            default: this.handleAddRecordReceiver(row);
+        }
+    }
+
+    deleteRow(row) {
+        const { Value__c } = row;
+        this.copyReceivers = deleteReceiver(this.copyReceivers, Value__c);
+        this.receivers = deleteReceiver(this.receivers, Value__c);
+        this.setIsHasReseivers();
+    }
+
+    createCopyReceiver(receiver, nameValue){
+        let copyReceiver = {...receiver};
+        copyReceiver.Name = nameValue;
+        this.copyReceivers = [...this.copyReceivers, copyReceiver];
+    }
+
+    handleGroupChange(event) {
+        this.groupId = event.detail.value;
+    }
+
+    handleAddGroupReceiver() {
+        const combobox = this.template.querySelector(".group-combobox");
+
+        if (!this.isGroupValid(combobox)) {
+            return;
+        }
+
+        const receiver = {};
+        receiver.Type__c = this.GROUP_VARIANT;
+        receiver.Value__c = this.groupId;
+
+        let groupName = getObjectName(this.displayedGroups, this.groupId);
+        this.createCopyReceiver(receiver, groupName);
+        this.receivers = [...this.receivers, receiver];
+
+        callReportValidity(combobox, "");
+        this.setIsHasReseivers();
+    }
+
+    isGroupValid(combobox) {
+        if (this.groupId.localeCompare("") === 0) {
+            callReportValidity(combobox, label.error_choose_some_group);
+            return false;
+        }
+
+        if (isReceiverExist(this.receivers, this.groupId)) {
+            callReportValidity(combobox, label.error_already_added_this_group);
+            return false;
+        }
+        return true;
+    }
+
+    handleAddRecordReceiver(row){
+        const { Id, Name } = row;
+        
+        if (!this.isRecordValid(Id)) {
+            return;
+        }
+
+        const receiver = {};
+        receiver.Type__c = this.SINGLE_RECORD_VARIANT;
+        receiver.Value__c = Id;
+
+        this.createCopyReceiver(receiver, Name);
+        this.receivers = [...this.receivers, receiver];
+
+        this.setIsHasReseivers();
+    }
+
+    isRecordValid(value){
+        if (isReceiverExist(this.receivers, value)) {
+            this.showToast();
+            return false;
+        }
+        return true;
+    }
+
+    showToast() {
+        const event = new ShowToastEvent({
+            title: label.error,
+            message: label.duplicate_record,
+            variant: 'error'
+        });
+        this.dispatchEvent(event);
+    }
+
+    handleCampaignChange(event) {
+        this.campaignId = event.detail.value;
+    }
+
+    handleAddCampaignReceiver() {
+        const combobox = this.template.querySelector(".campaign-combobox");
+
+        if (!this.isCampaignValid(combobox)) {
+            return;
+        }
+
+        const receiver = {};
+        receiver.Type__c = this.CAMPAIGN_VARIAN;
+        receiver.Value__c = this.campaignId;
+
+        let campaignName = getObjectName(this.displayedCampaigns, this.campaignId);
+        this.createCopyReceiver(receiver, campaignName);
+        this.receivers = [...this.receivers, receiver];
+
+        callReportValidity(combobox, "");
+        this.setIsHasReseivers();
+    }
+
+    isCampaignValid(combobox) {
+        if (this.campaignId.localeCompare("") === 0) {
+            callReportValidity(combobox, label.error_choose_some_campaign);
+            return false;
+        }
+
+        if (isReceiverExist(this.receivers, this.campaignId)) {
+            callReportValidity(combobox, label.error_already_added_campaign);
+            return false;
+        }
+        return true;
+    }
+
+    handleIsStandardSurveyChange(event) {
+        this.__survey.IsStandard__c = event.target.checked;
+    }
+
+    handleSurveyChange(event) {
+        this.__survey.Related_To__c = event.detail.value;
+        this.surveyId = event.detail.value;
+    }
+
+    handleConnectToAnotherSurveyChange(event) {
+        this.isConnectToSurvey = event.target.checked;
+        if (!this.isConnectToSurvey) {
+            this.surveyId = "";
+            this.__survey.Related_To__c = undefined;
+        }
+    }
+
+    clickPreviousButton() {
+        const backNavigationEvent = new FlowNavigationBackEvent();
+        this.dispatchEvent(backNavigationEvent);
+    }
+
+    clickNextButton() {
+        const nextNavigationEvent = new FlowNavigationNextEvent();
+        this.dispatchEvent(nextNavigationEvent);
+    }
 }

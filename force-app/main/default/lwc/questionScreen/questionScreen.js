@@ -3,25 +3,32 @@ import getTemplateSurveys from "@salesforce/apex/SurveyController.getTemplateSur
 import getStandardQuestions from "@salesforce/apex/QuestionController.getStandardQuestions";
 import getTemplatesQuestions from "@salesforce/apex/QuestionController.getTemplatesQuestions";
 import getMaxQuestionAmount from "@salesforce/apex/SurveySettingController.getMaxQuestionAmount";
+import getMinQuestionAmount from "@salesforce/apex/SurveySettingController.getMinQuestionAmount";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 import {label} from "./labels";
 import {
-  transformDisplayesTypes,
   getQuestionsBySurveyId,
   updateQuestionByPosition,
-  findQuestionsForDownSwap,
-  findQuestionsForUpSwap,
-  resetOptionsIds
+  updateValidationByPosition,
+  solveQuestionPosition,
+  prepareSelectedQuestion,
+  resolveQuestionsByDeleted,
+  resolveValidationsByDeleted,
+  prepareValidationForPush,
+  swapQuestions,
+  swapValidations,
+  findSwapIndex,
+  sortQuestionsFunction,
+  resolveEditableQuestions
 } from "./questionScreenHelper.js";
-
-import {
-  findQuestionByPosition
-} from "c/formUtil";
 
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 
 export default class QuestionScreen extends LightningElement {
+  QUESTION_BLOCK = 'Question block';
+  FORM_BLOCK = 'Form block';
+  STANDARD_SELECTOR_BLOCK = 'Standard selector block';
 
   ERROR_VARIANT = "error";
   NO_TEMPLATE_VALUE = "0";
@@ -30,6 +37,7 @@ export default class QuestionScreen extends LightningElement {
   @track displayedTemplates = [];
   @track displayedTemplateQuestions = [];
   @track displayedStandardQuestions = [];
+  @track displayedValidations = [];
   @track templateOptionsValue = this.NO_TEMPLATE_VALUE;
   
   get questions() {
@@ -50,6 +58,10 @@ export default class QuestionScreen extends LightningElement {
 
   get selectedTemplateName() {
     return this.templateOptionsValue;
+  }
+
+  get validations() {
+    return this.displayedValidations;
   }
 
   @api 
@@ -77,40 +89,30 @@ export default class QuestionScreen extends LightningElement {
     this.templateOptionsValue = value;
   }
 
-  @wire(getMaxQuestionAmount) maxQuestionsAmount;
+  @api
+  set validations(value) {
+    this.displayedValidations = JSON.parse(JSON.stringify(value));
+  }
 
-  @track hasQuestions = false;
-  @track hasStandardQuestions = false;
+  @wire(getMaxQuestionAmount) maxQuestionsAmount;
+  @wire(getMinQuestionAmount) minQuestionsAmount;
+
+  @track isEditMode = false;
+  @track isDependentQuestion = false;
+  @track questionForForm;
+  @track validationForForm;
   @track editQuestionPosition;
-  @track noTemplate;
   @track isError = false;
 
   label = label;
 
-  connectedCallback() {
-    this.hasQuestions = this.questions.length > 0;
-    this.hasStandardQuestions = this.standardQuestions.length > 0;
+  @track currentMode = this.QUESTION_BLOCK;
 
+  connectedCallback() {
+    this.hasStandardQuestions = this.standardQuestions.length > 0;
+    
     this.initTemplates();
     this.initStandardQuestions();
-
-    this.noTemplate = {
-      label: label.no_template,
-      value: this.NO_TEMPLATE_VALUE
-    };
-  }
-
-  get templateOptions() {
-    let templateOptions;
-
-    if (this.displayedTemplates) {
-      templateOptions = transformDisplayesTypes(this.displayedTemplates);
-    } else {
-      templateOptions = [];
-    }
-
-    templateOptions.push(this.noTemplate);
-    return templateOptions;
   }
 
   initTemplates() {
@@ -153,152 +155,192 @@ export default class QuestionScreen extends LightningElement {
     }
   }
 
-  initQuestion() {
-    this.template
-          .querySelectorAll("c-question-form")[0]
-          .clearQuestion();
+  openQuestionBlock() {
+    this.currentMode = this.QUESTION_BLOCK;
+  }
+
+  openForm() {
+    this.currentMode = this.FORM_BLOCK;
+  }
+
+  openStandardSelector() {
+    this.currentMode = this.STANDARD_SELECTOR_BLOCK;
+  }
+
+  get isQuestionBlockOpened() {
+    return this.currentMode === this.QUESTION_BLOCK;
+  }
+
+  get isFormOpened() {
+    return this.currentMode === this.FORM_BLOCK;
+  }
+
+  get isStandardSelectorOpen() {
+    return this.currentMode === this.STANDARD_SELECTOR_BLOCK;
   }
 
   handleTemplateChange(event) {
-    if (this.templateOptionsValue.localeCompare(event.detail.value) === 0) {
+    if (this.templateOptionsValue.localeCompare(event.detail) === 0) {
       return;
     }
 
-    this.templateOptionsValue = event.detail.value;
+    this.templateOptionsValue = event.detail;
+    this.displayedQuestions = getQuestionsBySurveyId(
+      this.templateQuestions, this.templateOptionsValue, this.NO_TEMPLATE_VALUE);
 
-    if (this.templateOptionsValue.localeCompare(this.NO_TEMPLATE_VALUE) === 0) {
-      this.displayedQuestions = [];
-    } else {
-      this.displayedQuestions = getQuestionsBySurveyId(
-        this.templateQuestions, 
-        this.templateOptionsValue);
+    this.updateQuestions();
+  }
+
+  openClearForm() {
+    this.clearFormAttributes();
+    
+    if(this.isFormOpened) {
+      this.template.querySelectorAll("c-question-form")[0].resetForm();
+      return;
     }
 
-    this.hasQuestions = this.questions.length > 0;
-
-    if (this.editQuestionPosition) {
-      this.initQuestion();
-      this.editQuestionPosition = null;
-    }
+    this.openForm();
   }
 
   addQuestion(event) {
-    const question = event.detail;
-    question.Position__c = this.displayedQuestions.length + 1;
+    const question = JSON.parse(JSON.stringify(event.detail));
+    this.pushQuestion(question);
+  }
 
-    if(this.displayedQuestions.length === this.maxQuestionsAmount.data) {
+  addDependantQuestion(event) {
+    const validation = prepareValidationForPush(this.validations, event.detail);
+
+    if(this.displayedQuestions.length === +this.maxQuestionsAmount.data) {
       this.showToastMessage(label.unable_to_continue, label.limit_question_sexceeded, this.ERROR_VARIANT);
       return;
     }
-    this.displayedQuestions.push(question);
-
-    this.hasQuestions = this.questions.length > 0;
-    this.initQuestion();
-  }
-
-  editQuestion(event) {
-    let position = +event.detail;
-    this.editQuestionPosition = position;
-
-    const questionForEdit = findQuestionByPosition(this.displayedQuestions, +position);
-
-    this.template
-      .querySelectorAll("c-question-form")[0]
-      .setQuestionForEdit(questionForEdit);
-  }
-
-  cancelEditQuestion() {
-    this.editQuestionPosition = null;
-    this.initQuestion();
-  }
-
-  deleteQuestion(event) {
-    let position = +event.detail;
-
-    if (position === this.editQuestionPosition) {
-      this.initQuestion();
-    }
-
-    position--;
-
-    this.displayedQuestions.splice(position, 1);
-
-    for (let i = position; i < this.displayedQuestions.length; i++) {
-      this.displayedQuestions[i].Position__c = i + 1;
-    }
-
-    this.hasQuestions = this.questions.length > 0;
-  }
-
-  updateQuestion(event) {
-    const updatedQuestion = event.detail;
 
     this.displayedQuestions = updateQuestionByPosition(
-      this.questions, 
-      this.editQuestionPosition, 
-      updatedQuestion);
+      this.questions, validation.Related_Question__c.Position__c, 
+      JSON.parse(JSON.stringify(validation.Related_Question__c)));
+    
+    this.displayedQuestions.push(JSON.parse(JSON.stringify(validation.Dependent_Question__c)));
+    this.displayedValidations.push(validation);
 
-    this.editQuestionPosition = null;
-  }
-
-  downQuestion(event) {
-    const position = +event.detail;
-
-    if (position === this.displayedQuestions.length) return;
-
-    let {relocatableQuestion, relocatableIndex, lowerQuestion, lowerIndex} = 
-      findQuestionsForDownSwap(this.displayedQuestions, position);
-
-    if (this.editQuestionPosition === lowerIndex + 1) {
-      this.editQuestionPosition = relocatableIndex + 1;
-    } else if (this.editQuestionPosition === relocatableIndex + 1) {
-      this.editQuestionPosition = lowerIndex + 1;
-    }
-
-    lowerQuestion.Position__c--;
-    relocatableQuestion.Position__c++;
-
-    this.displayedQuestions[relocatableIndex] = lowerQuestion;
-    this.displayedQuestions[lowerIndex] = relocatableQuestion;
-  }
-
-  upQuestion(event) {
-    const position = +event.detail;
-
-    if (position === 1) return;
-
-    let {relocatableQuestion, relocatableIndex, upperQuestion, upperIndex} =
-      findQuestionsForUpSwap(this.displayedQuestions, position);
-      
-    if (this.editQuestionPosition === upperIndex + 1) {
-      this.editQuestionPosition = relocatableIndex + 1;
-    } else if (this.editQuestionPosition === relocatableIndex + 1) {
-      this.editQuestionPosition = upperIndex + 1;
-    }
-
-    upperQuestion.Position__c++;
-    relocatableQuestion.Position__c--;
-
-    this.displayedQuestions[relocatableIndex] = upperQuestion;
-    this.displayedQuestions[upperIndex] = relocatableQuestion;
+    this.clearFormAttributes();
+    this.updateQuestions();
   }
 
   selectQuestion(event) {
-    const question = JSON.parse(JSON.stringify(event.detail));
-    question.Position__c = this.displayedQuestions.length + 1;
-    question.Id = null;
+    const question = prepareSelectedQuestion(event.detail);
+    this.pushQuestion(question);
+  }
 
-    if(!!question.Question_Options__r) {
-      question.Question_Options__r = resetOptionsIds(question.Question_Options__r);
+  pushQuestion(question) {
+    question.Position__c = solveQuestionPosition(this.displayedQuestions);
+    question.Editable = true;
+
+    if(this.displayedQuestions.length === +this.maxQuestionsAmount.data) {
+      this.showToastMessage(label.unable_to_continue, label.limit_question_sexceeded, this.ERROR_VARIANT);
+      return;
     }
 
     this.displayedQuestions.push(question);
-
-    this.hasQuestions = this.displayedQuestions.length > 0;
+    this.updateQuestions();
   }
 
-  setError() {
-    this.isError = true;
+  updateQuestions() {
+    this.displayedQuestions.sort(sortQuestionsFunction);
+
+    if(this.isQuestionBlockOpened) {
+      this.template.querySelectorAll("c-questions-block")[0].updateQuestions(this.displayedQuestions);
+    } else {
+      this.openQuestionBlock();
+    }
+  }
+  
+  editQuestion(event) {
+    this.questionForForm = event.detail;
+    this.editQuestionPosition = this.questionForForm.Position__c
+    this.isEditMode = true;
+
+    if(this.questionForForm.VisibilityReason) {
+      this.isDependentQuestion = true;
+      this.validationForForm = this.displayedValidations.filter((validation) => {
+        return validation.Dependent_Question__c.Position__c === this.questionForForm.Position__c;
+      })[0];
+    }
+
+    this.openForm();
+  }
+
+  addOptional(event) {
+    this.validationForForm = {
+      Related_Question__c: JSON.parse(JSON.stringify(event.detail))
+    };
+    this.isDependentQuestion = true;
+    this.openForm();
+  }
+
+  updateQuestion(event) {
+    const value = event.detail;
+
+    if(!this.isDependentQuestion) {
+      this.displayedQuestions = updateQuestionByPosition(this.questions, this.editQuestionPosition, value);
+    } else {
+      this.displayedQuestions = updateQuestionByPosition(
+        this.questions, this.editQuestionPosition, JSON.parse(JSON.stringify(value.Dependent_Question__c)));
+
+      this.displayedValidations = updateValidationByPosition(this.validations, value);
+    }
+    
+    this.clearFormAttributes();
+    this.openQuestionBlock();
+  }
+
+  clearFormAttributes() {
+    this.isEditMode = false;
+    this.isDependentQuestion = false;
+    this.questionForForm = {};
+    this.validationForForm = {};
+    this.editQuestionPosition = null;
+  }
+
+  deleteQuestions(event) {
+    const position = event.detail;
+
+    this.displayedQuestions = resolveQuestionsByDeleted(this.questions, position);
+    this.displayedValidations = resolveValidationsByDeleted(this.validations, position);
+    this.displayedQuestions = resolveEditableQuestions(this.questions, this.validations);
+
+    this.updateQuestions();
+  }
+
+  downQuestion(event) {
+    const position = event.detail;
+
+    const downQuestionIndex = findSwapIndex(this.questions, position, -1);
+    if(!downQuestionIndex) {
+      return;
+    }
+
+    const downPosition = this.questions[downQuestionIndex].Position__c;
+
+    this.displayedQuestions = swapQuestions(this.questions, position, downPosition);
+    this.displayedValidations = swapValidations(this.validations, position, downPosition);
+
+    this.updateQuestions();
+  }
+
+  upQuestion(event) {
+    const position = event.detail;
+
+    if(+position.slice(-1) === 1) {
+      return;
+    }
+
+    const upperQuestionIndex = findSwapIndex(this.questions, position, 1);
+    const upperPosition = this.questions[upperQuestionIndex].Position__c;
+
+    this.displayedQuestions = swapQuestions(this.questions, upperPosition, position);
+    this.displayedValidations = swapValidations(this.validations, upperPosition, position);
+
+    this.updateQuestions();
   }
 
   clickPreviousButton() {
@@ -307,8 +349,9 @@ export default class QuestionScreen extends LightningElement {
   }
 
   clickNextButton() {
-    if(this.displayedQuestions.length < 2) {
-      this.showToastMessage(label.unable_to_continue, label.should_have_two_questions, this.ERROR_VARIANT);
+    if(this.displayedQuestions.length < +this.minQuestionsAmount.data) {
+      const errorMessage = label.you_must_have_at_least + " " + this.minQuestionsAmount.data + " " +label.questions;
+      this.showToastMessage(label.unable_to_continue, errorMessage, this.ERROR_VARIANT);
       return;
     } 
 
@@ -318,10 +361,17 @@ export default class QuestionScreen extends LightningElement {
 
   showToastMessage(title, message, variant) {
     const event = new ShowToastEvent({
-      title,
-      message,
-      variant
+      title, message, variant
     });
     this.dispatchEvent(event);
+  }
+
+  setError() {
+    this.isError = true;
+  }
+
+  cancelEditQuestion() {
+    this.clearFormAttributes();
+    this.openQuestionBlock();
   }
 }

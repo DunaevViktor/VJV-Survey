@@ -57,11 +57,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>IsResending__c</field>
-            <table>Survey__c</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>IsStandard__c</field>
             <table>Survey__c</table>
         </columns>

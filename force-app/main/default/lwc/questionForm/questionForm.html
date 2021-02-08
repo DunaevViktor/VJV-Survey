@@ -1,5 +1,15 @@
 <template>
-  <div class="slds-box slds-box_x-small slds-m-around_x-small">
+
+  <div class="slds-m-top_small">
+    <lightning-button
+      variant="brand-outline" 
+      label={label.back}
+      title={label.back_title}
+      onclick={handleBack}>
+    </lightning-button>
+  </div>
+
+  <div class="slds-box slds-box_x-small slds-m-top_x-small">
     <template if:true={isEditMode}>
       <h2>{label.edit_question_form_title}</h2>
     </template>
@@ -13,6 +23,7 @@
       type="text"
       label={label.specify_question}
       onchange={handleLabel}
+      value={question.Label__c}
     ></lightning-input>
 
     <div class="slds-grid slds-wrap">
@@ -89,13 +100,56 @@
 
     <hr class="slds-clearfix slds-m-bottom_x-small" />
 
+    <template if:true={isDependentQuestion} class="slds-m-top_small">
+      {label.question_will_be_visible_if} {validationForForm.Related_Question__c.Label__c}
+
+      <div class="slds-grid slds-wrap">
+        <div class="slds-size_1-of-2">
+          <lightning-combobox
+            label={label.operator}
+            value={validationForForm.Operator__c}
+            placeholder={label.select_operator}
+            options={displayedOperators}
+            class="slds-m-right_small validation-operator"
+            onchange={handleSelectOperator}
+          >
+          </lightning-combobox>
+        </div>
+
+        <div class="slds-size_1-of-2">
+          <lightning-combobox
+            label={label.value}
+            if:true={isMainQuestionPicklist}
+            placeholder={label.select_value}
+            options={questionsOptions}
+            class="slds-m-left_small validationInput"
+            value={validationForForm.Value__c}
+            disabled={isDisabled}
+          >
+          </lightning-combobox>
+
+          <lightning-input
+            if:false={isMainQuestionPicklist}
+            type={inputType}
+            label={label.enter_compared_value}
+            class="slds-m-left_small validationInput"
+            value={validationForForm.Value__c}
+            disabled={isDisabled}
+          ></lightning-input>
+        </div>
+      </div>
+
+      <hr class="slds-clearfix slds-m-bottom_x-small" />
+
+    </template>
+
     <div class="slds-text-align_center modal_buttons">
       <template if:true={isEditMode}>
         <lightning-button
           variant="destructive"
           label={label.cancel_edit}
           class="slds-m-left_x-small"
-          onclick={cancelQuestionEdit}
+          onclick={handleBack}
         >
         </lightning-button>
 

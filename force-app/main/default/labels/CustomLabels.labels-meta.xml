@@ -1,11 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>Campaign</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Campaign</shortDescription>
+        <value>Campaign</value>
+    </labels>
+    <labels>
+        <fullName>Campaign_Label</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Campaign Label</shortDescription>
+        <value>Campaigns</value>
+    </labels>
+    <labels>
+        <fullName>Campaign_Placeholder</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Campaign Placeholder</shortDescription>
+        <value>Select campaign</value>
+    </labels>
+    <labels>
         <fullName>Create_Survey</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Create Survey</shortDescription>
         <value>Create Survey</value>
+    </labels>
+    <labels>
+        <fullName>Email_Receiver</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Email Receiver</shortDescription>
+        <value>Email Receivers:</value>
     </labels>
     <labels>
         <fullName>Launch</fullName>
@@ -15,11 +43,67 @@
         <value>Launch</value>
     </labels>
     <labels>
+        <fullName>Name</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Name</shortDescription>
+        <value>Name</value>
+    </labels>
+    <labels>
+        <fullName>Public_Group</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Public Group</shortDescription>
+        <value>Public Group</value>
+    </labels>
+    <labels>
+        <fullName>Public_Group_Placeholder</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Public Group Placeholder</shortDescription>
+        <value>Select User Group</value>
+    </labels>
+    <labels>
+        <fullName>Select_survey_for_connect</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select survey for connect</shortDescription>
+        <value>Select survey for connect</value>
+    </labels>
+    <labels>
+        <fullName>Single_Record</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Single Record</shortDescription>
+        <value>Single Record</value>
+    </labels>
+    <labels>
+        <fullName>Single_Record_Label</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Single Record Label</shortDescription>
+        <value>Enter Contact/Lead/User</value>
+    </labels>
+    <labels>
+        <fullName>Single_Record_Placeholder</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Single Record Placeholder</shortDescription>
+        <value>Type here(2+ symbols) and hit Enter...</value>
+    </labels>
+    <labels>
         <fullName>Survey_Constructor</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Survey Constructor</shortDescription>
-        <value>Survey Constructor</value>
+        <value>Survey constructor</value>
+    </labels>
+    <labels>
+        <fullName>Template</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Template</shortDescription>
+        <value>Add Survey To Templates</value>
     </labels>
     <labels>
         <fullName>add</fullName>
@@ -29,11 +113,25 @@
         <value>Add</value>
     </labels>
     <labels>
-        <fullName>add_new_receiver</fullName>
+        <fullName>add_dependent_question</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>add new receiver</shortDescription>
-        <value>Add new receiver</value>
+        <shortDescription>Add dependent question</shortDescription>
+        <value>Add dependent question</value>
+    </labels>
+    <labels>
+        <fullName>add_immediate_dispatch</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>add immediate dispatch</shortDescription>
+        <value>Add immediate dispatch</value>
+    </labels>
+    <labels>
+        <fullName>add_new_question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>add new question</shortDescription>
+        <value>Add new question</value>
     </labels>
     <labels>
         <fullName>add_option</fullName>
@@ -43,11 +141,25 @@
         <value>Add Option</value>
     </labels>
     <labels>
+        <fullName>add_optional_confirm_message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>The question editing option will be unavailable after adding dependent question</shortDescription>
+        <value>Main question editing option will be unavailable after adding dependent question.</value>
+    </labels>
+    <labels>
         <fullName>add_question</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>add question</shortDescription>
         <value>Add Question</value>
+    </labels>
+    <labels>
+        <fullName>add_standard_question</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>add standard question</shortDescription>
+        <value>Add standard question</value>
     </labels>
     <labels>
         <fullName>add_trigger_rule</fullName>
@@ -57,11 +169,46 @@
         <value>Add Trigger Rule</value>
     </labels>
     <labels>
-        <fullName>can_be_resending</fullName>
+        <fullName>advance_setting_header</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>can be resending</shortDescription>
-        <value>Can be resending</value>
+        <shortDescription>Advance setting header</shortDescription>
+        <value>Advanced survey settings</value>
+    </labels>
+    <labels>
+        <fullName>back</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Back</shortDescription>
+        <value>Back</value>
+    </labels>
+    <labels>
+        <fullName>back_title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Return to previous stage</shortDescription>
+        <value>Return to previous stage</value>
+    </labels>
+    <labels>
+        <fullName>basic_header</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Basic header</shortDescription>
+        <value>Enter basic survey information</value>
+    </labels>
+    <labels>
+        <fullName>can_no_longer_create_questions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>can no longer create questions</shortDescription>
+        <value>You can no longer create questions</value>
+    </labels>
+    <labels>
+        <fullName>cancel</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>cancel</shortDescription>
+        <value>Cancel</value>
     </labels>
     <labels>
         <fullName>cancel_edit</fullName>
@@ -71,6 +218,13 @@
         <value>Cancel edit</value>
     </labels>
     <labels>
+        <fullName>clear</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>clear</shortDescription>
+        <value>Clear</value>
+    </labels>
+    <labels>
         <fullName>clear_trigger_rules_fields</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -78,18 +232,25 @@
         <value>Clear trigger rule&apos;s fields</value>
     </labels>
     <labels>
-        <fullName>compared_value</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>compared value</shortDescription>
-        <value>Compared Value</value>
-    </labels>
-    <labels>
         <fullName>complete_this_field</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>complete this field</shortDescription>
         <value>Complete this field</value>
+    </labels>
+    <labels>
+        <fullName>confirm_action</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Confirm Action</shortDescription>
+        <value>Confirm Action</value>
+    </labels>
+    <labels>
+        <fullName>confirm_question_delete</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>The question will be completely deleted and cannot be restored</shortDescription>
+        <value>The question will be completely deleted and cannot be restored.</value>
     </labels>
     <labels>
         <fullName>connect_to_another_survey</fullName>
@@ -120,11 +281,11 @@
         <value>Delete trigger rule</value>
     </labels>
     <labels>
-        <fullName>dependent_question</fullName>
+        <fullName>do_you_want_to_proceed</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>dependent question</shortDescription>
-        <value>Dependent question</value>
+        <shortDescription>Do you want to proceed?</shortDescription>
+        <value>Do you want to proceed?</value>
     </labels>
     <labels>
         <fullName>done</fullName>
@@ -148,6 +309,13 @@
         <value>Drag&apos;n&apos;drop your logo image</value>
     </labels>
     <labels>
+        <fullName>duplicate_record</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>duplicate record</shortDescription>
+        <value>Duplicate record!</value>
+    </labels>
+    <labels>
         <fullName>edit</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -160,13 +328,6 @@
         <protected>true</protected>
         <shortDescription>edit question form title</shortDescription>
         <value>Edit question form</value>
-    </labels>
-    <labels>
-        <fullName>email</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>email</shortDescription>
-        <value>Email</value>
     </labels>
     <labels>
         <fullName>enter_compared_value</fullName>
@@ -183,6 +344,13 @@
         <value>Enter option value</value>
     </labels>
     <labels>
+        <fullName>enter_search_keyword</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Enter search keyword</shortDescription>
+        <value>Enter search keyword</value>
+    </labels>
+    <labels>
         <fullName>error</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -197,11 +365,11 @@
         <value>Error occured this page during to work</value>
     </labels>
     <labels>
-        <fullName>error_already_added_this_email</fullName>
+        <fullName>error_already_added_campaign</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>error already added this email</shortDescription>
-        <value>You&apos; ve already added this email!</value>
+        <shortDescription>error already added campaign</shortDescription>
+        <value>You&apos;ve already added this campaign!</value>
     </labels>
     <labels>
         <fullName>error_already_added_this_group</fullName>
@@ -211,6 +379,13 @@
         <value>You&apos;ve already added this group!</value>
     </labels>
     <labels>
+        <fullName>error_choose_some_campaign</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error choose some campaign</shortDescription>
+        <value>Choose some campaign to add!</value>
+    </labels>
+    <labels>
         <fullName>error_choose_some_group</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -218,18 +393,39 @@
         <value>Choose some group to add!</value>
     </labels>
     <labels>
-        <fullName>error_email_pattern_mismatch</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>error email pattern mismatch</shortDescription>
-        <value>Email pattern mismatch!</value>
-    </labels>
-    <labels>
         <fullName>error_few_options</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>error few options</shortDescription>
         <value>The number of options must be at least two</value>
+    </labels>
+    <labels>
+        <fullName>error_loading_campaigns</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error loading campaigns</shortDescription>
+        <value>Error with loading list of campaign</value>
+    </labels>
+    <labels>
+        <fullName>error_loading_groups</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error loading groups</shortDescription>
+        <value>Error with loading list of groups</value>
+    </labels>
+    <labels>
+        <fullName>error_loading_surveys</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error loading surveys</shortDescription>
+        <value>Error with loading list of surveys</value>
+    </labels>
+    <labels>
+        <fullName>error_search</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>error search</shortDescription>
+        <value>Error with search</value>
     </labels>
     <labels>
         <fullName>failed_image_delete</fullName>
@@ -267,18 +463,18 @@
         <value>Full incomplete trigger rules or clear(delete) them completely</value>
     </labels>
     <labels>
-        <fullName>group_name</fullName>
+        <fullName>find</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>group name</shortDescription>
-        <value>Group Name</value>
+        <shortDescription>find</shortDescription>
+        <value>Find</value>
     </labels>
     <labels>
-        <fullName>group_name_or_email</fullName>
+        <fullName>first_page</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>group name or email</shortDescription>
-        <value>Group Name or Email</value>
+        <shortDescription>first_page</shortDescription>
+        <value>First</value>
     </labels>
     <labels>
         <fullName>image_loading</fullName>
@@ -309,6 +505,13 @@
         <value>Is reusable</value>
     </labels>
     <labels>
+        <fullName>last_page</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>last page</shortDescription>
+        <value>Last</value>
+    </labels>
+    <labels>
         <fullName>limit_question_sexceeded</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -321,6 +524,13 @@
         <protected>true</protected>
         <shortDescription>logo image</shortDescription>
         <value>Logo image</value>
+    </labels>
+    <labels>
+        <fullName>more</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>more</shortDescription>
+        <value>more</value>
     </labels>
     <labels>
         <fullName>msg_no_public_groups_found</fullName>
@@ -337,6 +547,27 @@
         <value>Next</value>
     </labels>
     <labels>
+        <fullName>next_page</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>next_page</shortDescription>
+        <value>Next</value>
+    </labels>
+    <labels>
+        <fullName>no</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No</shortDescription>
+        <value>no</value>
+    </labels>
+    <labels>
+        <fullName>no_campaigns</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>no campaigns</shortDescription>
+        <value>Don&apos;t have campaigns</value>
+    </labels>
+    <labels>
         <fullName>no_questions</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -344,25 +575,11 @@
         <value>Don&apos;t have questions yet</value>
     </labels>
     <labels>
-        <fullName>no_questions_to_validation</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>no questions to validation</shortDescription>
-        <value>Don&apos;t have questions to create visibility validation</value>
-    </labels>
-    <labels>
         <fullName>no_records_found</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>No records found</shortDescription>
         <value>No records found</value>
-    </labels>
-    <labels>
-        <fullName>no_relevant_questions</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>no relevant questions</shortDescription>
-        <value>Don&apos;t have relevant questions</value>
     </labels>
     <labels>
         <fullName>no_standard_questions</fullName>
@@ -386,11 +603,25 @@
         <value>Don&apos;t have validations to display</value>
     </labels>
     <labels>
+        <fullName>none</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>none</shortDescription>
+        <value>None</value>
+    </labels>
+    <labels>
         <fullName>number</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>number</shortDescription>
         <value>number</value>
+    </labels>
+    <labels>
+        <fullName>number_of_found_items</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Number of found items</shortDescription>
+        <value>Number of found items</value>
     </labels>
     <labels>
         <fullName>object</fullName>
@@ -428,11 +659,11 @@
         <value>Previous</value>
     </labels>
     <labels>
-        <fullName>previous_button_message</fullName>
+        <fullName>previous_page</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>previous button message</shortDescription>
-        <value>If you will click this button you will lost all validations variables</value>
+        <shortDescription>previous_page</shortDescription>
+        <value>Previous</value>
     </labels>
     <labels>
         <fullName>question</fullName>
@@ -442,6 +673,13 @@
         <value>Question</value>
     </labels>
     <labels>
+        <fullName>question_header</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Question header</shortDescription>
+        <value>Add questions for survey</value>
+    </labels>
+    <labels>
         <fullName>question_settings</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -449,11 +687,32 @@
         <value>Question Setting</value>
     </labels>
     <labels>
-        <fullName>questions_connected</fullName>
+        <fullName>question_will_be_visible_if</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>questions connected</shortDescription>
-        <value>These questions are already connected in another validation</value>
+        <shortDescription>This question will be visible if</shortDescription>
+        <value>This question will be visible if</value>
+    </labels>
+    <labels>
+        <fullName>questions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>questions</shortDescription>
+        <value>questions</value>
+    </labels>
+    <labels>
+        <fullName>qustion</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>qustion</shortDescription>
+        <value>question</value>
+    </labels>
+    <labels>
+        <fullName>rating_can_not_be_greater_ten</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>rating can not be greater ten</shortDescription>
+        <value>Rating can not be more than 10</value>
     </labels>
     <labels>
         <fullName>remove_image</fullName>
@@ -519,6 +778,13 @@
         <value>Save validations</value>
     </labels>
     <labels>
+        <fullName>saver_header</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Saver header</shortDescription>
+        <value>Saving your survey</value>
+    </labels>
+    <labels>
         <fullName>saving_your_configurations</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -531,6 +797,27 @@
         <protected>true</protected>
         <shortDescription>Search</shortDescription>
         <value>Search</value>
+    </labels>
+    <labels>
+        <fullName>search_keyword_cant_be_empty</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Search keyword can&apos;t be empty</shortDescription>
+        <value>Search keyword can&apos;t be empty</value>
+    </labels>
+    <labels>
+        <fullName>search_result</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>search result</shortDescription>
+        <value>Search result:</value>
+    </labels>
+    <labels>
+        <fullName>select</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>select</shortDescription>
+        <value>Select</value>
     </labels>
     <labels>
         <fullName>select_an_option</fullName>
@@ -561,11 +848,11 @@
         <value>Selected Survey Template</value>
     </labels>
     <labels>
-        <fullName>should_have_two_questions</fullName>
+        <fullName>send</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>should have two questions</shortDescription>
-        <value>Your survey should have at least two questions</value>
+        <shortDescription>send</shortDescription>
+        <value>Send</value>
     </labels>
     <labels>
         <fullName>specify_question</fullName>
@@ -575,11 +862,18 @@
         <value>Specify question</value>
     </labels>
     <labels>
-        <fullName>standard_survey</fullName>
+        <fullName>standard_questions</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>standard survey</shortDescription>
-        <value>Standard survey</value>
+        <shortDescription>standard questions</shortDescription>
+        <value>Standard questions</value>
+    </labels>
+    <labels>
+        <fullName>successful_answer_save</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>successful answer save</shortDescription>
+        <value>Thanks! Your answer has been recorded.</value>
     </labels>
     <labels>
         <fullName>survey_bg_color</fullName>
@@ -594,6 +888,13 @@
         <protected>true</protected>
         <shortDescription>survey created successfully</shortDescription>
         <value>Survey created successfully!</value>
+    </labels>
+    <labels>
+        <fullName>survey_description</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Survey Description</shortDescription>
+        <value>Survey Description</value>
     </labels>
     <labels>
         <fullName>survey_name</fullName>
@@ -624,6 +925,27 @@
         <value>*Survey polling actions will occur when any of the created trigger rules work.</value>
     </labels>
     <labels>
+        <fullName>trigger_rule</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>trigger rule</shortDescription>
+        <value>trigger rule</value>
+    </labels>
+    <labels>
+        <fullName>trigger_rule_header</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Trigger rule header</shortDescription>
+        <value>Setup trigger rules</value>
+    </labels>
+    <labels>
+        <fullName>trigger_rules</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>trigger rules</shortDescription>
+        <value>trigger rules</value>
+    </labels>
+    <labels>
         <fullName>true</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -636,6 +958,20 @@
         <protected>true</protected>
         <shortDescription>type</shortDescription>
         <value>Type</value>
+    </labels>
+    <labels>
+        <fullName>type_description</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Type survey description</shortDescription>
+        <value>Type your survey description</value>
+    </labels>
+    <labels>
+        <fullName>type_survey_name</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Type survey name</shortDescription>
+        <value>Type survey name here</value>
     </labels>
     <labels>
         <fullName>unable_to_continue</fullName>
@@ -664,5 +1000,33 @@
         <protected>true</protected>
         <shortDescription>value</shortDescription>
         <value>Value</value>
+    </labels>
+    <labels>
+        <fullName>visible_if</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>visible if</shortDescription>
+        <value>Visible if</value>
+    </labels>
+    <labels>
+        <fullName>yes</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>yes</shortDescription>
+        <value>yes</value>
+    </labels>
+    <labels>
+        <fullName>you_can_create</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>you can create</shortDescription>
+        <value>You can create</value>
+    </labels>
+    <labels>
+        <fullName>you_must_have_at_least</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>you must have at least</shortDescription>
+        <value>You must have at least</value>
     </labels>
 </CustomLabels>
