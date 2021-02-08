@@ -337,10 +337,6 @@
         <name>no_records_found</name>
     </customLabels>
     <customLabels>
-        <label>Отсутствуют актуальные вопросы</label>
-        <name>no_relevant_questions</name>
-    </customLabels>
-    <customLabels>
         <label>Отсутсвуют стандартные вопросы</label>
         <name>no_standard_questions</name>
     </customLabels>
@@ -487,10 +483,6 @@
     <customLabels>
         <label>Отправить</label>
         <name>send</name>
-    </customLabels>
-    <customLabels>
-        <label>Ваш опрос должен содержать как минимум два вопроса</label>
-        <name>should_have_two_questions</name>
     </customLabels>
     <customLabels>
         <label>Введите вопрос</label>

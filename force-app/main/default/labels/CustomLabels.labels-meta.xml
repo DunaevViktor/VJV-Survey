@@ -582,13 +582,6 @@
         <value>No records found</value>
     </labels>
     <labels>
-        <fullName>no_relevant_questions</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>no relevant questions</shortDescription>
-        <value>Don&apos;t have relevant questions</value>
-    </labels>
-    <labels>
         <fullName>no_standard_questions</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -853,13 +846,6 @@
         <protected>true</protected>
         <shortDescription>send</shortDescription>
         <value>Send</value>
-    </labels>
-    <labels>
-        <fullName>should_have_two_questions</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>should have two questions</shortDescription>
-        <value>Your survey should have at least two questions</value>
     </labels>
     <labels>
         <fullName>specify_question</fullName>
