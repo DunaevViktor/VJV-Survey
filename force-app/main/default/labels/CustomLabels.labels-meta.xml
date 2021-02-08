@@ -708,6 +708,13 @@
         <value>question</value>
     </labels>
     <labels>
+        <fullName>rating_can_not_be_greater_ten</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>rating can not be greater ten</shortDescription>
+        <value>Rating can not be more than 10</value>
+    </labels>
+    <labels>
         <fullName>remove_image</fullName>
         <language>en_US</language>
         <protected>true</protected>
