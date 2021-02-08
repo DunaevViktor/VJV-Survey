@@ -96,7 +96,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Survey Constructor</shortDescription>
-        <value>Survey Constructor</value>
+        <value>Survey constructor</value>
     </labels>
     <labels>
         <fullName>Template</fullName>
@@ -1000,13 +1000,6 @@
         <protected>true</protected>
         <shortDescription>user groups</shortDescription>
         <value>Public User Groups</value>
-    </labels>
-    <labels>
-        <fullName>validation_header</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Validation header</shortDescription>
-        <value>Setup validations for questions</value>
     </labels>
     <labels>
         <fullName>value</fullName>

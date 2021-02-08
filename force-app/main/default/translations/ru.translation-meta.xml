@@ -41,7 +41,7 @@
         <name>Public_Group_Placeholder</name>
     </customLabels>
     <customLabels>
-        <label>Выберите опрос для связи</label>
+        <label>Выберите связанный опрос</label>
         <name>Select_survey_for_connect</name>
     </customLabels>
     <customLabels>
@@ -213,11 +213,11 @@
         <name>errorMessage</name>
     </customLabels>
     <customLabels>
-        <label>Вы уже добавляли эту кампанию!</label>
+        <label>Вы уже добавили эту кампанию!</label>
         <name>error_already_added_campaign</name>
     </customLabels>
     <customLabels>
-        <label>Вы уже добавляли эту группу!</label>
+        <label>Вы уже добавили эту группу!</label>
         <name>error_already_added_this_group</name>
     </customLabels>
     <customLabels>
@@ -233,15 +233,15 @@
         <name>error_few_options</name>
     </customLabels>
     <customLabels>
-        <label>Ошибка загрузки списка кампаний!</label>
+        <label>Ошибка при загрузке списка кампаний!</label>
         <name>error_loading_campaigns</name>
     </customLabels>
     <customLabels>
-        <label>Ошибка загрузки списка групп!</label>
+        <label>Ошибка при загрузке списка групп!</label>
         <name>error_loading_groups</name>
     </customLabels>
     <customLabels>
-        <label>Ошибка загрузки списка опросов!</label>
+        <label>Ошибка при загрузке списка опросов!</label>
         <name>error_loading_surveys</name>
     </customLabels>
     <customLabels>
@@ -253,7 +253,7 @@
         <name>failed_image_delete</name>
     </customLabels>
     <customLabels>
-        <label>Ошибка загрузки картинки</label>
+        <label>Ошибка во время загрузки картинки</label>
         <name>failed_image_upload</name>
     </customLabels>
     <customLabels>
@@ -289,7 +289,7 @@
         <name>is_required</name>
     </customLabels>
     <customLabels>
-        <label>Переиспользуемый</label>
+        <label>Стандартный</label>
         <name>is_reusable</name>
     </customLabels>
     <customLabels>
@@ -337,7 +337,7 @@
         <name>no_records_found</name>
     </customLabels>
     <customLabels>
-        <label>Отсутсвуют стандартные вопросы</label>
+        <label>Стандартные вопросы отсутствуют</label>
         <name>no_standard_questions</name>
     </customLabels>
     <customLabels>
@@ -369,7 +369,7 @@
         <name>operator</name>
     </customLabels>
     <customLabels>
-        <label>Этот вариант уже существует</label>
+        <label>Этот вариант ответа уже существует</label>
         <name>option_already_exists</name>
     </customLabels>
     <customLabels>
@@ -401,15 +401,19 @@
         <name>question_will_be_visible_if</name>
     </customLabels>
     <customLabels>
-        <label>Вопросы</label>
+        <label>Вопросов</label>
         <name>questions</name>
+    </customLabels>
+    <customLabels>
+        <label>Рейтинг не может быть больше 10</label>
+        <name>rating_can_not_be_greater_ten</name>
     </customLabels>
     <customLabels>
         <label>Удалить логотип</label>
         <name>remove_image</name>
     </customLabels>
     <customLabels>
-        <label>Удалить выбранный вариант</label>
+        <label>Удалить выбранный вариант ответа</label>
         <name>remove_selected_option</name>
     </customLabels>
     <customLabels>
@@ -425,7 +429,7 @@
         <name>save_email_rules_label</name>
     </customLabels>
     <customLabels>
-        <label>Сохранение общей информации об опросе</label>
+        <label>Сохранение основных настроек опроса</label>
         <name>save_main_survey_info_label</name>
     </customLabels>
     <customLabels>
@@ -433,7 +437,7 @@
         <name>save_questions_label</name>
     </customLabels>
     <customLabels>
-        <label>Сохранение правил для триггеров</label>
+        <label>Сохранение правил запуска</label>
         <name>save_trigger_rules_label</name>
     </customLabels>
     <customLabels>
@@ -453,7 +457,7 @@
         <name>search</name>
     </customLabels>
     <customLabels>
-        <label>Ключевое слово не может быть пустым</label>
+        <label>Поле не может быть пустым</label>
         <name>search_keyword_cant_be_empty</name>
     </customLabels>
     <customLabels>
@@ -465,7 +469,7 @@
         <name>select</name>
     </customLabels>
     <customLabels>
-        <label>Выберите вариант</label>
+        <label>Выберите вариант ответа</label>
         <name>select_an_option</name>
     </customLabels>
     <customLabels>
@@ -489,7 +493,7 @@
         <name>specify_question</name>
     </customLabels>
     <customLabels>
-        <label>стандартные вопросы</label>
+        <label>Стандартные вопросы</label>
         <name>standard_questions</name>
     </customLabels>
     <customLabels>
@@ -525,19 +529,19 @@
         <name>text</name>
     </customLabels>
     <customLabels>
-        <label>* Отправка опроса будет происходить, когда сработает любое из созданных правил триггеров.</label>
+        <label>* Отправка опроса будет происходить, когда сработает любое из созданных правил для критериев отправки.</label>
         <name>tip_for_user</name>
     </customLabels>
     <customLabels>
-        <label>правило триггера</label>
+        <label>критерий отправки</label>
         <name>trigger_rule</name>
     </customLabels>
     <customLabels>
-        <label>Настройка правил для триггеров</label>
+        <label>Настройка правил для критериев отправки</label>
         <name>trigger_rule_header</name>
     </customLabels>
     <customLabels>
-        <label>правила триггеров</label>
+        <label>правила для критериев отправки</label>
         <name>trigger_rules</name>
     </customLabels>
     <customLabels>
@@ -567,10 +571,6 @@
     <customLabels>
         <label>Публичные группы</label>
         <name>user_groups</name>
-    </customLabels>
-    <customLabels>
-        <label>Установка проверок для вопросов</label>
-        <name>validation_header</name>
     </customLabels>
     <customLabels>
         <label>Значение</label>
