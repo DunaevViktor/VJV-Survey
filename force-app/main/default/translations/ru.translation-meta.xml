@@ -165,6 +165,10 @@
         <name>delete_trigger_rule</name>
     </customLabels>
     <customLabels>
+        <label>Зависимый вопрос</label>
+        <name>dependent_question</name>
+    </customLabels>
+    <customLabels>
         <label>Вы хотите продолжить?</label>
         <name>do_you_want_to_proceed</name>
     </customLabels>
@@ -375,6 +379,10 @@
     <customLabels>
         <label>Варианты ответов</label>
         <name>options</name>
+    </customLabels>
+    <customLabels>
+        <label>Предварительный просмотр</label>
+        <name>preview_header</name>
     </customLabels>
     <customLabels>
         <label>Назад</label>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Main Template</name>
+    <style>none</style>
+    <subject>New Survey Available!</subject>
+    <textOnly>Survey Constructor
+
+Dear employee!
+
+You have received an invitation to take a survey. Please use the link:
+
+Go to Survey
+
+Sincerely, {!Organization.Name}.
+
+
+®Survey Constructor, Minsk 2021</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>
