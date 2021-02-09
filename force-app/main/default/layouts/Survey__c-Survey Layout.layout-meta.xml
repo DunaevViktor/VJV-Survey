@@ -70,6 +70,8 @@
     </layoutSections>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Description__c</fields>
+        <fields>IsStandard__c</fields>
         <relatedList>Survey__c.Related_To__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -79,6 +81,7 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Related_To__c</fields>
         <relatedList>Group_Answer__c.Survey__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -88,6 +91,9 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Field_Name__c</fields>
+        <fields>Operator__c</fields>
+        <fields>Field_Value__c</fields>
         <relatedList>Trigger_Rule__c.Survey__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
@@ -96,7 +102,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h6D000001D7Qg</masterLabel>
+        <masterLabel>00h1y000000yeRw</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>
