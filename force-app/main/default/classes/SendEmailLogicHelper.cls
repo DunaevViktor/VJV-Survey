@@ -65,15 +65,7 @@ public with sharing class SendEmailLogicHelper {
         }
         return leadIds;
     }
-
-    public static String createEmailBody(String templateBody, Survey__c currentSurvey, Organization currentOrg){
-        SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues(EMAIL_SETTINGS_NAME);
-        String surveyURL = currentSurvey.URL__c;
-        String bodyWithUrl =  templateBody.replace(config.Url_Config__c, surveyURL);
-        String organizationName = currentOrg.Name;
-        return bodyWithUrl.replace(config.Company_Config__c, organizationName);
-    }
-    
+ 
     public static Map<Id, Survey__c> createSurveyMap(){
         List<Survey__c> surveyList = getSurvey();
         Map<Id, Survey__c> surveyMap = new Map<Id, Survey__c>();
@@ -107,12 +99,8 @@ public with sharing class SendEmailLogicHelper {
         return [SELECT Id, Name, URL__c FROM Survey__c WITH SECURITY_ENFORCED];
     }
     
-    public static Organization getOrganization(){
-        return [SELECT Id, Name FROM Organization WITH SECURITY_ENFORCED LIMIT 1];
-    }
-    
     public static EmailTemplate getEmailTemplate(){
         SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues(EMAIL_SETTINGS_NAME);
-        return [SELECT Id, Name, Body FROM EmailTemplate WHERE Name = :config.Template_Name__c WITH SECURITY_ENFORCED LIMIT 1];
+        return [SELECT Id, Name, HtmlValue FROM EmailTemplate WHERE Name = :config.Template_Name__c WITH SECURITY_ENFORCED LIMIT 1];
     }
 }

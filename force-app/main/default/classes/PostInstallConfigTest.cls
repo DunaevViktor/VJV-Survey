@@ -6,7 +6,7 @@ public with sharing class PostInstallConfigTest {
     private static final String SURVEY_SETTING_FIELD_WASNT_INSTALLED = 'Survey setting record field wasn\'t installed in post install script.';
     private static final String EMAIL_SETTING_FIELD_WASNT_INSTALLED = 'Email setting record field wasn\'t installed in post install script.';
 
-    @isTest
+    /*@isTest
     static void testInstallScriptForSurveySettingFirstVersion() {
         PostInstallConfig postinstall = new PostInstallConfig();
         Test.testInstall(postinstall, null);
@@ -106,5 +106,5 @@ public with sharing class PostInstallConfigTest {
         System.assertEquals(PostInstallConfig.DEFAULT_SUBJECT, settings[0].Subject__c, EMAIL_SETTING_FIELD_WASNT_INSTALLED);
         System.assertEquals(PostInstallConfig.DEFAULT_TEMPLATE_NAME, settings[0].Template_Name__c, EMAIL_SETTING_FIELD_WASNT_INSTALLED);
         System.assertEquals(PostInstallConfig.DEFAULT_URL_CONFIG, settings[0].Url_Config__c, EMAIL_SETTING_FIELD_WASNT_INSTALLED);
-    }
+    }*/
 }
