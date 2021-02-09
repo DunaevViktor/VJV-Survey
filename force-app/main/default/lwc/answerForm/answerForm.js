@@ -153,7 +153,8 @@ export default class AnswerForm extends LightningElement {
     const allValid = [
       ...this.template.querySelectorAll("c-single-question")
     ].reduce(function (validSoFar, inputCmp) {
-      return validSoFar && inputCmp.validate();
+      const isValid = inputCmp.validate();
+      return validSoFar && isValid;
     }, true);
 
     return allValid;

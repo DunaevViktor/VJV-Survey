@@ -20,6 +20,7 @@
           label={question.Label__c}
           value={question.Answer}
           options={question.Question_Options__r}
+          required={question.Required__c}
           class="slds-p-around_small validate-input"
           onchange={handleAnswerChange}
           disabled={question.IsDisabled}
