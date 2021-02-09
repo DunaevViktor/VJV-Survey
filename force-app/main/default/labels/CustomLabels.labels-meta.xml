@@ -96,7 +96,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Survey Constructor</shortDescription>
-        <value>Survey Constructor</value>
+        <value>Survey constructor</value>
     </labels>
     <labels>
         <fullName>Template</fullName>
@@ -173,7 +173,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Advance setting header</shortDescription>
-        <value>Advanced Survey Settings</value>
+        <value>Advanced survey settings</value>
     </labels>
     <labels>
         <fullName>back</fullName>
@@ -194,7 +194,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Basic header</shortDescription>
-        <value>Enter Basic Survey Information</value>
+        <value>Enter basic survey information</value>
     </labels>
     <labels>
         <fullName>can_no_longer_create_questions</fullName>
@@ -589,13 +589,6 @@
         <value>No records found</value>
     </labels>
     <labels>
-        <fullName>no_relevant_questions</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>no relevant questions</shortDescription>
-        <value>Don&apos;t have relevant questions</value>
-    </labels>
-    <labels>
         <fullName>no_standard_questions</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -698,7 +691,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Question header</shortDescription>
-        <value>Add Questions for Survey</value>
+        <value>Add questions for survey</value>
     </labels>
     <labels>
         <fullName>question_settings</fullName>
@@ -803,7 +796,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Saver header</shortDescription>
-        <value>Saving Your Survey</value>
+        <value>Saving your survey</value>
     </labels>
     <labels>
         <fullName>saving_your_configurations</fullName>
@@ -876,13 +869,6 @@
         <value>Send</value>
     </labels>
     <labels>
-        <fullName>should_have_two_questions</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>should have two questions</shortDescription>
-        <value>Your survey should have at least two questions</value>
-    </labels>
-    <labels>
         <fullName>specify_question</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -895,13 +881,6 @@
         <protected>true</protected>
         <shortDescription>standard questions</shortDescription>
         <value>Standard questions</value>
-    </labels>
-    <labels>
-        <fullName>success</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>success</shortDescription>
-        <value>Success</value>
     </labels>
     <labels>
         <fullName>successful_answer_save</fullName>
@@ -971,7 +950,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Trigger rule header</shortDescription>
-        <value>Setup Trigger Rules</value>
+        <value>Setup trigger rules</value>
     </labels>
     <labels>
         <fullName>trigger_rules</fullName>
@@ -1028,13 +1007,6 @@
         <protected>true</protected>
         <shortDescription>user groups</shortDescription>
         <value>Public User Groups</value>
-    </labels>
-    <labels>
-        <fullName>validation_header</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Validation header</shortDescription>
-        <value>Setup Validations for Questions</value>
     </labels>
     <labels>
         <fullName>value</fullName>

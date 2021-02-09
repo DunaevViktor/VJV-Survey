@@ -13,7 +13,6 @@ import is_reusable from "@salesforce/label/c.is_reusable";
 import option_already_exists from "@salesforce/label/c.option_already_exists"; 
 import error_few_options from "@salesforce/label/c.error_few_options";
 import errorTitle from "@salesforce/label/c.error";
-import success from "@salesforce/label/c.success";
 import complete_this_field from "@salesforce/label/c.complete_this_field";
 import back from "@salesforce/label/c.back";
 import back_title from "@salesforce/label/c.back_title";
@@ -42,7 +41,6 @@ const label = {
   option_already_exists,
   error_few_options,
   errorTitle,
-  success,
   complete_this_field,
   back,
   back_title,
