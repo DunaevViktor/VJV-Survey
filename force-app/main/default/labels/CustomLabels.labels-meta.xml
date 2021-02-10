@@ -827,6 +827,13 @@
         <value>Select an option</value>
     </labels>
     <labels>
+        <fullName>select_any_change_confirm_message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Other rules will be deleted</shortDescription>
+        <value>Other trigger rules with chosen object and field combination will be deleted.</value>
+    </labels>
+    <labels>
         <fullName>select_operator</fullName>
         <language>en_US</language>
         <protected>true</protected>

@@ -1,6 +1,7 @@
 import { LightningElement, track, api } from "lwc";
 import getObjectFieldsDescriptionList from "@salesforce/apex/MetadataFetcher.getObjectFieldsDescriptionList";
 import getPicklistValues from "@salesforce/apex/MetadataFetcher.getPicklistValues";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import TRIGGER_RULE_OBJECT from '@salesforce/schema/Trigger_Rule__c';
 import OBJECT_API_NAME_FIELD from '@salesforce/schema/Trigger_Rule__c.Object_Api_Name__c';
 import OPERATOR_FIELD from '@salesforce/schema/Trigger_Rule__c.Operator__c';
@@ -58,6 +59,9 @@ export default class SingleTriggerRule extends LightningElement {
   @track objectApiName;
   @track recordTypeId;
 
+  @api anyChangeFieldsAndObjectsApi = [];
+  anyChangeFieldsAndObjects = [];
+
   constructor() {
     super();
     this.fetchFullOperatorList();     
@@ -65,6 +69,7 @@ export default class SingleTriggerRule extends LightningElement {
 
   connectedCallback() {
     this._rule = this.rule;
+    this.anyChangeFieldsAndObjects = this.anyChangeFieldsAndObjectsApi;
   }
 
   generateObjectField() {
@@ -102,12 +107,17 @@ export default class SingleTriggerRule extends LightningElement {
       this.setOperatorsByType(receivedFieldObject); 
       if(this._rule && this._rule.Operator__c) {
         this.operatorValue = this._rule.Operator__c;
-        this.provideValueInput(receivedFieldObject);
+        if(this.operatorValue !== operatorTypes.ANY_CHANGE) {
+          this.provideValueInput(receivedFieldObject);
+        }       
       }
     } 
   }
 
   handleObjectChange(event) {
+    if(this.operatorValue && this.operatorValue === operatorTypes.ANY_CHANGE) {
+      this.dispatchAnyChangeDeleted(this.objectValue, this.fieldValue);
+    }
     this.clearChosenData();
     this.objectApiName = event.detail.value;
     this.objectValue = event.detail.value;
@@ -116,11 +126,12 @@ export default class SingleTriggerRule extends LightningElement {
 
   getObjectFields(objectApiName) {
     getObjectFieldsDescriptionList({ objectApiName: objectApiName })
-      .then((result) => {
+      .then((result) => {  
         this.fieldNames = JSON.parse(JSON.stringify(result));
+        console.log(this.fieldNames);
         if (this._rule && this._rule.Field_Name__c) {
           this.fieldValue = this._rule.Field_Name__c;  
-          this.generateOperatorField();        
+          this.generateOperatorField();         
         }
       })
       .catch((error) => {
@@ -130,15 +141,29 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   handleFieldChange(event) {
-    this.fieldValue = event.detail.value;
+
+    if(this.operatorValue === operatorTypes.ANY_CHANGE) {
+      this.dispatchAnyChangeDeleted(this.objectValue, this.fieldValue);
+    }
+    const newFieldValue = event.detail.value;
+    this.fieldValue = null;
     this.operatorValue = "";    
     this.value = "";
     this.field = {}; 
+    if(this.areObjectAndFieldInAnyChange(newFieldValue)) {
+      this.showToast('', this.labels.field_setted_with_any_change, "error");
+      return;
+    }
+    this.fieldValue = event.detail.value;    
     let chosenFieldObject = this.fieldNames.find(
       (field) => field.value === this.fieldValue
     );
     chosenFieldObject.operatorType = getFieldOperatorType(chosenFieldObject);
     this.setOperatorsByType(chosenFieldObject);
+  }
+
+  areObjectAndFieldInAnyChange(newFieldValue) {
+    return this.anyChangeFieldsAndObjects.some(objectAndField => (objectAndField.object === this.objectValue) && (objectAndField.field === newFieldValue));
   }
 
   provideValueInput(chosenField) {
@@ -203,6 +228,24 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   handleOperatorChange(event) {
+
+    if(this.operatorValue === operatorTypes.ANY_CHANGE) {
+      this.dispatchAnyChangeDeleted(this.objectValue, this.fieldValue);
+    }
+    this.operatorValue = null;
+    if(event.detail.value === operatorTypes.ANY_CHANGE) {
+      const anyChangeEvent = new CustomEvent("anychangechosen", {
+        detail: {
+          number: this.number,
+          object: this.objectValue,
+          field: this.fieldValue
+        }
+      });  
+      this.dispatchEvent(anyChangeEvent);      
+      this.field = {};
+      this.value = "";
+      return;
+    }
     this.operatorValue = event.detail.value;
     let chosenFieldObject = this.fieldNames.find(
       (field) => field.value === this.fieldValue
@@ -216,17 +259,36 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   handleClearRuleClick() {
+    if(this.operatorValue === operatorTypes.ANY_CHANGE) {
+      this.dispatchAnyChangeDeleted(this.objectValue, this.fieldValue);
+    }
     this.clearChosenData();
   }
 
   handleDeleteRuleClick() {
+
+    if(this.operatorValue === operatorTypes.ANY_CHANGE) {
+      this.dispatchAnyChangeDeleted(this.objectValue, this.fieldValue);
+    }
+
     this.clearChosenData();
 
     const deleteEvent = new CustomEvent("deletetriggerrule", {
-      detail: this.number,
+      detail: this.number
     });
 
     this.dispatchEvent(deleteEvent);
+  }
+
+  dispatchAnyChangeDeleted(object, field) {
+    const deleteAnyChangeEvent = new CustomEvent("anychangedeleted", {
+      detail: {
+        object: object,
+        field: field
+      }
+    });
+
+    this.dispatchEvent(deleteAnyChangeEvent);
   }
 
   clearChosenData() {
@@ -270,5 +332,32 @@ export default class SingleTriggerRule extends LightningElement {
       }
     }
     return isClear;
+  }
+
+  @api setAnyChangeOperator() {
+    this.operatorValue = operatorTypes.ANY_CHANGE;
+  }
+
+  @api setFieldValue(fieldValue) {
+    this.fieldValue = fieldValue;
+    this.operatorValue = "";    
+    this.value = "";
+    this.field = {}; 
+    let chosenFieldObject = this.fieldNames.find(
+      (field) => field.value === this.fieldValue
+    );
+    chosenFieldObject.operatorType = getFieldOperatorType(chosenFieldObject);
+    this.setOperatorsByType(chosenFieldObject);
+  }
+
+  @api updateAnyChangeFieldObjects(anyChangeFieldsObjects) {
+    console.log('update any obj');
+    this.anyChangeFieldsAndObjects = JSON.parse(JSON.stringify(anyChangeFieldsObjects));
+    console.log(this.anyChangeFieldsAndObjects);
+  }
+
+  showToast(title, message, variant) {
+    const event = new ShowToastEvent({title, message, variant, mode: "dismissable"});
+    this.dispatchEvent(event);
   }
 }

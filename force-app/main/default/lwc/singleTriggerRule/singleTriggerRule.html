@@ -2,8 +2,8 @@
   <template if:true={error}>{labels.errorMessage}</template>
 
   <template if:false={error}>
-    <div class="slds-grid slds-grid_vertical-align-start card">
-      <div class="slds-grid slds-grid_vertical-align-end">
+    <div class="slds-grid slds-grid_vertical-align-start card ">
+      <div class="slds-grid slds-grid_vertical-align-end slds-m-around_x-small">
         
         <!--Object-->
         <div class="slds-col slds-size_1-of-5 slds-p-right_xx-small">
@@ -43,7 +43,7 @@
 
         <!--Value-->
         <div class="slds-grid slds-col slds-size_2-of-5 slds-grid_vertical-align-end">
-          <div class="slds-col slds-size_5-of-6 slds-m-right_xx-small">        
+          <div class="slds-col slds-size_5-of-6">        
             <lightning-input
               if:true={field.isInput}
               name={field.name}

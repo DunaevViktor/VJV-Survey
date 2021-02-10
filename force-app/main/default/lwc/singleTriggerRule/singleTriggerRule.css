@@ -1,6 +1,9 @@
 .card {
-    min-height: 120px;
+    min-height: 125px;
     max-height: 400px;
     overflow-x: hidden;
     overflow-y: auto;
+}
+.slds-form-element__row {
+    margin-bottom: 0;
 }

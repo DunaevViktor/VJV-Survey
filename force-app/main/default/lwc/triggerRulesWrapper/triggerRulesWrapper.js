@@ -9,6 +9,7 @@ import {
   isEmpty,
   areDuplicatesPresent
  } from "./helper"
+import { operatorTypes } from "c/formUtil";
 
 export default class TriggerRulesWrapper extends LightningElement {
 
@@ -22,6 +23,16 @@ export default class TriggerRulesWrapper extends LightningElement {
 
   @api rules = [];
   @track _rules = [];
+
+  @track isDialogVisible = false;
+  originalMessage = 'anyChange';
+  message = '';
+  anyChangeObject;
+  anyChangeField;
+  anyChangeRuleNumber;
+  @track objectFieldsWithAnyChangeOperator = [];
+
+  nextId = 0;
 
   constructor() {
     super();
@@ -39,36 +50,40 @@ export default class TriggerRulesWrapper extends LightningElement {
     if (this.rules && this.rules.length > 0) {
       let newtriggerRules = [];
       this._rules = this.rules;
-      let i = 0;
       this._rules.forEach((rule) => {
         newtriggerRules.push({
-          id: i,
+          id: this.nextId,
           rule: rule
         });
-        i++;
+        this.nextId++;
+        if(rule.Operator__c === operatorTypes.ANY_CHANGE) {
+          this.addObjectFieldWithAnyChangeOperator(rule.Object_Api_Name__c, rule.Field_Name__c);
+        }
       });
       this.triggerRules = newtriggerRules;
     } else {
       this.triggerRules.push({
         id: 0
       });
+      this.nextId++;
     }
     this.updateIsDeleteAvailableState();
   }
 
   handlePlusClick() {
-    const triggerRuleId = this.triggerRules.length;
     const newTriggerRule = {
-      id: triggerRuleId
+      id: this.nextId
     }
+    this.nextId++;
     this.triggerRules.unshift(newTriggerRule);
+    console.log('trigger rules');
+    console.log(this.triggerRules);
     this.updateIsDeleteAvailableState();
   }
 
   handleDeleteTriggerRule(event) {
-    let childKey = event.detail;
+    const childKey = event.detail;
     this.triggerRules.splice(this.triggerRules.findIndex(rule => rule.id === childKey), 1);
-    this.updateIsDeleteAvailableState();
   }
 
   updateIsDeleteAvailableState() {
@@ -139,6 +154,89 @@ export default class TriggerRulesWrapper extends LightningElement {
 
     return newTriggerRules;
   }  
+
+  handleAnyChangeChosen(event)  {
+    this.anyChangeRuleNumber = event.detail.number;
+    this.anyChangeObject = event.detail.object;
+    this.anyChangeField = event.detail.field;
+    this.isDialogVisible = true;
+  }
+
+  addObjectFieldWithAnyChangeOperator(objectField) {
+    this.objectFieldsWithAnyChangeOperator.push(objectField);
+    this.updateObjectsFieldsInChildren();
+  }
+
+  deleteObjectFieldWithAnyChangeOperator(object, field) {
+    const index = this.objectFieldsWithAnyChangeOperator.findIndex(obj => (obj.object = object) && (obj.field = field));
+    this.objectFieldsWithAnyChangeOperator.splice(index, 1);
+    this.updateObjectsFieldsInChildren();
+  }
+
+  handleAnyChangeDeleted(event) {
+    this.deleteObjectFieldWithAnyChangeOperator(event.detail.object, event.detail.field);
+    this.updateObjectsFieldsInChildren();
+  }
+
+  updateObjectsFieldsInChildren() {
+    console.log('update in parent');
+    console.log(this.objectFieldsWithAnyChangeOperator);
+    this.triggerRules.forEach(rule => {
+      let id = rule.id.toString();
+      let element = this.template.querySelector(
+        'c-single-trigger-rule[data-my-id="' + id + '"]'
+      )
+      element.updateAnyChangeFieldObjects(this.objectFieldsWithAnyChangeOperator);
+    });
+  }
+
+  clearAnyChangeData() {
+    this.anyChangeObject = null;
+    this.anyChangeField = null;
+    this.anyChangeRuleNumber = null;
+  }
+
+  handleCongirmationPopupClick(event) {
+    console.log(JSON.parse(JSON.stringify(event.detail)));
+    if(event.detail.originalMessage === this.originalMessage) {
+      if(event.detail.status === 'confirm') {
+        this.deleteAnyChangeDuplicates();
+        this.setOperatorValueInChild(this.anyChangeRuleNumber);
+        this.addObjectFieldWithAnyChangeOperator({object: this.anyChangeObject, field: this.anyChangeField});
+        this.clearAnyChangeData();
+      }
+    } 
+    this.clearAnyChangeData();
+    this.isDialogVisible = false;
+  }
+
+  deleteAnyChangeDuplicates() {
+    console.log('delete duplicates');
+    this.triggerRules.forEach(rule => {
+      console.log(rule);
+      if(rule.id !== this.anyChangeRuleNumber) {
+        let id = rule.id.toString();
+        let element = this.template.querySelector(
+          'c-single-trigger-rule[data-my-id="' + id + '"]'
+        );
+        let triggerRule = JSON.parse(JSON.stringify(element.getTriggerRule()));
+        if((triggerRule.Object_Api_Name__c === this.anyChangeObject) && (triggerRule.Field_Name__c === this.anyChangeField)) {
+          console.log('splice');
+          const index = this.triggerRules.findIndex(trRule => trRule.id === rule.id);
+          console.log(index);
+          this.triggerRules.splice(index, 1);
+        }  
+      }      
+    });
+  }
+
+  setOperatorValueInChild(ruleId) {
+    const id = ruleId.toString();
+    const element = this.template.querySelector(
+      'c-single-trigger-rule[data-my-id="' + id + '"]'
+    );
+    element.setAnyChangeOperator();
+  }
 
   showToast(title, message, variant) {
     const event = new ShowToastEvent({title, message, variant, mode: "dismissable"});
