@@ -23,8 +23,7 @@
                         <div class="scrollable-area slds-scrollable--y">
                             <template if:true={answerInputs}>
                                 <template for:each={answerInputs} for:item="question">
-
-                                    <c-single-question key={question.Key} question={question}
+                                    <c-single-question key={question.Key} single-question={question}
                                         onanswerchange={handleAnswerChange}>
                                     </c-single-question>
 

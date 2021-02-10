@@ -29,6 +29,10 @@ export default class QuestionCard extends LightningElement {
     return this.question[questionFields.REQUIRED];
   }
 
+  get isHasOptions() {
+    return this.question.Question_Options__r && this.question.Question_Options__r.length > 0;
+  }
+
   deleteQuestionClick() {
     this.originalMessage = 'deleteQuestion';
     this.message = label.confirm_question_delete_message;

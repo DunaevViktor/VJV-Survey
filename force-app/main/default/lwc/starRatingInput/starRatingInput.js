@@ -11,7 +11,11 @@ export default class StarRatingInput extends LightningElement {
   @api question;
 
   @api checkValidity() {
-    if (this.question.IsVisible__c && this.question.Required__c && this.selectedRate === undefined) {
+    if (
+      this.question.IsVisible__c &&
+      this.question.Required__c &&
+      this.selectedRate === undefined
+    ) {
       return false;
     }
     return true;
@@ -34,25 +38,27 @@ export default class StarRatingInput extends LightningElement {
   }
 
   handleStarPick(event) {
-    this.isInvalid = false;
-    const selectedRate = event.target.dataset.item;
-    this.selectedRate =
-      selectedRate === this.selectedRate ? undefined : selectedRate;
+    if (!this.question.IsDisabled === true) {
+      this.isInvalid = false;
+      const selectedRate = event.target.dataset.item;
+      this.selectedRate =
+        selectedRate === this.selectedRate ? undefined : selectedRate;
 
-    this.rating.forEach((rate) => {
-      rate.filled = rate.rate <= this.selectedRate ? true : false;
-    });
+      this.rating.forEach((rate) => {
+        rate.filled = rate.rate <= this.selectedRate ? true : false;
+      });
 
-    event.preventDefault();
-    const answerChangeEvent = new CustomEvent("answerchange", {
-      bubbles: true,
-      composed: true,
-      detail: {
-        questionId: this.question.Id,
-        answer: this.selectedRate
-      }
-    });
+      event.preventDefault();
+      const answerChangeEvent = new CustomEvent("answerchange", {
+        bubbles: true,
+        composed: true,
+        detail: {
+          questionId: this.question.Id,
+          answer: this.selectedRate
+        }
+      });
 
-    this.dispatchEvent(answerChangeEvent);
+      this.dispatchEvent(answerChangeEvent);
+    }
   }
 }

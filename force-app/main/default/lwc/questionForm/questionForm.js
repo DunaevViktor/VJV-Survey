@@ -33,9 +33,6 @@ import {
 export default class QuestionForm extends LightningElement {
   label = label;
 
-  SUCCESS_TITLE = label.success;
-  SUCCESS_VARIANT = "success";
-
   ERROR_TITLE = label.errorTitle;
   ERROR_VARIANT = "error";
 
