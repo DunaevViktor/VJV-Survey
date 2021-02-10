@@ -1,5 +1,6 @@
 import {questionTypes, operatorTypes} from "c/formUtil";
 import { label } from "./labels.js";
+import { validationFields, questionFields, optionFields } from "c/fieldService";
 
 const typesDescription = [
   {
@@ -51,11 +52,11 @@ const transformQuestionTypes = (types) => {
 
 const isNeedPicklist = (firstQuestion, selectedOperator) => {
   return (
-    firstQuestion.Type__c.toLowerCase() ===
+    firstQuestion[questionFields.TYPE].toLowerCase() ===
       questionTypes.PICKLIST.toLowerCase() ||
-    firstQuestion.Type__c.toLowerCase() ===
+    firstQuestion[questionFields.TYPE].toLowerCase() ===
       questionTypes.RADIOBUTTON.toLowerCase() ||
-    firstQuestion.Type__c.toLowerCase() ===
+    firstQuestion[questionFields.TYPE].toLowerCase() ===
       questionTypes.CHECKBOX.toLowerCase() ||
     (selectedOperator &&
       selectedOperator
@@ -67,7 +68,7 @@ const isNeedPicklist = (firstQuestion, selectedOperator) => {
 const resolveOperatorsByQuestionType = (operators, question) => {
   let resolvedOperators = [...operators];
 
-  if (question.Required__c) {
+  if (question[questionFields.REQUIRED]) {
     resolvedOperators = resolvedOperators.filter((item) => {
       return !item.label
         .toLowerCase()
@@ -78,7 +79,7 @@ const resolveOperatorsByQuestionType = (operators, question) => {
   for (let i = 0; i < typesDescription.length; i++) {
     const questionType = typesDescription[i];
 
-    if (question.Type__c !== questionType.label) {
+    if (question[questionFields.TYPE] !== questionType.label) {
       continue;
     }
 
@@ -109,7 +110,7 @@ const isOptionEnabling = (selectedType) => {
 const filterOptionsByValue = (options, value) => {
   return options.filter(
     (option) => {
-      return option.Value__c.localeCompare(value) === 0;
+      return option[optionFields.VALUE].localeCompare(value) === 0;
     }
   );
 }
@@ -117,7 +118,7 @@ const filterOptionsByValue = (options, value) => {
 const filterOptionsByValueAndIndex = (options, value, editiIndex) => {
   return options.filter(
     (option, index) => {
-      return option.Value__c.localeCompare(value) === 0 && index !== editiIndex;
+      return option[optionFields.VALUE].localeCompare(value) === 0 && index !== editiIndex;
     }
   );
 }
@@ -126,7 +127,7 @@ const findOptionIndexByValue = (options, value) => {
   let idx;
 
   options.forEach((option, index) => {
-    if(option.Value__c.localeCompare(value) === 0) {
+    if(option[optionFields.VALUE].localeCompare(value) === 0) {
       idx = index;
     }
   });
@@ -137,7 +138,7 @@ const findOptionIndexByValue = (options, value) => {
 const deleteFromOptions = (options, selectedValue) => {
   return options.filter(
     (option) => {
-      return option.Value__c.localeCompare(selectedValue) !== 0;
+      return option[optionFields.VALUE].localeCompare(selectedValue) !== 0;
     }
   );
 }
@@ -164,8 +165,8 @@ const transformOperators = (operators) => {
 }
 
 const buildVisibilityMessage = (validation) => {
-  return  label.visible_if + " '" + validation.Related_Question__c.Label__c 
-    + "' " + validation.Operator__c.toLowerCase() + " " + validation.Value__c;
+  return  label.visible_if + " '" + validation[validationFields.RELATED][questionFields.LABEL]
+    + "' " + validation[validationFields.OPERATOR].toLowerCase() + " " + validation[validationFields.VALUE];
 }
 
 export {

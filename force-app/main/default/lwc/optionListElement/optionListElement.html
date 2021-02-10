@@ -2,22 +2,23 @@
   <div
     class="slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
   >
-    <span>{option.Value__c}</span>
+    <span>{optionValue}</span>
 
-    <lightning-icon icon-name="utility:delete" 
-                    alternative-text={label.deleteTitle} 
-                    title={label.deleteTitle} 
-                    class="slds-float_right" 
-                    size="x-small" 
-                    onclick={deleteOption}>
-    </lightning-icon>
-    <lightning-icon icon-name="utility:edit" 
-                    alternative-text={label.edit} 
-                    title={label.edit} 
-                    class="slds-float_right" 
-                    size="x-small" 
-                    onclick={editOption}>
-    </lightning-icon>
-
+    <template if:true={isInForm}>
+      <lightning-icon icon-name="utility:delete" 
+            alternative-text={label.deleteTitle} 
+            title={label.deleteTitle} 
+            class="slds-float_right" 
+            size="x-small" 
+            onclick={deleteOption}>
+      </lightning-icon>
+      <lightning-icon icon-name="utility:edit" 
+            alternative-text={label.edit} 
+            title={label.edit} 
+            class="slds-float_right" 
+            size="x-small" 
+            onclick={editOption}>
+      </lightning-icon>
+    </template>
   </div>
 </template>

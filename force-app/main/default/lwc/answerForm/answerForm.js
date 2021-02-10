@@ -7,6 +7,7 @@ import getRelatedObjectId from "@salesforce/apex/RelatedObjectController.getRela
 import getQuestions from "@salesforce/apex/AnswerFormController.getQuestions";
 import saveGroupAnswer from "@salesforce/apex/GroupAnswerController.saveGroupAnswer";
 import saveAnswers from "@salesforce/apex/AnswerController.saveAnswers";
+import { surveyFields, groupAnswerFields } from "c/fieldService";
 
 import {
   FIELDS,
@@ -51,27 +52,27 @@ export default class AnswerForm extends LightningElement {
   }
 
   get title() {
-    return this.survey.data.fields.Name.value;
+    return this.survey.data.fields[surveyFields.NAME].value;
   }
 
   get description() {
-    return this.survey.data.fields.Description__c.value;
+    return this.survey.data.fields[surveyFields.DESCRIPTION].value;
   }
 
   get logo() {
-    return this.survey.data.fields.Logo__c.value;
+    return this.survey.data.fields[surveyFields.LOGO].value;
   }
 
   get backgroundColor() {
     return (
       "background-color: " +
-      this.survey.data.fields.Background_Color__c.value +
+      this.survey.data.fields[surveyFields.BACKGROUND].value +
       ";"
     );
   }
 
   get relatedSurveyId() {
-    return this.survey.data.fields.Related_To__c.value;
+    return this.survey.data.fields[surveyFields.RELATED].value;
   }
 
   getConnectedSurveyId() {
@@ -107,8 +108,8 @@ export default class AnswerForm extends LightningElement {
   createGroupAnswer() {
     if (this.validateFields()) {
       const groupAnswer = { SObjectType: "Group_Answer__c" };
-      const surveyId = this.survey.data.fields.Id.value;
-      groupAnswer.Survey__c = surveyId;
+      const surveyId = this.survey.data.fields[surveyFields.ID].value;
+      groupAnswer[groupAnswerFields.SURVEY] = surveyId;
 
       this.getRelatedObject(groupAnswer);
     }
@@ -116,18 +117,18 @@ export default class AnswerForm extends LightningElement {
 
   getRelatedObject(groupAnswer) {
     if (this.linkedRecordId !== null && this.linkedRecordId !== undefined) {
-      groupAnswer.IsLinked__c = true;
+      groupAnswer[groupAnswerFields.LINKED] = true;
 
       getRelatedObjectId({ standardObjectId: this.linkedRecordId })
         .then((result) => {
-          groupAnswer.Related_To__c = result;
+          groupAnswer[groupAnswerFields.RELATED] = result;
           this.saveGroupAnswer(groupAnswer);
         })
         .catch(() => {
           this.showToast(label.errorMessage);
         });
     } else {
-        groupAnswer.IsLinked__c = false;
+        groupAnswer[groupAnswerFields.LINKED] = false;
         this.saveGroupAnswer(groupAnswer);
     }
   }

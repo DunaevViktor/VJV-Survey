@@ -1,7 +1,7 @@
 import { LightningElement, track, api, wire } from "lwc";
 import { label } from "./labels.js";
 import { columns, columnsMember, getResultTableStyle, getReceiversTableStyle, isReceiverExist, deleteReceiver, createDisplayedMap,
-         getObjectName, callReportValidity, createMemberList } from "./advanceSettingScreenHelper.js";
+        createSurveyDisplayedMap, getObjectName, callReportValidity, createMemberList } from "./advanceSettingScreenHelper.js";
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getGroups from "@salesforce/apex/GroupController.getGroups";
@@ -9,6 +9,7 @@ import getSurveys from "@salesforce/apex/SurveyController.getAllSurveys";
 import getCampaigns from "@salesforce/apex/CampaignController.getCampaigns";
 import searchMembers from "@salesforce/apex/SearchHelper.searchMembers";
 import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getPageQuestionAmount";
+import { surveyFields, receiverFields } from "c/fieldService";
 
 export default class AdvanceSettingScreen extends LightningElement {
 
@@ -79,7 +80,7 @@ export default class AdvanceSettingScreen extends LightningElement {
     }
 
     get surveyOptions() {
-        return createDisplayedMap(this.displayedSurveys);
+        return createSurveyDisplayedMap(this.displayedSurveys);
     }
 
     get campaignOptions() {
@@ -88,8 +89,8 @@ export default class AdvanceSettingScreen extends LightningElement {
 
     @api set survey(value) {
         this.__survey = JSON.parse(JSON.stringify(value));
-        this.isConnectToSurvey = this.__survey.Related_To__c !== undefined;
-        if(this.isConnectToSurvey) this.surveyId = this.__survey.Related_To__c;
+        this.isConnectToSurvey = this.__survey[surveyFields.RELATED] !== undefined;
+        if(this.isConnectToSurvey) this.surveyId = this.__survey[surveyFields.RELATED] ;
     }
 
     @api set surveys(value) {
@@ -132,7 +133,6 @@ export default class AdvanceSettingScreen extends LightningElement {
         if(this.template.querySelector('.emailTable')) {
             this.template.querySelector('.emailTable').appendChild(getReceiversTableStyle());
         }
-        
     }
 
     initSurveys() {
@@ -172,6 +172,14 @@ export default class AdvanceSettingScreen extends LightningElement {
                     this.getCampaignsError = true;
                 });
         }
+    }
+
+    get isStandardSurvey() {
+        return this.__survey[surveyFields.STANDARD];
+    }
+
+    get receiversKeyField() {
+        return receiverFields.VALUE;
     }
 
     handleKeyUp(evt) {
@@ -246,9 +254,9 @@ export default class AdvanceSettingScreen extends LightningElement {
     }
 
     deleteRow(row) {
-        const { Value__c } = row;
-        this.copyReceivers = deleteReceiver(this.copyReceivers, Value__c);
-        this.receivers = deleteReceiver(this.receivers, Value__c);
+        const value = row[receiverFields.VALUE];
+        this.copyReceivers = deleteReceiver(this.copyReceivers, value);
+        this.receivers = deleteReceiver(this.receivers, value);
         this.setIsHasReseivers();
     }
 
@@ -270,8 +278,8 @@ export default class AdvanceSettingScreen extends LightningElement {
         }
 
         const receiver = {};
-        receiver.Type__c = this.GROUP_VARIANT;
-        receiver.Value__c = this.groupId;
+        receiver[receiverFields.TYPE] = this.GROUP_VARIANT;
+        receiver[receiverFields.VALUE] = this.groupId;
 
         let groupName = getObjectName(this.displayedGroups, this.groupId);
         this.createCopyReceiver(receiver, groupName);
@@ -302,8 +310,8 @@ export default class AdvanceSettingScreen extends LightningElement {
         }
 
         const receiver = {};
-        receiver.Type__c = this.SINGLE_RECORD_VARIANT;
-        receiver.Value__c = Id;
+        receiver[receiverFields.TYPE] = this.SINGLE_RECORD_VARIANT;
+        receiver[receiverFields.VALUE] = Id;
 
         this.createCopyReceiver(receiver, Name);
         this.receivers = [...this.receivers, receiver];
@@ -340,8 +348,8 @@ export default class AdvanceSettingScreen extends LightningElement {
         }
 
         const receiver = {};
-        receiver.Type__c = this.CAMPAIGN_VARIAN;
-        receiver.Value__c = this.campaignId;
+        receiver[receiverFields.TYPE] = this.CAMPAIGN_VARIAN;
+        receiver[receiverFields.VALUE] = this.campaignId;
 
         let campaignName = getObjectName(this.displayedCampaigns, this.campaignId);
         this.createCopyReceiver(receiver, campaignName);
@@ -365,11 +373,11 @@ export default class AdvanceSettingScreen extends LightningElement {
     }
 
     handleIsStandardSurveyChange(event) {
-        this.__survey.IsStandard__c = event.target.checked;
+        this.__survey[surveyFields.STANDARD] = event.target.checked;
     }
 
     handleSurveyChange(event) {
-        this.__survey.Related_To__c = event.detail.value;
+        this.__survey[surveyFields.RELATED] = event.detail.value;
         this.surveyId = event.detail.value;
     }
 
@@ -377,7 +385,7 @@ export default class AdvanceSettingScreen extends LightningElement {
         this.isConnectToSurvey = event.target.checked;
         if (!this.isConnectToSurvey) {
             this.surveyId = "";
-            this.__survey.Related_To__c = undefined;
+            this.__survey[surveyFields.RELATED] = undefined;
         }
     }
 

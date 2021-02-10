@@ -1,4 +1,5 @@
 import { LightningElement, api, track } from "lwc";
+import { questionFields } from "c/fieldService";
 
 import { label } from "./labels.js";
 
@@ -12,6 +13,22 @@ export default class QuestionCard extends LightningElement {
   @track isDialogVisible = false;
   @track originalMessage;
 
+  get questionPosition() {
+    return this.question[questionFields.POSITION];
+  }
+
+  get questionLabel() {
+    return this.question[questionFields.LABEL];
+  }
+
+  get questionType() {
+    return this.question[questionFields.TYPE];
+  }
+
+  get questionRequired() {
+    return this.question[questionFields.REQUIRED];
+  }
+
   deleteQuestionClick() {
     this.originalMessage = 'deleteQuestion';
     this.message = label.confirm_question_delete_message;
@@ -20,21 +37,21 @@ export default class QuestionCard extends LightningElement {
 
   deleteQuestion() {
     const deleteEvent = new CustomEvent("delete", {
-      detail: this.question.Position__c
+      detail: this.question[questionFields.POSITION]
     });
     this.dispatchEvent(deleteEvent);
   }
 
   editQuestion() {
     const editEvent = new CustomEvent("edit", {
-      detail: this.question.Position__c
+      detail: this.question[questionFields.POSITION]
     });
     this.dispatchEvent(editEvent);
   }
 
   addOptionalQuestion() {
     const addOptionalEvent = new CustomEvent("addoptional", {
-      detail: this.question.Position__c
+      detail: this.question[questionFields.POSITION]
     });
     this.dispatchEvent(addOptionalEvent);
   }
@@ -62,14 +79,14 @@ export default class QuestionCard extends LightningElement {
   
   downQuestion() {
     const downEvent = new CustomEvent("down", {
-      detail: this.question.Position__c
+      detail: this.question[questionFields.POSITION]
     });
     this.dispatchEvent(downEvent);
   }
 
   upQuestion() {
     const upEvent = new CustomEvent("up", {
-      detail: this.question.Position__c
+      detail: this.question[questionFields.POSITION]
     });
     this.dispatchEvent(upEvent);
   }
