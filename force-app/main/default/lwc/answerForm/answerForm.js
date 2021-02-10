@@ -2,6 +2,7 @@ import { LightningElement, wire, track } from "lwc";
 import { getRecord } from "lightning/uiRecordApi";
 import { CurrentPageReference } from "lightning/navigation";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import { NavigationMixin } from "lightning/navigation";
 import { label } from "./labels.js";
 import getRelatedObjectId from "@salesforce/apex/RelatedObjectController.getRelatedObjectIdByStandardObjectId";
 import getQuestions from "@salesforce/apex/AnswerFormController.getQuestions";
@@ -16,7 +17,7 @@ import {
   createAnswers
 } from "./answerFormHelper";
 
-export default class AnswerForm extends LightningElement {
+export default class AnswerForm extends NavigationMixin(LightningElement) {
   currentPageReference;
   urlStateParameters;
   surveyId;
@@ -24,6 +25,9 @@ export default class AnswerForm extends LightningElement {
   linkedRecordId;
 
   label = label;
+
+  NAVIGATION_TYPE = "standard__namedPage";
+  REDIRECT_PAGE_NAME = "home";
 
   @track showSurvey = true;
   @track answerInputs = [];
@@ -79,6 +83,7 @@ export default class AnswerForm extends LightningElement {
       this.surveyId = this.relatedSurveyId;
     } else {
       this.showSurvey = false;
+      this.navigateToHomePage();
     }
   }
 
@@ -127,8 +132,8 @@ export default class AnswerForm extends LightningElement {
           this.showToast(label.errorMessage);
         });
     } else {
-        groupAnswer.IsLinked__c = false;
-        this.saveGroupAnswer(groupAnswer);
+      groupAnswer.IsLinked__c = false;
+      this.saveGroupAnswer(groupAnswer);
     }
   }
 
@@ -161,6 +166,15 @@ export default class AnswerForm extends LightningElement {
   }
 
   handleCancel() {
-    this.showSurvey = false;
+    this.navigateToHomePage();
+  }
+
+  navigateToHomePage() {
+    this[NavigationMixin.Navigate]({
+      type: this.NAVIGATION_TYPE,
+      attributes: {
+        pageName: this.REDIRECT_PAGE_NAME
+      }
+    });
   }
 }
