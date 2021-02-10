@@ -13,6 +13,15 @@
           disabled={question.IsDisabled}
         ></lightning-input>
 
+        <template if:true={modifiedLabel}>
+            <div class="slds-text-title slds-p-left_small slds-p-top_medium slds-p-bottom_xx-small">
+                <template if:true={question.Required__c}>
+                    <span title="required" class="slds-required">*</span>
+                </template>
+                {question.Label__c}
+            </div>
+        </template>
+
         <lightning-checkbox-group
           key={question.Id}
           data-item={question.Id}
@@ -21,9 +30,10 @@
           value={question.Answer}
           options={question.Question_Options__r}
           required={question.Required__c}
-          class="slds-p-around_small validate-input"
+          class="slds-p-bottom_small slds-p-horizontal_small validate-input"
           onchange={handleAnswerChange}
           disabled={question.IsDisabled}
+          variant="label-hidden"
         ></lightning-checkbox-group>
 
         <lightning-radio-group
@@ -35,9 +45,10 @@
           type="radio"
           value={question.Answer}
           required={question.Required__c}
-          class="slds-p-around_small validate-input"
+          class="slds-p-bottom_small slds-p-horizontal_small validate-input"
           onchange={handleAnswerChange}
           disabled={question.IsDisabled}
+          variant="label-hidden"
         >
         </lightning-radio-group>
 
