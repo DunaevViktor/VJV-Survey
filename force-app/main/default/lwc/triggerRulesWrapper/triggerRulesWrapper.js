@@ -76,8 +76,6 @@ export default class TriggerRulesWrapper extends LightningElement {
     }
     this.nextId++;
     this.triggerRules.unshift(newTriggerRule);
-    console.log('trigger rules');
-    console.log(this.triggerRules);
     this.updateIsDeleteAvailableState();
   }
 
@@ -179,8 +177,6 @@ export default class TriggerRulesWrapper extends LightningElement {
   }
 
   updateObjectsFieldsInChildren() {
-    console.log('update in parent');
-    console.log(this.objectFieldsWithAnyChangeOperator);
     this.triggerRules.forEach(rule => {
       let id = rule.id.toString();
       let element = this.template.querySelector(
@@ -197,7 +193,6 @@ export default class TriggerRulesWrapper extends LightningElement {
   }
 
   handleCongirmationPopupClick(event) {
-    console.log(JSON.parse(JSON.stringify(event.detail)));
     if(event.detail.originalMessage === this.originalMessage) {
       if(event.detail.status === 'confirm') {
         this.deleteAnyChangeDuplicates();
@@ -211,9 +206,7 @@ export default class TriggerRulesWrapper extends LightningElement {
   }
 
   deleteAnyChangeDuplicates() {
-    console.log('delete duplicates');
     this.triggerRules.forEach(rule => {
-      console.log(rule);
       if(rule.id !== this.anyChangeRuleNumber) {
         let id = rule.id.toString();
         let element = this.template.querySelector(
@@ -221,9 +214,7 @@ export default class TriggerRulesWrapper extends LightningElement {
         );
         let triggerRule = JSON.parse(JSON.stringify(element.getTriggerRule()));
         if((triggerRule.Object_Api_Name__c === this.anyChangeObject) && (triggerRule.Field_Name__c === this.anyChangeField)) {
-          console.log('splice');
           const index = this.triggerRules.findIndex(trRule => trRule.id === rule.id);
-          console.log(index);
           this.triggerRules.splice(index, 1);
         }  
       }      

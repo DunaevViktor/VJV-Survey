@@ -4,6 +4,7 @@
     overflow-x: hidden;
     overflow-y: auto;
 }
-.slds-form-element__row {
-    margin-bottom: 0;
+
+.no-margin-bottom {
+    margin-bottom: -4px;
 }

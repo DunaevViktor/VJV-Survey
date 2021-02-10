@@ -128,7 +128,6 @@ export default class SingleTriggerRule extends LightningElement {
     getObjectFieldsDescriptionList({ objectApiName: objectApiName })
       .then((result) => {  
         this.fieldNames = JSON.parse(JSON.stringify(result));
-        console.log(this.fieldNames);
         if (this._rule && this._rule.Field_Name__c) {
           this.fieldValue = this._rule.Field_Name__c;  
           this.generateOperatorField();         
@@ -171,6 +170,12 @@ export default class SingleTriggerRule extends LightningElement {
       (field) => field.value === chosenField.value
     );
     this.value = "";
+
+    if(chosenFieldObject.datatype === "DATETIME") {
+      this.template.querySelector('[data-my-id="value-input"]').classList.add('no-margin-bottom');
+    } else {
+      this.template.querySelector('[data-my-id="value-input"]').classList.remove('no-margin-bottom');
+    }
 
     if (chosenFieldObject.datatype === "PICKLIST") {
       this.generateFieldPicklistOptions(chosenFieldObject);
@@ -351,9 +356,7 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   @api updateAnyChangeFieldObjects(anyChangeFieldsObjects) {
-    console.log('update any obj');
     this.anyChangeFieldsAndObjects = JSON.parse(JSON.stringify(anyChangeFieldsObjects));
-    console.log(this.anyChangeFieldsAndObjects);
   }
 
   showToast(title, message, variant) {
