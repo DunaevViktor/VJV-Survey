@@ -8,7 +8,7 @@ export default class SingleQuestion extends LightningElement {
   @api validate() {
       if(this.question[questionFields.VISIBLE]){
         let inputComponent = this.template.querySelector(".validate-input");
-        if(this.question.isText && this.question.Required__c){
+        if(this.question.isText && this.question[questionFields.REQUIRED]){
             let trimmedInput = inputComponent.value.trim();
             inputComponent.value = trimmedInput;
         }

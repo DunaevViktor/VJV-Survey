@@ -154,7 +154,7 @@ const createAnswers = (questions, groupAnswerId) => {
         if (createAnswer) {
           let singleAnswer = { SObjectType: "Answer__c" };
           singleAnswer[answerFields.GROUP] = groupAnswerId;
-          singleAnswer[answerFields.QUESION] = question.Id;
+          singleAnswer[answerFields.QUESION] = question[questionFields.ID];
     
           if (question[questionFields.TYPE] === questionTypes.CHECKBOX) {
             question.Answer.forEach((checkedBox) => {

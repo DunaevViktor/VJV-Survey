@@ -15,10 +15,10 @@
 
         <template if:true={modifiedLabel}>
             <div class="slds-text-title slds-p-left_small slds-p-top_medium slds-p-bottom_xx-small">
-                <template if:true={question.Required__c}>
+                <template if:true={questionRequired}>
                     <span title="required" class="slds-required">*</span>
                 </template>
-                {question.Label__c}
+                {questionLabel}
             </div>
         </template>
 
