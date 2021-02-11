@@ -9,6 +9,7 @@ import { surveyFields, validationFields, questionFields } from "c/fieldService";
 
 import {label} from "./labels";
 import {
+  trasnformResult,
   getQuestionsBySurveyId,
   updateQuestionByPosition,
   updateValidationByPosition,
@@ -136,7 +137,7 @@ export default class QuestionScreen extends LightningElement {
 
     getTemplatesQuestions({ surveyIds: templateIds })
       .then((result) => {
-        this.displayedTemplateQuestions = result;
+        this.displayedTemplateQuestions = trasnformResult(result);
       })
       .catch(() => {
         this.setError();
@@ -147,7 +148,7 @@ export default class QuestionScreen extends LightningElement {
     if(!this.hasStandardQuestions) {
       getStandardQuestions()
       .then((result) => {
-        this.displayedStandardQuestions = result;
+        this.displayedStandardQuestions = trasnformResult(result);
         this.hasStandardQuestions = this.standardQuestions.length > 0;
       })
       .catch(() => {

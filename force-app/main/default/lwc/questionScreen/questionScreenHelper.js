@@ -1,5 +1,14 @@
 import { validationFields, questionFields, optionFields } from "c/fieldService";
 
+const trasnformResult = (result) => {
+  return result.map((item) => {
+    return {
+      ...item.question,
+      Question_Options__r: item.options
+    }
+  })
+}
+
 const resetOptionsIds = (options) => {
   return options.map((option) => {
     option[optionFields.ID] = null;
@@ -239,6 +248,7 @@ const sortQuestionsFunction = (firstItem, secondItem) => {
 }
 
 export {
+  trasnformResult,
   getQuestionsBySurveyId,
   updateQuestionByPosition,
   resetOptionsIds,

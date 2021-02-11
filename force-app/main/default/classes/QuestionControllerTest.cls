@@ -24,19 +24,17 @@ public with sharing class QuestionControllerTest {
     }
     insert options;
 
-    List<Question__c> standardQuestions = QuestionController.getStandardQuestions();
+    List<QuestionWrapper> standardQuestions = QuestionController.getStandardQuestions();
 
     System.assertEquals(1, standardQuestions.size(), INVALID_QUESTIONS_AMOUNT);
 
-    Question__c standardQuestion = standardQuestions[0];
+    List<Question_Option__c> savedOptions = standardQuestions[0].options;
 
     System.assertEquals(
       options.size(),
-      standardQuestion.Question_Options__r.size(),
+      savedOptions.size(),
       INVALID_OPTIONS_AMOUNT
     );
-
-    List<Question_Option__c> savedOptions = standardQuestion.Question_Options__r;
 
     for (Integer i = 1; i <= savedOptions.size(); i++) {
       System.assertEquals(
@@ -73,7 +71,7 @@ public with sharing class QuestionControllerTest {
     List<Id> surveysIds = new List<Id>();
     surveysIds.add(survey.Id);
 
-    List<Question__c> templateQuestions = QuestionController.getTemplatesQuestions(
+    List<QuestionWrapper> templateQuestions = QuestionController.getTemplatesQuestions(
       surveysIds
     );
 
@@ -84,7 +82,8 @@ public with sharing class QuestionControllerTest {
     );
 
     for (Integer i = 1; i <= AMOUNT; i++) {
-      Question__c templateQuestion = templateQuestions[i - 1];
+      Question__c templateQuestion = templateQuestions[i - 1].question;
+      List<Question_Option__c> templateOptions = templateQuestions[i - 1].options;
       System.assertEquals(
         TestDataFactory.TEST_VALUE,
         templateQuestion.Label__c,
@@ -92,7 +91,7 @@ public with sharing class QuestionControllerTest {
       );
       System.assertEquals(
         AMOUNT,
-        templateQuestion.Question_Options__r.size(),
+        templateOptions.size(),
         INVALID_OPTIONS_AMOUNT
       );
     }
