@@ -140,22 +140,29 @@ const checkDependentQuestion = (event, questions) => {
 const createAnswers = (questions, groupAnswerId) => {
   let answers = [];
   questions.forEach((question) => {
-    if (question.Answer !== null && question.Answer !== undefined) {
-      let singleAnswer = { SObjectType: "Answer__c" };
-      singleAnswer.Group_Answer__c = groupAnswerId;
-      singleAnswer.Question__c = question.Id;
-
-      if (question.Type__c === questionTypes.CHECKBOX) {
-        question.Answer.forEach((checkedBox) => {
-          let singleCheckboxAnswer = { ...singleAnswer };
-          singleCheckboxAnswer.Value__c = checkedBox;
-          answers.push(singleCheckboxAnswer);
-        });
-      } else {
-        singleAnswer.Value__c = question.Answer;
-        answers.push(singleAnswer);
+      if(question.Answer){
+        let createAnswer = true;
+        if (question.isText && question.IsVisible__c && question.Answer.trim().length === 0) {
+            createAnswer = false;
+        }
+        if (createAnswer) {
+          let singleAnswer = { SObjectType: "Answer__c" };
+          singleAnswer.Group_Answer__c = groupAnswerId;
+          singleAnswer.Question__c = question.Id;
+    
+          if (question.Type__c === questionTypes.CHECKBOX) {
+            question.Answer.forEach((checkedBox) => {
+              let singleCheckboxAnswer = { ...singleAnswer };
+              singleCheckboxAnswer.Value__c = checkedBox;
+              answers.push(singleCheckboxAnswer);
+            });
+          } else {
+            singleAnswer.Value__c = question.Answer;
+            answers.push(singleAnswer);
+          }
+        }
       }
-    }
+
   });
 
   return answers;
