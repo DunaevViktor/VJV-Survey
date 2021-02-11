@@ -19,8 +19,6 @@ import QUESTION_NAME_FIELD from '@salesforce/schema/Question__c.Name';
 import QUESTION_REQUIRED_FIELD from '@salesforce/schema/Question__c.Required__c';
 import QUESTION_SURVEY_FIELD from '@salesforce/schema/Question__c.Survey__c';
 import QUESTION_TYPE_FIELD from '@salesforce/schema/Question__c.Type__c';
-// import QUESTION_OPTIONS_FIELD from '@salesforce/schema/Question__c.Question_Options__r.value';
-// import QUESTION_VALIDATIONS_FIELD from '@salesforce/schema/Question__c.Related_Question_Validations__r';
 
 import OPTION_ID_FIELD from '@salesforce/schema/Question_Option__c.Id';
 import OPTION_QUESTION_FIELD from '@salesforce/schema/Question_Option__c.Question__c';

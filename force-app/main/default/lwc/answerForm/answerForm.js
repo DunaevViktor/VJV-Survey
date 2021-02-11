@@ -51,15 +51,15 @@ export default class AnswerForm extends LightningElement {
     }
   }
 
-  get title() {
+  get surveyTitle() {
     return this.survey.data.fields[surveyFields.NAME].value;
   }
 
-  get description() {
+  get surveyDescription() {
     return this.survey.data.fields[surveyFields.DESCRIPTION].value;
   }
 
-  get logo() {
+  get surveyLogo() {
     return this.survey.data.fields[surveyFields.LOGO].value;
   }
 

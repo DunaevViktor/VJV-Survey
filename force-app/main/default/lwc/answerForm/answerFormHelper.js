@@ -116,7 +116,7 @@ const checkDependentQuestion = (event, questions) => {
     (question) => question[questionFields.ID] === answeredQuestionId
   );
   const questionIndex = questions.findIndex(
-    ({ question }) => question[questionFields.ID] === answeredQuestionId
+    ( question ) => question[questionFields.ID] === answeredQuestionId
   );
   questions[questionIndex].Answer = answer;
 
@@ -132,6 +132,7 @@ const checkDependentQuestion = (event, questions) => {
         const dependentQuestion = questions.findIndex(
           (question) => question[questionFields.ID] === validation[validationFields.DEPENDANT]
         );
+
         if (isConditionMet === true) {
           questions[dependentQuestion][questionFields.VISIBLE] = true;
         } else {

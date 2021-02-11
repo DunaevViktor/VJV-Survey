@@ -1,9 +1,8 @@
-import { LightningElement, api, track } from "lwc";
+import { LightningElement, api } from "lwc";
 import { questionFields } from "c/fieldService";
 
 export default class SingleQuestion extends LightningElement {
   @api singleQuestion;
-  @track question;
 
   @api validate() {
       if(this.question[questionFields.VISIBLE]){
@@ -14,9 +13,9 @@ export default class SingleQuestion extends LightningElement {
       
       return true;
   }
-
-  connectedCallback() {
-    this.question = JSON.parse(JSON.stringify(this.singleQuestion));
+  
+  get question() {
+    return JSON.parse(JSON.stringify(this.singleQuestion));
   }
   
   get questionId() {

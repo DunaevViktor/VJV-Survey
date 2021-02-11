@@ -61,6 +61,11 @@ export default class QuestionCard extends LightningElement {
   }
 
   addOptionalQuestionClick() {
+    if(!this.question.Editable) {
+      this.addOptionalQuestion();
+      return;
+    }
+    
     this.originalMessage = 'addOptional';
     this.message = label.add_optional_full_confirm_message;
     this.isDialogVisible = true;
