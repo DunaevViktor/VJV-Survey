@@ -107,10 +107,7 @@ public class TestDataFactory {
         SurveyEmailConfig__c config = new SurveyEmailConfig__c();
         config.Name = 'Main';
         config.Display_Name__c = 'Display Name';
-        config.Subject__c = 'Subject';
         config.Template_Name__c = 'Main Template';
-        config.Url_Config__c = 'URL';
-        config.Company_Config__c = 'COMPANY';
         return config;
     }
 

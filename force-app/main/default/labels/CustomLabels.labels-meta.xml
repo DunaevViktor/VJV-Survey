@@ -715,13 +715,6 @@
         <value>questions</value>
     </labels>
     <labels>
-        <fullName>qustion</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>qustion</shortDescription>
-        <value>question</value>
-    </labels>
-    <labels>
         <fullName>rating_can_not_be_greater_ten</fullName>
         <language>en_US</language>
         <protected>true</protected>

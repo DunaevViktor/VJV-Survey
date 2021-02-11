@@ -17,14 +17,13 @@ public with sharing class SendEmailLogic {
         List<Id> allCurrentCampaign = SendEmailLogicHelper.gerCurrentCampaigns(receiverList);
         List<GroupMember> currentGroupMember = SendEmailLogicHelper.getGroupMemeber(allCurrentGroup);
         List<CampaignMember> currentCampaignMember = SendEmailLogicHelper.getCampaignMember(allCurrentCampaign);
-        Organization currentOrg = SendEmailLogicHelper.getOrganization();
         EmailTemplate template = SendEmailLogicHelper.getEmailTemplate();
         SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues(EMAIL_SETTINGS_NAME);
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
         
         for(Email_Receiver__c receiver: receiverList){
             Survey__c survey = surveyMap.get(receiver.Survey__c);
-            String body = SendEmailLogicHelper.createEmailBody(template.Body, survey, currentOrg);
+            List<Id> currentSurveyAndTemplateId = new List<Id>{survey.Id, template.Id};
             Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
 
             switch on receiver.Type__c {
@@ -32,7 +31,7 @@ public with sharing class SendEmailLogic {
                     Id groupId = receiver.Value__c;
                     List<Id> userForSend = SendEmailLogicHelper.getUserByGroup(currentGroupMember, groupId);
                     for(Id userId: userForSend){
-                        mail = createSingleEmail(userId, body, config);
+                        mail = createSingleEmail(userId, config, currentSurveyAndTemplateId);
                         emails.add(mail);
                     }
                 }
@@ -42,17 +41,17 @@ public with sharing class SendEmailLogic {
                     List<Id> leadForSend = SendEmailLogicHelper.getLeadByCampaign(currentCampaignMember, campaignId);
 
                     for(Id contactId: contactForSend){
-                        mail = createSingleEmail(contactId, body, config);
+                        mail = createSingleEmail(contactId, config, currentSurveyAndTemplateId);
                         emails.add(mail);
                     }
 
                     for(Id leadId: leadForSend){
-                        mail = createSingleEmail(leadId, body, config);
+                        mail = createSingleEmail(leadId, config, currentSurveyAndTemplateId);
                         emails.add(mail);
                     }
                 }
                 when 'Record'{
-                    mail = createSingleEmail(receiver.Value__c, body, config);
+                    mail = createSingleEmail(receiver.Value__c, config, currentSurveyAndTemplateId);
                     emails.add(mail);
                 }
             }
@@ -61,16 +60,14 @@ public with sharing class SendEmailLogic {
         return emails;
     }
 
-    public static Messaging.SingleEmailMessage createSingleEmail(Id idForSent, String mailBody, SurveyEmailConfig__c config){
+    public static Messaging.SingleEmailMessage createSingleEmail(Id idForSent, SurveyEmailConfig__c config, List<Id> idsList){
         Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
-
+        mail = Messaging.renderStoredEmailTemplate(idsList[1], idForSent, idsList[0]);
         mail.setTargetObjectId(idForSent);
-        mail.setSaveAsActivity(false);
         mail.setSenderDisplayName(config.Display_Name__c);
-        mail.setSubject(config.Subject__c);
         mail.setBccSender(false);
         mail.setUseSignature(false);
-        mail.setPlainTextBody(mailBody);
+        mail.setSaveAsActivity(false);
 
         return mail;
     }
