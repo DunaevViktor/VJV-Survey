@@ -1,10 +1,10 @@
 .card {
-    min-height: 130px;
-    max-height: 400px;
+    min-height: 20vh;
+    max-height: 30vh;
     overflow-x: hidden;
     overflow-y: auto;
 }
 
 .no-margin-bottom {
-    margin-bottom: -4px;
+    margin-bottom: -0.5vh;
 }
