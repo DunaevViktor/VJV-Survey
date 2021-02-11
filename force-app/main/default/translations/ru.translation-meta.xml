@@ -89,6 +89,14 @@
         <name>add_optional_confirm_message</name>
     </customLabels>
     <customLabels>
+        <label>Данное поле уже было установлено с оператором any change.</label>
+        <name>field_setted_with_any_change</name>
+    </customLabels>
+    <customLabels>
+        <label>Другие правила с данной комбинацией объект-поле будут удалены.</label>
+        <name>select_any_change_confirm_message</name>
+    </customLabels>
+    <customLabels>
         <label>Добавить вопрос</label>
         <name>add_question</name>
     </customLabels>

@@ -145,7 +145,7 @@ export default class SingleTriggerRule extends LightningElement {
       this.dispatchAnyChangeDeleted(this.objectValue, this.fieldValue);
     }
     const newFieldValue = event.detail.value;
-    this.fieldValue = null;
+    this.fieldValue = "";
     this.operatorValue = "";    
     this.value = "";
     this.field = {}; 
