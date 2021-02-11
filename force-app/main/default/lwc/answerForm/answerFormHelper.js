@@ -167,7 +167,6 @@ const createAnswers = (questions, groupAnswerId) => {
             answers.push(singleAnswer);
           }
         }
->>>>>>> develop
       }
 
   });

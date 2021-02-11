@@ -19,8 +19,8 @@ export default class SingleQuestion extends LightningElement {
       return true;
   }
   
-  get question() {
-    return JSON.parse(JSON.stringify(this.singleQuestion));
+  get question(){
+    return JSON.parse(JSON.stringify(this.singleQuestion))
   }
   
   get questionId() {
@@ -30,18 +30,13 @@ export default class SingleQuestion extends LightningElement {
   get questionLabel() {
     return this.question[questionFields.LABEL];
   }
-
-<<<<<<< HEAD
+  
   get questionRequired() {
     return this.question[questionFields.REQUIRED];
   }
 
   get questionVisible() {
     return this.question[questionFields.VISIBLE];
-=======
-  get question(){
-      return JSON.parse(JSON.stringify(this.singleQuestion))
->>>>>>> develop
   }
 
   connectedCallback(){
