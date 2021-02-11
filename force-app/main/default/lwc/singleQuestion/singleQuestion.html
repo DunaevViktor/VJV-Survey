@@ -1,39 +1,40 @@
 <template>
-    <template if:true={question.IsVisible__c}>
+    <template if:true={questionVisible}>
         <lightning-input
-          key={question.Id}
-          data-item={question.Id}
+          key={questionId}
+          data-item={questionId}
           if:true={question.isText}
-          label={question.Label__c}
+          label={questionLabel}
           type="text"
           value={question.Answer}
-          required={question.Required__c}
+          required={questionRequired}
           class="slds-p-around_small validate-input"
           onchange={handleAnswerChange}
           disabled={question.IsDisabled}
         ></lightning-input>
 
         <lightning-checkbox-group
-          key={question.Id}
-          data-item={question.Id}
+          key={questionId}
+          data-item={questionId}
           if:true={question.isCheckbox}
-          label={question.Label__c}
+          label={questionLabel}
           value={question.Answer}
           options={question.Question_Options__r}
+          required={questionRequired}
           class="slds-p-around_small validate-input"
           onchange={handleAnswerChange}
           disabled={question.IsDisabled}
         ></lightning-checkbox-group>
 
         <lightning-radio-group
-          key={question.Id}
-          data-item={question.Id}
+          key={questionId}
+          data-item={questionId}
           if:true={question.isRadioButton}
-          label={question.Label__c}
+          label={questionLabel}
           options={question.Question_Options__r}
           type="radio"
           value={question.Answer}
-          required={question.Required__c}
+          required={questionRequired}
           class="slds-p-around_small validate-input"
           onchange={handleAnswerChange}
           disabled={question.IsDisabled}
@@ -41,13 +42,13 @@
         </lightning-radio-group>
 
         <lightning-combobox
-          key={question.Id}
-          data-item={question.Id}
+          key={questionId}
+          data-item={questionId}
           if:true={question.isPicklist}
-          label={question.Label__c}
+          label={questionLabel}
           options={question.Question_Options__r}
           value={question.Answer}
-          required={question.Required__c}
+          required={questionRequired}
           class="slds-p-around_small validate-input"
           onchange={handleAnswerChange}
           disabled={question.IsDisabled}

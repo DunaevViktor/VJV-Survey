@@ -1,4 +1,5 @@
 import SURVEY_OBJECT from '@salesforce/schema/Survey__c';
+import TRIGGER_RULE_OBJECT from '@salesforce/schema/Trigger_Rule__c';
 
 import SURVEY_ID_FIELD from '@salesforce/schema/Survey__c.Id';
 import SURVEY_NAME_FIELD from '@salesforce/schema/Survey__c.Name';
@@ -7,6 +8,7 @@ import SURVEY_LOGO_FIELD from '@salesforce/schema/Survey__c.Logo__c';
 import SURVEY_DESCRIPTION_FIELD from '@salesforce/schema/Survey__c.Description__c';
 import SURVEY_RELATED_FIELD from '@salesforce/schema/Survey__c.Related_To__c';
 import SURVEY_STANDARD_FIELD from '@salesforce/schema/Survey__c.IsStandard__c';
+import SURVEY_URL_FIELD from '@salesforce/schema/Survey__c.Url__c';
 
 import QUESTION_ID_FIELD from '@salesforce/schema/Question__c.Id';
 import QUESTION_REUSABLE_FIELD from '@salesforce/schema/Question__c.IsReusable__c';
@@ -32,6 +34,13 @@ import VALIDATION_RELATED_FIELD from '@salesforce/schema/Validation__c.Related_Q
 import VALIDATION_NAME_FIELD from '@salesforce/schema/Validation__c.Name';
 import VALIDATION_VALUE_FIELD from '@salesforce/schema/Validation__c.Value__c';
 
+import RULE_ID_FIELD from '@salesforce/schema/Trigger_Rule__c.Id';
+import RULE_FIELD_NAME_FIELD from '@salesforce/schema/Trigger_Rule__c.Field_Name__c';
+import RULE_VALUE_FIELD from '@salesforce/schema/Trigger_Rule__c.Field_Value__c';
+import RULE_API_FIELD from '@salesforce/schema/Trigger_Rule__c.Object_Api_Name__c';
+import RULE_OPERATOR_FIELD from '@salesforce/schema/Trigger_Rule__c.Operator__c';
+import RULE_SURVEY_FIELD from '@salesforce/schema/Trigger_Rule__c.Survey__c';
+
 import RECEIVER_ID_FIELD from '@salesforce/schema/Email_Receiver__c.Id';
 import RECEIVER_NAME_FIELD from '@salesforce/schema/Email_Receiver__c.Name';
 import RECEIVER_TYPE_FIELD from '@salesforce/schema/Email_Receiver__c.Type__c';
@@ -48,7 +57,8 @@ import GROUP_ANSWER_LINKED_FIELD from '@salesforce/schema/Group_Answer__c.IsLink
 import GROUP_ANSWER_RELATED_FIELD from '@salesforce/schema/Group_Answer__c.Related_To__c';
 import GROUP_ANSWER_SURVEY_FIELD from '@salesforce/schema/Group_Answer__c.Survey__c';
 
-const surveyObject = SURVEY_OBJECT;
+const surveyObject = SURVEY_OBJECT.objectApiName;
+const triggerRuleObject = TRIGGER_RULE_OBJECT.objectApiName;
 
 const surveyFields = {
     ID: SURVEY_ID_FIELD.fieldApiName,
@@ -58,6 +68,7 @@ const surveyFields = {
     DESCRIPTION: SURVEY_DESCRIPTION_FIELD.fieldApiName,
     RELATED: SURVEY_RELATED_FIELD.fieldApiName,
     STANDARD: SURVEY_STANDARD_FIELD.fieldApiName,
+    URL: SURVEY_URL_FIELD.fieldApiName,
 }
 
 const questionFields = {
@@ -90,6 +101,15 @@ const validationFields = {
     VALUE: VALIDATION_VALUE_FIELD.fieldApiName,
 }
 
+const ruleFields = {
+    ID: RULE_ID_FIELD.fieldApiName,
+    FIELD: RULE_FIELD_NAME_FIELD .fieldApiName,
+    VALUE: RULE_VALUE_FIELD.fieldApiName,
+    API: RULE_API_FIELD.fieldApiName,
+    OPERATOR: RULE_OPERATOR_FIELD.fieldApiName,
+    SURVEY: RULE_SURVEY_FIELD.fieldApiName,
+}
+
 const receiverFields = {
     ID: RECEIVER_ID_FIELD.fieldApiName,
     NAME: RECEIVER_NAME_FIELD.fieldApiName,
@@ -114,10 +134,12 @@ const groupAnswerFields = {
 
 export {
     surveyObject,
+    triggerRuleObject,
     surveyFields,
     questionFields,
     optionFields,
     validationFields,
+    ruleFields,
     receiverFields,
     answerFields,
     groupAnswerFields,

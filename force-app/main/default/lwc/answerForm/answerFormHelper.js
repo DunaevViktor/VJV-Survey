@@ -1,5 +1,6 @@
 import { operatorTypes, questionTypes } from "c/formUtil";
 import { surveyObject, surveyFields, questionFields, optionFields, validationFields, answerFields } from "c/fieldService";
+import { label } from "./labels.js";
 
 const FIELDS = [
   surveyObject + "." + surveyFields.ID,
@@ -29,17 +30,17 @@ const initQuestionFields = (questions, data) => {
         question.Answer = [];
         break;
       case questionTypes.PICKLIST:
-        options = [{ label: "-- None --", value: null }];
+        options = [{ label: `-- ${label.none} --`, value: null }];
         break;
       default:
     }
 
-    if (question[questionFields.OPTIONS]) {
-      question[questionFields.OPTIONS].forEach((option) => {
+    if (question.Question_Options__r) {
+      question.Question_Options__r.forEach((option) => {
         options.push({ label: option[optionFields.VALUE], value: option[optionFields.VALUE] });
       });
 
-      question[questionFields.OPTIONS] = options;
+      question.Question_Options__r = options;
     }
   });
 
@@ -98,8 +99,8 @@ const hideAnswerChain = (questions, validation) => {
   questions[dependentQuestion][questionFields.VISIBLE] = false;
   questions[dependentQuestion].Answer =
     questions[dependentQuestion][questionFields.TYPE] === questionTypes.CHECKBOX ? [] : null;
-  if (questions[dependentQuestion][questionFields.VALIDATIONS] != null) {
-    questions[dependentQuestion][questionFields.VALIDATIONS].forEach(
+  if (questions[dependentQuestion].Related_Question_Validations__r != null) {
+    questions[dependentQuestion].Related_Question_Validations__r.forEach(
       (nextValidation) => {
         hideAnswerChain(questions, nextValidation);
       }
@@ -112,15 +113,15 @@ const checkDependentQuestion = (event, questions) => {
   const answer = event.detail.answer;
 
   const questionWithChangedAnswer = questions.find(
-    ({ Id }) => Id === answeredQuestionId
+    (question) => question[questionFields.ID] === answeredQuestionId
   );
   const questionIndex = questions.findIndex(
-    ({ Id }) => Id === answeredQuestionId
+    ({ question }) => question[questionFields.ID] === answeredQuestionId
   );
   questions[questionIndex].Answer = answer;
 
-  if (questionWithChangedAnswer[questionFields.VALIDATIONS] != null) {
-    questionWithChangedAnswer[questionFields.VALIDATIONS].forEach(
+  if (questionWithChangedAnswer.Related_Question_Validations__r != null) {
+    questionWithChangedAnswer.Related_Question_Validations__r.forEach(
       (validation) => {
         let isConditionMet = compareValues(
           answer,

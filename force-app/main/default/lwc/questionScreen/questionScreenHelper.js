@@ -1,6 +1,8 @@
+import { validationFields, questionFields, optionFields } from "c/fieldService";
+
 const resetOptionsIds = (options) => {
   return options.map((option) => {
-    option.Id = null;
+    option[optionFields.ID] = null;
     return option;
   });
 }
@@ -13,16 +15,16 @@ const getQuestionsBySurveyId = (templateQuestions, surveyId, noTemplateValue) =>
   return templateQuestions.filter(
     (question) => {
       return (
-        question.Survey__c.localeCompare(surveyId) === 0
+        question[questionFields.SURVEY].localeCompare(surveyId) === 0
       );
     }
   ).map(
     (question, index) => {
-      question.Id = null;
-      question.Position__c = '' + (index + 1);
+      question[questionFields.ID] = null;
+      question[questionFields.POSITION] = '' + (index + 1);
       question.Editable = true;
-      question.IsVisible__c = true;
-      question.IsReusable__c = false;
+      question[questionFields.VISIBLE] = true;
+      question[questionFields.REUSABLE] = false;
 
       if(question.Question_Options__r) {
         question.Question_Options__r = resetOptionsIds(question.Question_Options__r);
@@ -35,10 +37,10 @@ const getQuestionsBySurveyId = (templateQuestions, surveyId, noTemplateValue) =>
 
 const updateQuestionByPosition = (questions, position, updatedQuestion) => {
   return questions.map((question) => {
-    if (question.Position__c === position) {
+    if (question[questionFields.POSITION] === position) {
       return {
         ...updatedQuestion,
-        Position__c: position
+        [questionFields.POSITION]: position
       };
     }
     return question;
@@ -47,8 +49,10 @@ const updateQuestionByPosition = (questions, position, updatedQuestion) => {
 
 const updateValidationByPosition = (validations, updatedValidation) => {
   return validations.map((validation) => {
-    if (validation.Related_Question__c.Position__c === updatedValidation.Related_Question__c.Position__c &&
-        validation.Dependent_Question__c.Position__c === updatedValidation.Dependent_Question__c.Position__c) {
+    if (validation[validationFields.RELATED][questionFields.POSITION] 
+        === updatedValidation[validationFields.RELATED][questionFields.POSITION] &&
+        validation[validationFields.DEPENDANT][questionFields.POSITION] 
+        === updatedValidation[validationFields.DEPENDANT][questionFields.POSITION]) {
       return {
         ...updatedValidation
       };
@@ -59,7 +63,7 @@ const updateValidationByPosition = (validations, updatedValidation) => {
 
 const solveQuestionPosition = (questions) => {
   questions = questions.filter((question) => {
-    return !~question.Position__c.indexOf('.');
+    return !~question[questionFields.POSITION].indexOf('.');
   }) 
 
   return '' + (+questions.length + 1);
@@ -67,15 +71,15 @@ const solveQuestionPosition = (questions) => {
 
 const solveDependentQuestionPosition = (validations, question) => {
   const amount = validations.filter((validation) => {
-    return validation.Related_Question__c.Position__c === question.Position__c
+    return validation[validationFields.RELATED][questionFields.POSITION]  === question[questionFields.POSITION] 
   }).length;
-  return question.Position__c + "." + (+amount + 1);
+  return question[questionFields.POSITION]  + "." + (+amount + 1);
 }
 
 const prepareSelectedQuestion = (selectedQuestion) => {
   const question = JSON.parse(JSON.stringify(selectedQuestion));
-  question.IsReusable__c = false;
-  question.Id = null;
+  question[questionFields.REUSABLE] = false;
+  question[questionFields.ID] = null;
 
   if(question.Question_Options__r) {
     question.Question_Options__r = resetOptionsIds(question.Question_Options__r);
@@ -106,12 +110,12 @@ const resolveQuestionsByDeleted = (questions, position) => {
   const rightPart = !~index ? position : position.slice(index + 1);
 
   return questions.filter((question) => {
-    return !question.Position__c.startsWith(position);
+    return !question[questionFields.POSITION].startsWith(position);
   })
   .map((question) => {
-    if(question.Position__c.startsWith(leftPart)) {
-      question.Position__c = resolvePositionByDeleted(
-        question.Position__c, 
+    if(question[questionFields.POSITION].startsWith(leftPart)) {
+      question[questionFields.POSITION] = resolvePositionByDeleted(
+        question[questionFields.POSITION], 
         leftPart, rightPart);
     }
     return question;
@@ -124,18 +128,18 @@ const resolveValidationsByDeleted = (validations, position) => {
   const rightPart = !~index ? position : position.slice(index + 1);
 
   return validations.filter((validation) => {
-    return !validation.Related_Question__c.Position__c.startsWith(position) &&
-      !validation.Dependent_Question__c.Position__c.startsWith(position);
+    return !validation[validationFields.RELATED][questionFields.POSITION].startsWith(position) &&
+      !validation[validationFields.DEPENDANT][questionFields.POSITION].startsWith(position);
   })
   .map((validation) => {
-    if(validation.Related_Question__c.Position__c.startsWith(leftPart)) {
-      validation.Related_Question__c.Position__c = resolvePositionByDeleted(
-        validation.Related_Question__c.Position__c, 
+    if(validation[validationFields.RELATED][questionFields.POSITION].startsWith(leftPart)) {
+      validation[validationFields.RELATED][questionFields.POSITION]= resolvePositionByDeleted(
+        validation[validationFields.RELATED][questionFields.POSITION], 
         leftPart, rightPart);
     }
-    if(validation.Dependent_Question__c.Position__c.startsWith(leftPart)) {
-      validation.Dependent_Question__c.Position__c = resolvePositionByDeleted(
-        validation.Dependent_Question__c.Position__c, 
+    if(validation[validationFields.DEPENDANT][questionFields.POSITION].startsWith(leftPart)) {
+      validation[validationFields.DEPENDANT][questionFields.POSITION] = resolvePositionByDeleted(
+        validation[validationFields.DEPENDANT][questionFields.POSITION], 
         leftPart, rightPart);
     }
     return validation;
@@ -146,7 +150,7 @@ const resolveEditableQuestions = (questions, validations) => {
   return questions.map((question) => {
 
     const filteredValidations = validations.filter((validation) => {
-      return validation.Related_Question__c.Position__c === question.Position__c;
+      return validation[validationFields.RELATED][questionFields.POSITION] === question[questionFields.POSITION];
     })
 
     if(filteredValidations.length === 0) question.Editable = true;
@@ -156,11 +160,11 @@ const resolveEditableQuestions = (questions, validations) => {
 }
 
 const prepareValidationForPush = (validations, newValidation) => {
-  newValidation.Dependent_Question__c.Position__c = solveDependentQuestionPosition(
-    validations, newValidation.Related_Question__c);
-  newValidation.Dependent_Question__c.Editable = true;
-  newValidation.Dependent_Question__c.IsVisible__c = false;
-  newValidation.Related_Question__c.Editable = false;
+  newValidation[validationFields.DEPENDANT][questionFields.POSITION] = solveDependentQuestionPosition(
+    validations, newValidation[validationFields.RELATED]);
+  newValidation[validationFields.DEPENDANT].Editable = true;
+  newValidation[validationFields.DEPENDANT][questionFields.VISIBLE] = false;
+  newValidation[validationFields.RELATED].Editable = false;
   return newValidation;
 }
 
@@ -177,17 +181,17 @@ const updatePosition = (position, upperPosition, downPosition) => {
 
 const swapQuestions = (questions, upperPosition, downPosition) => {
   return questions.map((question) => {
-    question.Position__c = updatePosition(question.Position__c, upperPosition, downPosition)
+    question[questionFields.POSITION] = updatePosition(question[questionFields.POSITION] , upperPosition, downPosition)
     return question;
   });
 }
 
 const swapValidations = (validations, upperPosition, downPosition) => {
   return validations.map((validation) => {
-    validation.Related_Question__c.Position__c = 
-    updatePosition(validation.Related_Question__c.Position__c, upperPosition, downPosition);
-    validation.Dependent_Question__c.Position__c = 
-    updatePosition(validation.Dependent_Question__c.Position__c, upperPosition, downPosition);
+    validation[validationFields.RELATED][questionFields.POSITION] = 
+    updatePosition(validation[validationFields.RELATED][questionFields.POSITION], upperPosition, downPosition);
+    validation[validationFields.DEPENDANT][questionFields.POSITION] = 
+    updatePosition(validation[validationFields.DEPENDANT][questionFields.POSITION], upperPosition, downPosition);
     return validation;
   });
 }
@@ -200,8 +204,9 @@ const findSwapIndex = (questions, position, action) => {
   for(let i = 0; i < questions.length; i++) {
     const question = questions[i];
 
-    if(question.Position__c.startsWith(leftPart) && question.Position__c.length === position.length) {
-      const currentRightPart = +question.Position__c.slice(-1);
+    if(question[questionFields.POSITION].startsWith(leftPart) 
+      && question[questionFields.POSITION].length === position.length) {
+      const currentRightPart = +question[questionFields.POSITION].slice(-1);
 
       if(currentRightPart + (1 * action) === +rightPart) {
         questionIndex = i;
@@ -214,8 +219,8 @@ const findSwapIndex = (questions, position, action) => {
 }
 
 const sortQuestionsFunction = (firstItem, secondItem) => {
-  const firstPosition = firstItem.Position__c;
-  const secondPosition = secondItem.Position__c;
+  const firstPosition = firstItem[questionFields.POSITION];
+  const secondPosition = secondItem[questionFields.POSITION];
 
   let firstIndex = firstPosition.indexOf('.');
   let secondIndex = secondPosition.indexOf('.');

@@ -3,7 +3,7 @@
         <template if:true={question.Required__c}>
             <span title="required" class="slds-required">*</span>
         </template>
-        {question.Label__c}
+        {questionLabel}
     </div>
     <div class="slds-grid slds-wrap">
         <div class="slds-grid slds-col slds-size_1-of-2 slds-gutters slds-p-left_small slds-gutters_direct-xx-small ">
@@ -26,7 +26,8 @@
         </div>
     </div>
     <template if:true={isInvalid}>
-        <div class="slds-p-top_small slds-p-left_small slds-text-color_destructive slds-text-title">{invalidMessage}
+        <div class="slds-p-top_small slds-p-left_small slds-text-color_destructive slds-text-title">
+          {invalidMessage}
         </div>
     </template>
 </template>

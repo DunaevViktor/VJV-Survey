@@ -1,8 +1,9 @@
 import {label} from "./labels.js";
+import { questionFields, optionFields  } from "c/fieldService";
 
 const columns = [
-  { label: label.question, fieldName: 'Label__c' },
-  { label: label.type, fieldName: 'Type__c'},
+  { label: label.question, fieldName: questionFields.LABEL },
+  { label: label.type, fieldName: questionFields.TYPE },
   { label: label.options, fieldName: 'Question_Options__r'},
   {
       type: 'button',
@@ -24,7 +25,7 @@ const getQuestionsTableStyle = () => {
 
 const reduceOptionsToString = (options) => {
   return options.reduce((accumulator, currentItem, index) => {
-    accumulator += currentItem.Value__c;
+    accumulator += currentItem[optionFields.VALUE];
           
     if(index !== options.length - 1) {
      accumulator += ", ";
@@ -38,9 +39,9 @@ const reduceOptionsToString = (options) => {
 const transformStandardQuestions = (standardQuestions) => {
   return standardQuestions.map((standardQuestion) => {
     const displayedQuestion = {
-      Id: standardQuestion.Id,
-      Label__c: standardQuestion.Label__c,
-      Type__c: standardQuestion.Type__c
+      [questionFields.ID]: standardQuestion[questionFields.ID],
+      [questionFields.LABEL]: standardQuestion[questionFields.LABEL],
+      [questionFields.TYPE]: standardQuestion[questionFields.TYPE]
     };
   
     if(!standardQuestion.Question_Options__r || standardQuestion.Question_Options__r.length === 0) {
@@ -51,7 +52,7 @@ const transformStandardQuestions = (standardQuestions) => {
   
     return displayedQuestion;
   }).sort((firstQuestion, secondQuestion) => {
-    return firstQuestion.Label__c.toLowerCase().localeCompare(secondQuestion.Label__c.toLowerCase());
+    return firstQuestion[questionFields.LABEL].toLowerCase().localeCompare(secondQuestion[questionFields.LABEL].toLowerCase());
   });
 }
 

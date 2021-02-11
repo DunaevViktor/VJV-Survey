@@ -82,8 +82,8 @@ export default class QuestionForm extends LightningElement {
 
   get questionSettingList() {
     return [
-      { label: label.is_required, value: [questionFields.REQUIRED] },
-      { label: label.is_reusable, value: [questionFields.REUSABLE] }
+      { label: label.is_required, value: questionFields.REQUIRED },
+      { label: label.is_reusable, value: questionFields.REUSABLE }
     ];
   }
 
@@ -245,7 +245,6 @@ export default class QuestionForm extends LightningElement {
   cancelOptionEdit() {
     const input = this.template.querySelector(".option-input");
     clearInput(input);
-    //input.value = "";
     this.editOptionValue = "";
     this.editOptionIndex = null;
     this.isEditOption = false;
@@ -309,9 +308,11 @@ export default class QuestionForm extends LightningElement {
   sendDependatQuestion(message) {
     const input = this.template.querySelector(".validationInput");
 
+    console.log('asd');
+
     const validation = {
       ...this.validationForForm,
-      [validationFields.RELATED]: JSON.parse(JSON.stringify(this.question)),
+      [validationFields.DEPENDANT]: JSON.parse(JSON.stringify(this.question)),
       [validationFields.OPERATOR]: this.selectedOperator,
       [validationFields.VALUE]: input.value
     };
