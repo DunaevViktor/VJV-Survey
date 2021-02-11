@@ -1,6 +1,6 @@
 <template>
     <div class="slds-text-title slds-p-left_small slds-p-bottom_xx-small">
-        <template if:true={question.Required__c}>
+        <template if:true={questionRequired}>
             <span title="required" class="slds-required">*</span>
         </template>
         {questionLabel}

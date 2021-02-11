@@ -78,9 +78,7 @@ const questionFields = {
     NAME: QUESTION_NAME_FIELD.fieldApiName,
     REQUIRED: QUESTION_REQUIRED_FIELD.fieldApiName,
     SURVEY: QUESTION_SURVEY_FIELD.fieldApiName,
-    TYPE: QUESTION_TYPE_FIELD.fieldApiName,
-    OPTIONS: 'Question_Options__r',
-    VALIDATIONS: 'Related_Question_Validations__r',
+    TYPE: QUESTION_TYPE_FIELD.fieldApiName
 }
 
 const optionFields = {

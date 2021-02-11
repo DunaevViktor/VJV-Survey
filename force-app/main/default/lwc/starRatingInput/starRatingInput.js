@@ -42,6 +42,10 @@ export default class StarRatingInput extends LightningElement {
     return this.question[questionFields.LABEL];
   }
 
+  get questionRequired() {
+    return this.question[questionFields.REQUIRED];
+  }
+
   handleStarPick(event) {
     if (!this.question.IsDisabled === true) {
       this.isInvalid = false;
