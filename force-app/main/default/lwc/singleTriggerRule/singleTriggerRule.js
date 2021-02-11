@@ -343,18 +343,6 @@ export default class SingleTriggerRule extends LightningElement {
     this.operatorValue = operatorTypes.ANY_CHANGE;
   }
 
-  @api setFieldValue(fieldValue) {
-    this.fieldValue = fieldValue;
-    this.operatorValue = "";    
-    this.value = "";
-    this.field = {}; 
-    let chosenFieldObject = this.fieldNames.find(
-      (field) => field.value === this.fieldValue
-    );
-    chosenFieldObject.operatorType = getFieldOperatorType(chosenFieldObject);
-    this.setOperatorsByType(chosenFieldObject);
-  }
-
   @api updateAnyChangeFieldObjects(anyChangeFieldsObjects) {
     this.anyChangeFieldsAndObjects = JSON.parse(JSON.stringify(anyChangeFieldsObjects));
   }
