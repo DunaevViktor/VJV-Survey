@@ -146,22 +146,30 @@ const checkDependentQuestion = (event, questions) => {
 const createAnswers = (questions, groupAnswerId) => {
   let answers = [];
   questions.forEach((question) => {
-    if (question.Answer !== null && question.Answer !== undefined) {
-      let singleAnswer = { SObjectType: "Answer__c" };
-      singleAnswer[answerFields.GROUP] = groupAnswerId;
-      singleAnswer[answerFields.QUESION] = question[questionFields.ID];
-
-      if (question[questionFields.TYPE] === questionTypes.CHECKBOX) {
-        question.Answer.forEach((checkedBox) => {
-          let singleCheckboxAnswer = { ...singleAnswer };
-          singleCheckboxAnswer[answerFields.VALUE] = checkedBox;
-          answers.push(singleCheckboxAnswer);
-        });
-      } else {
-        singleAnswer[answerFields.VALUE] = question.Answer;
-        answers.push(singleAnswer);
+      if(question.Answer){
+        let createAnswer = true;
+        if (question.isText && question[questionFields.VISIBLE] && question.Answer.trim().length === 0) {
+            createAnswer = false;
+        }
+        if (createAnswer) {
+          let singleAnswer = { SObjectType: "Answer__c" };
+          singleAnswer[answerFields.GROUP] = groupAnswerId;
+          singleAnswer[answerFields.QUESION] = question.Id;
+    
+          if (question[questionFields.TYPE] === questionTypes.CHECKBOX) {
+            question.Answer.forEach((checkedBox) => {
+              let singleCheckboxAnswer = { ...singleAnswer };
+              singleCheckboxAnswer[answerFields.VALUE] = checkedBox;
+              answers.push(singleCheckboxAnswer);
+            });
+          } else {
+            singleAnswer[answerFields.VALUE] = question.Answer;
+            answers.push(singleAnswer);
+          }
+        }
+>>>>>>> develop
       }
-    }
+
   });
 
   return answers;
