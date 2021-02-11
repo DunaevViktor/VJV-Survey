@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>50.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Preview Screen</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="survey" type="@salesforce/schema/Survey__c" label="Survey"/>
+            <property name="questions" type="@salesforce/schema/Question__c[]" label="Questions"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

@@ -16,7 +16,6 @@ export default class QuestionsBlock extends LightningElement {
   label = label;
 
   @wire(getMaxQuestionAmount) maxQuestionsAmount;
-  @wire(getPageQuestionAmount) pageQuestionsAmount;
 
   @api questions;
 
@@ -34,10 +33,24 @@ export default class QuestionsBlock extends LightningElement {
   @track isPreviousDisabled = true;
   @track isNextDisabled = true;
   @track isLastDisabled = true;
+
+  @track pageQuestionsAmount;
+  @track isError = false;
   
   connectedCallback() {
     this.displayedQuestions = this.questions;
-    this.resolveDisplayedQuestions();
+    this.loadAmountItemsOnPage();
+  }
+
+  loadAmountItemsOnPage() {
+    getPageQuestionAmount()
+      .then((result) => {
+        this.pageQuestionsAmount = result;
+        this.resolveDisplayedQuestions();
+      })
+      .catch(() => {
+        this.isError = true;
+      })
   }
 
   @api
@@ -57,7 +70,7 @@ export default class QuestionsBlock extends LightningElement {
         + this.availableQuestionsAmount + " " + this.label.more + " " + this.label.question;
       case 0: return this.label.can_no_longer_create_questions;
       default: return this.label.you_can_create + " " 
-        + this.availableQuestionsAmount + " " + this.label.questions;
+        + this.availableQuestionsAmount + " " + this.label.more + " " + this.label.questions;
     }
   }
 
@@ -80,8 +93,7 @@ export default class QuestionsBlock extends LightningElement {
 
   resolveDisplayedQuestions() {
     this.filteredDisplayedQuestions = filterQuestionsByPage(
-      this.displayedQuestions, this.currentPage, 
-      +this.pageQuestionsAmount.data);
+      this.displayedQuestions, this.currentPage, this.pageQuestionsAmount);
 
     this.resolveQuestionsSubinfo();
   }
@@ -96,8 +108,8 @@ export default class QuestionsBlock extends LightningElement {
       this.resolveDisplayedQuestions();
     }
 
-    this.amountPages =  Math.ceil(this.displayedQuestions.length / +this.pageQuestionsAmount.data);
-    this.isNeedPagination = this.displayedQuestions.length > +this.pageQuestionsAmount.data;
+    this.amountPages =  Math.ceil(this.displayedQuestions.length / this.pageQuestionsAmount);
+    this.isNeedPagination = this.displayedQuestions.length > this.pageQuestionsAmount;
 
     this.repaintPaginationButtons();
   }

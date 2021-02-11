@@ -34,6 +34,22 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Set_Preview_Header</name>
+        <label>Set Preview Header</label>
+        <locationX>176</locationX>
+        <locationY>1118</locationY>
+        <assignmentItems>
+            <assignToReference>CurrentScreenHeader</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Label.preview_header</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>PreviewScreen</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Set_Question_Header</name>
         <label>Set Question Header</label>
         <locationX>176</locationX>
@@ -53,7 +69,7 @@
         <name>Set_Saver_Header</name>
         <label>Set Saver Header</label>
         <locationX>176</locationX>
-        <locationY>1118</locationY>
+        <locationY>1358</locationY>
         <assignmentItems>
             <assignToReference>CurrentScreenHeader</assignToReference>
             <operator>Assign</operator>
@@ -111,7 +127,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>Set_Saver_Header</targetReference>
+            <targetReference>Set_Preview_Header</targetReference>
         </connector>
         <fields>
             <name>AdvanceSettingsScreenComponent</name>
@@ -223,6 +239,38 @@
         <showHeader>false</showHeader>
     </screens>
     <screens>
+        <name>PreviewScreen</name>
+        <label>PreviewScreen</label>
+        <locationX>176</locationX>
+        <locationY>1238</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Set_Saver_Header</targetReference>
+        </connector>
+        <fields>
+            <name>PreviewScreenComponent</name>
+            <extensionName>c:previewScreen</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>questions</name>
+                <value>
+                    <elementReference>QuestionList</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>survey</name>
+                <value>
+                    <elementReference>Survey</elementReference>
+                </value>
+            </inputParameters>
+            <isRequired>true</isRequired>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
         <name>Questions_Screen</name>
         <label>Questions Screen</label>
         <locationX>176</locationX>
@@ -306,7 +354,7 @@
         <name>SaverScreen</name>
         <label>SaverScreen</label>
         <locationX>176</locationX>
-        <locationY>1238</locationY>
+        <locationY>1478</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>

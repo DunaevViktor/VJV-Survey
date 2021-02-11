@@ -54,7 +54,7 @@
       <span>{question.VisibilityReason}</span>
     </template>
 
-    <template if:true={question.Question_Options__r}>
+    <template if:true={isHasOptions}>
       <br />
       <div class="slds-m-top_x-small">
         {label.options}:

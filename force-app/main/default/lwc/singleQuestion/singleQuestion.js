@@ -1,7 +1,7 @@
 import { LightningElement, api } from "lwc";
 
 export default class SingleQuestion extends LightningElement {
-  @api question;
+  @api singleQuestion;
 
   @api validate() {
       if(this.question.IsVisible__c){
@@ -11,6 +11,14 @@ export default class SingleQuestion extends LightningElement {
       }
       
       return true;
+  }
+
+  connectedCallback(){
+      console.log(this.question);
+  }
+
+  get question(){
+      return JSON.parse(JSON.stringify(this.singleQuestion))
   }
 
   handleAnswerChange(event) {
