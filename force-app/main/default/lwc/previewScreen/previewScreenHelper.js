@@ -4,13 +4,12 @@ import { label } from "./labels.js";
 const initQuestionFields = (data) => {
   let questions = [];
   data.forEach((question) => {
-    let previewInput = { ...JSON.parse(JSON.stringify(question)) };
-    if (previewInput.IsVisible__c === false) {
-      previewInput.Label__c += " (" + label.dependentQuestion + ")";
+    if (question.IsVisible__c === false) {
+      question.Label__c += " (" + label.dependentQuestion + ")";
     }
-    previewInput.IsVisible__c = true;
-    previewInput.IsDisabled = true;
-    questions.push(previewInput);
+    question.IsVisible__c = true;
+    question.IsDisabled = true;
+    questions.push(question);
   });
 
   questions.forEach((question) => {
