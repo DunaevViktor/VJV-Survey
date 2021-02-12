@@ -1,5 +1,6 @@
 import { LightningElement, track, api } from "lwc";
 import completeThisField from "@salesforce/label/c.complete_this_field";
+import { questionFields } from "c/fieldService";
 
 export default class StarRatingInput extends LightningElement {
   isInvalid = false;
@@ -12,8 +13,8 @@ export default class StarRatingInput extends LightningElement {
 
   @api checkValidity() {
     if (
-      this.question.IsVisible__c &&
-      this.question.Required__c &&
+      this.question[questionFields.VISIBLE] &&
+      this.question[questionFields.REQUIRED] &&
       this.selectedRate === undefined
     ) {
       return false;
@@ -37,6 +38,14 @@ export default class StarRatingInput extends LightningElement {
     }
   }
 
+  get questionLabel() {
+    return this.question[questionFields.LABEL];
+  }
+
+  get questionRequired() {
+    return this.question[questionFields.REQUIRED];
+  }
+
   handleStarPick(event) {
     if (!this.question.IsDisabled === true) {
       this.isInvalid = false;
@@ -53,7 +62,7 @@ export default class StarRatingInput extends LightningElement {
         bubbles: true,
         composed: true,
         detail: {
-          questionId: this.question.Id,
+          questionId: this.question[questionFields.ID],
           answer: this.selectedRate
         }
       });

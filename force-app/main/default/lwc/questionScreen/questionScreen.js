@@ -5,9 +5,11 @@ import getTemplatesQuestions from "@salesforce/apex/QuestionController.getTempla
 import getMaxQuestionAmount from "@salesforce/apex/SurveySettingController.getMaxQuestionAmount";
 import getMinQuestionAmount from "@salesforce/apex/SurveySettingController.getMinQuestionAmount";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import { surveyFields, validationFields, questionFields } from "c/fieldService";
 
 import {label} from "./labels";
 import {
+  trasnformResult,
   getQuestionsBySurveyId,
   updateQuestionByPosition,
   updateValidationByPosition,
@@ -130,12 +132,12 @@ export default class QuestionScreen extends LightningElement {
 
   initTemplateQuestions() {
     const templateIds = this.displayedTemplates.map((template) => {
-      return template.Id;
+      return template[surveyFields.ID];
     });
 
     getTemplatesQuestions({ surveyIds: templateIds })
       .then((result) => {
-        this.displayedTemplateQuestions = result;
+        this.displayedTemplateQuestions = trasnformResult(result);
       })
       .catch(() => {
         this.setError();
@@ -146,7 +148,7 @@ export default class QuestionScreen extends LightningElement {
     if(!this.hasStandardQuestions) {
       getStandardQuestions()
       .then((result) => {
-        this.displayedStandardQuestions = result;
+        this.displayedStandardQuestions = trasnformResult(result);
         this.hasStandardQuestions = this.standardQuestions.length > 0;
       })
       .catch(() => {
@@ -216,10 +218,10 @@ export default class QuestionScreen extends LightningElement {
     }
 
     this.displayedQuestions = updateQuestionByPosition(
-      this.questions, validation.Related_Question__c.Position__c, 
-      JSON.parse(JSON.stringify(validation.Related_Question__c)));
+      this.questions, validation[validationFields.RELATED][questionFields.POSITION], 
+      JSON.parse(JSON.stringify(validation[validationFields.RELATED])));
     
-    this.displayedQuestions.push(JSON.parse(JSON.stringify(validation.Dependent_Question__c)));
+    this.displayedQuestions.push(JSON.parse(JSON.stringify(validation[validationFields.DEPENDENT])));
     this.displayedValidations.push(validation);
 
     this.clearFormAttributes();
@@ -232,7 +234,7 @@ export default class QuestionScreen extends LightningElement {
   }
 
   pushQuestion(question) {
-    question.Position__c = solveQuestionPosition(this.displayedQuestions);
+    question[questionFields.POSITION] = solveQuestionPosition(this.displayedQuestions);
     question.Editable = true;
 
     if(this.displayedQuestions.length === +this.maxQuestionsAmount.data) {
@@ -256,13 +258,14 @@ export default class QuestionScreen extends LightningElement {
   
   editQuestion(event) {
     this.questionForForm = event.detail;
-    this.editQuestionPosition = this.questionForForm.Position__c
+    this.editQuestionPosition = this.questionForForm[questionFields.POSITION]
     this.isEditMode = true;
 
     if(this.questionForForm.VisibilityReason) {
       this.isDependentQuestion = true;
       this.validationForForm = this.displayedValidations.filter((validation) => {
-        return validation.Dependent_Question__c.Position__c === this.questionForForm.Position__c;
+        return validation[validationFields.DEPENDENT][questionFields.POSITION] 
+        === this.questionForForm[questionFields.POSITION];
       })[0];
     }
 
@@ -271,7 +274,7 @@ export default class QuestionScreen extends LightningElement {
 
   addOptional(event) {
     this.validationForForm = {
-      Related_Question__c: JSON.parse(JSON.stringify(event.detail))
+      [validationFields.RELATED]: JSON.parse(JSON.stringify(event.detail))
     };
     this.isDependentQuestion = true;
     this.openForm();
@@ -284,7 +287,7 @@ export default class QuestionScreen extends LightningElement {
       this.displayedQuestions = updateQuestionByPosition(this.questions, this.editQuestionPosition, value);
     } else {
       this.displayedQuestions = updateQuestionByPosition(
-        this.questions, this.editQuestionPosition, JSON.parse(JSON.stringify(value.Dependent_Question__c)));
+        this.questions, this.editQuestionPosition, JSON.parse(JSON.stringify(value[validationFields.DEPENDENT])));
 
       this.displayedValidations = updateValidationByPosition(this.validations, value);
     }
@@ -319,7 +322,7 @@ export default class QuestionScreen extends LightningElement {
       return;
     }
 
-    const downPosition = this.questions[downQuestionIndex].Position__c;
+    const downPosition = this.questions[downQuestionIndex][questionFields.POSITION];
 
     this.displayedQuestions = swapQuestions(this.questions, position, downPosition);
     this.displayedValidations = swapValidations(this.validations, position, downPosition);
@@ -335,7 +338,7 @@ export default class QuestionScreen extends LightningElement {
     }
 
     const upperQuestionIndex = findSwapIndex(this.questions, position, 1);
-    const upperPosition = this.questions[upperQuestionIndex].Position__c;
+    const upperPosition = this.questions[upperQuestionIndex][questionFields.POSITION];
 
     this.displayedQuestions = swapQuestions(this.questions, upperPosition, position);
     this.displayedValidations = swapValidations(this.validations, upperPosition, position);

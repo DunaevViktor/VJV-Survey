@@ -1,4 +1,5 @@
 import { LightningElement, api, track } from "lwc";
+import { questionFields } from "c/fieldService";
 
 import { label } from "./labels.js";
 
@@ -12,6 +13,22 @@ export default class QuestionCard extends LightningElement {
   @track isDialogVisible = false;
   @track originalMessage;
 
+  get questionPosition() {
+    return this.question[questionFields.POSITION];
+  }
+
+  get questionLabel() {
+    return this.question[questionFields.LABEL];
+  }
+
+  get questionType() {
+    return this.question[questionFields.TYPE];
+  }
+
+  get questionRequired() {
+    return this.question[questionFields.REQUIRED];
+  }
+
   get isHasOptions() {
     return this.question.Question_Options__r && this.question.Question_Options__r.length > 0;
   }
@@ -24,26 +41,31 @@ export default class QuestionCard extends LightningElement {
 
   deleteQuestion() {
     const deleteEvent = new CustomEvent("delete", {
-      detail: this.question.Position__c
+      detail: this.question[questionFields.POSITION]
     });
     this.dispatchEvent(deleteEvent);
   }
 
   editQuestion() {
     const editEvent = new CustomEvent("edit", {
-      detail: this.question.Position__c
+      detail: this.question[questionFields.POSITION]
     });
     this.dispatchEvent(editEvent);
   }
 
   addOptionalQuestion() {
     const addOptionalEvent = new CustomEvent("addoptional", {
-      detail: this.question.Position__c
+      detail: this.question[questionFields.POSITION]
     });
     this.dispatchEvent(addOptionalEvent);
   }
 
   addOptionalQuestionClick() {
+    if(!this.question.Editable) {
+      this.addOptionalQuestion();
+      return;
+    }
+    
     this.originalMessage = 'addOptional';
     this.message = label.add_optional_full_confirm_message;
     this.isDialogVisible = true;
@@ -66,14 +88,14 @@ export default class QuestionCard extends LightningElement {
   
   downQuestion() {
     const downEvent = new CustomEvent("down", {
-      detail: this.question.Position__c
+      detail: this.question[questionFields.POSITION]
     });
     this.dispatchEvent(downEvent);
   }
 
   upQuestion() {
     const upEvent = new CustomEvent("up", {
-      detail: this.question.Position__c
+      detail: this.question[questionFields.POSITION]
     });
     this.dispatchEvent(upEvent);
   }

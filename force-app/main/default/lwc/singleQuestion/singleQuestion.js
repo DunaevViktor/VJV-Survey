@@ -1,24 +1,48 @@
-import { LightningElement, api } from "lwc";
+import { LightningElement, api, track } from "lwc";
+import { questionFields } from "c/fieldService";
 
 export default class SingleQuestion extends LightningElement {
   @api singleQuestion;
+  @track modifiedLabel = false;
 
   @api validate() {
-      if(this.question.IsVisible__c){
+      if(this.question[questionFields.VISIBLE]){
         let inputComponent = this.template.querySelector(".validate-input");
+        if(this.question.isText && this.question[questionFields.REQUIRED]){
+            let trimmedInput = inputComponent.value.trim();
+            inputComponent.value = trimmedInput;
+        }
         inputComponent.reportValidity();
         return inputComponent.checkValidity();
       }
       
       return true;
   }
-
-  connectedCallback(){
-      console.log(this.question);
+  
+  get question(){
+    return JSON.parse(JSON.stringify(this.singleQuestion))
+  }
+  
+  get questionId() {
+    return this.question[questionFields.ID];
   }
 
-  get question(){
-      return JSON.parse(JSON.stringify(this.singleQuestion))
+  get questionLabel() {
+    return this.question[questionFields.LABEL];
+  }
+  
+  get questionRequired() {
+    return this.question[questionFields.REQUIRED];
+  }
+
+  get questionVisible() {
+    return this.question[questionFields.VISIBLE];
+  }
+
+  connectedCallback(){
+      if(this.question.isCheckbox || this.question.isRadioButton){
+          this.modifiedLabel = true;
+      }
   }
 
   handleAnswerChange(event) {

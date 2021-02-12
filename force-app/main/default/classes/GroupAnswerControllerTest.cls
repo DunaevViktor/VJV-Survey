@@ -2,17 +2,15 @@
 public with sharing class GroupAnswerControllerTest {
     
     private static final String INVALID_SAVE_GROUP_ANSWER_RESULT = 'Invalid group answer saving.';
-
+    
     @TestSetup
     static void setup() {
         Survey__c testSurvey = TestDataFactory.createSurvey();
         insert testSurvey;
     }
-
+    
     private static Id getTestSurveyId() {
-        Survey__c testSurvey = [SELECT Id
-                                FROM Survey__c
-                                WHERE Name = :TestDataFactory.TEST_VALUE];
+        Survey__c testSurvey = [SELECT Id FROM Survey__c WHERE Name = :TestDataFactory.TEST_VALUE];
         return testSurvey.Id;      
     }
     
@@ -22,7 +20,7 @@ public with sharing class GroupAnswerControllerTest {
         Id savedGroupAnswerId = GroupAnswerController.saveGroupAnswer(testGroupAnswer);
         System.assertNotEquals(null, savedGroupAnswerId, INVALID_SAVE_GROUP_ANSWER_RESULT);
     }
-
+    
     @isTest
     static void testNegativeSaveGroupAnswer() {
         AuraHandledException auraExc = null;
@@ -33,6 +31,5 @@ public with sharing class GroupAnswerControllerTest {
             auraExc = exc;
         }
         System.assertNotEquals(null, auraExc, INVALID_SAVE_GROUP_ANSWER_RESULT);
-    }
-    
+    } 
 }
