@@ -2,6 +2,7 @@ import { LightningElement, api, track, wire } from 'lwc';
 import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getPageQuestionAmount";
 import {columns, getQuestionsTableStyle, transformStandardQuestions} from "./questionStandardSelectorHelper.js";
 import {label} from "./labels.js";
+import { questionFields } from "c/fieldService";
 
 export default class QuestionStandardSelector extends LightningElement {
 
@@ -59,10 +60,10 @@ export default class QuestionStandardSelector extends LightningElement {
   }
 
   addStandardQuestion(row) {
-    const { Id } = row;
+    const Id = row[questionFields.ID];
 
     const selectedQuestion = this.standardQuestions.find((question) => {
-      return question.Id === Id;
+      return question[questionFields.ID] === Id;
     });
 
     const selectEvent = new CustomEvent("select", {

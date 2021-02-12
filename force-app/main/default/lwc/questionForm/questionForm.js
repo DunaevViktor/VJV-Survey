@@ -6,6 +6,7 @@ import OPERATOR_FIELD from "@salesforce/schema/Validation__c.Operator__c";
 import { getPicklistValues } from "lightning/uiObjectInfoApi";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import { validationFields, questionFields, optionFields } from "c/fieldService";
 
 import { label } from "./labels.js";
 import {
@@ -34,9 +35,6 @@ export default class QuestionForm extends LightningElement {
 
   ERROR_TITLE = label.errorTitle;
   ERROR_VARIANT = "error";
-
-  REQUIRED_FIELD_API_NAME = "Required__c";
-  REUSABLE_FIELD_API_NAME = "IsReusable__c";
 
   @track question = {};
   @track validation = {};
@@ -67,22 +65,25 @@ export default class QuestionForm extends LightningElement {
   @track isMainQuestionPicklist;
   @track isDisabled = true;
 
+  isOptionInsideForm = true;
+
   connectedCallback() {
     if(this.isEditMode) {
       this.setQuestionForEdit(this.questionForForm);
-      if(this.isDependentQuestion) this.selectedOperator = this.validationForForm.Operator__c;
+      if(this.isDependentQuestion) this.selectedOperator = this.validationForForm[validationFields.OPERATOR];
+      this.isDisabled = false;
     } else {
       this.isOptionsEnabled = false;
       this.question = {};
-      this.question.Label__c = '';
+      this.question[questionFields.LABEL] = '';
       this.question.Question_Options__r = [];
     }
   }
 
   get questionSettingList() {
     return [
-      { label: label.is_required, value: this.REQUIRED_FIELD_API_NAME },
-      { label: label.is_reusable, value: this.REUSABLE_FIELD_API_NAME }
+      { label: label.is_required, value: questionFields.REQUIRED },
+      { label: label.is_reusable, value: questionFields.REUSABLE }
     ];
   }
 
@@ -110,8 +111,8 @@ export default class QuestionForm extends LightningElement {
       if(this.isDependentQuestion) {
         this.setDisplayedOperators();
         this.isMainQuestionPicklist = isNeedPicklist(
-          this.validationForForm.Related_Question__c, 
-          this.validationForForm.Operator__c);
+          this.validationForForm[validationFields.RELATED], 
+          this.validationForForm[validationFields.OPERATOR]);
       }
     } else if (error) {
       this.sendErrorNotification();
@@ -128,21 +129,44 @@ export default class QuestionForm extends LightningElement {
       return booleanPicklistOptions;
     }
 
-    return this.validationForForm.Related_Question__c.Question_Options__r.map((option) => {
+    return this.validationForForm[validationFields.RELATED].Question_Options__r.map((option) => {
       return {
-        label: option.Value__c,
-        value: option.Value__c
+        label: option[optionFields.VALUE],
+        value: option[optionFields.VALUE]
       };
     });
+  }
+
+  get questionLabel() {
+    return this.question[questionFields.LABEL]
+  }
+
+  get validationQuestionLabel() {
+    if(!this.isDependentQuestion) {
+      return '';
+    }
+    return this.validationForForm[validationFields.RELATED][questionFields.LABEL];
+  }
+
+  get validatiorOperator() {
+    if(!this.isDependentQuestion) {
+      return '';
+    }
+    return this.validationForForm[validationFields.OPERATOR];
+  }
+
+  get validationValue() {
+    if(!this.isDependentQuestion) {
+      return '';
+    }
+    return this.validationForForm[validationFields.VALUE];
   }
 
   @api
   resetForm() {
     const input = this.template.querySelector(".input");
     clearInput(input);
-    this.selectedType = this.displayedTypes
-      ? this.displayedTypes[0].value
-      : "Text";
+    this.selectedType = this.displayedTypes ? this.displayedTypes[0].value : "Text";
     this.selectedSettings = [];
     this.question = {};
     this.question.Question_Options__r = [];
@@ -152,36 +176,34 @@ export default class QuestionForm extends LightningElement {
   setQuestionForEdit(editQuestion) {
     this.question = JSON.parse(JSON.stringify(editQuestion));
 
-    this.selectedType = this.question.Type__c;
+    this.selectedType = this.question[questionFields.TYPE];
     this.selectedSettings = [];
 
-    if (this.question[this.REQUIRED_FIELD_API_NAME]) this.selectedSettings.push(this.REQUIRED_FIELD_API_NAME);
-    if (this.question[this.REUSABLE_FIELD_API_NAME])
-      this.selectedSettings.push(this.REUSABLE_FIELD_API_NAME);
+    if (this.question[questionFields.REQUIRED]) this.selectedSettings.push(questionFields.REQUIRED);
+    if (this.question[questionFields.REUSABLE]) this.selectedSettings.push(questionFields.REUSABLE);
 
     this.setOptionsEnabling();
   }
 
   setDisplayedOperators() {
     this.displayedOperators = [...resolveOperatorsByQuestionType(
-      this.operators, 
-      this.validationForForm.Related_Question__c)];
+      this.operators, this.validationForForm[validationFields.RELATED])];
   }
 
   handleLabel(event) {
-    this.question.Label__c = event.detail.value;
+    this.question[questionFields.LABEL]= event.detail.value;
   }
 
   handleTypeChange(event) {
     this.selectedType = event.detail.value;
-    this.question.Type__c = event.detail.value;
+    this.question[questionFields.TYPE] = event.detail.value;
     this.question.Question_Options__r = [];
     this.setOptionsEnabling();
   }
 
   handleSettingChange(event) {
-    this.question[this.REQUIRED_FIELD_API_NAME] = false;
-    this.question[this.REUSABLE_FIELD_API_NAME] = false;
+    this.question[questionFields.REQUIRED] = false;
+    this.question[questionFields.REUSABLE] = false;
 
     for (const value of event.detail.value) {
       this.question[value] = true;
@@ -191,17 +213,13 @@ export default class QuestionForm extends LightningElement {
   handleSelectOperator(event) {
     this.selectedOperator = event.detail.value;
     this.isMainQuestionPicklist = isNeedPicklist(
-      this.validationForForm.Related_Question__c, 
+      this.validationForForm[validationFields.RELATED], 
       this.selectedOperator);
     this.isDisabled = false;
   }
 
   setOptionsEnabling() {
     this.isOptionsEnabled = isOptionEnabling(this.selectedType);
-
-    // if(this.isOptionsEnabled && !this.question.Question_Options__r) {
-    //   this.question.Question_Options__r = [];
-    // }
   }
 
   addOption() {
@@ -209,7 +227,7 @@ export default class QuestionForm extends LightningElement {
     if(!this.isOptionCorrect(input)) return;
 
     this.question.Question_Options__r.push({
-      Value__c: input.value
+      [optionFields.VALUE]: input.value
     });
 
     clearInput(input);
@@ -227,7 +245,6 @@ export default class QuestionForm extends LightningElement {
   cancelOptionEdit() {
     const input = this.template.querySelector(".option-input");
     clearInput(input);
-    input.value = "";
     this.editOptionValue = "";
     this.editOptionIndex = null;
     this.isEditOption = false;
@@ -237,7 +254,7 @@ export default class QuestionForm extends LightningElement {
     const input = this.template.querySelector(".option-input");
     if(!this.isOptionCorrect(input)) return;
 
-    this.question.Question_Options__r[this.editOptionIndex].Value__c = input.value;
+    this.question.Question_Options__r[this.editOptionIndex][optionFields.VALUE] = input.value;
     this.cancelOptionEdit();
   }
 
@@ -293,11 +310,11 @@ export default class QuestionForm extends LightningElement {
 
     const validation = {
       ...this.validationForForm,
-      Dependent_Question__c: JSON.parse(JSON.stringify(this.question)),
-      Operator__c: this.selectedOperator,
-      Value__c: input.value
+      [validationFields.DEPENDENT]: JSON.parse(JSON.stringify(this.question)),
+      [validationFields.OPERATOR]: this.selectedOperator,
+      [validationFields.VALUE]: input.value
     };
-    validation.Dependent_Question__c.VisibilityReason = buildVisibilityMessage(validation);
+    validation[validationFields.DEPENDENT].VisibilityReason = buildVisibilityMessage(validation);
 
     const addEvent = new CustomEvent(message, {
       detail: { ...validation }
@@ -328,7 +345,7 @@ export default class QuestionForm extends LightningElement {
     ) {
       this.question.Question_Options__r = null;
     }
-    this.question.Type__c = this.selectedType;
+    this.question[questionFields.TYPE] = this.selectedType;
   }
 
   isQuestionCorrect() {
@@ -365,7 +382,8 @@ export default class QuestionForm extends LightningElement {
       if (validationInput.value.trim().length === 0) {
         setInputValidity(validationInput, label.complete_this_field);
         isValid = false;
-      } else if(this.validationForForm.Related_Question__c.Type__c === questionTypes.RATING && +validationInput.value > 10) {
+      } else if(this.validationForForm[validationFields.RELATED][questionFields.TYPE] 
+        === questionTypes.RATING && +validationInput.value > 10) {
         setInputValidity(validationInput, label.rating_can_not_be_greater_ten);
         isValid = false;
       } else {

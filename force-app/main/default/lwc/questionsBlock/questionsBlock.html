@@ -25,7 +25,7 @@
         </template>
     
         <template for:each={filteredDisplayedQuestions} for:item="displayedQuestion">
-          <div key={displayedQuestion.Position__c}>
+          <div key={displayedQuestion.Key}>
             <c-question-card
               question={displayedQuestion}
               onaddoptional={addOptional}

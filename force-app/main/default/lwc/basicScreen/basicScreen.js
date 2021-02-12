@@ -5,6 +5,7 @@ import getDefaultBackgroundColor from "@salesforce/apex/SurveySettingController.
 import { FlowAttributeChangeEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { labels } from './labels';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { surveyFields } from "c/fieldService";
 
 export default class BasicScreen extends LightningElement {
   @track survey;
@@ -38,6 +39,22 @@ export default class BasicScreen extends LightningElement {
     return this.logoId;
   }
 
+  get surveyName() {
+    return this.survey[surveyFields.NAME];
+  }
+
+  get surveyBackground() {
+    return this.survey[surveyFields.BACKGROUND];
+  }
+
+  get surveyLogo() {
+    return this.survey[surveyFields.LOGO];
+  }
+
+  get surveyDescription() {
+    return this.survey[surveyFields.DESCRIPTION];
+  }
+
   connectedCallback() {
     this.setDefaultSurveyData();
   }
@@ -54,10 +71,10 @@ export default class BasicScreen extends LightningElement {
   setDefaultSurveyData() {
     if (!this.survey) {
       this.survey = {
-        Name: '',
-        Background_Color__c: '',
-        Logo__c: '',
-        Description__c: ''
+        [surveyFields.NAME] : '',
+        [surveyFields.BACKGROUND] : '',
+        [surveyFields.LOGO] : '',
+        [surveyFields.DESCRIPTION] : ''
       };
       this.setDefaultBackgroundColor();
     }
@@ -70,7 +87,7 @@ export default class BasicScreen extends LightningElement {
   setDefaultBackgroundColor() {
     getDefaultBackgroundColor()
       .then(result => {
-        this.survey.Background_Color__c = result;
+        this.survey[surveyFields.BACKGROUND] = result;
       })
       .catch((error) => {
         console.log(error);
@@ -78,15 +95,15 @@ export default class BasicScreen extends LightningElement {
   }
 
   handleNameChange(event) {
-    this.survey.Name = event.target.value;
+    this.survey[surveyFields.NAME] = event.target.value;
   }
 
   handleColorChange(event) {
-    this.survey.Background_Color__c = event.target.value;
+    this.survey[surveyFields.BACKGROUND] = event.target.value;
   }
 
   handleDescriptionChange(event) {
-    this.survey.Description__c = event.target.value;
+    this.survey[surveyFields.DESCRIPTION] = event.target.value;
   }
 
   handleImageUpdate(event) {
@@ -96,7 +113,7 @@ export default class BasicScreen extends LightningElement {
       this.isNewLogo = true;
     } else {
       this.isNewLogo = false;
-      this.survey.Logo__c = '';
+      this.survey[surveyFields.LOGO] = '';
     }
   }
   
@@ -121,7 +138,7 @@ export default class BasicScreen extends LightningElement {
             this.loading = false;
             this.logoData = JSON.parse(result);
             this.logoId = this.logoData.imageDocumentId;
-            this.survey.Logo__c = this.logoData.imageUrl;
+            this.survey[surveyFields.LOGO] = this.logoData.imageUrl;
             this.updateSurveyData();
           }).
           then(() => {
@@ -158,14 +175,14 @@ export default class BasicScreen extends LightningElement {
   }
 
   updateSurveyData() {
-    if (!this.survey.Background_Color__c) {
-      this.survey.Background_Color__c = this.defaultColor;
+    if (!this.survey[surveyFields.BACKGROUND]) {
+      this.survey[surveyFields.BACKGROUND] = this.defaultColor;
     }
     const changeSurveyDataEvent = new FlowAttributeChangeEvent("surveydatachange", this.surveyData);
     const changeLogoIdEvent = new FlowAttributeChangeEvent("logoidchange", this.logoDocumentId);
     this.dispatchEvent(changeSurveyDataEvent);
     this.dispatchEvent(changeLogoIdEvent);
-    if (this.logoId && !this.survey.Logo__c) {
+    if (this.logoId && !this.survey[surveyFields.LOGO]) {
       this.deleteImage();
     }
   }

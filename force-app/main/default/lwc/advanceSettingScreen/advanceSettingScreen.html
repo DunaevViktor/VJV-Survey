@@ -1,7 +1,7 @@
 <template>
 
     <div class="slds-box slds-box_x-small">
-        <lightning-input type="checkbox" label={label.template} checked={__survey.IsStandard__c}
+        <lightning-input type="checkbox" label={label.template} checked={isStandardSurvey}
         onchange={handleIsStandardSurveyChange}></lightning-input>
 
         <template if:true={isHasSurveys}>
@@ -112,7 +112,7 @@
                 <lightning-icon icon-name="action:email" size="x-small" class="emailIcon"></lightning-icon>
                 <span class="slds-m-left_xx-small">{label.Email_Receiver}</span>
             </div>
-             <lightning-datatable key-field="Value__c" data={copyReceivers} columns={columns} onrowaction={handleRowAction}
+             <lightning-datatable key-field={receiversKeyField} data={copyReceivers} columns={columns} onrowaction={handleRowAction}
                 class="slds-scrollable_none emailTable" hide-checkbox-column>
               </lightning-datatable>
           </div>

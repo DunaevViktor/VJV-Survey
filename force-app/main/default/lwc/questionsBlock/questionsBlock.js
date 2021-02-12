@@ -4,6 +4,7 @@ import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getP
 
 import {label} from "./labels.js";
 import {
+  trasnformQuestions,
   isEmpty,
   filterQuestionsByPage,
   filterQuestionsBySearhTerm,
@@ -38,7 +39,7 @@ export default class QuestionsBlock extends LightningElement {
   @track isError = false;
   
   connectedCallback() {
-    this.displayedQuestions = this.questions;
+    this.displayedQuestions = trasnformQuestions(this.questions);
     this.loadAmountItemsOnPage();
   }
 
@@ -56,9 +57,9 @@ export default class QuestionsBlock extends LightningElement {
   @api
   updateQuestions(questions) {
     if(this.isSearchMode) {
-      this.displayedQuestionsCopy = questions;
+      this.displayedQuestionsCopy = trasnformQuestions(questions);
     } else {
-      this.displayedQuestions = questions;
+      this.displayedQuestions = trasnformQuestions(questions);
     }
     
     this.resolveDisplayedQuestions();

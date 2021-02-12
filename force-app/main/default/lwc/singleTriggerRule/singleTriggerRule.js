@@ -2,9 +2,7 @@ import { LightningElement, track, api } from "lwc";
 import getObjectFieldsDescriptionList from "@salesforce/apex/MetadataFetcher.getObjectFieldsDescriptionList";
 import getPicklistValues from "@salesforce/apex/MetadataFetcher.getPicklistValues";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import TRIGGER_RULE_OBJECT from '@salesforce/schema/Trigger_Rule__c';
-import OBJECT_API_NAME_FIELD from '@salesforce/schema/Trigger_Rule__c.Object_Api_Name__c';
-import OPERATOR_FIELD from '@salesforce/schema/Trigger_Rule__c.Operator__c';
+import { triggerRuleObject, ruleFields } from "c/fieldService";
 
 import {
   getFieldAttributes,
@@ -26,9 +24,9 @@ export default class SingleTriggerRule extends LightningElement {
 
   labels = importedLabels;
 
-  triggerRuleObjectApiName = TRIGGER_RULE_OBJECT.objectApiName;
-  object_Api_NameFieldName = OBJECT_API_NAME_FIELD.fieldApiName;
-  operatorFieldName = OPERATOR_FIELD.fieldApiName;
+  triggerRuleObjectApiName = triggerRuleObject;
+  object_Api_NameFieldName = ruleFields.API;
+  operatorFieldName = ruleFields.OPERATOR;
 
   initialRender = true;
   
@@ -76,8 +74,8 @@ export default class SingleTriggerRule extends LightningElement {
     getPicklistValues({objectApiName: this.triggerRuleObjectApiName, fieldApiName: this.object_Api_NameFieldName})
       .then((result) => {
         this.objectNames = generateFieldOptions(result);
-        if (this._rule && this._rule.Object_Api_Name__c) {
-          this.objectValue = this._rule.Object_Api_Name__c;
+        if (this._rule && this._rule[ruleFields.API]) {
+          this.objectValue = this._rule[ruleFields.API];
           this.getObjectFields(this.objectValue);
         }
       })
@@ -94,22 +92,21 @@ export default class SingleTriggerRule extends LightningElement {
       })
       .catch((error) => {
         this.error = error;
-        console.log(error);
       });
   }
 
   generateOperatorField() {
-    if(this._rule && this._rule.Field_Name__c) {
+    if(this._rule && this._rule[ruleFields.FIELD]) {
       let receivedFieldObject = this.fieldNames.find(
           (field) => field.value === this.fieldValue
       );
       receivedFieldObject.operatorType = getFieldOperatorType(receivedFieldObject); 
-      this.setOperatorsByType(receivedFieldObject); 
-      if(this._rule && this._rule.Operator__c) {
-        this.operatorValue = this._rule.Operator__c;
+      this.setOperatorsByType(receivedFieldObject);       
+      if(this._rule && this._rule[ruleFields.OPERATOR]) {
+        this.operatorValue = this._rule[ruleFields.OPERATOR];
         if(this.operatorValue !== operatorTypes.ANY_CHANGE) {
           this.provideValueInput(receivedFieldObject);
-        }       
+        }
       }
     } 
   }
@@ -128,14 +125,13 @@ export default class SingleTriggerRule extends LightningElement {
     getObjectFieldsDescriptionList({ objectApiName: objectApiName })
       .then((result) => {  
         this.fieldNames = JSON.parse(JSON.stringify(result));
-        if (this._rule && this._rule.Field_Name__c) {
-          this.fieldValue = this._rule.Field_Name__c;  
-          this.generateOperatorField();         
+        if (this._rule && this._rule[ruleFields.FIELD]) {
+          this.fieldValue = this._rule[ruleFields.FIELD];  
+          this.generateOperatorField();        
         }
       })
       .catch((error) => {
         this.error = error;
-        console.log(error);
       });
   }
 
@@ -199,14 +195,13 @@ export default class SingleTriggerRule extends LightningElement {
       })
       .catch((error) => {
         this.error = error;
-        console.log(error);
       });
   }
 
   setField(chosenFieldObject, picklistOptions) {
     let settedValue = "";
-    if (this._rule && this._rule.Field_Value__c) {
-      settedValue = this._rule.Field_Value__c;
+    if (this._rule && this._rule[ruleFields.VALUE]) {
+      settedValue = this._rule[ruleFields.VALUE];
       this.value = settedValue;
     }
     if (this.operatorValue === operatorTypes.NULL) {
@@ -317,10 +312,10 @@ export default class SingleTriggerRule extends LightningElement {
 
   @api getTriggerRule() {    
     const triggerRule = {
-      Object_Api_Name__c: this.objectValue,
-      Field_Name__c: this.fieldValue,
-      Operator__c: this.operatorValue,
-      Field_Value__c: this.value,
+      [ruleFields.API]: this.objectValue,
+      [ruleFields.FIELD]: this.fieldValue,
+      [ruleFields.OPERATOR]: this.operatorValue,
+      [ruleFields.VALUE]: this.value,
     };
     if(this.isTriggerRuleClear(triggerRule)) {
       return {};

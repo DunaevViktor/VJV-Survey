@@ -42,7 +42,6 @@ export default class TriggerRulesWrapper extends LightningElement {
       })
       .catch((error) => {
         this.error = error;
-        console.log(error);
       });
   }
   

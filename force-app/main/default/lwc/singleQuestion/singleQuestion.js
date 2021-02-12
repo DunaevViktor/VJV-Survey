@@ -1,13 +1,14 @@
 import { LightningElement, api, track } from "lwc";
+import { questionFields } from "c/fieldService";
 
 export default class SingleQuestion extends LightningElement {
   @api singleQuestion;
   @track modifiedLabel = false;
 
   @api validate() {
-      if(this.question.IsVisible__c){
+      if(this.question[questionFields.VISIBLE]){
         let inputComponent = this.template.querySelector(".validate-input");
-        if(this.question.isText && this.question.Required__c){
+        if(this.question.isText && this.question[questionFields.REQUIRED]){
             let trimmedInput = inputComponent.value.trim();
             inputComponent.value = trimmedInput;
         }
@@ -17,9 +18,25 @@ export default class SingleQuestion extends LightningElement {
       
       return true;
   }
-
+  
   get question(){
-      return JSON.parse(JSON.stringify(this.singleQuestion))
+    return JSON.parse(JSON.stringify(this.singleQuestion))
+  }
+  
+  get questionId() {
+    return this.question[questionFields.ID];
+  }
+
+  get questionLabel() {
+    return this.question[questionFields.LABEL];
+  }
+  
+  get questionRequired() {
+    return this.question[questionFields.REQUIRED];
+  }
+
+  get questionVisible() {
+    return this.question[questionFields.VISIBLE];
   }
 
   connectedCallback(){
