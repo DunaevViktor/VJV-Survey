@@ -1,9 +1,10 @@
 import {findQuestionByPosition} from "c/formUtil";
+import { ruleFields, receiverFields, questionFields, optionFields, validationFields } from "c/fieldService";
 
 const transformRules = (rules, surveyId) => {
   return rules.map((rule) => {
     rule = JSON.parse(JSON.stringify(rule));
-    rule.Survey__c = surveyId;
+    rule[ruleFields.SURVEY] = surveyId;
     return rule;
   });
 }
@@ -11,7 +12,7 @@ const transformRules = (rules, surveyId) => {
 const transformQuestions = (questions, surveyId) => {
   return questions.map((question) => {
     question = JSON.parse(JSON.stringify(question));
-    question.Survey__c = surveyId;
+    question[questionFields.SURVEY] = surveyId;
     return question;
   });
 }
@@ -24,11 +25,11 @@ const transformOptions = (questions, savedQuestions) => {
      
     if(!question.Question_Options__r || question.Question_Options__r.length === 0) continue;
 
-    const savedQuestion = findQuestionByPosition(savedQuestions, question.Position__c);
+    const savedQuestion = findQuestionByPosition(savedQuestions, question[questionFields.POSITION]);
 
     question.Question_Options__r.forEach((option) => {
       option = JSON.parse(JSON.stringify(option));
-      option.Question__c = savedQuestion.Id;
+      option[optionFields.QUESTION] = savedQuestion[questionFields.ID];
       options.push(option);
     });
   }
@@ -44,12 +45,14 @@ const transformValidations = (validations, savedQuestions) => {
   validations.forEach((validation) => {
     validation = JSON.parse(JSON.stringify(validation));
 
-    const relatedQuestion = findQuestionByPosition(savedQuestions, validation.Related_Question__c.Position__c);
+    const relatedQuestion = findQuestionByPosition(
+      savedQuestions, validation[validationFields.RELATED][questionFields.POSITION]);
 
-    const dependantQuestion = findQuestionByPosition(savedQuestions, validation.Dependent_Question__c.Position__c);
+    const dependantQuestion = findQuestionByPosition(
+      savedQuestions, validation[validationFields.DEPENDENT][questionFields.POSITION]);
 
-    validation.Related_Question__c = relatedQuestion.Id;
-    validation.Dependent_Question__c = dependantQuestion.Id;
+    validation[validationFields.RELATED] = relatedQuestion[questionFields.ID];
+    validation[validationFields.DEPENDENT] = dependantQuestion[questionFields.ID];
 
     transformedValidations.push(validation);
   })
@@ -60,7 +63,7 @@ const transformValidations = (validations, savedQuestions) => {
 const transformEmailReceivers = (emailReceivers, surveyId) => {
   return emailReceivers.map((receiver) => {
     receiver = JSON.parse(JSON.stringify(receiver));
-    receiver.Survey__c = surveyId;
+    receiver[receiverFields.SURVEY] = surveyId;
     return receiver;
   });
 }

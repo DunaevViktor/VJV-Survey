@@ -8,6 +8,7 @@ import saveOptions from "@salesforce/apex/SaverController.saveOptions";
 import saveValidations from "@salesforce/apex/SaverController.saveValidations";
 import saveEmailReceivers from "@salesforce/apex/SaverController.saveEmailReceivers";
 import sendEmails from "@salesforce/apex/SendEmailLogic.sendEmails";
+import { surveyFields } from "c/fieldService";
 
 import { transformRules,  
          transformQuestions,
@@ -50,7 +51,7 @@ export default class SaverScreen extends LightningElement {
 
   sendSaveSurveyRequest() {
       let copySurvey = {...this.survey};
-      copySurvey.URL__c = this.getSurveyUrl();
+      copySurvey[surveyFields.URL] = this.getSurveyUrl();
 
     saveSurvey({survey : copySurvey})
       .then((result) => {
