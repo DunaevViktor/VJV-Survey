@@ -26,7 +26,7 @@ import OPTION_NAME_FIELD from '@salesforce/schema/Question_Option__c.Name';
 import OPTION_VALUE_FIELD from '@salesforce/schema/Question_Option__c.Value__c';
 
 import VALIDATION_ID_FIELD from '@salesforce/schema/Validation__c.Id';
-import VALIDATION_DEPENDANT_FIELD from '@salesforce/schema/Validation__c.Dependent_Question__c';
+import VALIDATION_DEPENDENT_FIELD from '@salesforce/schema/Validation__c.Dependent_Question__c';
 import VALIDATION_OPERATOR_FIELD from '@salesforce/schema/Validation__c.Operator__c';
 import VALIDATION_RELATED_FIELD from '@salesforce/schema/Validation__c.Related_Question__c';
 import VALIDATION_NAME_FIELD from '@salesforce/schema/Validation__c.Name';
@@ -90,7 +90,7 @@ const optionFields = {
 
 const validationFields = {
     ID: VALIDATION_ID_FIELD.fieldApiName,
-    DEPENDANT: VALIDATION_DEPENDANT_FIELD.fieldApiName,
+    DEPENDENT: VALIDATION_DEPENDENT_FIELD.fieldApiName,
     OPERATOR: VALIDATION_OPERATOR_FIELD.fieldApiName,
     RELATED: VALIDATION_RELATED_FIELD.fieldApiName,
     NAME: VALIDATION_NAME_FIELD.fieldApiName,
@@ -117,7 +117,7 @@ const receiverFields = {
 const answerFields = {
     ID: ANSWER_ID_FIELD.fieldApiName,
     GROUP: ANSWER_GROUP_FIELD.fieldApiName,
-    QUESION: ANSWER_QUESTION_FIELD.fieldApiName,
+    QUESTION: ANSWER_QUESTION_FIELD.fieldApiName,
     VALUE: ANSWER_VALUE_FIELD.fieldApiName,
 }
 

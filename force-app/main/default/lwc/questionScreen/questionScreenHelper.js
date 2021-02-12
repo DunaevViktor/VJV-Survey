@@ -60,8 +60,8 @@ const updateValidationByPosition = (validations, updatedValidation) => {
   return validations.map((validation) => {
     if (validation[validationFields.RELATED][questionFields.POSITION] 
         === updatedValidation[validationFields.RELATED][questionFields.POSITION] &&
-        validation[validationFields.DEPENDANT][questionFields.POSITION] 
-        === updatedValidation[validationFields.DEPENDANT][questionFields.POSITION]) {
+        validation[validationFields.DEPENDENT][questionFields.POSITION] 
+        === updatedValidation[validationFields.DEPENDENT][questionFields.POSITION]) {
       return {
         ...updatedValidation
       };
@@ -138,7 +138,7 @@ const resolveValidationsByDeleted = (validations, position) => {
 
   return validations.filter((validation) => {
     return !validation[validationFields.RELATED][questionFields.POSITION].startsWith(position) &&
-      !validation[validationFields.DEPENDANT][questionFields.POSITION].startsWith(position);
+      !validation[validationFields.DEPENDENT][questionFields.POSITION].startsWith(position);
   })
   .map((validation) => {
     if(validation[validationFields.RELATED][questionFields.POSITION].startsWith(leftPart)) {
@@ -146,9 +146,9 @@ const resolveValidationsByDeleted = (validations, position) => {
         validation[validationFields.RELATED][questionFields.POSITION], 
         leftPart, rightPart);
     }
-    if(validation[validationFields.DEPENDANT][questionFields.POSITION].startsWith(leftPart)) {
-      validation[validationFields.DEPENDANT][questionFields.POSITION] = resolvePositionByDeleted(
-        validation[validationFields.DEPENDANT][questionFields.POSITION], 
+    if(validation[validationFields.DEPENDENT][questionFields.POSITION].startsWith(leftPart)) {
+      validation[validationFields.DEPENDENT][questionFields.POSITION] = resolvePositionByDeleted(
+        validation[validationFields.DEPENDENT][questionFields.POSITION], 
         leftPart, rightPart);
     }
     return validation;
@@ -169,10 +169,10 @@ const resolveEditableQuestions = (questions, validations) => {
 }
 
 const prepareValidationForPush = (validations, newValidation) => {
-  newValidation[validationFields.DEPENDANT][questionFields.POSITION] = solveDependentQuestionPosition(
+  newValidation[validationFields.DEPENDENT][questionFields.POSITION] = solveDependentQuestionPosition(
     validations, newValidation[validationFields.RELATED]);
-  newValidation[validationFields.DEPENDANT].Editable = true;
-  newValidation[validationFields.DEPENDANT][questionFields.VISIBLE] = false;
+  newValidation[validationFields.DEPENDENT].Editable = true;
+  newValidation[validationFields.DEPENDENT][questionFields.VISIBLE] = false;
   newValidation[validationFields.RELATED].Editable = false;
   return newValidation;
 }
@@ -199,8 +199,8 @@ const swapValidations = (validations, upperPosition, downPosition) => {
   return validations.map((validation) => {
     validation[validationFields.RELATED][questionFields.POSITION] = 
     updatePosition(validation[validationFields.RELATED][questionFields.POSITION], upperPosition, downPosition);
-    validation[validationFields.DEPENDANT][questionFields.POSITION] = 
-    updatePosition(validation[validationFields.DEPENDANT][questionFields.POSITION], upperPosition, downPosition);
+    validation[validationFields.DEPENDENT][questionFields.POSITION] = 
+    updatePosition(validation[validationFields.DEPENDENT][questionFields.POSITION], upperPosition, downPosition);
     return validation;
   });
 }

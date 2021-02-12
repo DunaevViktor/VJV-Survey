@@ -94,7 +94,7 @@ const compareValues = (answerValue, operator, validationValue) => {
 
 const hideAnswerChain = (questions, validation) => {
   const dependentQuestion = questions.findIndex(
-    (question) => question[questionFields.ID] === validation[validationFields.DEPENDANT]
+    (question) => question[questionFields.ID] === validation[validationFields.DEPENDENT]
   );
   questions[dependentQuestion][questionFields.VISIBLE] = false;
   questions[dependentQuestion].Answer =
@@ -130,7 +130,7 @@ const checkDependentQuestion = (event, questions) => {
         );
 
         const dependentQuestion = questions.findIndex(
-          (question) => question[questionFields.ID] === validation[validationFields.DEPENDANT]
+          (question) => question[questionFields.ID] === validation[validationFields.DEPENDENT]
         );
 
         if (isConditionMet === true) {
@@ -154,7 +154,7 @@ const createAnswers = (questions, groupAnswerId) => {
         if (createAnswer) {
           let singleAnswer = { SObjectType: "Answer__c" };
           singleAnswer[answerFields.GROUP] = groupAnswerId;
-          singleAnswer[answerFields.QUESION] = question[questionFields.ID];
+          singleAnswer[answerFields.QUESTION] = question[questionFields.ID];
     
           if (question[questionFields.TYPE] === questionTypes.CHECKBOX) {
             question.Answer.forEach((checkedBox) => {

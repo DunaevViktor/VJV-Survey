@@ -122,7 +122,6 @@ export default class SingleTriggerRule extends LightningElement {
       })
       .catch((error) => {
         this.error = error;
-        console.log(error);
       });
   }
 

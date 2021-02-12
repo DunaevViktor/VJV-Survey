@@ -49,10 +49,10 @@ const transformValidations = (validations, savedQuestions) => {
       savedQuestions, validation[validationFields.RELATED][questionFields.POSITION]);
 
     const dependantQuestion = findQuestionByPosition(
-      savedQuestions, validation[validationFields.DEPENDANT][questionFields.POSITION]);
+      savedQuestions, validation[validationFields.DEPENDENT][questionFields.POSITION]);
 
     validation[validationFields.RELATED] = relatedQuestion[questionFields.ID];
-    validation[validationFields.DEPENDANT] = dependantQuestion[questionFields.ID];
+    validation[validationFields.DEPENDENT] = dependantQuestion[questionFields.ID];
 
     transformedValidations.push(validation);
   })

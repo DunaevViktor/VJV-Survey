@@ -221,7 +221,7 @@ export default class QuestionScreen extends LightningElement {
       this.questions, validation[validationFields.RELATED][questionFields.POSITION], 
       JSON.parse(JSON.stringify(validation[validationFields.RELATED])));
     
-    this.displayedQuestions.push(JSON.parse(JSON.stringify(validation[validationFields.DEPENDANT])));
+    this.displayedQuestions.push(JSON.parse(JSON.stringify(validation[validationFields.DEPENDENT])));
     this.displayedValidations.push(validation);
 
     this.clearFormAttributes();
@@ -264,7 +264,7 @@ export default class QuestionScreen extends LightningElement {
     if(this.questionForForm.VisibilityReason) {
       this.isDependentQuestion = true;
       this.validationForForm = this.displayedValidations.filter((validation) => {
-        return validation[validationFields.DEPENDANT][questionFields.POSITION] 
+        return validation[validationFields.DEPENDENT][questionFields.POSITION] 
         === this.questionForForm[questionFields.POSITION];
       })[0];
     }
@@ -287,7 +287,7 @@ export default class QuestionScreen extends LightningElement {
       this.displayedQuestions = updateQuestionByPosition(this.questions, this.editQuestionPosition, value);
     } else {
       this.displayedQuestions = updateQuestionByPosition(
-        this.questions, this.editQuestionPosition, JSON.parse(JSON.stringify(value[validationFields.DEPENDANT])));
+        this.questions, this.editQuestionPosition, JSON.parse(JSON.stringify(value[validationFields.DEPENDENT])));
 
       this.displayedValidations = updateValidationByPosition(this.validations, value);
     }

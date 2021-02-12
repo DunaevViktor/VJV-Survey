@@ -59,5 +59,5 @@ const transformStandardQuestions = (standardQuestions) => {
 export {
   columns,
   getQuestionsTableStyle,
-  transformStandardQuestions,
+  transformStandardQuestions
 }

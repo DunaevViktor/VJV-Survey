@@ -308,15 +308,13 @@ export default class QuestionForm extends LightningElement {
   sendDependatQuestion(message) {
     const input = this.template.querySelector(".validationInput");
 
-    console.log('asd');
-
     const validation = {
       ...this.validationForForm,
-      [validationFields.DEPENDANT]: JSON.parse(JSON.stringify(this.question)),
+      [validationFields.DEPENDENT]: JSON.parse(JSON.stringify(this.question)),
       [validationFields.OPERATOR]: this.selectedOperator,
       [validationFields.VALUE]: input.value
     };
-    validation[validationFields.DEPENDANT].VisibilityReason = buildVisibilityMessage(validation);
+    validation[validationFields.DEPENDENT].VisibilityReason = buildVisibilityMessage(validation);
 
     const addEvent = new CustomEvent(message, {
       detail: { ...validation }
