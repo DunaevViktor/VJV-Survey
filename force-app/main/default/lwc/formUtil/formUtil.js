@@ -1,5 +1,6 @@
 import trueLabel from "@salesforce/label/c.true";
 import falseLabel from "@salesforce/label/c.false";
+import { questionFields } from "c/fieldService";
 
 const questionTypes = {
   PICKLIST: "Picklist",
@@ -32,7 +33,7 @@ const booleanPicklistOptions = [
 
 const findQuestionByPosition = (questions, position) => {
   return questions.filter((question) => {
-    return question.Position__c === position;
+    return question[questionFields.POSITION] === position;
   })[0];
 }
 

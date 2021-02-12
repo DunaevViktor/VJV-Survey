@@ -1,8 +1,10 @@
+import { surveyFields } from "c/fieldService";
+
 const transformDisplayesTypes = (templates) => {
   return templates.map((template) => {
     return {
-      label: template.Name,
-      value: template.Id
+      label: template[surveyFields.NAME],
+      value: template[surveyFields.ID]
     };
   });
 }

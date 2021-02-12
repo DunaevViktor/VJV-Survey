@@ -14,14 +14,14 @@
           type="text"
           label={label.survey_name}
           placeholder={label.type_survey_name}
-          value={survey.Name}
+          value={surveyName}
           onchange={handleNameChange}
           required
         >
         </lightning-input>
 
         <c-image-upload 
-          default-url={survey.Logo__c}
+          default-url={surveyLogo}
           loading={loading}
           onupdateimageurl={handleImageUpdate}
         ></c-image-upload>
@@ -30,7 +30,7 @@
           class="slds-m-vertical_medium"
           type="color"
           label={label.survey_bg_color}
-          value={survey.Background_Color__c}
+          value={surveyBackground}
           onchange={handleColorChange}
         >
         </lightning-input>
@@ -39,7 +39,7 @@
           max-length="255"
           label={label.survey_description}
           placeholder={label.type_description}
-          value={survey.Description__c}
+          value={surveyDescription}
           onchange={handleDescriptionChange}
         >
         </lightning-textarea>

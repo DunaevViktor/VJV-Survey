@@ -2,6 +2,7 @@ import { LightningElement, api, track } from "lwc";
 import { FlowNavigationBackEvent,FlowNavigationNextEvent } from "lightning/flowSupport";
 import { label } from "./labels.js";
 import { initQuestionFields } from "./previewScreenHelper.js";
+import { surveyFields } from "c/fieldService";
 
 export default class PreviewScreen extends LightningElement {
   label = label;
@@ -27,8 +28,20 @@ export default class PreviewScreen extends LightningElement {
     this._survey = JSON.parse(JSON.stringify(value));
   }
 
+  get surveyName() {
+    return this.survey[surveyFields.NAME];
+  }
+  
+  get surveyLogo() {
+    return this.survey[surveyFields.LOGO];
+  }
+
+  get surveyDescription() {
+    return this.survey[surveyFields.DESCRIPTION];
+  }
+
   get backgroundColor() {
-    return "background-color: " + this.survey.Background_Color__c + ";";
+    return "background-color: " + this.survey[surveyFields.BACKGROUND] + ";";
   }
 
   clickPreviousButton() {

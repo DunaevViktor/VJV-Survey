@@ -1,13 +1,13 @@
 <template>
-    <template if:true={question.IsVisible__c}>
+    <template if:true={questionVisible}>
         <lightning-input
-          key={question.Id}
-          data-item={question.Id}
+          key={questionId}
+          data-item={questionId}
           if:true={question.isText}
-          label={question.Label__c}
+          label={questionLabel}
           type="text"
           value={question.Answer}
-          required={question.Required__c}
+          required={questionRequired}
           class="slds-p-around_small validate-input"
           onchange={handleAnswerChange}
           disabled={question.IsDisabled}
@@ -15,21 +15,21 @@
 
         <template if:true={modifiedLabel}>
             <div class="slds-text-title slds-p-left_small slds-p-top_medium slds-p-bottom_xx-small">
-                <template if:true={question.Required__c}>
+                <template if:true={questionRequired}>
                     <span title="required" class="slds-required">*</span>
                 </template>
-                {question.Label__c}
+                {questionLabel}
             </div>
         </template>
 
         <lightning-checkbox-group
-          key={question.Id}
-          data-item={question.Id}
+          key={questionId}
+          data-item={questionId}
           if:true={question.isCheckbox}
-          label={question.Label__c}
+          label={questionLabel}
           value={question.Answer}
           options={question.Question_Options__r}
-          required={question.Required__c}
+          required={questionRequired}
           class="slds-p-bottom_small slds-p-horizontal_small validate-input"
           onchange={handleAnswerChange}
           disabled={question.IsDisabled}
@@ -37,14 +37,14 @@
         ></lightning-checkbox-group>
 
         <lightning-radio-group
-          key={question.Id}
-          data-item={question.Id}
+          key={questionId}
+          data-item={questionId}
           if:true={question.isRadioButton}
-          label={question.Label__c}
+          label={questionLabel}
           options={question.Question_Options__r}
           type="radio"
           value={question.Answer}
-          required={question.Required__c}
+          required={questionRequired}
           class="slds-p-bottom_small slds-p-horizontal_small validate-input"
           onchange={handleAnswerChange}
           disabled={question.IsDisabled}
@@ -53,19 +53,22 @@
         </lightning-radio-group>
 
         <lightning-combobox
-          key={question.Id}
-          data-item={question.Id}
+          key={questionId}
+          data-item={questionId}
           if:true={question.isPicklist}
-          label={question.Label__c}
+          label={questionLabel}
           options={question.Question_Options__r}
           value={question.Answer}
-          required={question.Required__c}
+          required={questionRequired}
           class="slds-p-around_small validate-input"
           onchange={handleAnswerChange}
           disabled={question.IsDisabled}
         >
         </lightning-combobox>
 
-        <c-star-rating-input if:true={question.isRating} question={question} class="slds-p-around_small validate-input"></c-star-rating-input>
+        <c-star-rating-input if:true={question.isRating} 
+        question={question} 
+        class="slds-p-around_small validate-input"
+        ></c-star-rating-input>
       </template>
 </template>

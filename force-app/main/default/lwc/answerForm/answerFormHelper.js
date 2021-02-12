@@ -1,38 +1,43 @@
 import { operatorTypes, questionTypes } from "c/formUtil";
+import { surveyObject, surveyFields, questionFields, optionFields, validationFields, answerFields } from "c/fieldService";
+import { label } from "./labels.js";
 
 const FIELDS = [
-  "Survey__c.Id",
-  "Survey__c.Name",
-  "Survey__c.Description__c",
-  "Survey__c.Logo__c",
-  "Survey__c.Background_Color__c",
-  "Survey__c.Related_To__c"
+  surveyObject + "." + surveyFields.ID,
+  surveyObject + "." + surveyFields.NAME,
+  surveyObject + "." + surveyFields.DESCRIPTION,
+  surveyObject + "." + surveyFields.LOGO,
+  surveyObject + "." + surveyFields.BACKGROUND,
+  surveyObject + "." + surveyFields.RELATED
 ];
 
 const initQuestionFields = (questions, data) => {
   questions = [];
   data.forEach((question) => {
-    questions.push({ ...question });
+    questions.push({ 
+      ...question, 
+      Key: question[questionFields.ID]
+    });
   });
 
   questions.forEach((question) => {
-    let fieldType = "is" + question.Type__c;
+    let fieldType = "is" + question[questionFields.TYPE];
     question[fieldType] = true;
     let options = [];
 
-    switch (question.Type__c) {
+    switch (question[questionFields.TYPE]) {
       case questionTypes.CHECKBOX:
         question.Answer = [];
         break;
       case questionTypes.PICKLIST:
-        options = [{ label: "-- None --", value: null }];
+        options = [{ label: `-- ${label.none} --`, value: null }];
         break;
       default:
     }
 
     if (question.Question_Options__r) {
       question.Question_Options__r.forEach((option) => {
-        options.push({ label: option.Value__c, value: option.Value__c });
+        options.push({ label: option[optionFields.VALUE], value: option[optionFields.VALUE] });
       });
 
       question.Question_Options__r = options;
@@ -44,7 +49,7 @@ const initQuestionFields = (questions, data) => {
 
 const sortQuestionsByPosition = (questions) => {
   questions.sort(function (a, b) {
-    return a.Position__c.localeCompare(b.Position__c, undefined, {
+    return a[questionFields.POSITION].localeCompare(b[questionFields.POSITION], undefined, {
       numeric: true,
       sensitivity: "base"
     });
@@ -89,11 +94,11 @@ const compareValues = (answerValue, operator, validationValue) => {
 
 const hideAnswerChain = (questions, validation) => {
   const dependentQuestion = questions.findIndex(
-    (question) => question.Id === validation.Dependent_Question__c
+    (question) => question[questionFields.ID] === validation[validationFields.DEPENDENT]
   );
-  questions[dependentQuestion].IsVisible__c = false;
+  questions[dependentQuestion][questionFields.VISIBLE] = false;
   questions[dependentQuestion].Answer =
-    questions[dependentQuestion].Type__c === questionTypes.CHECKBOX ? [] : null;
+    questions[dependentQuestion][questionFields.TYPE] === questionTypes.CHECKBOX ? [] : null;
   if (questions[dependentQuestion].Related_Question_Validations__r != null) {
     questions[dependentQuestion].Related_Question_Validations__r.forEach(
       (nextValidation) => {
@@ -108,10 +113,10 @@ const checkDependentQuestion = (event, questions) => {
   const answer = event.detail.answer;
 
   const questionWithChangedAnswer = questions.find(
-    ({ Id }) => Id === answeredQuestionId
+    (question) => question[questionFields.ID] === answeredQuestionId
   );
   const questionIndex = questions.findIndex(
-    ({ Id }) => Id === answeredQuestionId
+    ( question ) => question[questionFields.ID] === answeredQuestionId
   );
   questions[questionIndex].Answer = answer;
 
@@ -120,15 +125,16 @@ const checkDependentQuestion = (event, questions) => {
       (validation) => {
         let isConditionMet = compareValues(
           answer,
-          validation.Operator__c,
-          validation.Value__c
+          validation[validationFields.OPERATOR],
+          validation[validationFields.VALUE]
         );
 
         const dependentQuestion = questions.findIndex(
-          (question) => question.Id === validation.Dependent_Question__c
+          (question) => question[questionFields.ID] === validation[validationFields.DEPENDENT]
         );
+
         if (isConditionMet === true) {
-          questions[dependentQuestion].IsVisible__c = true;
+          questions[dependentQuestion][questionFields.VISIBLE] = true;
         } else {
           hideAnswerChain(questions, validation);
         }
@@ -142,22 +148,22 @@ const createAnswers = (questions, groupAnswerId) => {
   questions.forEach((question) => {
       if(question.Answer){
         let createAnswer = true;
-        if (question.isText && question.IsVisible__c && question.Answer.trim().length === 0) {
+        if (question.isText && question[questionFields.VISIBLE] && question.Answer.trim().length === 0) {
             createAnswer = false;
         }
         if (createAnswer) {
           let singleAnswer = { SObjectType: "Answer__c" };
-          singleAnswer.Group_Answer__c = groupAnswerId;
-          singleAnswer.Question__c = question.Id;
+          singleAnswer[answerFields.GROUP] = groupAnswerId;
+          singleAnswer[answerFields.QUESTION] = question[questionFields.ID];
     
-          if (question.Type__c === questionTypes.CHECKBOX) {
+          if (question[questionFields.TYPE] === questionTypes.CHECKBOX) {
             question.Answer.forEach((checkedBox) => {
               let singleCheckboxAnswer = { ...singleAnswer };
-              singleCheckboxAnswer.Value__c = checkedBox;
+              singleCheckboxAnswer[answerFields.VALUE] = checkedBox;
               answers.push(singleCheckboxAnswer);
             });
           } else {
-            singleAnswer.Value__c = question.Answer;
+            singleAnswer[answerFields.VALUE] = question.Answer;
             answers.push(singleAnswer);
           }
         }

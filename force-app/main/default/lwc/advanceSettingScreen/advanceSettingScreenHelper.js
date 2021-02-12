@@ -1,15 +1,15 @@
 import { label } from "./labels.js";
+import { surveyFields, receiverFields } from "c/fieldService";
 
 const TYPE_TEXT = "text";
 const FIELD_NAME = "Name";
 const FIELD_STANDARD_TYPE = "Type";
-const FIELD_CUSTOM_TYPE = "Type__c";
 const RECORD_TYPE_CONTACT = "Contact";
 const RECORD_TYPE_USER = "User";
 const RECORD_TYPE_LEAD = "Lead";
 
 const columns = [
-    { label: label.type, fieldName: FIELD_CUSTOM_TYPE, type: TYPE_TEXT },
+    { label: label.type, fieldName: receiverFields.TYPE, type: TYPE_TEXT },
     { label: label.Name, fieldName: FIELD_NAME, type: TYPE_TEXT },
     {
         type: "button",
@@ -52,19 +52,25 @@ const getReceiversTableStyle = () => {
 
 const isReceiverExist = (receivers, value) => {
     return receivers.find((receiver) => {
-        return receiver.Value__c.localeCompare(value) === 0
+        return receiver[receiverFields.VALUE].localeCompare(value) === 0
     });
 };
 
 const deleteReceiver = (receiverList, filterValue) => {
     return receiverList.filter((receiver) => {
-        return receiver.Value__c !== filterValue;
+        return receiver[receiverFields.VALUE] !== filterValue;
     });
 }
 
 const createDisplayedMap = (objectList) => {
     return objectList.map((element) => {
         return { label: element.Name, value: element.Id };
+    });
+}
+
+const createSurveyDisplayedMap = (objectList) => {
+    return objectList.map((element) => {
+        return { label: element[surveyFields.NAME], value: element[surveyFields.ID] };
     });
 }
 
@@ -112,6 +118,7 @@ export {
     isReceiverExist,
     deleteReceiver,
     createDisplayedMap,
+    createSurveyDisplayedMap,
     getObjectName,
     callReportValidity,
     createMemberList

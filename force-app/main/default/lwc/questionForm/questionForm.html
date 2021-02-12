@@ -23,7 +23,7 @@
       type="text"
       label={label.specify_question}
       onchange={handleLabel}
-      value={question.Label__c}
+      value={questionLabel}
     ></lightning-input>
 
     <div class="slds-grid slds-wrap">
@@ -59,6 +59,7 @@
             <li key={option.Id} role="presentation" class="slds-listbox__item">
               <c-option-list-element
                 option={option}
+                is-in-form={isOptionInsideForm}
                 ondelete={deleteOption}
                 onedit={editOption}
               ></c-option-list-element>
@@ -101,13 +102,13 @@
     <hr class="slds-clearfix slds-m-bottom_x-small" />
 
     <template if:true={isDependentQuestion} class="slds-m-top_small">
-      {label.question_will_be_visible_if} {validationForForm.Related_Question__c.Label__c}
+      {label.question_will_be_visible_if} {validationQuestionLabel}
 
       <div class="slds-grid slds-wrap">
         <div class="slds-size_1-of-2">
           <lightning-combobox
             label={label.operator}
-            value={validationForForm.Operator__c}
+            value={validatiorOperator}
             placeholder={label.select_operator}
             options={displayedOperators}
             class="slds-m-right_small validation-operator"
@@ -123,17 +124,16 @@
             placeholder={label.select_value}
             options={questionsOptions}
             class="slds-m-left_small validationInput"
-            value={validationForForm.Value__c}
+            value={validationValue}
             disabled={isDisabled}
-          >
-          </lightning-combobox>
+          ></lightning-combobox>
 
           <lightning-input
             if:false={isMainQuestionPicklist}
             type={inputType}
             label={label.enter_compared_value}
             class="slds-m-left_small validationInput"
-            value={validationForForm.Value__c}
+            value={validationValue}
             disabled={isDisabled}
           ></lightning-input>
         </div>
