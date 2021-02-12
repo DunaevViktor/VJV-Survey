@@ -15,7 +15,9 @@ const initQuestionFields = (questions, data) => {
   questions = [];
   data.forEach((question) => {
     questions.push({ 
-      ...question, 
+      ...question.question,
+      Question_Options__r: question.options,
+      Related_Question_Validations__r: question.validations,
       Key: question[questionFields.ID]
     });
   });
