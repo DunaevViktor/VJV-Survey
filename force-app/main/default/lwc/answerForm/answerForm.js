@@ -112,7 +112,7 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
 
   createGroupAnswer() {
     if (this.validateFields()) {
-      const groupAnswer = { SObjectType: "Group_Answer__c" };
+      const groupAnswer = {};
       const surveyId = this.survey.data.fields[surveyFields.ID].value;
       groupAnswer[groupAnswerFields.SURVEY] = surveyId;
 

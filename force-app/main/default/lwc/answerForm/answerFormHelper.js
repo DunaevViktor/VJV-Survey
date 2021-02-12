@@ -154,7 +154,7 @@ const createAnswers = (questions, groupAnswerId) => {
             createAnswer = false;
         }
         if (createAnswer) {
-          let singleAnswer = { SObjectType: "Answer__c" };
+          const singleAnswer = {};
           singleAnswer[answerFields.GROUP] = groupAnswerId;
           singleAnswer[answerFields.QUESTION] = question[questionFields.ID];
     
