@@ -2,7 +2,9 @@ import { LightningElement, track, api } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getMaxTriggerRuleAmount from "@salesforce/apex/SurveySettingController.getMaxTriggerRuleAmount";
 
-import { importedLabels } from "./labels"
+import { importedLabels } from "./labels";
+
+import { ruleFields } from "c/fieldService";
 
 import { 
   areTriggerRulesFilledCompletely,
@@ -55,8 +57,8 @@ export default class TriggerRulesWrapper extends LightningElement {
           rule: rule
         });
         this.nextId++;
-        if(rule.Operator__c === operatorTypes.ANY_CHANGE) {
-          this.addObjectFieldWithAnyChangeOperator(rule.Object_Api_Name__c, rule.Field_Name__c);
+        if(rule[ruleFields.OPERATOR] === operatorTypes.ANY_CHANGE) {
+          this.addObjectFieldWithAnyChangeOperator(rule[ruleFields.API], rule[ruleFields.FIELD]);
         }
       });
       this.triggerRules = newtriggerRules;
@@ -212,7 +214,7 @@ export default class TriggerRulesWrapper extends LightningElement {
           'c-single-trigger-rule[data-my-id="' + id + '"]'
         );
         let triggerRule = JSON.parse(JSON.stringify(element.getTriggerRule()));
-        if((triggerRule.Object_Api_Name__c === this.anyChangeObject) && (triggerRule.Field_Name__c === this.anyChangeField)) {
+        if((triggerRule[ruleFields.API] === this.anyChangeObject) && (triggerRule[ruleFields.FIELD] === this.anyChangeField)) {
           const index = this.triggerRules.findIndex(trRule => trRule.id === rule.id);
           this.triggerRules.splice(index, 1);
         }  
