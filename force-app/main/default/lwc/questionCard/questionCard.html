@@ -67,17 +67,19 @@
         </ul>
       </div>
     </template>
-  </div>
 
-  <c-confirmation-popup
-    title={label.confirm_action}
-    message={message}
-    confirm-label={label.yes}
-    cancel-label={label.no}
-    visible={isDialogVisible}
-    name="confirmModal"
-    original-message={originalMessage}
-    onpopupclick={handleCongirmationPopupClick}>
-  </c-confirmation-popup>
+    <c-confirmation-popup
+      title={label.confirm_action}
+      message={message}
+      confirm-label={label.yes}
+      cancel-label={label.no}
+      visible={isDialogVisible}
+      name="confirmModal"
+      original-message={originalMessage}
+      onpopupclick={handleCongirmationPopupClick}
+      class="slds-is-fixed">
+    </c-confirmation-popup>
+    
+  </div>  
 
 </template>

@@ -1,6 +1,8 @@
+import { operatorTypes } from "c/formUtil";
+
 const isFilledCompletely = (obj) => {
     let filledCompletely = true;
-    for(let field in obj) { 
+    for(let field in obj) {
       if(!obj[field] || obj[field] === "") {
         filledCompletely = false;
         break;
@@ -12,6 +14,9 @@ const isFilledCompletely = (obj) => {
 const areTriggerRulesFilledCompletely = (triggerRules) => {
     let completelyFilled = true;
     for (let i = 0; i < triggerRules.length; i++) {
+      if(triggerRules[i].Operator__c && triggerRules[i].Operator__c === operatorTypes.ANY_CHANGE) {
+        continue;
+      }
       if(!isFilledCompletely(triggerRules[i])) {
         completelyFilled = false;
         break;

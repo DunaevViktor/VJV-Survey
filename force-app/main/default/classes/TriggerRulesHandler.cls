@@ -64,6 +64,9 @@ public with sharing class TriggerRulesHandler {
                 DateNumberFieldComparable numberComparator = (DateNumberFieldComparable)comparator;
                 isConditionMet = numberComparator.isLess(changedField.newValue, ruleFieldValue);
             }
+            when 'ANY CHANGE'{
+                isConditionMet = true;
+            }
         }
         
         return isConditionMet;
