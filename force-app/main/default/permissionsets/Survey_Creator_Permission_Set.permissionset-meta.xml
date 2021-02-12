@@ -414,7 +414,7 @@
         <readable>true</readable>
     </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
-    <label>User Survey Creator</label>
+    <label>Survey Creator Permission Set</label>
     <license>Salesforce</license>
     <objectPermissions>
         <allowCreate>false</allowCreate>

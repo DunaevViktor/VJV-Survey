@@ -561,7 +561,7 @@
         <readable>true</readable>
     </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
-    <label>Admin_Survey Permission Set</label>
+    <label>Admin Survey Permission Set</label>
     <license>Salesforce</license>
     <objectPermissions>
         <allowCreate>false</allowCreate>
