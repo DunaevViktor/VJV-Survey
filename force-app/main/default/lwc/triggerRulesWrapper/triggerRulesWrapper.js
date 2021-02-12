@@ -199,7 +199,6 @@ export default class TriggerRulesWrapper extends LightningElement {
         this.deleteAnyChangeDuplicates();
         this.setOperatorValueInChild(this.anyChangeRuleNumber);
         this.addObjectFieldWithAnyChangeOperator({object: this.anyChangeObject, field: this.anyChangeField});
-        this.clearAnyChangeData();
       }
     } 
     this.clearAnyChangeData();
