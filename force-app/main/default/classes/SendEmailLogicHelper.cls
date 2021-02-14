@@ -9,13 +9,20 @@ public with sharing class SendEmailLogicHelper {
 
         if(currentGroups.size() == 0) { return memberList; }
 
-        List<Group> groupList = [SELECT Id, Name, Type FROM Group WHERE Id IN :currentGroups WITH SECURITY_ENFORCED];
+        List<Group> groupList = [SELECT Id, Name, Type 
+                                 FROM Group 
+                                 WHERE Id IN :currentGroups 
+                                 WITH SECURITY_ENFORCED
+                                 LIMIT 50000];
         List<Id> groupId = new List<Id>();
         for(Group groupItem: groupList){
             groupId.add(groupItem.Id);
         }
-        memberList = [SELECT Id, GroupId, UserOrGroupId FROM GroupMember 
-                      WHERE GroupId IN :groupId WITH SECURITY_ENFORCED];
+        memberList = [SELECT Id, GroupId, UserOrGroupId 
+                      FROM GroupMember 
+                      WHERE GroupId IN :groupId 
+                      WITH SECURITY_ENFORCED
+                      LIMIT 50000];
 
         return memberList;
     }
@@ -25,13 +32,20 @@ public with sharing class SendEmailLogicHelper {
 
         if(currentCampaigns.size() == 0) { return membersList; }
 
-        List<Campaign> campaignList = [SELECT Id, Name FROM Campaign WHERE Id IN :currentCampaigns WITH SECURITY_ENFORCED];
+        List<Campaign> campaignList = [SELECT Id, Name 
+                                       FROM Campaign 
+                                       WHERE Id IN :currentCampaigns 
+                                       WITH SECURITY_ENFORCED
+                                       LIMIT 50000];
         List<Id> campaignId = new List<Id>();
         for(Campaign campaignItem: campaignList){
             campaignId.add(campaignItem.Id);
         }
-        membersList = [SELECT Id, ContactId, LeadId, CampaignId FROM CampaignMember
-                       WHERE CampaignId IN :campaignId WITH SECURITY_ENFORCED];
+        membersList = [SELECT Id, ContactId, LeadId, CampaignId 
+                       FROM CampaignMember
+                       WHERE CampaignId IN :campaignId 
+                       WITH SECURITY_ENFORCED
+                       LIMIT 50000];
         
         return membersList;
     }
@@ -96,11 +110,18 @@ public with sharing class SendEmailLogicHelper {
     }
 
     public static List<Survey__c> getSurvey(){
-        return [SELECT Id, Name, URL__c FROM Survey__c WITH SECURITY_ENFORCED];
+        return [SELECT Id, Name, URL__c 
+                FROM Survey__c 
+                WITH SECURITY_ENFORCED
+                LIMIT 50000];
     }
     
     public static EmailTemplate getEmailTemplate(){
         SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues(EMAIL_SETTINGS_NAME);
-        return [SELECT Id, Name, HtmlValue FROM EmailTemplate WHERE Name = :config.Template_Name__c WITH SECURITY_ENFORCED LIMIT 1];
+        return [SELECT Id, Name, HtmlValue 
+                FROM EmailTemplate 
+                WHERE Name = :config.Template_Name__c 
+                WITH SECURITY_ENFORCED 
+                LIMIT 1];
     }
 }

@@ -5,6 +5,10 @@ public with sharing class GroupController {
 
     @AuraEnabled(cacheable=true)
     public static List<Group> getGroups() {
-        return [SELECT Id, Name, Type FROM Group WHERE Type = :REGULAR_TYPE OR Type = :QUEUE_TYPE WITH SECURITY_ENFORCED];
+        return [SELECT Id, Name, Type 
+                FROM Group 
+                WHERE Type = :REGULAR_TYPE OR Type = :QUEUE_TYPE 
+                WITH SECURITY_ENFORCED
+                LIMIT 50000];
     }
 }

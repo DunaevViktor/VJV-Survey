@@ -9,8 +9,7 @@ public with sharing class RelatedObjectController {
         try {
 
             String standardObjectApiName = getSObjectNameById(String.valueOf(standardObjectId));
-
-            //this will throw exception if record with standardObjectId doesn't exist
+            
             checkStandardObjectRecordExisting(standardObjectApiName, standardObjectId);
 
             Id relatedObjectId = getRelatedObjectIdByRelatedStandardObject(standardObjectApiName, standardObjectId);
