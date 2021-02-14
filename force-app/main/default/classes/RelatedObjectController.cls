@@ -9,7 +9,7 @@ public with sharing class RelatedObjectController {
         try {
 
             String standardObjectApiName = getSObjectNameById(String.valueOf(standardObjectId));
-            
+
             checkStandardObjectRecordExisting(standardObjectApiName, standardObjectId);
 
             Id relatedObjectId = getRelatedObjectIdByRelatedStandardObject(standardObjectApiName, standardObjectId);
@@ -30,9 +30,10 @@ public with sharing class RelatedObjectController {
             CustomExceptionData excData = new CustomExceptionData('GetRelatedObjectException', RELATED_OBJECT_IS_NOT_ACCESSIBLE);
             throw new AuraHandledException(JSON.serialize(excData));
         }
+        String namespacePrefix = NamespaceService.namespacePrefix;
         List<Related_Object__c> res = Database.query(
-          'SELECT Id FROM Related_Object__c' +
-          ' WHERE Related_' + String.escapeSingleQuotes(relatedStandardObjectApiName) + '__c =: relatedStandardObjectId' +
+          'SELECT ' + String.escapeSingleQuotes(namespacePrefix) + 'Id FROM ' + String.escapeSingleQuotes(namespacePrefix) + 'Related_Object__c' +
+          ' WHERE ' + String.escapeSingleQuotes(namespacePrefix) + 'Related_' + String.escapeSingleQuotes(relatedStandardObjectApiName) + '__c =: relatedStandardObjectId' +
           ' WITH SECURITY_ENFORCED LIMIT 1'
         );
         if(res != null && res.size() > 0) {
@@ -52,7 +53,8 @@ public with sharing class RelatedObjectController {
             throw new AuraHandledException(JSON.serialize(excData));
         }
         Related_Object__c relatedObjectToInsert = new Related_Object__c();
-        relatedObjectToInsert.put('Related_' + standardObjectApiName + '__c', relatedObjectId + '');
+        String namespacePrefix = NamespaceService.namespacePrefix;
+        relatedObjectToInsert.put(namespacePrefix + 'Related_' + standardObjectApiName + '__c', relatedObjectId + '');
         insert relatedObjectToInsert;
         return relatedObjectToInsert.Id;
     }
