@@ -27,6 +27,9 @@ const stepsOfSave = [
   }
 ];
 
+const navigationType = "standard__navItemPage";
+
 export {
-  stepsOfSave
+  stepsOfSave,
+  navigationType
 }

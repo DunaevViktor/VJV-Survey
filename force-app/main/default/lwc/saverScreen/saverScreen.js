@@ -1,5 +1,6 @@
 import { LightningElement, api, track } from 'lwc';
-import { stepsOfSave } from './constants.js';
+import { NavigationMixin } from 'lightning/navigation';
+import { stepsOfSave, navigationType } from './constants.js';
 
 import saveSurvey from "@salesforce/apex/SaverController.saveSurvey";
 import saveTriggerRules from "@salesforce/apex/SaverController.saveTriggerRules";
@@ -8,7 +9,9 @@ import saveOptions from "@salesforce/apex/SaverController.saveOptions";
 import saveValidations from "@salesforce/apex/SaverController.saveValidations";
 import saveEmailReceivers from "@salesforce/apex/SaverController.saveEmailReceivers";
 import sendEmails from "@salesforce/apex/SendEmailLogic.sendEmails";
-import { surveyFields } from "c/fieldService";
+import saveSurveyUrl from "@salesforce/apex/SaverController.saveSurveyUrl";
+
+import { surveyObject } from "c/fieldService";
 
 import { transformRules,  
          transformQuestions,
@@ -19,7 +22,7 @@ import { transformRules,
 
 import {label} from "./labels.js";
 
-export default class SaverScreen extends LightningElement {
+export default class SaverScreen extends NavigationMixin(LightningElement) {
 
   label = label;
 
@@ -39,6 +42,9 @@ export default class SaverScreen extends LightningElement {
   surveyId;
   savedQuestions;
 
+  SURVEY_URL_PARAMETER_NAME = 'c__surveyId';
+  ANSWER_PAGE_API_NAME = 'Survey_Answer_Form';
+
   get isComplete() {
     return this.stepsOfSave.reduce((accumulator, currentValue) => {
       return accumulator && currentValue.isDone;
@@ -50,12 +56,10 @@ export default class SaverScreen extends LightningElement {
   }
 
   sendSaveSurveyRequest() {
-      let copySurvey = {...this.survey};
-      copySurvey[surveyFields.URL] = this.getSurveyUrl();
-
-    saveSurvey({survey : copySurvey})
+    saveSurvey({survey : this.survey})
       .then((result) => {
         this.surveyId = result;
+        this.getSurveyUrl(this.surveyId);
 
         this.increaseProgress();
 
@@ -173,13 +177,24 @@ export default class SaverScreen extends LightningElement {
     this.currentStep++;
   }
 
-  getSurveyUrl(){
-      return 'https://' + this.getOrgDomain() + '.lightning.force.com/lightning/n/Survey_Answer_Form';
-  }
+  getSurveyUrl(_surveyId){
+    if(surveyObject.split("__S").length > 1){
+        this.ANSWER_PAGE_API_NAME = surveyObject.split("__S")[0] + '__' +  this.ANSWER_PAGE_API_NAME;
+        this.SURVEY_URL_PARAMETER_NAME = this.SURVEY_URL_PARAMETER_NAME.replace('c', surveyObject.split("__S")[0]);
+    }
 
-  getOrgDomain(){
-    const hostname = window.location.hostname;
-    const splitHostname = hostname.split(".");
-    return splitHostname[0];
+    this[NavigationMixin.GenerateUrl]({
+        type: navigationType,
+        attributes: {
+            apiName: this.ANSWER_PAGE_API_NAME
+        }
+    })
+    .then((url) => {
+        url = url + '?' + this.SURVEY_URL_PARAMETER_NAME + '=' + _surveyId;
+        saveSurveyUrl({surveyId : this.surveyId, surveyUrl : url})
+        .catch(() => {
+            this.isError = true;
+        })
+    });
   }
 }
