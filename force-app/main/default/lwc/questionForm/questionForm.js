@@ -271,6 +271,7 @@ export default class QuestionForm extends LightningElement {
 
   isOptionCorrect(input) {
     if (input.value.trim().length === 0) {
+      input.value = "";
       setInputValidity(input, label.complete_this_field);
       return false;
     }
@@ -353,6 +354,7 @@ export default class QuestionForm extends LightningElement {
     const input = this.template.querySelector(".input");
 
     if (input.value.trim().length === 0) {
+      input.value = "";
       setInputValidity(input, label.complete_this_field);
       isValid = false;
     } else {
@@ -376,13 +378,16 @@ export default class QuestionForm extends LightningElement {
       } else {
         setInputValidity(operatorCombobox, "");
       }
-      
 
       const validationInput = this.template.querySelector(".validationInput");
-      if (validationInput.value.trim().length === 0) {
+      if (!this.isMainQuestionPicklist && validationInput.value.trim().length === 0) {
+        validationInput.value = "";
         setInputValidity(validationInput, label.complete_this_field);
         isValid = false;
-      } else if(this.validationForForm[validationFields.RELATED][questionFields.TYPE] 
+      } else if (this.isMainQuestionPicklist && this.selectedOperator && !validationInput.value) {
+        setInputValidity(validationInput, label.complete_this_field);
+        isValid = false;
+      }else if(this.validationForForm[validationFields.RELATED][questionFields.TYPE] 
         === questionTypes.RATING && +validationInput.value > 10) {
         setInputValidity(validationInput, label.rating_can_not_be_greater_ten);
         isValid = false;
