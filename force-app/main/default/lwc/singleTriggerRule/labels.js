@@ -5,6 +5,7 @@ import fieldLabel from "@salesforce/label/c.field";
 import objectLabel from "@salesforce/label/c.object";
 import errorMessage from "@salesforce/label/c.errorMessage";
 import clearTitle from "@salesforce/label/c.clear_trigger_rules_fields";
+import field_setted_with_any_change from "@salesforce/label/c.field_setted_with_any_change";
 
 const importedLabels = {
     deleteLabel,
@@ -13,7 +14,8 @@ const importedLabels = {
     fieldLabel,
     objectLabel,
     errorMessage,
-    clearTitle
+    clearTitle,
+    field_setted_with_any_change
 }
 
 export {

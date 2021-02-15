@@ -8,7 +8,8 @@ const typesDescription = [
     deprecatedOperators: [
       operatorTypes.CONTAINS,
       operatorTypes.GREATER_THAN,
-      operatorTypes.LESS_THAN
+      operatorTypes.LESS_THAN,
+      operatorTypes.ANY_CHANGE
     ]
   },
   {
@@ -16,7 +17,8 @@ const typesDescription = [
     deprecatedOperators: [
       operatorTypes.CONTAINS,
       operatorTypes.GREATER_THAN,
-      operatorTypes.LESS_THAN
+      operatorTypes.LESS_THAN,
+      operatorTypes.ANY_CHANGE
     ]
   },
   {
@@ -24,7 +26,8 @@ const typesDescription = [
     deprecatedOperators: [
       operatorTypes.EQUALS,
       operatorTypes.GREATER_THAN,
-      operatorTypes.LESS_THAN
+      operatorTypes.LESS_THAN,
+      operatorTypes.ANY_CHANGE
     ]
   },
   {
@@ -32,12 +35,16 @@ const typesDescription = [
     deprecatedOperators: [
       operatorTypes.EQUALS,
       operatorTypes.GREATER_THAN,
-      operatorTypes.LESS_THAN
+      operatorTypes.LESS_THAN,
+      operatorTypes.ANY_CHANGE
     ]
   },
   {
     label: questionTypes.RATING,
-    deprecatedOperators: [operatorTypes.CONTAINS]
+    deprecatedOperators: [
+      operatorTypes.CONTAINS,
+      operatorTypes.ANY_CHANGE
+    ]
   }
 ];
 

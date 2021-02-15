@@ -8,6 +8,11 @@ import you_can_create from "@salesforce/label/c.you_can_create";
 import trigger_rule from "@salesforce/label/c.trigger_rule";
 import trigger_rules from "@salesforce/label/c.trigger_rules";
 import more from "@salesforce/label/c.more";
+import yes from "@salesforce/label/c.yes";
+import no from "@salesforce/label/c.no";
+import confirm_action from "@salesforce/label/c.confirm_action";
+import do_you_want_to_proceed from "@salesforce/label/c.do_you_want_to_proceed";
+import select_any_change_confirm_message from "@salesforce/label/c.select_any_change_confirm_message";
 
 const importedLabels = {
     tip_for_user,
@@ -19,7 +24,11 @@ const importedLabels = {
     you_can_create,
     trigger_rule,
     trigger_rules,
-    more
+    more,
+    yes,
+    no,
+    confirm_action,
+    confirm_message : select_any_change_confirm_message + ' ' + do_you_want_to_proceed
 }
 
 export {

@@ -2,107 +2,111 @@
   <template if:true={error}>{labels.errorMessage}</template>
 
   <template if:false={error}>
-    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-end">
-      <!--Object-->
-      <div class="slds-col slds-size_1-of-4 slds-p-around_x-small">
-        <lightning-combobox
-          name="Object"
-          label={labels.objectLabel}
-          options={objectNames}
-          value={objectValue}
-          onchange={handleObjectChange}
-        >
-        </lightning-combobox>
-      </div>
-
-      <!--Field-->
-      <div class="slds-col slds-size_1-of-4 slds-p-around_x-small">
-        <lightning-combobox
-          name="Field"
-          label={labels.fieldLabel}
-          options={fieldNames}
-          value={fieldValue}
-          onchange={handleFieldChange}
-        >
-        </lightning-combobox>
-      </div>
-
-      <!--Operator-->
-      <div class="slds-col slds-size_1-of-4 slds-p-around_x-small">
-        <lightning-combobox
-          name="Operator"
-          label={labels.operatorLabel}
-          options={operators}
-          value={operatorValue}
-          onchange={handleOperatorChange}
-        >
-        </lightning-combobox>
-      </div>
-
-      <!--Value-->
-      <div class="slds-grid slds-col slds-grid_align-spread slds-size_1-of-4 slds-grid_vertical-align-end slds-p-around_x-small">
-        <div class="slds-col slds-size_4-of-6 slds-m-right_x-small">
+    <div class="slds-grid slds-grid_vertical-align-start card ">
+      <div class="slds-grid slds-grid_vertical-align-end slds-m-around_x-small">
         
-        <lightning-input
-          if:true={field.isInput}
-          name={field.name}
-          label={field.label}
-          value={field.value}
-          type={field.type}
-          pattern={field.pattern}
-          formatter={field.formatter}
-          step={field.step}
-          min={field.min}
-          max={field.max}
-          checked={field.value}
-          onchange={handleValueChange}
-        >
-        </lightning-input>
+        <!--Object-->
+        <div class="slds-col slds-size_1-of-5 slds-p-right_xx-small">
+          <lightning-combobox
+            name="Object"
+            label={labels.objectLabel}
+            options={objectNames}
+            value={objectValue}
+            onchange={handleObjectChange}
+          >
+          </lightning-combobox>
+        </div>
 
-        <lightning-combobox
-          if:true={field.isCombobox}
-          name={field.label}
-          label={field.label}
-          value={value}
-          onchange={handleValueChange}
-          options={picklistFieldOptions}
-        >
-        </lightning-combobox>
+        <!--Field-->
+        <div class="slds-col slds-size_1-of-5 slds-p-right_xx-small">
+          <lightning-combobox
+            name="Field"
+            label={labels.fieldLabel}
+            options={fieldNames}
+            value={fieldValue}
+            onchange={handleFieldChange}
+          >
+          </lightning-combobox>
+        </div>
 
-        <c-custom-lookup
-          if:true={field.isLookup}
-          lookup-label={field.objectsApiNames}
-          objects-api-names={field.objectsApiNames}
-          icon-name="utility:check"
-          onrecordselection={handleRecordSelection}
-          selected-record-id={field.value}
-          selected-value={field.name}
-        ></c-custom-lookup>
-      </div>
-      <!--Clear button-->
-      <div class="slds-col slds-size_1-of-6 slds-align-bottom slds-p-bottom_x-small">
-        <lightning-icon
-          icon-name={clearIconName}
-          size="x-small"
-          alternative-text={labels.clearTitle}
-          title={labels.clearTitle}
-          onclick={handleClearRuleClick}
-        ></lightning-icon>
-      </div>
-      <!--Delete button-->
-      <div class="slds-col slds-size_1-of-6 slds-align-bottom slds-p-bottom_x-small">
-        <template if:true={isDeleteAvailable}>
-          <lightning-icon
-            icon-name={deleteIconName}
-            size="x-small"
-            alternative-text={labels.deleteTitle}
-            title={labels.deleteTitle}
-            onclick={handleDeleteRuleClick}
-          ></lightning-icon>     
-        </template>
+        <!--Operator-->
+        <div class="slds-col slds-size_1-of-5 slds-p-right_xx-small">
+          <lightning-combobox
+            name="Operator"
+            label={labels.operatorLabel}
+            options={operators}
+            value={operatorValue}
+            onchange={handleOperatorChange}
+          >
+          </lightning-combobox>
+        </div>
+
+        <!--Value-->
+        <div class="slds-grid slds-col slds-size_2-of-5 slds-grid_vertical-align-end">
+          <div class="slds-col slds-size_5-of-6" data-my-id="value-input">        
+            <lightning-input
+              if:true={field.isInput}
+              name={field.name}
+              label={field.label}
+              value={field.value}
+              type={field.type}
+              pattern={field.pattern}
+              formatter={field.formatter}
+              step={field.step}
+              min={field.min}
+              max={field.max}
+              checked={field.value}
+              onchange={handleValueChange}              
+            >
+            </lightning-input>
+
+            <lightning-combobox
+              if:true={field.isCombobox}
+              name={field.label}
+              label={field.label}
+              value={value}
+              onchange={handleValueChange}
+              options={picklistFieldOptions}
+            >
+            </lightning-combobox>
+
+            <c-custom-lookup
+              if:true={field.isLookup}
+              lookup-label={field.objectsApiNames}
+              objects-api-names={field.objectsApiNames}
+              icon-name="utility:check"
+              onrecordselection={handleRecordSelection}
+              selected-record-id={field.value}
+              selected-value={field.name}
+            ></c-custom-lookup>
+          </div>
+
+          <div aria-orientation="vertical" class="slds-p-left_x-small">
+            <!--Clear button-->
+            <div class="slds-col slds-size_1-of-6 slds-align-middle slds-p-bottom_xx-small">
+              <lightning-icon
+                icon-name={clearIconName}
+                size="x-small"
+                alternative-text={labels.clearTitle}
+                title={labels.clearTitle}
+                onclick={handleClearRuleClick}
+              ></lightning-icon>
+          </div>
+          <!--Delete button-->
+          <div class="slds-col slds-size_1-of-6 slds-align-middle">
+            <template if:true={isDeleteAvailable}>
+              <lightning-icon
+                icon-name={deleteIconName}
+                size="x-small"
+                alternative-text={labels.deleteTitle}
+                title={labels.deleteTitle}
+                onclick={handleDeleteRuleClick}
+              ></lightning-icon>     
+            </template>
+          </div>
+        </div>      
       </div>
     </div>
-      
     </div>
   </template>
 </template>
