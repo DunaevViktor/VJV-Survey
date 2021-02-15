@@ -29,6 +29,8 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
 
   NAVIGATION_TYPE = "standard__namedPage";
   REDIRECT_PAGE_NAME = "home";
+  ERROR_STATE = 'error';
+  SUCCESS_STATE = 'success';
 
   @track showSurvey = true;
   @track answerInputs = [];
@@ -51,7 +53,7 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
       this.answerInputs = sortQuestionsByPosition(this.answerInputs);
     }
     if (error) {
-      this.showToast(label.errorMessage);
+      this.showToast(label.errorMessage, this.ERROR_STATE);
     }
   }
 
@@ -82,10 +84,12 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
   getConnectedSurveyId() {
     if (this.relatedSurveyId) {
       this.surveyId = this.relatedSurveyId;
-    } else {
+      return true;
+    } 
       this.showSurvey = false;
+      this.closeTab();
       this.navigateToHomePage();
-    }
+      return false;
   }
 
   setParametersBasedOnUrl() {
@@ -102,11 +106,14 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
 
     saveAnswers({ answers: answers })
       .then(() => {
-        this.showToast(label.successfulAnswerSave);
-        this.getConnectedSurveyId();
+        if(this.getConnectedSurveyId()){
+            this.showToast(label.successfulAnswerSave + label.takeAnotherSurvey, this.SUCCESS_STATE);
+        }else{
+            this.showToast(label.successfulAnswerSave, this.SUCCESS_STATE);
+        }
       })
       .catch(() => {
-        this.showToast(label.errorMessage);
+        this.showToast(label.errorMessage, this.ERROR_STATE);
       });
   }
 
@@ -130,7 +137,7 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
           this.saveGroupAnswer(groupAnswer);
         })
         .catch(() => {
-          this.showToast(label.errorMessage);
+          this.showToast(label.errorMessage, this.ERROR_STATE);
         });
     } else {
       groupAnswer[groupAnswerFields.LINKED] = false;
@@ -144,13 +151,14 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
         this.saveAnswers(result);
       })
       .catch(() => {
-        this.showToast(label.errorMessage);
+        this.showToast(label.errorMessage, this.ERROR_STATE);
       });
   }
 
-  showToast(message) {
+  showToast(message, state) {
     const event = new ShowToastEvent({
-      title: message
+      title: message,
+      variant: state
     });
     this.dispatchEvent(event);
   }
@@ -167,6 +175,7 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
   }
 
   handleCancel() {
+    this.closeTab();
     this.navigateToHomePage();
   }
 
@@ -177,5 +186,14 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
         pageName: this.REDIRECT_PAGE_NAME
       }
     });
+  }
+
+  closeTab(){ 
+    const close = true;
+    const closeTabEvent = new CustomEvent('closetab', {
+          detail: { close },
+      });
+
+    this.dispatchEvent(closeTabEvent); 
   }
 }
