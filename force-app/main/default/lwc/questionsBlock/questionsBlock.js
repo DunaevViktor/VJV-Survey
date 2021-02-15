@@ -211,6 +211,7 @@ export default class QuestionsBlock extends LightningElement {
     const keyword = input.value;
 
     if(isEmpty(keyword)) {
+      input.value = "";
       setInputValidation(input, label.search_keyword_cant_be_empty);
       return;
     }

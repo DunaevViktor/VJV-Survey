@@ -1,7 +1,7 @@
 import { questionFields } from "c/fieldService";
 
 const isEmpty = (value) => {
-  return value === "";
+  return value === "" || value.trim().length === 0;
 }
 
 const trasnformQuestions = (questions) => {
