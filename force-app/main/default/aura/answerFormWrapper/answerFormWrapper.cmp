@@ -1,0 +1,4 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global">
+    <lightning:workspaceAPI aura:id="workspace"/>
+    <c:answerForm onclosetab="{!c.handleCloseTab}"/> 
+</aura:component>	

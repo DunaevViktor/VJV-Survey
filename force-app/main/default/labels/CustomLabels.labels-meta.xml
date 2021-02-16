@@ -932,6 +932,13 @@
         <value>Surveys</value>
     </labels>
     <labels>
+        <fullName>take_another_survey</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>take another survey</shortDescription>
+        <value>Please, take another survey.</value>
+    </labels>
+    <labels>
         <fullName>text</fullName>
         <language>en_US</language>
         <protected>true</protected>

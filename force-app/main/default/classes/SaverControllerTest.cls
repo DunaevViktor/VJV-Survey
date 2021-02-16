@@ -2,6 +2,7 @@
 public with sharing class SaverControllerTest {
     
     private static final Integer TEST_AMOUNT = 5;
+    private static final String TEST_TAB_URL = '/Survey_Test_Url';
     
     private static final String EXPECTED_NOT_BE_NULL = 'The value was not expected to be null.';
     private static final String INVALID_SURVEY_ID = 'Actual survey id doesn\'t equal to expected.';
@@ -11,6 +12,8 @@ public with sharing class SaverControllerTest {
     private static final String INVALID_RULES_AMOUNT = 'Actual amount of rules doesn\'t equal to expected.';
     private static final String INVALID_VALIDATIONS_AMOUNT = 'Actual amount of validations doesn\'t equal to expected.';
     private static final String INVALID_RECEIVERS_AMOUNT = 'Actual amount of email receivers doesn\'t equal to expected.';
+    private static final String INVALID_SURVEY_URL = 'Actual survey url doesn\'t equal to expected.';
+
     
     @IsTest  
     static void testSaveSurvey() {
@@ -21,6 +24,19 @@ public with sharing class SaverControllerTest {
         
         Survey__c databaseSurvey = [SELECT Id FROM Survey__c WHERE Name = : survey.Name];
         System.assertEquals(surveyId, databaseSurvey.Id, INVALID_SURVEY_ID);
+    }
+
+    @IsTest
+    static void testSaveSurveyUrl(){
+        Survey__c survey = TestDataFactory.createSurvey();
+        insert survey;
+
+        String baseUrl = System.Url.getSalesforceBaseURL().toExternalForm();
+        String expectedUrl = baseUrl + TEST_TAB_URL;
+
+        String actualUrl = SaverController.saveSurveyUrl(survey.Id, TEST_TAB_URL);
+
+        System.assertEquals(expectedUrl, actualUrl, INVALID_SURVEY_URL);
     }
     
     @IsTest 
