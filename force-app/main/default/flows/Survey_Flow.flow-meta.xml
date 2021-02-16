@@ -201,12 +201,6 @@
                     <elementReference>GroupList</elementReference>
                 </value>
             </inputParameters>
-            <inputParameters>
-                <name>copySurveyReceivers</name>
-                <value>
-                    <elementReference>ViewERList</elementReference>
-                </value>
-            </inputParameters>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>CampaignList</assignToReference>
@@ -219,10 +213,6 @@
             <outputParameters>
                 <assignToReference>GroupList</assignToReference>
                 <name>groups</name>
-            </outputParameters>
-            <outputParameters>
-                <assignToReference>ViewERList</assignToReference>
-                <name>copySurveyReceivers</name>
             </outputParameters>
         </fields>
         <showFooter>false</showFooter>
@@ -535,13 +525,5 @@
         <isInput>true</isInput>
         <isOutput>true</isOutput>
         <objectType>Validation__c</objectType>
-    </variables>
-    <variables>
-        <name>ViewERList</name>
-        <dataType>SObject</dataType>
-        <isCollection>true</isCollection>
-        <isInput>true</isInput>
-        <isOutput>true</isOutput>
-        <objectType>Email_Receiver__c</objectType>
     </variables>
 </Flow>

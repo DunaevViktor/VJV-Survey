@@ -12,6 +12,8 @@ import complete_this_field from "@salesforce/label/c.complete_this_field";
 import template from "@salesforce/label/c.Template";
 import connect_to_another_survey from "@salesforce/label/c.connect_to_another_survey";
 import surveys from "@salesforce/label/c.surveys";
+import select_survey_for_connect from "@salesforce/label/c.Select_survey_for_connect";
+import error_loading_surveys from "@salesforce/label/c.error_loading_surveys";
 
 export const labels = {
   survey_name,
@@ -27,5 +29,7 @@ export const labels = {
   connect_to_another_survey,
   template,
   surveys,
-  next
+  next,
+  select_survey_for_connect,
+  error_loading_surveys
 }

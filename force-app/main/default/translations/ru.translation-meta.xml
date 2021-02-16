@@ -88,7 +88,6 @@
         <label>После добавления зависимого вопроса опция редактирования основного вопроса будет недоступна.</label>
         <name>add_optional_confirm_message</name>
     </customLabels>
-
     <customLabels>
         <label>Добавить вопрос</label>
         <name>add_question</name>
@@ -318,7 +317,7 @@
         <name>more</name>
     </customLabels>
     <customLabels>
-        <label>Публичные группы отсутствуют в данной организации</label>
+        <label>Публичные группы отсутствуют в данной организации.</label>
         <name>msg_no_public_groups_found</name>
     </customLabels>
     <customLabels>
@@ -334,7 +333,7 @@
         <name>no</name>
     </customLabels>
     <customLabels>
-        <label>Кампании отсутствуют</label>
+        <label>Кампании отсутствуют в данной организации.</label>
         <name>no_campaigns</name>
     </customLabels>
     <customLabels>
@@ -342,7 +341,7 @@
         <name>no_questions</name>
     </customLabels>
     <customLabels>
-        <label>Записи отсутствуют</label>
+        <label>Записи не найдены.</label>
         <name>no_records_found</name>
     </customLabels>
     <customLabels>
