@@ -10,7 +10,7 @@
       
       <div class="slds-container--fluid">
         <lightning-input
-          class="slds-m-vertical_medium"
+          class="slds-m-vertical_medium survey-name"
           type="text"
           label={label.survey_name}
           placeholder={label.type_survey_name}
@@ -43,7 +43,26 @@
           onchange={handleDescriptionChange}
         >
         </lightning-textarea>
+
+        <lightning-input type="checkbox" label={label.template} checked={isStandardSurvey}
+        onchange={handleIsStandardSurveyChange}></lightning-input>
+
+        <template if:true={isHasSurveys}>
+            <lightning-input type="checkbox" label={label.connect_to_another_survey} checked={isConnectToSurvey}
+                onchange={handleConnectToAnotherSurveyChange}></lightning-input>
+            <template if:true={isConnectToSurvey}>
+                <template if:false={isError}>
+                    <lightning-combobox name="surveys" label={label.surveys} value={surveyId}
+                        placeholder={label.select_survey_for_connect} options={surveyOptions} onchange={handleSurveyChange}
+                        required></lightning-combobox>
+                </template>
+                <template if:true={isError}>
+                    <div class="text">{label.error_loading_surveys}</div>
+                </template>
+            </template>
+        </template>
       </div>
+
     </div>
 
     <hr class="slds-m-bottom_small" />

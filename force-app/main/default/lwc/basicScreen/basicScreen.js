@@ -2,6 +2,8 @@ import { LightningElement, api, track } from "lwc";
 import uploadImage from "@salesforce/apex/ImageUploadController.uploadImage";
 import deleteImageById from "@salesforce/apex/ImageUploadController.deleteImageById";
 import getDefaultBackgroundColor from "@salesforce/apex/SurveySettingController.getDefaultBackgroundColor";
+import getSurveys from "@salesforce/apex/SurveyController.getAllSurveys";
+import { createSurveyDisplayedMap } from "./basicScreenHelper.js";
 import { FlowAttributeChangeEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { labels } from './labels';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -12,11 +14,17 @@ export default class BasicScreen extends LightningElement {
   @track loading = false;
   @track logoData;
   @track logoId;
+  @track isError = false;
+
+  @track isHasSurveys = false;
+  @track displayedSurveys = [];
+  @track isConnectToSurvey;
+  
+  surveyId = "";
   
   label = labels;
   imageName;
   imageBlobUrl;
-  defaultColor = '#74c1ed';
   isNewLogo = false;
   
   errorVariant = 'error';
@@ -24,6 +32,8 @@ export default class BasicScreen extends LightningElement {
   @api 
   set surveyData(data) {
     this.survey = JSON.parse(JSON.stringify(data));
+    this.isConnectToSurvey = this.survey[surveyFields.RELATED] !== undefined;
+    if(this.isConnectToSurvey) this.surveyId = this.survey[surveyFields.RELATED] ;
   }
 
   get surveyData() {
@@ -33,6 +43,14 @@ export default class BasicScreen extends LightningElement {
   @api 
   set logoDocumentId(data) {
     this.logoId = data;
+  }
+
+  get surveys() {
+    return this.displayedSurveys;
+  }
+
+  @api set surveys(value) {
+    this.displayedSurveys = JSON.parse(JSON.stringify(value));
   }
 
   get logoDocumentId() {
@@ -55,27 +73,52 @@ export default class BasicScreen extends LightningElement {
     return this.survey[surveyFields.DESCRIPTION];
   }
 
+  get isStandardSurvey() {
+    return this.survey[surveyFields.STANDARD];
+  }
+
+  get surveyOptions() {
+    return createSurveyDisplayedMap(this.displayedSurveys);
+  }
+
   connectedCallback() {
     this.setDefaultSurveyData();
+
+    this.initSurveys();
+    this.isHasSurveys = this.displayedSurveys.length > 0;
+  }
+
+  initSurveys() {
+    if (this.displayedSurveys.length === 0) {
+        getSurveys()
+            .then((result) => {
+                this.displayedSurveys = result.length > 0 ? result : [];
+                this.isHasSurveys = this.displayedSurveys.length > 0;
+            })
+            .catch(() => {
+                this.isError = true;
+            });
+    }
   }
 
   validateInput() {
-    const isInputsCorrect = [...this.template.querySelectorAll('lightning-input')]
-      .reduce((validSoFar, inputField) => {
-        inputField.reportValidity();
-        return validSoFar && inputField.checkValidity();
-      }, true);
-    return isInputsCorrect;
+    const input = this.template.querySelector(".survey-name");
+
+    if(input.value.trim().length === 0) {
+      input.value = '';
+      input.setCustomValidity(this.label.complete_this_field);
+      input.reportValidity();
+      return false;
+    }
+
+    input.setCustomValidity('');
+    input.reportValidity();
+    return input.checkValidity();
   }
 
   setDefaultSurveyData() {
     if (!this.survey) {
-      this.survey = {
-        [surveyFields.NAME] : '',
-        [surveyFields.BACKGROUND] : '',
-        [surveyFields.LOGO] : '',
-        [surveyFields.DESCRIPTION] : ''
-      };
+      this.survey = {};
       this.setDefaultBackgroundColor();
     }
 
@@ -106,6 +149,10 @@ export default class BasicScreen extends LightningElement {
     this.survey[surveyFields.DESCRIPTION] = event.target.value;
   }
 
+  handleIsStandardSurveyChange(event) {
+    this.survey[surveyFields.STANDARD] = event.target.checked;
+  }
+
   handleImageUpdate(event) {
     this.imageName = event.detail.imageName;
     this.imageBlobUrl = event.detail.imageUrl;
@@ -115,6 +162,19 @@ export default class BasicScreen extends LightningElement {
       this.isNewLogo = false;
       this.survey[surveyFields.LOGO] = '';
     }
+  }
+
+  handleConnectToAnotherSurveyChange(event) {
+    this.isConnectToSurvey = event.target.checked;
+    if (!this.isConnectToSurvey) {
+        this.surveyId = "";
+        this.survey[surveyFields.RELATED] = undefined;
+    }
+  }
+
+  handleSurveyChange(event) {
+    this.survey[surveyFields.RELATED] = event.detail.value;
+    this.surveyId = event.detail.value;
   }
   
   saveLogo() {
@@ -175,13 +235,9 @@ export default class BasicScreen extends LightningElement {
   }
 
   updateSurveyData() {
-    if (!this.survey[surveyFields.BACKGROUND]) {
-      this.survey[surveyFields.BACKGROUND] = this.defaultColor;
-    }
-    const changeSurveyDataEvent = new FlowAttributeChangeEvent("surveydatachange", this.surveyData);
     const changeLogoIdEvent = new FlowAttributeChangeEvent("logoidchange", this.logoDocumentId);
-    this.dispatchEvent(changeSurveyDataEvent);
     this.dispatchEvent(changeLogoIdEvent);
+
     if (this.logoId && !this.survey[surveyFields.LOGO]) {
       this.deleteImage();
     }

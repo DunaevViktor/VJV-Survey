@@ -2,16 +2,13 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>50.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>Advance Settings Screen</masterLabel>
-    <description>This is a simple todos component</description>
+    <masterLabel>Email Settings Screen</masterLabel>
     <targets>
         <target>lightning__FlowScreen</target>
     </targets>
     <targetConfigs>
         <targetConfig targets="lightning__FlowScreen">
-            <property name="survey" type="@salesforce/schema/Survey__c" label="Survey"/>
             <property name="surveyReceivers" type="@salesforce/schema/Email_Receiver__c[]" label="Email Receivers"/>
-            <property name="surveys" type="@salesforce/schema/Survey__c[]" label="Surveys for connecting"/>
             <property name="groups" type="@salesforce/schema/Group[]" label="Groups"/>
             <property name="campaigns" type="@salesforce/schema/Campaign[]" label="Campaigns"/>
             <property name="copySurveyReceivers" type="@salesforce/schema/Email_Receiver__c[]" label="View Email Receivers"/>
