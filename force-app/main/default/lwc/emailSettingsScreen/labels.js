@@ -4,10 +4,7 @@ import type from "@salesforce/label/c.type";
 import error_choose_some_group from "@salesforce/label/c.error_choose_some_group";
 import error_already_added_this_group from "@salesforce/label/c.error_already_added_this_group";
 import user_groups from "@salesforce/label/c.user_groups";
-import template from "@salesforce/label/c.Template";
 import select_survey_for_connect from "@salesforce/label/c.Select_survey_for_connect";
-import connect_to_another_survey from "@salesforce/label/c.connect_to_another_survey";
-import surveys from "@salesforce/label/c.surveys";
 import msg_no_public_groups_found from "@salesforce/label/c.msg_no_public_groups_found";
 import previous from "@salesforce/label/c.previous";
 import next from "@salesforce/label/c.next";
@@ -64,12 +61,9 @@ const label = {
     error_already_added_this_group,
     user_groups,
     add,
-    connect_to_another_survey,
-    surveys,
     msg_no_public_groups_found,
     previous,
     next,
-    template,
     select_survey_for_connect,
     search_result,
     previous_page,

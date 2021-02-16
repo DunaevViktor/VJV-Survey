@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>50.0</apiVersion>
-    <assignments>
-        <name>Set_Advance_Header</name>
-        <label>Set Advance Header</label>
-        <locationX>176</locationX>
-        <locationY>878</locationY>
-        <assignmentItems>
-            <assignToReference>CurrentScreenHeader</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Label.advance_setting_header</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>AdvanceSettingsScreen</targetReference>
-        </connector>
-    </assignments>
+    <apiVersion>51.0</apiVersion>
     <assignments>
         <name>Set_Basic_Header</name>
         <label>Set Basic Header</label>
@@ -31,6 +15,22 @@
         </assignmentItems>
         <connector>
             <targetReference>Basic_Screen</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_Email_Header</name>
+        <label>Set Email Header</label>
+        <locationX>176</locationX>
+        <locationY>878</locationY>
+        <assignmentItems>
+            <assignToReference>CurrentScreenHeader</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Label.email_settings_header</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>EmailSettingsScreen</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -119,86 +119,6 @@
     </processMetadataValues>
     <processType>Flow</processType>
     <screens>
-        <name>AdvanceSettingsScreen</name>
-        <label>AdvanceSettingsScreen</label>
-        <locationX>176</locationX>
-        <locationY>998</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <connector>
-            <targetReference>Set_Preview_Header</targetReference>
-        </connector>
-        <fields>
-            <name>AdvanceSettingsScreenComponent</name>
-            <extensionName>c:advanceSettingScreen</extensionName>
-            <fieldType>ComponentInstance</fieldType>
-            <inputParameters>
-                <name>surveyReceivers</name>
-                <value>
-                    <elementReference>EmailRecieverList</elementReference>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>groups</name>
-                <value>
-                    <elementReference>GroupList</elementReference>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>survey</name>
-                <value>
-                    <elementReference>Survey</elementReference>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>surveys</name>
-                <value>
-                    <elementReference>SurveyForConnectingList</elementReference>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>campaigns</name>
-                <value>
-                    <elementReference>CampaignList</elementReference>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>copySurveyReceivers</name>
-                <value>
-                    <elementReference>ViewERList</elementReference>
-                </value>
-            </inputParameters>
-            <isRequired>true</isRequired>
-            <outputParameters>
-                <assignToReference>EmailRecieverList</assignToReference>
-                <name>surveyReceivers</name>
-            </outputParameters>
-            <outputParameters>
-                <assignToReference>GroupList</assignToReference>
-                <name>groups</name>
-            </outputParameters>
-            <outputParameters>
-                <assignToReference>Survey</assignToReference>
-                <name>survey</name>
-            </outputParameters>
-            <outputParameters>
-                <assignToReference>SurveyForConnectingList</assignToReference>
-                <name>surveys</name>
-            </outputParameters>
-            <outputParameters>
-                <assignToReference>CampaignList</assignToReference>
-                <name>campaigns</name>
-            </outputParameters>
-            <outputParameters>
-                <assignToReference>ViewERList</assignToReference>
-                <name>copySurveyReceivers</name>
-            </outputParameters>
-        </fields>
-        <showFooter>false</showFooter>
-        <showHeader>false</showHeader>
-    </screens>
-    <screens>
         <name>Basic_Screen</name>
         <label>Basic Screen</label>
         <locationX>176</locationX>
@@ -225,6 +145,12 @@
                     <elementReference>LogoContentDocumentId</elementReference>
                 </value>
             </inputParameters>
+            <inputParameters>
+                <name>surveys</name>
+                <value>
+                    <elementReference>SurveyForConnectingList</elementReference>
+                </value>
+            </inputParameters>
             <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>LogoContentDocumentId</assignToReference>
@@ -233,6 +159,70 @@
             <outputParameters>
                 <assignToReference>Survey</assignToReference>
                 <name>surveyData</name>
+            </outputParameters>
+            <outputParameters>
+                <assignToReference>SurveyForConnectingList</assignToReference>
+                <name>surveys</name>
+            </outputParameters>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>EmailSettingsScreen</name>
+        <label>EmailSettingsScreen</label>
+        <locationX>176</locationX>
+        <locationY>998</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Set_Preview_Header</targetReference>
+        </connector>
+        <fields>
+            <name>EmailSettingsScreenComponent</name>
+            <extensionName>c:emailSettingsScreen</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>campaigns</name>
+                <value>
+                    <elementReference>CampaignList</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>surveyReceivers</name>
+                <value>
+                    <elementReference>EmailRecieverList</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>groups</name>
+                <value>
+                    <elementReference>GroupList</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>copySurveyReceivers</name>
+                <value>
+                    <elementReference>ViewERList</elementReference>
+                </value>
+            </inputParameters>
+            <isRequired>true</isRequired>
+            <outputParameters>
+                <assignToReference>CampaignList</assignToReference>
+                <name>campaigns</name>
+            </outputParameters>
+            <outputParameters>
+                <assignToReference>EmailRecieverList</assignToReference>
+                <name>surveyReceivers</name>
+            </outputParameters>
+            <outputParameters>
+                <assignToReference>GroupList</assignToReference>
+                <name>groups</name>
+            </outputParameters>
+            <outputParameters>
+                <assignToReference>ViewERList</assignToReference>
+                <name>copySurveyReceivers</name>
             </outputParameters>
         </fields>
         <showFooter>false</showFooter>
@@ -266,6 +256,7 @@
                 </value>
             </inputParameters>
             <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
         </fields>
         <showFooter>false</showFooter>
         <showHeader>false</showHeader>
@@ -279,7 +270,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>Set_Advance_Header</targetReference>
+            <targetReference>Set_Email_Header</targetReference>
         </connector>
         <fields>
             <name>QuestionScreenComponent</name>

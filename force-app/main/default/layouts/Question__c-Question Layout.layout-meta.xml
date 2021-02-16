@@ -79,14 +79,21 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Value__c</fields>
         <relatedList>Answer__c.Question__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Operator__c</fields>
+        <fields>Value__c</fields>
+        <fields>Related_Question__c</fields>
         <relatedList>Validation__c.Dependent_Question__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
+        <fields>Operator__c</fields>
+        <fields>Value__c</fields>
+        <fields>Dependent_Question__c</fields>
         <relatedList>Validation__c.Related_Question__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
@@ -95,7 +102,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h1y000000ooaN</masterLabel>
+        <masterLabel>00h1y000000yeRu</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

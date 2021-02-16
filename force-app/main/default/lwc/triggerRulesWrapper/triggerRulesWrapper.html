@@ -23,8 +23,11 @@
       <c-single-trigger-rule
         key={rule.id}
         number={rule.id}
+        any-change-fields-and-objects-api={objectFieldsWithAnyChangeOperator}
         is-delete-available={isDeleteAvailable}
         ondeletetriggerrule={handleDeleteTriggerRule}
+        onanychangechosen={handleAnyChangeChosen}
+        onanychangedeleted={handleAnyChangeDeleted}
         data-my-id={rule.id}
         rule={rule.rule}
       ></c-single-trigger-rule>
@@ -44,4 +47,17 @@
       class="slds-m-left_xx-small"
     ></lightning-button>
   </div>
+
+  <c-confirmation-popup
+    title={labels.confirm_action}
+    message={labels.confirm_message}
+    confirm-label={labels.yes}
+    cancel-label={labels.no}
+    visible={isDialogVisible}
+    name="confirmModal"
+    original-message={originalMessage}
+    onpopupclick={handleCongirmationPopupClick}
+    class="slds-is-fixed">
+  </c-confirmation-popup>
+
 </template>

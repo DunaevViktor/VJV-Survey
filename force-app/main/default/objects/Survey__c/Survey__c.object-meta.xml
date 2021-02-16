@@ -168,6 +168,6 @@
         <searchResultsAdditionalFields>IsStandard__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Related_To__c</searchResultsAdditionalFields>
     </searchLayouts>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>Private</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

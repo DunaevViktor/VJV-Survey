@@ -169,13 +169,6 @@
         <value>Add Trigger Rule</value>
     </labels>
     <labels>
-        <fullName>advance_setting_header</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Advance setting header</shortDescription>
-        <value>Advanced survey settings</value>
-    </labels>
-    <labels>
         <fullName>back</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -337,6 +330,13 @@
         <value>Edit question form</value>
     </labels>
     <labels>
+        <fullName>email_settings_header</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>email settings header</shortDescription>
+        <value>Email settings</value>
+    </labels>
+    <labels>
         <fullName>enter_compared_value</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -461,6 +461,13 @@
         <protected>true</protected>
         <shortDescription>Field</shortDescription>
         <value>Field</value>
+    </labels>
+    <labels>
+        <fullName>field_setted_with_any_change</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>This field setted with any change</shortDescription>
+        <value>This field has already been set with any change operator.</value>
     </labels>
     <labels>
         <fullName>fill_trigger_rules</fullName>
@@ -832,6 +839,13 @@
         <protected>true</protected>
         <shortDescription>Select an option</shortDescription>
         <value>Select an option</value>
+    </labels>
+    <labels>
+        <fullName>select_any_change_confirm_message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Other rules will be deleted</shortDescription>
+        <value>Other trigger rules with chosen object and field combination will be deleted.</value>
     </labels>
     <labels>
         <fullName>select_operator</fullName>

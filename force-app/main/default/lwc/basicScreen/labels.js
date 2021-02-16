@@ -8,6 +8,10 @@ import unable_to_continue from "@salesforce/label/c.unable_to_continue";
 import survey_description from "@salesforce/label/c.survey_description";
 import type_description from "@salesforce/label/c.type_description";
 import type_survey_name from "@salesforce/label/c.type_survey_name";
+import complete_this_field from "@salesforce/label/c.complete_this_field";
+import template from "@salesforce/label/c.Template";
+import connect_to_another_survey from "@salesforce/label/c.connect_to_another_survey";
+import surveys from "@salesforce/label/c.surveys";
 
 export const labels = {
   survey_name,
@@ -19,5 +23,9 @@ export const labels = {
   survey_description,
   type_description,
   type_survey_name,
+  complete_this_field,
+  connect_to_another_survey,
+  template,
+  surveys,
   next
 }

@@ -1,26 +1,6 @@
 <template>
 
-    <div class="slds-box slds-box_x-small">
-        <lightning-input type="checkbox" label={label.template} checked={isStandardSurvey}
-        onchange={handleIsStandardSurveyChange}></lightning-input>
-
-        <template if:true={isHasSurveys}>
-            <lightning-input type="checkbox" label={label.connect_to_another_survey} checked={isConnectToSurvey}
-                onchange={handleConnectToAnotherSurveyChange}></lightning-input>
-            <template if:true={isConnectToSurvey}>
-                <template if:false={getSurveyError}>
-                    <lightning-combobox name="surveys" label={label.surveys} value={surveyId}
-                        placeholder={label.select_survey_for_connect} options={surveyOptions} onchange={handleSurveyChange}
-                        required></lightning-combobox>
-                </template>
-                <template if:true={getSurveyError}>
-                    <div class="text">{label.error_loading_surveys}</div>
-                </template>
-            </template>
-        </template>
-    </div>
-
-    <div class="slds-box slds-box_x-small slds-m-top_small">
+    <div class="slds-box_x-small">
       <div class="slds-text-heading_x-small">{label.add_immediate_dispatch}</div>
 
         <lightning-tabset>

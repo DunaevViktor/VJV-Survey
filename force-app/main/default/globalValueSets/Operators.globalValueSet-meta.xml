@@ -35,6 +35,11 @@
         <default>false</default>
         <label>LESS THAN</label>
     </customValue>
+    <customValue>
+        <fullName>ANY CHANGE</fullName>
+        <default>false</default>
+        <label>ANY CHANGE</label>
+    </customValue>
     <masterLabel>Operators</masterLabel>
     <sorted>false</sorted>
 </GlobalValueSet>
