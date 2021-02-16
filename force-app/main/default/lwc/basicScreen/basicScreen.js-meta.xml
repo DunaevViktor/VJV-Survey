@@ -10,6 +10,7 @@
         <targetConfig targets="lightning__FlowScreen">
             <property name="surveyData" label="Survey Data" type="@salesforce/schema/Survey__c"/>
             <property name="logoDocumentId" label="Logo ContentDocument Id" type="String"/>
+            <property name="surveys" type="@salesforce/schema/Survey__c[]" label="Surveys for connecting"/>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

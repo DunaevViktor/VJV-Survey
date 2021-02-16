@@ -88,14 +88,7 @@
         <label>После добавления зависимого вопроса опция редактирования основного вопроса будет недоступна.</label>
         <name>add_optional_confirm_message</name>
     </customLabels>
-    <customLabels>
-        <label>Данное поле уже было установлено с оператором any change.</label>
-        <name>field_setted_with_any_change</name>
-    </customLabels>
-    <customLabels>
-        <label>Другие правила с данной комбинацией объект-поле будут удалены.</label>
-        <name>select_any_change_confirm_message</name>
-    </customLabels>
+
     <customLabels>
         <label>Добавить вопрос</label>
         <name>add_question</name>
@@ -107,10 +100,6 @@
     <customLabels>
         <label>Добавить правило</label>
         <name>add_trigger_rule</name>
-    </customLabels>
-    <customLabels>
-        <label>Расширенные настройки опроса</label>
-        <name>advance_setting_header</name>
     </customLabels>
     <customLabels>
         <label>Назад</label>
@@ -205,6 +194,10 @@
         <name>edit_question_form_title</name>
     </customLabels>
     <customLabels>
+        <label>Настройки рассылки</label>
+        <name>email_settings_header</name>
+    </customLabels>
+    <customLabels>
         <label>Введите значение для сравнения</label>
         <name>enter_compared_value</name>
     </customLabels>
@@ -275,6 +268,10 @@
     <customLabels>
         <label>Поле</label>
         <name>field</name>
+    </customLabels>
+    <customLabels>
+        <label>Данное поле уже было установлено с оператором any change.</label>
+        <name>field_setted_with_any_change</name>
     </customLabels>
     <customLabels>
         <label>Правила заполнены не полностью</label>
@@ -489,6 +486,10 @@
         <name>select_an_option</name>
     </customLabels>
     <customLabels>
+        <label>Другие правила с данной комбинацией объект-поле будут удалены.</label>
+        <name>select_any_change_confirm_message</name>
+    </customLabels>
+    <customLabels>
         <label>Выберите оператор</label>
         <name>select_operator</name>
     </customLabels>
@@ -616,15 +617,15 @@
         <flows>
             <screens>
                 <fields>
-                    <name>AdvanceSettingsScreenComponent</name>
-                </fields>
-                <name>AdvanceSettingsScreen</name>
-            </screens>
-            <screens>
-                <fields>
                     <name>BasicScreenComponent</name>
                 </fields>
                 <name>Basic_Screen</name>
+            </screens>
+            <screens>
+                <fields>
+                    <name>EmailSettingsScreenComponent</name>
+                </fields>
+                <name>EmailSettingsScreen</name>
             </screens>
             <screens>
                 <fields>
