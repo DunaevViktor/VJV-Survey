@@ -538,6 +538,10 @@
         <name>surveys</name>
     </customLabels>
     <customLabels>
+        <label>Пожалуйста, пройдите еще один опрос.</label>
+        <name>take_another_survey</name>
+    </customLabels>
+    <customLabels>
         <label>Текст</label>
         <name>text</name>
     </customLabels>

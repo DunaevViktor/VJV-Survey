@@ -4,6 +4,8 @@
 
 .inner-box {
     background-color: white;
+    min-height: 40vh;
+    max-height: 90vh;
 }
 
 .image-block {
@@ -24,5 +26,6 @@
 }
 
 .scrollable-area {
-    height: 70vh;
+    min-height: 30vh;
+    max-height: 80vh;
 }
