@@ -3,7 +3,7 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentName>answerForm</componentName>
+                <componentName>answerFormWrapper</componentName>
             </componentInstance>
         </itemInstances>
         <name>main</name>
