@@ -6,11 +6,16 @@ public with sharing class SaverController {
   }
 
   @AuraEnabled
-  public static void saveSurveyUrl(Id surveyId, String surveyUrl){
+  public static String saveSurveyUrl(Id surveyId, String surveyUrl){
     Survey__c survey = [SELECT Id, URL__c FROM Survey__c WHERE Id =: surveyId WITH SECURITY_ENFORCED];
     String baseUrl = System.Url.getSalesforceBaseURL().toExternalForm();
     survey.URL__c = baseUrl + surveyUrl;
-    update survey;
+
+    if(Schema.sObjectType.Survey__c.isUpdateable()){
+        update survey;
+    }
+
+    return survey.URL__c;
   }
 
   @AuraEnabled
