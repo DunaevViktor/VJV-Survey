@@ -1,15 +1,15 @@
 import { operatorTypes, questionTypes } from "c/formUtil";
-import { surveyObject, surveyFields, questionFields, optionFields, validationFields, answerFields } from "c/fieldService";
+import { surveyFields, questionFields, optionFields, validationFields, answerFields } from "c/fieldService";
 import { label } from "./labels.js";
 
-const FIELDS = [
-  surveyObject + "." + surveyFields.ID,
-  surveyObject + "." + surveyFields.NAME,
-  surveyObject + "." + surveyFields.DESCRIPTION,
-  surveyObject + "." + surveyFields.LOGO,
-  surveyObject + "." + surveyFields.BACKGROUND,
-  surveyObject + "." + surveyFields.RELATED
-];
+const emptySurvey = {
+  [surveyFields.ID]: undefined,
+  [surveyFields.NAME]: undefined,
+  [surveyFields.DESCRIPTION]: undefined,
+  [surveyFields.LOGO]: undefined,
+  [surveyFields.BACKGROUND]: undefined,
+  [surveyFields.RELATED]: undefined
+};
 
 const initQuestionFields = (questions, data) => {
   questions = [];
@@ -177,7 +177,7 @@ const createAnswers = (questions, groupAnswerId) => {
 };
 
 export {
-  FIELDS,
+  emptySurvey,
   sortQuestionsByPosition,
   hideAnswerChain,
   compareValues,

@@ -1,4 +1,4 @@
-public with sharing class GroupAnswerController {
+public inherited sharing class GroupAnswerController {
     
     @AuraEnabled
     public static Id saveGroupAnswer(Group_Answer__c groupAnswer) {

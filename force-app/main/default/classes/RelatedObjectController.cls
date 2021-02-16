@@ -1,4 +1,4 @@
-public with sharing class RelatedObjectController {
+public inherited sharing class RelatedObjectController {
 
     private static final String RECORD_NOT_FOUND = 'Given standard record doesn\'t exist.';
     private static final String RELATED_OBJECT_IS_NOT_CREATEABLE = 'Related_Object__c is\'t createable.';

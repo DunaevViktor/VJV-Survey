@@ -10,6 +10,9 @@ import saveValidations from "@salesforce/apex/SaverController.saveValidations";
 import saveEmailReceivers from "@salesforce/apex/SaverController.saveEmailReceivers";
 import sendEmails from "@salesforce/apex/SendEmailLogic.sendEmails";
 import saveSurveyUrl from "@salesforce/apex/SaverController.saveSurveyUrl";
+import saveCommunityUrl from "@salesforce/apex/SaverController.saveCommunityUrl";
+import getCommunityUrl from "@salesforce/apex/CommunityController.getCommunityUrl";
+import getCommunityName from "@salesforce/apex/SurveySettingController.getCommunityName";
 
 import { surveyObject } from "c/fieldService";
 
@@ -60,6 +63,7 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
       .then((result) => {
         this.surveyId = result;
         this.getSurveyUrl(this.surveyId);
+        this.getSurvey
 
         this.increaseProgress();
 
@@ -196,5 +200,24 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
             this.isError = true;
         })
     });
+  }
+
+  getCommunityUrl(_surveyId){
+    getCommunityName()
+      .then((data) => {
+        if (data) {
+          return getCommunityUrl({communityName: data})
+        }
+      })
+      .then((url) => {
+        if (url) {
+          url = `${url}?${this.SURVEY_URL_PARAMETER_NAME}=${_surveyId}`;
+          saveCommunityUrl({surveyId : this.surveyId, communityUrl : url});
+        }
+      })
+      .catch(() => {
+          this.isError = true;
+      });
+    
   }
 }

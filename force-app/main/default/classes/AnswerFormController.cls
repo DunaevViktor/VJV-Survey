@@ -1,4 +1,4 @@
-public with sharing class AnswerFormController {
+public inherited sharing class AnswerFormController {
     
     @AuraEnabled(cacheable=true)
     public static List<QuestionWrapper> getQuestions(Id surveyId){

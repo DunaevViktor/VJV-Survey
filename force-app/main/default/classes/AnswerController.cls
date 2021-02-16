@@ -1,4 +1,4 @@
-public with sharing class AnswerController {
+public inherited sharing class AnswerController {
     
     @AuraEnabled
     public static void saveAnswersPartially(List<Answer__c> answers) {
