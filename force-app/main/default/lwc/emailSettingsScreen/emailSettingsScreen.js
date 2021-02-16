@@ -1,17 +1,16 @@
 import { LightningElement, track, api, wire } from "lwc";
 import { label } from "./labels.js";
 import { columns, columnsMember, getResultTableStyle, getReceiversTableStyle, isReceiverExist, deleteReceiver, createDisplayedMap,
-        createSurveyDisplayedMap, getObjectName, callReportValidity, createMemberList } from "./advanceSettingScreenHelper.js";
+        getObjectName, callReportValidity, createMemberList } from "./emailSettingsScreenHelper.js";
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getGroups from "@salesforce/apex/GroupController.getGroups";
-import getSurveys from "@salesforce/apex/SurveyController.getAllSurveys";
 import getCampaigns from "@salesforce/apex/CampaignController.getCampaigns";
 import searchMembers from "@salesforce/apex/SearchHelper.searchMembers";
 import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getPageQuestionAmount";
-import { surveyFields, receiverFields } from "c/fieldService";
+import { receiverFields } from "c/fieldService";
 
-export default class AdvanceSettingScreen extends LightningElement {
+export default class EmailSettingsScreen extends LightningElement {
 
     MULTIPLIER = 1;
     SINGLE_RECORD_VARIANT = "Record";
@@ -24,13 +23,9 @@ export default class AdvanceSettingScreen extends LightningElement {
 
     @wire(getPageQuestionAmount) amountItems;
 
-    @track isConnectToSurvey;
     @track hasReceivers;
-    @track __survey = {};
     @track receivers = [];
-    @track displayedSurveys = [];
     @track displayedGroups = [];
-    @track isHasSurveys = false;
     @track isHasGroups = false;
     @track getGroupError = false;
     @track getSurveyError = false;
@@ -46,18 +41,9 @@ export default class AdvanceSettingScreen extends LightningElement {
     @track currentPage = 0;
 
     groupId = "";
-    surveyId = "";
     campaignId = "";
     queryTerm = "";
     memberList = [];
-
-    get survey() {
-        return this.__survey;
-    }
-
-    get surveys() {
-        return this.displayedSurveys;
-    }
 
     get surveyReceivers() {
         return this.receivers;
@@ -79,22 +65,8 @@ export default class AdvanceSettingScreen extends LightningElement {
         return createDisplayedMap(this.displayedGroups);
     }
 
-    get surveyOptions() {
-        return createSurveyDisplayedMap(this.displayedSurveys);
-    }
-
     get campaignOptions() {
         return createDisplayedMap(this.displayedCampaigns);
-    }
-
-    @api set survey(value) {
-        this.__survey = JSON.parse(JSON.stringify(value));
-        this.isConnectToSurvey = this.__survey[surveyFields.RELATED] !== undefined;
-        if(this.isConnectToSurvey) this.surveyId = this.__survey[surveyFields.RELATED] ;
-    }
-
-    @api set surveys(value) {
-        this.displayedSurveys = JSON.parse(JSON.stringify(value));
     }
 
     @api set surveyReceivers(value) {
@@ -114,13 +86,11 @@ export default class AdvanceSettingScreen extends LightningElement {
     }
 
     connectedCallback() {
-        this.initSurveys();
         this.initGroups();
         this.initCampaigns();
         this.setIsHasReseivers();
         this.setIsHasMembers();
 
-        this.isHasSurveys = this.displayedSurveys.length > 0;
         this.isHasGroups = this.displayedGroups.length > 0;
         this.isHasCampaigns = this.displayedCampaigns.length > 0;
     }
@@ -132,19 +102,6 @@ export default class AdvanceSettingScreen extends LightningElement {
 
         if(this.template.querySelector('.emailTable')) {
             this.template.querySelector('.emailTable').appendChild(getReceiversTableStyle());
-        }
-    }
-
-    initSurveys() {
-        if (this.displayedSurveys.length === 0) {
-            getSurveys()
-                .then((result) => {
-                    this.displayedSurveys = result.length > 0 ? result : [];
-                    this.isHasSurveys = this.displayedSurveys.length > 0;
-                })
-                .catch(() => {
-                    this.getSurveyError = true;
-                });
         }
     }
 
@@ -172,10 +129,6 @@ export default class AdvanceSettingScreen extends LightningElement {
                     this.getCampaignsError = true;
                 });
         }
-    }
-
-    get isStandardSurvey() {
-        return this.__survey[surveyFields.STANDARD];
     }
 
     get receiversKeyField() {
@@ -370,23 +323,6 @@ export default class AdvanceSettingScreen extends LightningElement {
             return false;
         }
         return true;
-    }
-
-    handleIsStandardSurveyChange(event) {
-        this.__survey[surveyFields.STANDARD] = event.target.checked;
-    }
-
-    handleSurveyChange(event) {
-        this.__survey[surveyFields.RELATED] = event.detail.value;
-        this.surveyId = event.detail.value;
-    }
-
-    handleConnectToAnotherSurveyChange(event) {
-        this.isConnectToSurvey = event.target.checked;
-        if (!this.isConnectToSurvey) {
-            this.surveyId = "";
-            this.__survey[surveyFields.RELATED] = undefined;
-        }
     }
 
     clickPreviousButton() {

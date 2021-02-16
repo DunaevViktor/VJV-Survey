@@ -1,5 +1,5 @@
 import { label } from "./labels.js";
-import { surveyFields, receiverFields } from "c/fieldService";
+import { receiverFields } from "c/fieldService";
 
 const TYPE_TEXT = "text";
 const FIELD_NAME = "Name";
@@ -68,12 +68,6 @@ const createDisplayedMap = (objectList) => {
     });
 }
 
-const createSurveyDisplayedMap = (objectList) => {
-    return objectList.map((element) => {
-        return { label: element[surveyFields.NAME], value: element[surveyFields.ID] };
-    });
-}
-
 const getObjectName = (objectList, objectId) => {
     return objectList.find((element) => {
         return objectId === element.Id;
@@ -118,7 +112,6 @@ export {
     isReceiverExist,
     deleteReceiver,
     createDisplayedMap,
-    createSurveyDisplayedMap,
     getObjectName,
     callReportValidity,
     createMemberList

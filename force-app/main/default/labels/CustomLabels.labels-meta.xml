@@ -169,13 +169,6 @@
         <value>Add Trigger Rule</value>
     </labels>
     <labels>
-        <fullName>advance_setting_header</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Advance setting header</shortDescription>
-        <value>Advanced survey settings</value>
-    </labels>
-    <labels>
         <fullName>back</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -335,6 +328,13 @@
         <protected>true</protected>
         <shortDescription>edit question form title</shortDescription>
         <value>Edit question form</value>
+    </labels>
+    <labels>
+        <fullName>email_settings_header</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>email settings header</shortDescription>
+        <value>Email settings</value>
     </labels>
     <labels>
         <fullName>enter_compared_value</fullName>
