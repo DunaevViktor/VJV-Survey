@@ -221,7 +221,7 @@ export default class EmailSettingsScreen extends LightningElement {
         const receiver = {};
         receiver[receiverFields.TYPE] = this.GROUP_VARIANT;
         receiver[receiverFields.VALUE] = this.groupId;
-        receiver.DisaplayedName = groupName;
+        receiver.DisplayedName = groupName;
         
         this.receivers = [...this.receivers, receiver];
 
@@ -252,7 +252,7 @@ export default class EmailSettingsScreen extends LightningElement {
         const receiver = {};
         receiver[receiverFields.TYPE] = this.SINGLE_RECORD_VARIANT;
         receiver[receiverFields.VALUE] = Id;
-        receiver.DisaplayedName = Name;
+        receiver.DisplayedName = Name;
 
         this.receivers = [...this.receivers, receiver];
 
@@ -291,7 +291,7 @@ export default class EmailSettingsScreen extends LightningElement {
         const receiver = {};
         receiver[receiverFields.TYPE] = this.CAMPAIGN_VARIAN;
         receiver[receiverFields.VALUE] = this.campaignId;
-        receiver.DisaplayedName = campaignName;
+        receiver.DisplayedName = campaignName;
         
         this.receivers = [...this.receivers, receiver];
 

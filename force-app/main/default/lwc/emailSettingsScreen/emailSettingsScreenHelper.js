@@ -3,7 +3,7 @@ import { receiverFields } from "c/fieldService";
 
 const TYPE_TEXT = "text";
 const FIELD_NAME = "Name";
-const FIELD_DISPLAYED_NAME = "DisaplayedName";
+const FIELD_DISPLAYED_NAME = "DisplayedName";
 const FIELD_STANDARD_TYPE = "Type";
 const RECORD_TYPE_CONTACT = "Contact";
 const RECORD_TYPE_USER = "User";
