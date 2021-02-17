@@ -205,16 +205,6 @@ const filterOperatorList = (fullOperatorList, operatorType) => {
   return resolvedOperators;
 };
 
-const setReferencedObjectNames = (objectFieldsDescriptionList, fieldObject) => {
-  if (fieldObject.datatype === fieldTypes.REFERENCE) {
-    let referencedObjectsNames = [];
-    for (let i = 3; i < objectFieldsDescriptionList.length; i++) {
-      referencedObjectsNames.push(objectFieldsDescriptionList[i]);
-    }
-    fieldObject.referencedObjects = referencedObjectsNames;
-  }
-};
-
 const generateFieldOptions = (result) => {
   let fieldOptions = [];
   for (let key in result) {
@@ -231,7 +221,6 @@ const generateFieldOptions = (result) => {
 
 export {
   getFieldAttributes,
-  setReferencedObjectNames,
   generateBooleanField,
   filterOperatorList,
   operatorGroups,

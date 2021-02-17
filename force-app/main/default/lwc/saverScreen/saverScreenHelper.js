@@ -1,6 +1,8 @@
 import {findQuestionByPosition} from "c/formUtil";
 import { ruleFields, receiverFields, questionFields, optionFields, validationFields } from "c/fieldService";
 
+const ZERO = 0;
+
 const transformRules = (rules, surveyId) => {
   return rules.map((rule) => {
     rule = JSON.parse(JSON.stringify(rule));
@@ -23,7 +25,7 @@ const transformOptions = (questions, savedQuestions) => {
   for(let i = 0; i < questions.length; i++) {
     const question = questions[i];
      
-    if(!question.Question_Options__r || question.Question_Options__r.length === 0) continue;
+    if(!question.Question_Options__r || question.Question_Options__r.length === ZERO) continue;
 
     const savedQuestion = findQuestionByPosition(savedQuestions, question[questionFields.POSITION]);
 
@@ -38,7 +40,7 @@ const transformOptions = (questions, savedQuestions) => {
 }
 
 const transformValidations = (validations, savedQuestions) => {
-  if(validations === null || validations.length === 0) return [];
+  if(validations === null || validations.length === ZERO) return [];
 
   const transformedValidations = [];
 

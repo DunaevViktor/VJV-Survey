@@ -4,6 +4,12 @@ import { questionFields } from "c/fieldService";
 import { label } from "./labels.js";
 
 export default class QuestionCard extends LightningElement {
+  ZERO = 0;
+  STATUS_CONFIRM = 'confirm';
+  EMPTY_STRING = '';
+  MESSAGE_DELETE = 'deleteQuestion';
+  MESSAGE_ADD = 'addOptional';
+
   @api question;
 
   label = label;
@@ -30,11 +36,11 @@ export default class QuestionCard extends LightningElement {
   }
 
   get isHasOptions() {
-    return this.question.Question_Options__r && this.question.Question_Options__r.length > 0;
+    return this.question.Question_Options__r && this.question.Question_Options__r.length > this.ZERO;
   }
 
   deleteQuestionClick() {
-    this.originalMessage = 'deleteQuestion';
+    this.originalMessage = this.MESSAGE_DELETE;
     this.message = label.confirm_question_delete_message;
     this.isDialogVisible = true;
   }
@@ -66,23 +72,23 @@ export default class QuestionCard extends LightningElement {
       return;
     }
     
-    this.originalMessage = 'addOptional';
+    this.originalMessage = this.MESSAGE_ADD;
     this.message = label.add_optional_full_confirm_message;
     this.isDialogVisible = true;
   }
 
   handleCongirmationPopupClick(event) {
-    if(event.detail.originalMessage === 'addOptional') {
-      if(event.detail.status === 'confirm') {
+    if(event.detail.originalMessage === this.MESSAGE_ADD) {
+      if(event.detail.status === this.STATUS_CONFIRM) {
         this.addOptionalQuestion();
       }
-    } else if(event.detail.originalMessage === 'deleteQuestion') {
-      if(event.detail.status === 'confirm') {
+    } else if(event.detail.originalMessage === this.MESSAGE_DELETE) {
+      if(event.detail.status === this.STATUS_CONFIRM) {
         this.deleteQuestion();
       }
     }
-    this.message = '';
-    this.originalMessage = '';
+    this.message = this.EMPTY_STRING;
+    this.originalMessage = this.EMPTY_STRING;
     this.isDialogVisible = false;
   }
   

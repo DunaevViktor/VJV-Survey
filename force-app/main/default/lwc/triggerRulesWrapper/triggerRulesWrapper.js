@@ -14,6 +14,8 @@ import {
 import { operatorTypes } from "c/formUtil";
 
 export default class TriggerRulesWrapper extends LightningElement {
+  ZERO = 0;
+  ONE = 1;
 
   @track maxTriggerRulesAmount = 5;
 
@@ -48,7 +50,7 @@ export default class TriggerRulesWrapper extends LightningElement {
   }
   
   connectedCallback() { 
-    if (this.rules && this.rules.length > 0) {
+    if (this.rules && this.rules.length > this.ZERO) {
       let newtriggerRules = [];
       this._rules = this.rules;
       this._rules.forEach((rule) => {
@@ -82,12 +84,12 @@ export default class TriggerRulesWrapper extends LightningElement {
 
   handleDeleteTriggerRule(event) {
     const childKey = event.detail;
-    this.triggerRules.splice(this.triggerRules.findIndex(rule => rule.id === childKey), 1);
+    this.triggerRules.splice(this.triggerRules.findIndex(rule => rule.id === childKey), this.ONE);
   }
 
   updateIsDeleteAvailableState() {
     let visibleRulesAmount = this.triggerRules.length;
-    if(visibleRulesAmount === 1) {
+    if(visibleRulesAmount === this.ONE) {
       this.isDeleteAvailable = false;
     } else {
       this.isDeleteAvailable = true;
@@ -101,7 +103,7 @@ export default class TriggerRulesWrapper extends LightningElement {
 
   get labelOfAvailableItems() {
     const availableTriggerRulesAmount = this.maxTriggerRulesAmount - this.triggerRules.length;
-    if (availableTriggerRulesAmount === 1) {
+    if (availableTriggerRulesAmount === this.ONE) {
       return this.labels.you_can_create + " " 
         + availableTriggerRulesAmount + " " + this.labels.more + " " + this.labels.trigger_rule + ".";
     }
@@ -168,7 +170,7 @@ export default class TriggerRulesWrapper extends LightningElement {
 
   deleteObjectFieldWithAnyChangeOperator(object, field) {
     const index = this.objectFieldsWithAnyChangeOperator.findIndex(obj => (obj.object = object) && (obj.field = field));
-    this.objectFieldsWithAnyChangeOperator.splice(index, 1);
+    this.objectFieldsWithAnyChangeOperator.splice(index, this.ONE);
     this.updateObjectsFieldsInChildren();
   }
 
@@ -215,7 +217,7 @@ export default class TriggerRulesWrapper extends LightningElement {
         let triggerRule = JSON.parse(JSON.stringify(element.getTriggerRule()));
         if((triggerRule[ruleFields.API] === this.anyChangeObject) && (triggerRule[ruleFields.FIELD] === this.anyChangeField)) {
           const index = this.triggerRules.findIndex(trRule => trRule.id === rule.id);
-          this.triggerRules.splice(index, 1);
+          this.triggerRules.splice(index, this.ONE);
         }  
       }      
     });
@@ -233,5 +235,4 @@ export default class TriggerRulesWrapper extends LightningElement {
     const event = new ShowToastEvent({title, message, variant, mode: "dismissable"});
     this.dispatchEvent(event);
   }
-
 }

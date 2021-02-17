@@ -21,6 +21,7 @@ import {
 
 
 export default class SingleTriggerRule extends LightningElement {
+  EMPTY_STRING = "";
 
   labels = importedLabels;
 
@@ -199,7 +200,7 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   setField(chosenFieldObject, picklistOptions) {
-    let settedValue = "";
+    let settedValue = this.EMPTY_STRING;
     if (this._rule && this._rule[ruleFields.VALUE]) {
       settedValue = this._rule[ruleFields.VALUE];
       this.value = settedValue;
@@ -243,7 +244,7 @@ export default class SingleTriggerRule extends LightningElement {
       });  
       this.dispatchEvent(anyChangeEvent);      
       this.field = {};
-      this.value = "";
+      this.value = this.EMPTY_STRING;
       return;
     }
     this.operatorValue = event.detail.value;
@@ -251,7 +252,7 @@ export default class SingleTriggerRule extends LightningElement {
       (field) => field.value === this.fieldValue
     );
     if (this.operatorValue === operatorTypes.NULL) {
-      let settedValue = "";      
+      let settedValue = this.EMPTY_STRING;      
       this.field = generateBooleanField(chosenFieldObject.label, settedValue);
       this.picklistFieldOptions = this.field.picklistValues;
     }
@@ -292,13 +293,13 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   clearChosenData() {
-    this.value = "";
-    this.operatorValue = "";
+    this.value = this.EMPTY_STRING;
+    this.operatorValue = this.EMPTY_STRING;
     this.operators = [];
     this.fieldNames = [];
-    this.fieldValue = "";
-    this.fieldType = "";
-    this.objectValue = "";
+    this.fieldValue = this.EMPTY_STRING;
+    this.fieldType = this.EMPTY_STRING;
+    this.objectValue = this.EMPTY_STRING;
     this.field = {};
   }
 

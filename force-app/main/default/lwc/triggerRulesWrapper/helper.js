@@ -1,9 +1,12 @@
 import { operatorTypes } from "c/formUtil";
 
+const EMPTY_STRING = '';
+const ZERO = 0;
+
 const isFilledCompletely = (obj) => {
     let filledCompletely = true;
     for(let field in obj) {
-      if(!obj[field] || obj[field] === "") {
+      if(!obj[field] || obj[field] === EMPTY_STRING) {
         filledCompletely = false;
         break;
       }
@@ -26,7 +29,7 @@ const areTriggerRulesFilledCompletely = (triggerRules) => {
 }
 
 const isEmpty = (obj) => {
-    return Object.keys(obj).length === 0;
+    return Object.keys(obj).length === ZERO;
 }
 
 const areDuplicatesPresent = (triggerRules) => {  

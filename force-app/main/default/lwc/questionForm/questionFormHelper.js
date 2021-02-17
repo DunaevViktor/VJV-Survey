@@ -2,6 +2,9 @@ import {questionTypes, operatorTypes} from "c/formUtil";
 import { label } from "./labels.js";
 import { validationFields, questionFields, optionFields } from "c/fieldService";
 
+const ZERO = 0;
+const EMPTY_STRING = '';
+
 const typesDescription = [
   {
     label: questionTypes.PICKLIST,
@@ -109,15 +112,15 @@ const resolveOperatorsByQuestionType = (operators, question) => {
 }
 
 const isOptionEnabling = (selectedType) => {
-  return selectedType.toLowerCase().localeCompare(questionTypes.CHECKBOX.toLowerCase()) === 0 ||
-         selectedType.toLowerCase().localeCompare(questionTypes.RADIOBUTTON.toLowerCase()) === 0 ||
-         selectedType.toLowerCase().localeCompare(questionTypes.PICKLIST.toLowerCase()) === 0;
+  return selectedType.toLowerCase().localeCompare(questionTypes.CHECKBOX.toLowerCase()) === ZERO ||
+         selectedType.toLowerCase().localeCompare(questionTypes.RADIOBUTTON.toLowerCase()) === ZERO ||
+         selectedType.toLowerCase().localeCompare(questionTypes.PICKLIST.toLowerCase()) === ZERO;
 }
 
 const filterOptionsByValue = (options, value) => {
   return options.filter(
     (option) => {
-      return option[optionFields.VALUE].localeCompare(value) === 0;
+      return option[optionFields.VALUE].localeCompare(value) === ZERO;
     }
   );
 }
@@ -125,7 +128,7 @@ const filterOptionsByValue = (options, value) => {
 const filterOptionsByValueAndIndex = (options, value, editiIndex) => {
   return options.filter(
     (option, index) => {
-      return option[optionFields.VALUE].localeCompare(value) === 0 && index !== editiIndex;
+      return option[optionFields.VALUE].localeCompare(value) === ZERO && index !== editiIndex;
     }
   );
 }
@@ -134,7 +137,7 @@ const findOptionIndexByValue = (options, value) => {
   let idx;
 
   options.forEach((option, index) => {
-    if(option[optionFields.VALUE].localeCompare(value) === 0) {
+    if(option[optionFields.VALUE].localeCompare(value) === ZERO) {
       idx = index;
     }
   });
@@ -145,15 +148,15 @@ const findOptionIndexByValue = (options, value) => {
 const deleteFromOptions = (options, selectedValue) => {
   return options.filter(
     (option) => {
-      return option[optionFields.VALUE].localeCompare(selectedValue) !== 0;
+      return option[optionFields.VALUE].localeCompare(selectedValue) !== ZERO;
     }
   );
 }
 
 const clearInput = (input) => {
-  input.setCustomValidity("");
+  input.setCustomValidity(EMPTY_STRING);
   input.reportValidity();
-  input.value = "";
+  input.value = EMPTY_STRING;
   input.blur();
 }
 
@@ -172,8 +175,8 @@ const transformOperators = (operators) => {
 }
 
 const buildVisibilityMessage = (validation) => {
-  return  label.visible_if + " '" + validation[validationFields.RELATED][questionFields.LABEL]
-    + "' " + validation[validationFields.OPERATOR].toLowerCase() + " " + validation[validationFields.VALUE];
+  return  `${label.visible_if} '${validation[validationFields.RELATED][questionFields.LABEL]}' ` + 
+  `${validation[validationFields.OPERATOR].toLowerCase()} ${validation[validationFields.VALUE]}`;
 }
 
 export {

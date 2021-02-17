@@ -10,6 +10,11 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { surveyFields } from "c/fieldService";
 
 export default class BasicScreen extends LightningElement {
+
+  ZERO = 0;
+  EMPTY_STRING = '';
+  BASE_PIC_STRING = 'base64,';
+
   @track survey;
   @track loading = false;
   @track logoData;
@@ -85,33 +90,33 @@ export default class BasicScreen extends LightningElement {
     this.setDefaultSurveyData();
 
     this.initSurveys();
-    this.isHasSurveys = this.displayedSurveys.length > 0;
+    this.isHasSurveys = this.displayedSurveys.length > this.ZERO;
   }
 
   initSurveys() {
-    if (this.displayedSurveys.length === 0) {
-        getSurveys()
-            .then((result) => {
-                this.displayedSurveys = result.length > 0 ? result : [];
-                this.isHasSurveys = this.displayedSurveys.length > 0;
-            })
-            .catch(() => {
-                this.isError = true;
-            });
+    if (this.displayedSurveys.length === this.ZERO) {
+      getSurveys()
+        .then((result) => {
+          this.displayedSurveys = result.length > this.ZERO ? result : [];
+          this.isHasSurveys = this.displayedSurveys.length > this.ZERO;
+        })
+        .catch(() => {
+          this.isError = true;
+        });
     }
   }
 
   validateInput() {
     const input = this.template.querySelector(".survey-name");
 
-    if(input.value.trim().length === 0) {
-      input.value = '';
+    if(input.value.trim().length === this.ZERO) {
+      input.value = this.EMPTY_STRING;
       input.setCustomValidity(this.label.complete_this_field);
       input.reportValidity();
       return false;
     }
 
-    input.setCustomValidity('');
+    input.setCustomValidity(this.EMPTY_STRING);
     input.reportValidity();
     return input.checkValidity();
   }
@@ -160,14 +165,14 @@ export default class BasicScreen extends LightningElement {
       this.isNewLogo = true;
     } else {
       this.isNewLogo = false;
-      this.survey[surveyFields.LOGO] = '';
+      this.survey[surveyFields.LOGO] = this.EMPTY_STRING;
     }
   }
 
   handleConnectToAnotherSurveyChange(event) {
     this.isConnectToSurvey = event.target.checked;
     if (!this.isConnectToSurvey) {
-        this.surveyId = "";
+        this.surveyId = this.EMPTY_STRING;
         this.survey[surveyFields.RELATED] = undefined;
     }
   }
@@ -178,7 +183,7 @@ export default class BasicScreen extends LightningElement {
   }
   
   saveLogo() {
-    const base64 = "base64,";
+    const base64 = this.BASE_PIC_STRING;
     const imageBase64 = this.imageBlobUrl.substr(this.imageBlobUrl.indexOf(base64) + base64.length);
     return uploadImage({
       imageName: this.imageName,
@@ -231,7 +236,7 @@ export default class BasicScreen extends LightningElement {
       catch(() => {
         this.showToastEvent(this.label.unable_to_continue, this.errorVariant, this.label.failed_image_delete);
       });
-    this.logoId = '';
+    this.logoId = this.EMPTY_STRING;
   }
 
   updateSurveyData() {

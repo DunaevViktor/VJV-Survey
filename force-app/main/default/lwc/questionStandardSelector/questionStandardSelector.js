@@ -8,6 +8,8 @@ export default class QuestionStandardSelector extends LightningElement {
 
   MULTIPLIER = 2;
   SELECT_OPTION_VARIANT = 'select';
+  ZERO = 0;
+  ONE = 1;
 
   label = label;
 
@@ -38,7 +40,7 @@ export default class QuestionStandardSelector extends LightningElement {
   }
 
   get isPreviousDisabled() {
-    return this.currentPage === 0;
+    return this.currentPage === this.ZERO;
   }
 
   get isNextDisabled() {
@@ -73,7 +75,7 @@ export default class QuestionStandardSelector extends LightningElement {
   }
 
   clickPreviousButton() {
-    if(this.currentPage === 0) return;
+    if(this.currentPage === this.ZERO) return;
 
     this.currentPage--;
     this.resolveQuestiosOnPage();
@@ -89,7 +91,7 @@ export default class QuestionStandardSelector extends LightningElement {
   resolveQuestiosOnPage() {
     this.questionsPage = this.displayedQuestions.slice(
       this.currentPage *  (this.amountItems.data * this.MULTIPLIER), 
-      (this.currentPage + 1 )*  (this.amountItems.data * this.MULTIPLIER)
+      (this.currentPage + this.ONE)*  (this.amountItems.data * this.MULTIPLIER)
     );
   }
 }

@@ -4,11 +4,14 @@ import { importedLabels } from "./labels";
 import findRecords from "@salesforce/apex/LookupController.findRecords";
 
 export default class LwcLookup extends LightningElement {
+  ZERO = 0;
+  EMPTY_STRING = '';
+  DELAY = 300;
 
   labels = importedLabels;
 
   @track recordsList;
-  @track searchKey = "";
+  @track searchKey = this.EMPTY_STRING;
   @api selectedValue;
   @track _selectedValue;
   @api selectedRecordId;
@@ -25,16 +28,16 @@ export default class LwcLookup extends LightningElement {
 
   onLeave() {
     setTimeout(() => {
-      this.searchKey = "";
+      this.searchKey = this.EMPTY_STRING;
       this.message = null;
       this.recordsList = null;
-    }, 300);
+    }, this.DELAY);
   }
 
   onRecordSelection(event) {
     this._selectedRecordId = event.target.dataset.key;
     this._selectedValue = event.target.dataset.name;
-    this.searchKey = "";
+    this.searchKey = this.EMPTY_STRING;
     this.onSeletedRecordUpdate();
   }
 
@@ -45,9 +48,9 @@ export default class LwcLookup extends LightningElement {
   }
 
   removeRecordOnLookup() {
-    this.searchKey = "";
-    this._selectedValue = "";
-    this._selectedRecordId = "";
+    this.searchKey = this.EMPTY_STRING;
+    this._selectedValue = this.EMPTY_STRING;
+    this._selectedRecordId = this.EMPTY_STRING;
     this.recordsList = null;
     this.onSeletedRecordUpdate();
   }
@@ -58,12 +61,12 @@ export default class LwcLookup extends LightningElement {
       objectsApiNames: this.objectsApiNames
     })
       .then((result) => {
-        if (result.length === 0) {
+        if (result.length === this.ZERO) {
           this.recordsList = [];
           this.message = this.labels.no_records_found;
         } else {
           this.recordsList = result;
-          this.message = "";
+          this.message = this.EMPTY_STRING;
         }
         this.error = undefined;
       })
@@ -79,7 +82,7 @@ export default class LwcLookup extends LightningElement {
         selectedValue: this._selectedValue
     }   
     if(!this._selectedRecordId || !this._selectedValue) {
-      detailObject = "";
+      detailObject = this.EMPTY_STRING;
     } 
     const recordSelectionEvent = new CustomEvent("recordselection", {
       detail: detailObject

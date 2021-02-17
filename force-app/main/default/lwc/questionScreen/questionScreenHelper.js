@@ -1,5 +1,11 @@
 import { validationFields, questionFields, optionFields } from "c/fieldService";
 
+const ZERO = 0;
+const ONE = 1;
+const ONE_NEG = -1;
+const EMPTY_STRING = '';
+const DOT = '.';
+
 const trasnformResult = (result) => {
   return result.map((item) => {
     return {
@@ -17,20 +23,20 @@ const resetOptionsIds = (options) => {
 }
 
 const getQuestionsBySurveyId = (templateQuestions, surveyId, noTemplateValue) => {
-  if (surveyId.localeCompare(noTemplateValue) === 0) {
+  if (surveyId.localeCompare(noTemplateValue) === ZERO) {
     return [];
   } 
 
   return templateQuestions.filter(
     (question) => {
       return (
-        question[questionFields.SURVEY].localeCompare(surveyId) === 0
+        question[questionFields.SURVEY].localeCompare(surveyId) === ZERO
       );
     }
   ).map(
     (question, index) => {
       question[questionFields.ID] = null;
-      question[questionFields.POSITION] = '' + (index + 1);
+      question[questionFields.POSITION] = EMPTY_STRING + (index + ONE);
       question.Editable = true;
       question[questionFields.VISIBLE] = true;
       question[questionFields.REUSABLE] = false;
@@ -72,17 +78,17 @@ const updateValidationByPosition = (validations, updatedValidation) => {
 
 const solveQuestionPosition = (questions) => {
   questions = questions.filter((question) => {
-    return !~question[questionFields.POSITION].indexOf('.');
+    return !~question[questionFields.POSITION].indexOf(DOT);
   }) 
 
-  return '' + (+questions.length + 1);
+  return '' + (+questions.length + ONE);
 }
 
 const solveDependentQuestionPosition = (validations, question) => {
   const amount = validations.filter((validation) => {
     return validation[validationFields.RELATED][questionFields.POSITION]  === question[questionFields.POSITION] 
   }).length;
-  return question[questionFields.POSITION]  + "." + (+amount + 1);
+  return question[questionFields.POSITION]  + DOT + (+amount + ONE);
 }
 
 const prepareSelectedQuestion = (selectedQuestion) => {
@@ -98,25 +104,25 @@ const prepareSelectedQuestion = (selectedQuestion) => {
 }
 
 const resolvePositionByDeleted = (position, leftPart, rightPart) => {
-  const leftPartLength = leftPart.length > 0 ? leftPart.length + 1 : 0;
+  const leftPartLength = leftPart.length > ZERO ? leftPart.length + ONE : ZERO;
   const itemPart = position.slice(leftPartLength);
     
-  const itemIndex = itemPart.indexOf('.');
-  const value = !~itemIndex ? itemPart : itemPart.slice(0, itemIndex);
+  const itemIndex = itemPart.indexOf(DOT);
+  const value = !~itemIndex ? itemPart : itemPart.slice(ZERO, itemIndex);
     
   if(+value > +rightPart) {
-    const itemRightPart = !~itemIndex ? '' : itemPart.slice(itemIndex);
-    const itemLeftPart = leftPart.length > 0 ? leftPart + '.' : '';
+    const itemRightPart = !~itemIndex ? EMPTY_STRING : itemPart.slice(itemIndex);
+    const itemLeftPart = leftPart.length > ZERO ? leftPart + DOT : EMPTY_STRING;
         
-    position = itemLeftPart + Math.round(+value - 1) + itemRightPart;
+    position = itemLeftPart + Math.round(+value - ONE) + itemRightPart;
   }
   return position;
 }
 
 const resolveQuestionsByDeleted = (questions, position) => {
-  const index = position.lastIndexOf('.');
-  const leftPart = !~index ? '' : position.slice(0, index);
-  const rightPart = !~index ? position : position.slice(index + 1);
+  const index = position.lastIndexOf(DOT);
+  const leftPart = !~index ? EMPTY_STRING : position.slice(ZERO, index);
+  const rightPart = !~index ? position : position.slice(index + ONE);
 
   return questions.filter((question) => {
     return !question[questionFields.POSITION].startsWith(position);
@@ -132,9 +138,9 @@ const resolveQuestionsByDeleted = (questions, position) => {
 };
 
 const resolveValidationsByDeleted = (validations, position) => {
-  const index = position.lastIndexOf('.');
-  const leftPart = !~index ? '' : position.slice(0, index);
-  const rightPart = !~index ? position : position.slice(index + 1);
+  const index = position.lastIndexOf(DOT);
+  const leftPart = !~index ? EMPTY_STRING : position.slice(ZERO, index);
+  const rightPart = !~index ? position : position.slice(index + ONE);
 
   return validations.filter((validation) => {
     return !validation[validationFields.RELATED][questionFields.POSITION].startsWith(position) &&
@@ -162,7 +168,7 @@ const resolveEditableQuestions = (questions, validations) => {
       return validation[validationFields.RELATED][questionFields.POSITION] === question[questionFields.POSITION];
     })
 
-    if(filteredValidations.length === 0) question.Editable = true;
+    if(filteredValidations.length === ZERO) question.Editable = true;
 
     return question;
   })
@@ -206,8 +212,8 @@ const swapValidations = (validations, upperPosition, downPosition) => {
 }
 
 const findSwapIndex = (questions, position, action) => {
-  const rightPart = position.slice(-1);
-  const leftPart = position.slice(0, -1);
+  const rightPart = position.slice(ONE_NEG);
+  const leftPart = position.slice(ZERO, ONE_NEG);
   let questionIndex;
 
   for(let i = 0; i < questions.length; i++) {
@@ -215,9 +221,9 @@ const findSwapIndex = (questions, position, action) => {
 
     if(question[questionFields.POSITION].startsWith(leftPart) 
       && question[questionFields.POSITION].length === position.length) {
-      const currentRightPart = +question[questionFields.POSITION].slice(-1);
+      const currentRightPart = +question[questionFields.POSITION].slice(ONE_NEG);
 
-      if(currentRightPart + (1 * action) === +rightPart) {
+      if(currentRightPart + (ONE * action) === +rightPart) {
         questionIndex = i;
         break;
       }
@@ -231,14 +237,14 @@ const sortQuestionsFunction = (firstItem, secondItem) => {
   const firstPosition = firstItem[questionFields.POSITION];
   const secondPosition = secondItem[questionFields.POSITION];
 
-  let firstIndex = firstPosition.indexOf('.');
-  let secondIndex = secondPosition.indexOf('.');
+  let firstIndex = firstPosition.indexOf(DOT);
+  let secondIndex = secondPosition.indexOf(DOT);
   
   if(!~firstIndex) firstIndex = firstPosition.length;
   if(!~secondIndex) secondIndex = secondPosition.length;
   
-  const firstNumber = +firstPosition.slice(0, firstIndex);
-  const secondNumber = +secondPosition.slice(0, secondIndex);
+  const firstNumber = +firstPosition.slice(ZERO, firstIndex);
+  const secondNumber = +secondPosition.slice(ZERO, secondIndex);
 
   if(firstNumber === secondNumber) {
     return firstPosition.localeCompare(secondPosition);

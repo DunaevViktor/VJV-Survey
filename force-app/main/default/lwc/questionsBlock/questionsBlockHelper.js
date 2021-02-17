@@ -1,7 +1,11 @@
 import { questionFields } from "c/fieldService";
 
+const EMPTY_STRING = '';
+const ZERO = 0;
+const ONE = 1;
+
 const isEmpty = (value) => {
-  return value === "" || value.trim().length === 0;
+  return value === EMPTY_STRING || value.trim().length === ZERO;
 }
 
 const trasnformQuestions = (questions) => {
@@ -14,7 +18,7 @@ const trasnformQuestions = (questions) => {
 }
 
 const filterQuestionsByPage = (questions, currentPage, amountOnPage) => {
-  return questions.slice((currentPage-1) * amountOnPage, (currentPage) * amountOnPage);
+  return questions.slice((currentPage - ONE) * amountOnPage, (currentPage) * amountOnPage);
 }
 
 const filterQuestionsBySearhTerm = (questions, keyword) => {

@@ -1,13 +1,19 @@
 import {label} from "./labels.js";
 import { questionFields, optionFields  } from "c/fieldService";
 
+const BUTTON_WIDTH = 100;
+const ZERO = 0;
+const ONE = 1;
+const EMPTY_STRING = '';
+const COMMA = ', ';
+
 const columns = [
   { label: label.question, fieldName: questionFields.LABEL },
   { label: label.type, fieldName: questionFields.TYPE },
   { label: label.options, fieldName: 'Question_Options__r'},
   {
       type: 'button',
-      initialWidth: 100,
+      initialWidth: BUTTON_WIDTH,
       typeAttributes: {
           label: label.select,
           name: 'select'
@@ -27,13 +33,13 @@ const reduceOptionsToString = (options) => {
   return options.reduce((accumulator, currentItem, index) => {
     accumulator += currentItem[optionFields.VALUE];
           
-    if(index !== options.length - 1) {
-     accumulator += ", ";
+    if(index !== options.length - ONE) {
+     accumulator += COMMA;
     }
 
     return accumulator;
     }, 
-  "");
+  EMPTY_STRING);
 };
 
 const transformStandardQuestions = (standardQuestions) => {
@@ -44,7 +50,7 @@ const transformStandardQuestions = (standardQuestions) => {
       [questionFields.TYPE]: standardQuestion[questionFields.TYPE]
     };
   
-    if(!standardQuestion.Question_Options__r || standardQuestion.Question_Options__r.length === 0) {
+    if(!standardQuestion.Question_Options__r || standardQuestion.Question_Options__r.length === ZERO) {
       displayedQuestion.Question_Options__r  = label.none;
     } else {
       displayedQuestion.Question_Options__r = reduceOptionsToString(standardQuestion.Question_Options__r);

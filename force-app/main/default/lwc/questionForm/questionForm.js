@@ -31,6 +31,13 @@ import {
 } from "c/formUtil";
 
 export default class QuestionForm extends LightningElement {
+  EMPTY_STRING = '';
+  ZERO = 0;
+
+  TEXT_TYPE = 'Text';
+  MIN_OPTIONS_AMOUNT = 2;
+  MAX_RATING_VALUE = 10;
+
   label = label;
 
   ERROR_TITLE = label.errorTitle;
@@ -55,7 +62,7 @@ export default class QuestionForm extends LightningElement {
 
   @track isOptionsEnabled;
   @track isEditOption = false;
-  @track editOptionValue = "";
+  @track editOptionValue = this.EMPTY_STRING;
   @track editOptionIndex;
 
   displayedTypes;
@@ -75,7 +82,7 @@ export default class QuestionForm extends LightningElement {
     } else {
       this.isOptionsEnabled = false;
       this.question = {};
-      this.question[questionFields.LABEL] = '';
+      this.question[questionFields.LABEL] = this.EMPTY_STRING;
       this.question.Question_Options__r = [];
     }
   }
@@ -143,21 +150,21 @@ export default class QuestionForm extends LightningElement {
 
   get validationQuestionLabel() {
     if(!this.isDependentQuestion) {
-      return '';
+      return this.EMPTY_STRING;
     }
     return this.validationForForm[validationFields.RELATED][questionFields.LABEL];
   }
 
   get validatiorOperator() {
     if(!this.isDependentQuestion) {
-      return '';
+      return this.EMPTY_STRING;
     }
     return this.validationForForm[validationFields.OPERATOR];
   }
 
   get validationValue() {
     if(!this.isDependentQuestion) {
-      return '';
+      return this.EMPTY_STRING;
     }
     return this.validationForForm[validationFields.VALUE];
   }
@@ -166,7 +173,7 @@ export default class QuestionForm extends LightningElement {
   resetForm() {
     const input = this.template.querySelector(".input");
     clearInput(input);
-    this.selectedType = this.displayedTypes ? this.displayedTypes[0].value : "Text";
+    this.selectedType = this.displayedTypes ? this.displayedTypes[0].value : this.TEXT_TYPE;
     this.selectedSettings = [];
     this.question = {};
     this.question.Question_Options__r = [];
@@ -245,7 +252,7 @@ export default class QuestionForm extends LightningElement {
   cancelOptionEdit() {
     const input = this.template.querySelector(".option-input");
     clearInput(input);
-    this.editOptionValue = "";
+    this.editOptionValue = this.EMPTY_STRING;
     this.editOptionIndex = null;
     this.isEditOption = false;
   }
@@ -259,7 +266,7 @@ export default class QuestionForm extends LightningElement {
   }
 
   deleteOption(event) {
-    if(this.editOptionValue.localeCompare(event.detail) === 0) {
+    if(this.editOptionValue.localeCompare(event.detail) === this.ZERO) {
       this.cancelOptionEdit();
     } else {
       const index = findOptionIndexByValue(this.question.Question_Options__r, event.detail);
@@ -270,8 +277,8 @@ export default class QuestionForm extends LightningElement {
   }
 
   isOptionCorrect(input) {
-    if (input.value.trim().length === 0) {
-      input.value = "";
+    if (input.value.trim().length === this.ZERO) {
+      input.value = this.EMPTY_STRING;
       setInputValidity(input, label.complete_this_field);
       return false;
     }
@@ -280,7 +287,7 @@ export default class QuestionForm extends LightningElement {
     filterOptionsByValueAndIndex(this.question.Question_Options__r, input.value, this.editOptionIndex) :
     filterOptionsByValue(this.question.Question_Options__r, input.value);
 
-    if (filteredOptions.length > 0) {
+    if (filteredOptions.length > this.ZERO) {
       setInputValidity(input, label.option_already_exists);
       return false;
     }
@@ -342,7 +349,7 @@ export default class QuestionForm extends LightningElement {
   getQuestionAttributes() {
     if (
       !this.isOptionsEnabled ||
-      (this.isOptionsEnabled && this.question.Question_Options__r.length === 0)
+      (this.isOptionsEnabled && this.question.Question_Options__r.length === this.ZERO)
     ) {
       this.question.Question_Options__r = null;
     }
@@ -353,15 +360,15 @@ export default class QuestionForm extends LightningElement {
     let isValid = true;
     const input = this.template.querySelector(".input");
 
-    if (input.value.trim().length === 0) {
-      input.value = "";
+    if (input.value.trim().length === this.ZERO) {
+      input.value = this.EMPTY_STRING;
       setInputValidity(input, label.complete_this_field);
       isValid = false;
     } else {
-      setInputValidity(input, "");
+      setInputValidity(input, this.EMPTY_STRING);
     }
     
-    if (this.isOptionsEnabled &&this.question.Question_Options__r.length < 2) {
+    if (this.isOptionsEnabled &&this.question.Question_Options__r.length < this.MIN_OPTIONS_AMOUNT) {
       this.showToastMessage(
         this.ERROR_TITLE,
         label.error_few_options,
@@ -376,23 +383,23 @@ export default class QuestionForm extends LightningElement {
         setInputValidity(operatorCombobox, label.select_operator);
         isValid = false;
       } else {
-        setInputValidity(operatorCombobox, "");
+        setInputValidity(operatorCombobox, this.EMPTY_STRING);
       }
 
       const validationInput = this.template.querySelector(".validationInput");
-      if (!this.isMainQuestionPicklist && validationInput.value.trim().length === 0) {
-        validationInput.value = "";
+      if (!this.isMainQuestionPicklist && validationInput.value.trim().length === this.ZERO) {
+        validationInput.value = this.EMPTY_STRING;
         setInputValidity(validationInput, label.complete_this_field);
         isValid = false;
       } else if (this.isMainQuestionPicklist && this.selectedOperator && !validationInput.value) {
         setInputValidity(validationInput, label.complete_this_field);
         isValid = false;
       }else if(this.validationForForm[validationFields.RELATED][questionFields.TYPE] 
-        === questionTypes.RATING && +validationInput.value > 10) {
+        === questionTypes.RATING && +validationInput.value > this.MAX_RATING_VALUE) {
         setInputValidity(validationInput, label.rating_can_not_be_greater_ten);
         isValid = false;
       } else {
-        setInputValidity(validationInput, "");
+        setInputValidity(validationInput, this.EMPTY_STRING);
       }
     }
 
