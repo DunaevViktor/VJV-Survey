@@ -71,8 +71,8 @@ export default class QuestionsBlock extends LightningElement {
 
   get labelOfAvailableItems() {
     switch(this.availableQuestionsAmount) {
-      case 1: return `${this.label.you_can_create} ${this.availableQuestionsAmount} ${this.label.more} ${this.label.question}`;
-      case 0: return this.label.can_no_longer_create_questions;
+      case this.ONE: return `${this.label.you_can_create} ${this.availableQuestionsAmount} ${this.label.more} ${this.label.question}`;
+      case this.ZERO: return this.label.can_no_longer_create_questions;
       default: return `${this.label.you_can_create} ${this.availableQuestionsAmount} ${this.label.more} ${this.label.questions}`;
     }
   }
@@ -219,7 +219,7 @@ export default class QuestionsBlock extends LightningElement {
     }
 
     setInputValidation(input, this.EMPTY_STRING);
-    this.currentPage = 1;
+    this.currentPage = this.ONE;
 
     if(!this.isSearchMode) {
       this.displayedQuestionsCopy = [...this.displayedQuestions];
@@ -239,7 +239,7 @@ export default class QuestionsBlock extends LightningElement {
 
     if(this.isSearchMode) {
       this.isSearchMode = false;
-      this.currentPage = this.ONEs;
+      this.currentPage = this.ONE;
       this.displayedQuestions = [...this.displayedQuestionsCopy];
       this.resolveDisplayedQuestions();
     }

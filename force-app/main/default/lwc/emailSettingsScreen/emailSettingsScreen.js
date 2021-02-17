@@ -18,6 +18,8 @@ export default class EmailSettingsScreen extends LightningElement {
     EMPTY_ARRAY = [];
     ENTER_KEYCODE = 13;
     MULTIPLIER = 2;
+    DELETE_ROW_ACTION = 'delete';
+    ERROR_VARIANT = 'error';
 
     SINGLE_RECORD_VARIANT = "Record";
     GROUP_VARIANT = "User Group";
@@ -154,37 +156,37 @@ export default class EmailSettingsScreen extends LightningElement {
     }
 
     resolveMembersPage() {
-      this.isNeedPagination = this.memberList.length > (this.amountItems.data * this.MULTIPLIER);
-      if(this.isNeedPagination) {
-        this.memberPage = this.memberList.slice(
-          this.currentPage *  (this.amountItems.data * this.MULTIPLIER), 
-          (this.currentPage + this.ONE )*  (this.amountItems.data * this.MULTIPLIER)
-        );
-      } else {
-        this.memberPage = [...this.memberList];
-      }
+        this.isNeedPagination = this.memberList.length > (this.amountItems.data * this.MULTIPLIER);
+        if(this.isNeedPagination) {
+            this.memberPage = this.memberList.slice(
+            this.currentPage *  (this.amountItems.data * this.MULTIPLIER), 
+            (this.currentPage + this.ONE )*  (this.amountItems.data * this.MULTIPLIER)
+            );
+        } else {
+            this.memberPage = [...this.memberList];
+        }
     }
 
     get isPreviousDisabled() {
-      return this.currentPage === this.ZERO;
+        return this.currentPage === this.ZERO;
     }
     
     get isNextDisabled() {
-      return this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER));
+        return this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER));
     }
 
     clickPreviousTableButton() {
-      if(this.currentPage === this.ZERO) return;
-    
-      this.currentPage--;
-      this.resolveMembersPage();
+        if(this.currentPage === this.ZERO) return;
+        
+        this.currentPage--;
+        this.resolveMembersPage();
     }
     
     clickNextTableButton() {
-      if(this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER))) return;
-    
-      this.currentPage++;
-      this.resolveMembersPage();
+        if(this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER))) return;
+        
+        this.currentPage++;
+        this.resolveMembersPage();
     }
 
     setIsHasMembers() {
@@ -199,7 +201,7 @@ export default class EmailSettingsScreen extends LightningElement {
         const actionName = event.detail.action.name;
         const row = event.detail.row;
         switch (actionName){
-            case 'delete' :
+            case this.DELETE_ROW_ACTION:
                 this.deleteRow(row);
                 break;
             default: this.handleAddRecordReceiver(row);
@@ -277,7 +279,7 @@ export default class EmailSettingsScreen extends LightningElement {
         const event = new ShowToastEvent({
             title: label.error,
             message: label.duplicate_record,
-            variant: 'error'
+            variant: this.ERROR_VARIANT
         });
         this.dispatchEvent(event);
     }

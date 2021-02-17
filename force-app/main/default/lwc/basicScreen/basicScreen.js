@@ -25,7 +25,7 @@ export default class BasicScreen extends LightningElement {
   @track displayedSurveys = [];
   @track isConnectToSurvey;
   
-  surveyId = "";
+  surveyId = '';
   
   label = labels;
   imageName;
@@ -205,11 +205,11 @@ export default class BasicScreen extends LightningElement {
             this.logoId = this.logoData.imageDocumentId;
             this.survey[surveyFields.LOGO] = this.logoData.imageUrl;
             this.updateSurveyData();
-          }).
-          then(() => {
+          })
+          .then(() => {
             this.dispatchEvent(navigateNextEvent);
-          }).
-          catch(() => {
+          })
+          .catch(() => {
             this.loading = false;
             this.showToastEvent(this.label.unable_to_continue, this.errorVariant, this.label.failed_image_upload)
           });

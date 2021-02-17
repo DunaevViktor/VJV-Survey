@@ -16,6 +16,9 @@ const PREFIX_LENGTH = 3;
 const USER_PREFIX = '005';
 const LEAD_PREFIX = '00Q';
 
+const DELETE_ROW_ACTION = 'delete';
+const ADD_ROW_ACTION = 'add';
+
 const columns = [
     { label: label.type, fieldName: receiverFields.TYPE, type: TYPE_TEXT },
     { label: label.Name, fieldName: FIELD_DISPLAYED_NAME, type: TYPE_TEXT },
@@ -24,7 +27,7 @@ const columns = [
         initialWidth: BUTTON_WIDTH,
         typeAttributes: {
             label: label.delete_button,
-            name: "delete"
+            name: DELETE_ROW_ACTION
         }
     }
 ];
@@ -37,7 +40,7 @@ const columnsMember = [
         initialWidth: BUTTON_WIDTH,
         typeAttributes: {
             label: label.add,
-            name: "add"
+            name: ADD_ROW_ACTION
         }
     }
 ];

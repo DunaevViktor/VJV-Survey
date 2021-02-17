@@ -14,6 +14,7 @@ import {
 import { operatorTypes } from "c/formUtil";
 
 export default class TriggerRulesWrapper extends LightningElement {
+  EMPTY_STRING = "";
   ZERO = 0;
   ONE = 1;
 
@@ -66,7 +67,7 @@ export default class TriggerRulesWrapper extends LightningElement {
       this.triggerRules = newtriggerRules;
     } else {
       this.triggerRules.push({
-        id: 0
+        id: this.ZERO
       });
       this.nextId++;
     }
@@ -104,19 +105,17 @@ export default class TriggerRulesWrapper extends LightningElement {
   get labelOfAvailableItems() {
     const availableTriggerRulesAmount = this.maxTriggerRulesAmount - this.triggerRules.length;
     if (availableTriggerRulesAmount === this.ONE) {
-      return this.labels.you_can_create + " " 
-        + availableTriggerRulesAmount + " " + this.labels.more + " " + this.labels.trigger_rule + ".";
+      return `${this.labels.you_can_create} ${availableTriggerRulesAmount} ${this.labels.more} ${this.labels.trigger_rule}.`;
     }
-    return this.labels.you_can_create + " " 
-      + availableTriggerRulesAmount + " " + this.labels.more + " " + this.labels.trigger_rules + ".";
+    return `${this.labels.you_can_create} ${availableTriggerRulesAmount} ${this.labels.more} ${this.labels.trigger_rules}.`;
   }
 
   handleNavigateNext() {    
     this._rules = this.getNewTriggerRules();
     if(!areTriggerRulesFilledCompletely(this._rules)) {
-      this.showToast("", this.labels.fill_trigger_rules, "error");
+      this.showToast(this.EMPTY_STRING, this.labels.fill_trigger_rules, "error");
     } else if(areDuplicatesPresent(this._rules)) {
-      this.showToast("", this.labels.restrict_duplicate_rules, "error");
+      this.showToast(this.EMPTY_STRING, this.labels.restrict_duplicate_rules, "error");
     } else {
       const navigateNextEvent = new CustomEvent("navigatenext", {
         detail: { triggerRules: [...this._rules] },
@@ -128,9 +127,9 @@ export default class TriggerRulesWrapper extends LightningElement {
   handleNavigatePrev() {
     this._rules = this.getNewTriggerRules();
     if(!areTriggerRulesFilledCompletely(this._rules)) {
-      this.showToast("", this.labels.fill_trigger_rules, "error");
+      this.showToast(this.EMPTY_STRING, this.labels.fill_trigger_rules, "error");
     } else if(areDuplicatesPresent(this._rules)) {
-      this.showToast("", this.labels.restrict_duplicate_rules, "error");
+      this.showToast(this.EMPTY_STRING, this.labels.restrict_duplicate_rules, "error");
     } else {
       const navigatePrevEvent = new CustomEvent("navigateback", {
         detail: { triggerRules: [...this._rules] },

@@ -22,6 +22,9 @@ import {
 
 export default class SingleTriggerRule extends LightningElement {
   EMPTY_STRING = "";
+  DATETIME_DATATYPE = "DATETIME";
+  PICKLISRT_DATATYPE = "PICKLIST";
+  BOOLEAN_DATATYPE = "BOOLEAN";
 
   labels = importedLabels;
 
@@ -137,17 +140,16 @@ export default class SingleTriggerRule extends LightningElement {
   }
 
   handleFieldChange(event) {
-
     if(this.operatorValue === operatorTypes.ANY_CHANGE) {
       this.dispatchAnyChangeDeleted(this.objectValue, this.fieldValue);
     }
     const newFieldValue = event.detail.value;
     this.fieldValue = null;
-    this.operatorValue = "";    
-    this.value = "";
+    this.operatorValue = this.EMPTY_STRING;    
+    this.value = this.EMPTY_STRING;
     this.field = {}; 
     if(this.areObjectAndFieldInAnyChange(newFieldValue)) {
-      this.showToast('', this.labels.field_setted_with_any_change, "error");
+      this.showToast(this.EMPTY_STRING, this.labels.field_setted_with_any_change, "error");
       return;
     }
     this.fieldValue = event.detail.value;    
@@ -166,17 +168,17 @@ export default class SingleTriggerRule extends LightningElement {
     let chosenFieldObject = this.fieldNames.find(
       (field) => field.value === chosenField.value
     );
-    this.value = "";
+    this.value = this.EMPTY_STRING;
 
-    if(chosenFieldObject.datatype === "DATETIME") {
+    if(chosenFieldObject.datatype === this.DATETIME_DATATYPE) {
       this.template.querySelector('[data-my-id="value-input"]').classList.add('no-margin-bottom');
     } else {
       this.template.querySelector('[data-my-id="value-input"]').classList.remove('no-margin-bottom');
     }
 
-    if (chosenFieldObject.datatype === "PICKLIST") {
+    if (chosenFieldObject.datatype === this.PICKLISRT_DATATYPE) {
       this.generateFieldPicklistOptions(chosenFieldObject);
-    } else if (chosenFieldObject.datatype === "BOOLEAN") {
+    } else if (chosenFieldObject.datatype === this.BOOLEAN_DATATYPE) {
       this.picklistFieldOptions = booleanPicklistOptions;
       this.setField(chosenFieldObject, this.picklistFieldOptions);
     } else {
@@ -256,7 +258,7 @@ export default class SingleTriggerRule extends LightningElement {
       this.field = generateBooleanField(chosenFieldObject.label, settedValue);
       this.picklistFieldOptions = this.field.picklistValues;
     }
-      this.provideValueInput(chosenFieldObject);
+    this.provideValueInput(chosenFieldObject);
   }
 
   handleClearRuleClick() {

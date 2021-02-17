@@ -5,9 +5,6 @@ import { initQuestionFields } from "./previewScreenHelper.js";
 import { surveyFields } from "c/fieldService";
 
 export default class PreviewScreen extends LightningElement {
-  BACKGROUND_STYLE = "background-color: ";
-  SEMICOLON = ";";
-
   label = label;
 
   @track _survey;
@@ -44,7 +41,7 @@ export default class PreviewScreen extends LightningElement {
   }
 
   get backgroundColor() {
-    return this.BACKGROUND_STYLE + this.survey[surveyFields.BACKGROUND] + this.SEMICOLON;
+    return `background-color: ${this.survey[surveyFields.BACKGROUND]};`;
   }
 
   clickPreviousButton() {

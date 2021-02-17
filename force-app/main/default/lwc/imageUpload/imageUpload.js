@@ -2,6 +2,8 @@ import { LightningElement, api, track } from "lwc";
 import { labels } from "./labels";
 
 export default class ImageUpload extends LightningElement {
+  EMPTY_STRING = '';
+
   @api defaultUrl;
   @api loading;
   
@@ -39,8 +41,8 @@ export default class ImageUpload extends LightningElement {
 
   clearFile() {
     this.imageFile = undefined;
-    this.imageName = '';
-    this.imageUrl = '';
+    this.imageName = this.EMPTY_STRING;
+    this.imageUrl = this.EMPTY_STRING;
     this.dispatchImageUrl();
     this.updateImageArea();
   }

@@ -81,7 +81,7 @@ const solveQuestionPosition = (questions) => {
     return !~question[questionFields.POSITION].indexOf(DOT);
   }) 
 
-  return '' + (+questions.length + ONE);
+  return EMPTY_STRING + (+questions.length + ONE);
 }
 
 const solveDependentQuestionPosition = (validations, question) => {

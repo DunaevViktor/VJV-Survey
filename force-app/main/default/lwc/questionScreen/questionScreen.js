@@ -30,6 +30,7 @@ import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flow
 export default class QuestionScreen extends LightningElement {
   ZERO = 0;
   ONE = 1;
+  NOT_INCLUDE = -1;
   DOWN_DIRECTION = -1;
   UP_DIRECTION = 1;
 
@@ -338,7 +339,7 @@ export default class QuestionScreen extends LightningElement {
   upQuestion(event) {
     const position = event.detail;
 
-    if(+position.slice(-1) === this.ONE) {
+    if(+position.slice(this.NOT_INCLUDE) === this.ONE) {
       return;
     }
 

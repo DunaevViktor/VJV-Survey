@@ -195,7 +195,7 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
         }
     })
     .then((url) => {
-        url = `${url}?${this.SURVEY_URL_PARAMETER_NAME}=${ _surveyId}`;
+        url = `${url}?${this.SURVEY_URL_PARAMETER_NAME}=${_surveyId}`;
         saveSurveyUrl({surveyId : this.surveyId, surveyUrl : url})
         .catch(() => {
             this.isError = true;

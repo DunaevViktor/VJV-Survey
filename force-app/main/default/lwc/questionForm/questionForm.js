@@ -198,7 +198,7 @@ export default class QuestionForm extends LightningElement {
   }
 
   handleLabel(event) {
-    this.question[questionFields.LABEL]= event.detail.value;
+    this.question[questionFields.LABEL] = event.detail.value;
   }
 
   handleTypeChange(event) {
