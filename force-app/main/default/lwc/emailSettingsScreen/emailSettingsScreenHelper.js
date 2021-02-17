@@ -63,7 +63,7 @@ const getReceiversTableStyle = () => {
 
 const isReceiverExist = (receivers, value) => {
     return receivers.find((receiver) => {
-        return receiver[receiverFields.VALUE].localeCompare(value) === ZERO
+        return !receiver[receiverFields.VALUE].localeCompare(value)
     });
 };
 
@@ -94,8 +94,8 @@ const createMemberList = (result) => {
     let memberList = [];
     result.forEach(memberListByType => {
         let recordType = EMPTY_STRING;
-        if(memberListByType.length > ZERO){
-            let uniquePrefix = memberListByType[ZERO].Id.substr(ZERO, PREFIX_LENGTH);
+        if(memberListByType.length){
+            let uniquePrefix = memberListByType[0].Id.substr(ZERO, PREFIX_LENGTH);
             switch (uniquePrefix){
                 case USER_PREFIX :
                     recordType = RECORD_TYPE_USER;
