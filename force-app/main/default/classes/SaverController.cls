@@ -20,9 +20,8 @@ public with sharing class SaverController {
   
   @AuraEnabled
   public static String saveCommunityUrl(Id surveyId, String communityUrl){
-    Survey__c survey = [SELECT Id, URL__c FROM Survey__c WHERE Id =: surveyId WITH SECURITY_ENFORCED];
-    String baseUrl = System.Url.getSalesforceBaseURL().toExternalForm();
-    survey.Guest_URL__c = baseUrl + communityUrl;
+    Survey__c survey = [SELECT Id, Guest_URL__c FROM Survey__c WHERE Id =: surveyId WITH SECURITY_ENFORCED];
+    survey.Guest_URL__c = communityUrl;
 
     if(Schema.sObjectType.Survey__c.isUpdateable()){
         update survey;

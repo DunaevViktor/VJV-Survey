@@ -63,7 +63,7 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
       .then((result) => {
         this.surveyId = result;
         this.getSurveyUrl(this.surveyId);
-        this.getSurvey
+        this.getCommunityUrl(this.surveyId);
 
         this.increaseProgress();
 
@@ -211,7 +211,7 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
       })
       .then((url) => {
         if (url) {
-          url = `${url}?${this.SURVEY_URL_PARAMETER_NAME}=${_surveyId}`;
+          url = `${url}/s/?${this.SURVEY_URL_PARAMETER_NAME}=${_surveyId}`;
           saveCommunityUrl({surveyId : this.surveyId, communityUrl : url});
         }
       })

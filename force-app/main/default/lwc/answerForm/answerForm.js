@@ -101,7 +101,6 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
     } 
       this.showSurvey = false;
       this.closeTab();
-      this.navigateToHomePage();
       return false;
   }
 

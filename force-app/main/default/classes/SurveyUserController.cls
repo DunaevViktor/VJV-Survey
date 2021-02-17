@@ -1,5 +1,5 @@
 public without sharing class SurveyUserController {
-  @AuraEnabled(cacheable=true)
+  @AuraEnabled
   public static Id getRelatedObjectIdByStandardObjectId(Id standardObjectId) {
     return RelatedObjectController.getRelatedObjectIdByStandardObjectId(standardObjectId);
   }

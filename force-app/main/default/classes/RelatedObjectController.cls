@@ -4,7 +4,7 @@ public inherited sharing class RelatedObjectController {
     private static final String RELATED_OBJECT_IS_NOT_CREATEABLE = 'Related_Object__c is\'t createable.';
     private static final String RELATED_OBJECT_IS_NOT_ACCESSIBLE = 'Related_Object__c is\'t accessible.';
 
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static Id getRelatedObjectIdByStandardObjectId(Id standardObjectId) { 
         try {
 
