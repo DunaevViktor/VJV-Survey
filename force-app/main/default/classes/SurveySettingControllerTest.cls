@@ -9,9 +9,10 @@ public with sharing class SurveySettingControllerTest {
     private static final String INVALID_MAX_QUESTION_AMOUNT_SETTING_VALUE = 'Actual value of max question amount setting doesn\'t equal to expected.';
     private static final String INVALID_MIN_QUESTION_AMOUNT_SETTING_VALUE = 'Actual value of min question rule amount setting doesn\'t equal to expected.';
     private static final String INVALID_PAGE_QUESTION_AMOUNT_SETTING_VALUE = 'Actual value of page question amount setting doesn\'t equal to expected.';
+    private static final String INVALID_COMMUNITY_NAME_SETTING_VALUE = 'Actual value of community name setting doesn\'t equal to expected.';
     
     @TestSetup
-    static void makeData(){
+    static void makeData() {
         Survey_Setting__c setting = new Survey_Setting__c();
         setting.Name = SURVEY_SETTING_RECORD_NAME;
         setting.Max_Question_Amount__c = TEST_AMOUNT;
@@ -50,5 +51,11 @@ public with sharing class SurveySettingControllerTest {
     static void testGetDefaultBackgroundColor() {    
         String fetchedValue = SurveySettingController.getDefaultBackgroundColor();
         System.assertEquals(TEST_COLOR, fetchedValue, INVALID_BACKGROUND_COLOR_VALUE);
+    }
+
+    @IsTest
+    static void testGetDefaultCommunityName() {    
+        String fetchedValue = SurveySettingController.getDefaultCommunityName();
+        System.assertEquals(null, fetchedValue, INVALID_COMMUNITY_NAME_SETTING_VALUE);
     }
 }
