@@ -2,7 +2,6 @@ import {questionTypes, operatorTypes} from "c/formUtil";
 import { label } from "./labels.js";
 import { validationFields, questionFields, optionFields } from "c/fieldService";
 
-const ZERO = 0;
 const EMPTY_STRING = '';
 
 const typesDescription = [
@@ -112,15 +111,15 @@ const resolveOperatorsByQuestionType = (operators, question) => {
 }
 
 const isOptionEnabling = (selectedType) => {
-  return selectedType.toLowerCase().localeCompare(questionTypes.CHECKBOX.toLowerCase()) === ZERO ||
-         selectedType.toLowerCase().localeCompare(questionTypes.RADIOBUTTON.toLowerCase()) === ZERO ||
-         selectedType.toLowerCase().localeCompare(questionTypes.PICKLIST.toLowerCase()) === ZERO;
+  return !selectedType.toLowerCase().localeCompare(questionTypes.CHECKBOX.toLowerCase()) ||
+         !selectedType.toLowerCase().localeCompare(questionTypes.RADIOBUTTON.toLowerCase()) ||
+         !selectedType.toLowerCase().localeCompare(questionTypes.PICKLIST.toLowerCase());
 }
 
 const filterOptionsByValue = (options, value) => {
   return options.filter(
     (option) => {
-      return option[optionFields.VALUE].localeCompare(value) === ZERO;
+      return !option[optionFields.VALUE].localeCompare(value);
     }
   );
 }
@@ -128,7 +127,7 @@ const filterOptionsByValue = (options, value) => {
 const filterOptionsByValueAndIndex = (options, value, editiIndex) => {
   return options.filter(
     (option, index) => {
-      return option[optionFields.VALUE].localeCompare(value) === ZERO && index !== editiIndex;
+      return !option[optionFields.VALUE].localeCompare(value) && index !== editiIndex;
     }
   );
 }
@@ -137,7 +136,7 @@ const findOptionIndexByValue = (options, value) => {
   let idx;
 
   options.forEach((option, index) => {
-    if(option[optionFields.VALUE].localeCompare(value) === ZERO) {
+    if(!option[optionFields.VALUE].localeCompare(value)) {
       idx = index;
     }
   });
@@ -148,7 +147,7 @@ const findOptionIndexByValue = (options, value) => {
 const deleteFromOptions = (options, selectedValue) => {
   return options.filter(
     (option) => {
-      return option[optionFields.VALUE].localeCompare(selectedValue) !== ZERO;
+      return option[optionFields.VALUE].localeCompare(selectedValue);
     }
   );
 }

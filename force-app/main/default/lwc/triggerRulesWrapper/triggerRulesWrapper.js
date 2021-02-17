@@ -15,7 +15,7 @@ import { operatorTypes } from "c/formUtil";
 
 export default class TriggerRulesWrapper extends LightningElement {
   EMPTY_STRING = "";
-  ZERO = 0;
+  INITIAL_ID = 0;
   ONE = 1;
 
   @track maxTriggerRulesAmount = 5;
@@ -51,7 +51,7 @@ export default class TriggerRulesWrapper extends LightningElement {
   }
   
   connectedCallback() { 
-    if (this.rules && this.rules.length > this.ZERO) {
+    if (this.rules && this.rules.length) {
       let newtriggerRules = [];
       this._rules = this.rules;
       this._rules.forEach((rule) => {
@@ -67,7 +67,7 @@ export default class TriggerRulesWrapper extends LightningElement {
       this.triggerRules = newtriggerRules;
     } else {
       this.triggerRules.push({
-        id: this.ZERO
+        id: this.INITIAL_ID
       });
       this.nextId++;
     }

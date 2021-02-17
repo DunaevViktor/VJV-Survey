@@ -23,7 +23,6 @@ import { transformRules,
 import {label} from "./labels.js";
 
 export default class SaverScreen extends NavigationMixin(LightningElement) {
-  ZERO = 0;
   ONE = 1;
   S_END = '__S';
   UNDERSCORE = '__';
@@ -68,7 +67,7 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
 
         this.increaseProgress();
 
-        if(!this.triggerRules || this.triggerRules.length === this.ZERO) {
+        if(!this.triggerRules || !this.triggerRules.length) {
           this.increaseProgress();
           this.sendSaveQuestionsRequest();
           return;
@@ -113,7 +112,7 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
   sendSaveOptionsRequest() {
     const tranformedOptions = transformOptions(this.questions, this.savedQuestions);
 
-    if(tranformedOptions.length === this.ZERO) {
+    if(!tranformedOptions.length) {
       this.increaseProgress();
       this.sendSaveValidationsRequest();
       return;
@@ -133,7 +132,7 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
   sendSaveValidationsRequest() {
     const transformedValidations = transformValidations(this.validations, this.savedQuestions);
 
-    if(transformedValidations.length === this.ZERO) {
+    if(!transformedValidations.length) {
       this.increaseProgress();
       this.sendSaveEmailReceiversRequest();
       return;
@@ -153,7 +152,7 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
   sendSaveEmailReceiversRequest() {
     const transformedEmailReceivers = transformEmailReceivers(this.emailReceivers, this.surveyId);
 
-    if(!transformedEmailReceivers || transformedEmailReceivers.length === this.ZERO) {
+    if(!transformedEmailReceivers || !transformedEmailReceivers.length) {
       this.increaseProgress();
       return;
     }

@@ -4,7 +4,6 @@ import { importedLabels } from "./labels";
 import findRecords from "@salesforce/apex/LookupController.findRecords";
 
 export default class LwcLookup extends LightningElement {
-  ZERO = 0;
   EMPTY_STRING = '';
   DELAY = 300;
 
@@ -61,7 +60,7 @@ export default class LwcLookup extends LightningElement {
       objectsApiNames: this.objectsApiNames
     })
       .then((result) => {
-        if (result.length === this.ZERO) {
+        if (!result.length) {
           this.recordsList = [];
           this.message = this.labels.no_records_found;
         } else {

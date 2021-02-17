@@ -32,8 +32,6 @@ import {
 
 export default class QuestionForm extends LightningElement {
   EMPTY_STRING = '';
-  ZERO = 0;
-
   TEXT_TYPE = 'Text';
   MIN_OPTIONS_AMOUNT = 2;
   MAX_RATING_VALUE = 10;
@@ -266,7 +264,7 @@ export default class QuestionForm extends LightningElement {
   }
 
   deleteOption(event) {
-    if(this.editOptionValue.localeCompare(event.detail) === this.ZERO) {
+    if(!this.editOptionValue.localeCompare(event.detail)) {
       this.cancelOptionEdit();
     } else {
       const index = findOptionIndexByValue(this.question.Question_Options__r, event.detail);
@@ -277,7 +275,7 @@ export default class QuestionForm extends LightningElement {
   }
 
   isOptionCorrect(input) {
-    if (input.value.trim().length === this.ZERO) {
+    if (!input.value.trim().length) {
       input.value = this.EMPTY_STRING;
       setInputValidity(input, label.complete_this_field);
       return false;
@@ -287,7 +285,7 @@ export default class QuestionForm extends LightningElement {
     filterOptionsByValueAndIndex(this.question.Question_Options__r, input.value, this.editOptionIndex) :
     filterOptionsByValue(this.question.Question_Options__r, input.value);
 
-    if (filteredOptions.length > this.ZERO) {
+    if (filteredOptions.length) {
       setInputValidity(input, label.option_already_exists);
       return false;
     }
@@ -349,7 +347,7 @@ export default class QuestionForm extends LightningElement {
   getQuestionAttributes() {
     if (
       !this.isOptionsEnabled ||
-      (this.isOptionsEnabled && this.question.Question_Options__r.length === this.ZERO)
+      (this.isOptionsEnabled && !this.question.Question_Options__r.length)
     ) {
       this.question.Question_Options__r = null;
     }
@@ -360,7 +358,7 @@ export default class QuestionForm extends LightningElement {
     let isValid = true;
     const input = this.template.querySelector(".input");
 
-    if (input.value.trim().length === this.ZERO) {
+    if (!input.value.trim().length) {
       input.value = this.EMPTY_STRING;
       setInputValidity(input, label.complete_this_field);
       isValid = false;
@@ -387,7 +385,7 @@ export default class QuestionForm extends LightningElement {
       }
 
       const validationInput = this.template.querySelector(".validationInput");
-      if (!this.isMainQuestionPicklist && validationInput.value.trim().length === this.ZERO) {
+      if (!this.isMainQuestionPicklist && !validationInput.value.trim().length) {
         validationInput.value = this.EMPTY_STRING;
         setInputValidity(validationInput, label.complete_this_field);
         isValid = false;

@@ -23,15 +23,13 @@ const resetOptionsIds = (options) => {
 }
 
 const getQuestionsBySurveyId = (templateQuestions, surveyId, noTemplateValue) => {
-  if (surveyId.localeCompare(noTemplateValue) === ZERO) {
+  if (!surveyId.localeCompare(noTemplateValue)) {
     return [];
   } 
 
   return templateQuestions.filter(
     (question) => {
-      return (
-        question[questionFields.SURVEY].localeCompare(surveyId) === ZERO
-      );
+      return !question[questionFields.SURVEY].localeCompare(surveyId);
     }
   ).map(
     (question, index) => {
@@ -104,7 +102,7 @@ const prepareSelectedQuestion = (selectedQuestion) => {
 }
 
 const resolvePositionByDeleted = (position, leftPart, rightPart) => {
-  const leftPartLength = leftPart.length > ZERO ? leftPart.length + ONE : ZERO;
+  const leftPartLength = leftPart.length ? leftPart.length + ONE : ZERO;
   const itemPart = position.slice(leftPartLength);
     
   const itemIndex = itemPart.indexOf(DOT);
@@ -112,7 +110,7 @@ const resolvePositionByDeleted = (position, leftPart, rightPart) => {
     
   if(+value > +rightPart) {
     const itemRightPart = !~itemIndex ? EMPTY_STRING : itemPart.slice(itemIndex);
-    const itemLeftPart = leftPart.length > ZERO ? leftPart + DOT : EMPTY_STRING;
+    const itemLeftPart = leftPart.length ? leftPart + DOT : EMPTY_STRING;
         
     position = itemLeftPart + Math.round(+value - ONE) + itemRightPart;
   }
@@ -168,7 +166,7 @@ const resolveEditableQuestions = (questions, validations) => {
       return validation[validationFields.RELATED][questionFields.POSITION] === question[questionFields.POSITION];
     })
 
-    if(filteredValidations.length === ZERO) question.Editable = true;
+    if(!filteredValidations.length) question.Editable = true;
 
     return question;
   })

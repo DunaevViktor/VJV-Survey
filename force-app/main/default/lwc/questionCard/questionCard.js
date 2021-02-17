@@ -4,7 +4,6 @@ import { questionFields } from "c/fieldService";
 import { label } from "./labels.js";
 
 export default class QuestionCard extends LightningElement {
-  ZERO = 0;
   STATUS_CONFIRM = 'confirm';
   EMPTY_STRING = '';
   MESSAGE_DELETE = 'deleteQuestion';
@@ -36,7 +35,7 @@ export default class QuestionCard extends LightningElement {
   }
 
   get isHasOptions() {
-    return this.question.Question_Options__r && this.question.Question_Options__r.length > this.ZERO;
+    return this.question.Question_Options__r && this.question.Question_Options__r.length;
   }
 
   deleteQuestionClick() {

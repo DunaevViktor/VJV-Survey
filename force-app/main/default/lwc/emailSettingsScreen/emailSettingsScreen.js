@@ -12,7 +12,6 @@ import { receiverFields } from "c/fieldService";
 
 export default class EmailSettingsScreen extends LightningElement {
 
-    ZERO = 0;
     ONE = 1;
     EMPTY_STRING = '';
     EMPTY_ARRAY = [];
@@ -46,7 +45,7 @@ export default class EmailSettingsScreen extends LightningElement {
 
     @track memberPage;
     @track isNeedPagination = false;
-    @track currentPage = this.ZERO;
+    @track currentPage = 0;
 
     groupId = this.EMPTY_STRING;
     campaignId = this.EMPTY_STRING;
@@ -92,8 +91,8 @@ export default class EmailSettingsScreen extends LightningElement {
         this.setIsHasMembers();
 
         this.isFirstRun = true;
-        this.isHasGroups = this.displayedGroups.length > this.ZERO;
-        this.isHasCampaigns = this.displayedCampaigns.length > this.ZERO;
+        this.isHasGroups = !!this.displayedGroups.length;
+        this.isHasCampaigns = !!this.displayedCampaigns.length;
     }
 
     renderedCallback() {
@@ -107,11 +106,11 @@ export default class EmailSettingsScreen extends LightningElement {
     }
 
     initGroups() {
-        if (this.displayedGroups.length === this.ZERO) {
+        if (!this.displayedGroups.length) {
             getGroups()
                 .then((result) => {
-                    this.displayedGroups = result.length > this.ZERO ? result : [];
-                    this.isHasGroups = this.displayedGroups.length > this.ZERO;
+                    this.displayedGroups = result.length ? result : [];
+                    this.isHasGroups = !!this.displayedGroups.length;
                 })
                 .catch(() => {
                     this.getGroupError = true;
@@ -120,11 +119,11 @@ export default class EmailSettingsScreen extends LightningElement {
     }
 
     initCampaigns() {
-        if (this.displayedCampaigns.length === this.ZERO) {
+        if (!this.displayedCampaigns.length) {
             getCampaigns()
                 .then((result) => {
-                    this.displayedCampaigns = result.length > this.ZERO ? result : [];
-                    this.isHasCampaigns = this.displayedCampaigns.length > this.ZERO;
+                    this.displayedCampaigns = result.length ? result : [];
+                    this.isHasCampaigns = !!this.displayedCampaigns.length;
                 })
                 .catch(() => {
                     this.getCampaignsError = true;
@@ -146,7 +145,7 @@ export default class EmailSettingsScreen extends LightningElement {
         searchMembers({ searchTerm: this.queryTerm })
             .then((result) => {
                 this.memberList = createMemberList(result);
-                this.currentPage = this.ZERO;
+                this.currentPage = 0;
                 this.resolveMembersPage();
                 this.setIsHasMembers();
             })
@@ -168,7 +167,7 @@ export default class EmailSettingsScreen extends LightningElement {
     }
 
     get isPreviousDisabled() {
-        return this.currentPage === this.ZERO;
+        return !!this.currentPage;
     }
     
     get isNextDisabled() {
@@ -176,7 +175,7 @@ export default class EmailSettingsScreen extends LightningElement {
     }
 
     clickPreviousTableButton() {
-        if(this.currentPage === this.ZERO) return;
+        if(!this.currentPage) return;
         
         this.currentPage--;
         this.resolveMembersPage();
@@ -190,11 +189,11 @@ export default class EmailSettingsScreen extends LightningElement {
     }
 
     setIsHasMembers() {
-        this.hasMembers = this.memberList && this.memberList.length > this.ZERO;
+        this.hasMembers = this.memberList && this.memberList.length;
     }
 
     setIsHasReseivers() {
-        this.hasReceivers = this.receivers && this.receivers.length > this.ZERO;
+        this.hasReceivers = this.receivers && this.receivers.length;
     }
 
     handleRowAction(event) {
@@ -238,7 +237,7 @@ export default class EmailSettingsScreen extends LightningElement {
     }
 
     isGroupValid(combobox) {
-        if (this.groupId.localeCompare(this.EMPTY_STRING) === this.ZERO) {
+        if (!this.groupId.localeCompare(this.EMPTY_STRING)) {
             callReportValidity(combobox, label.error_choose_some_group);
             return false;
         }
@@ -308,7 +307,7 @@ export default class EmailSettingsScreen extends LightningElement {
     }
 
     isCampaignValid(combobox) {
-        if (this.campaignId.localeCompare(this.EMPTY_STRING) === this.ZERO) {
+        if (!this.campaignId.localeCompare(this.EMPTY_STRING)) {
             callReportValidity(combobox, label.error_choose_some_campaign);
             return false;
         }

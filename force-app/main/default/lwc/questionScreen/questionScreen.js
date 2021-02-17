@@ -28,7 +28,6 @@ import {
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 
 export default class QuestionScreen extends LightningElement {
-  ZERO = 0;
   ONE = 1;
   NOT_INCLUDE = -1;
   DOWN_DIRECTION = -1;
@@ -117,14 +116,14 @@ export default class QuestionScreen extends LightningElement {
   @track currentMode = this.QUESTION_BLOCK;
 
   connectedCallback() {
-    this.hasStandardQuestions = this.standardQuestions.length > this.ZERO;
+    this.hasStandardQuestions = !!this.standardQuestions.length;
     
     this.initTemplates();
     this.initStandardQuestions();
   }
 
   initTemplates() {
-    if(this.displayedTemplates.length === this.ZERO) {
+    if(!this.displayedTemplates.length) {
       getTemplateSurveys()
       .then((result) => {
         this.displayedTemplates = result;
@@ -155,7 +154,7 @@ export default class QuestionScreen extends LightningElement {
       getStandardQuestions()
       .then((result) => {
         this.displayedStandardQuestions = trasnformResult(result);
-        this.hasStandardQuestions = this.standardQuestions.length > this.ZERO;
+        this.hasStandardQuestions = !!this.standardQuestions.length;
       })
       .catch(() => {
         this.setError();
@@ -188,7 +187,7 @@ export default class QuestionScreen extends LightningElement {
   }
 
   handleTemplateChange(event) {
-    if (this.templateOptionsValue.localeCompare(event.detail) === this.ZERO) {
+    if (!this.templateOptionsValue.localeCompare(event.detail)) {
       return;
     }
 

@@ -8,7 +8,6 @@ export default class QuestionStandardSelector extends LightningElement {
 
   MULTIPLIER = 2;
   SELECT_OPTION_VARIANT = 'select';
-  ZERO = 0;
   ONE = 1;
 
   label = label;
@@ -40,7 +39,7 @@ export default class QuestionStandardSelector extends LightningElement {
   }
 
   get isPreviousDisabled() {
-    return this.currentPage === this.ZERO;
+    return !!this.currentPage;
   }
 
   get isNextDisabled() {
@@ -75,7 +74,7 @@ export default class QuestionStandardSelector extends LightningElement {
   }
 
   clickPreviousButton() {
-    if(this.currentPage === this.ZERO) return;
+    if(!this.currentPage) return;
 
     this.currentPage--;
     this.resolveQuestiosOnPage();

@@ -11,7 +11,6 @@ import { surveyFields } from "c/fieldService";
 
 export default class BasicScreen extends LightningElement {
 
-  ZERO = 0;
   EMPTY_STRING = '';
   BASE_PIC_STRING = 'base64,';
 
@@ -90,15 +89,15 @@ export default class BasicScreen extends LightningElement {
     this.setDefaultSurveyData();
 
     this.initSurveys();
-    this.isHasSurveys = this.displayedSurveys.length > this.ZERO;
+    this.isHasSurveys = !!this.displayedSurveys.length;
   }
 
   initSurveys() {
-    if (this.displayedSurveys.length === this.ZERO) {
+    if (!this.displayedSurveys.length) {
       getSurveys()
         .then((result) => {
-          this.displayedSurveys = result.length > this.ZERO ? result : [];
-          this.isHasSurveys = this.displayedSurveys.length > this.ZERO;
+          this.displayedSurveys = result.length ? result : [];
+          this.isHasSurveys = !!this.displayedSurveys.length;
         })
         .catch(() => {
           this.isError = true;
@@ -109,7 +108,7 @@ export default class BasicScreen extends LightningElement {
   validateInput() {
     const input = this.template.querySelector(".survey-name");
 
-    if(input.value.trim().length === this.ZERO) {
+    if(!input.value.trim().length) {
       input.value = this.EMPTY_STRING;
       input.setCustomValidity(this.label.complete_this_field);
       input.reportValidity();

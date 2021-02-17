@@ -102,11 +102,11 @@ export default class QuestionsBlock extends LightningElement {
   }
 
   resolveQuestionsSubinfo() {
-    this.hasQuestions = (this.displayedQuestions.length > this.ZERO) || (this.isSearchMode);
+    this.hasQuestions = this.displayedQuestions.length || (this.isSearchMode);
 
     if(this.amountPages > this.ONE && 
       this.currentPage === this.amountPages && 
-      this.filteredDisplayedQuestions.length === this.ZERO) {
+      !this.filteredDisplayedQuestions.length) {
       this.currentPage--;
       this.resolveDisplayedQuestions();
     }
@@ -140,7 +140,7 @@ export default class QuestionsBlock extends LightningElement {
   deleteQuestion(event) {
     this.displayedQuestions = filterQuestionsByPosition(this.displayedQuestions, event.detail);
 
-    if(this.isSearchMode && this.displayedQuestions.length === this.ZERO) {
+    if(this.isSearchMode && !this.displayedQuestions.length) {
       this.displayedQuestionsCopy = filterQuestionsByPosition(
         this.displayedQuestionsCopy, event.detail);
       this.handleClearQuestionSearch();

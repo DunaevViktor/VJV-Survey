@@ -2,7 +2,6 @@ import {label} from "./labels.js";
 import { questionFields, optionFields  } from "c/fieldService";
 
 const BUTTON_WIDTH = 100;
-const ZERO = 0;
 const ONE = 1;
 const EMPTY_STRING = '';
 const COMMA = ', ';
@@ -50,7 +49,7 @@ const transformStandardQuestions = (standardQuestions) => {
       [questionFields.TYPE]: standardQuestion[questionFields.TYPE]
     };
   
-    if(!standardQuestion.Question_Options__r || standardQuestion.Question_Options__r.length === ZERO) {
+    if(!standardQuestion.Question_Options__r || !standardQuestion.Question_Options__r.length) {
       displayedQuestion.Question_Options__r  = label.none;
     } else {
       displayedQuestion.Question_Options__r = reduceOptionsToString(standardQuestion.Question_Options__r);
