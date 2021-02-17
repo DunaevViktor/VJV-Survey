@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Min_Question_Amount__c</fullName>
-    <defaultValue>1</defaultValue>
     <description>Min amount of questions available for creating in survey constructor.</description>
     <externalId>false</externalId>
     <label>Min Question Amount</label>

@@ -5,13 +5,15 @@ public with sharing class PostInstallConfigTest {
     private static final String EMAIL_SETTING_WASNT_INSTALLED = 'Email setting record wasn\'t installed in post install script.';
     private static final String SURVEY_SETTING_FIELD_WASNT_INSTALLED = 'Survey setting record field wasn\'t installed in post install script.';
     private static final String EMAIL_SETTING_FIELD_WASNT_INSTALLED = 'Email setting record field wasn\'t installed in post install script.';
+    private static final String SURVEY_SETTING_FIELD_MUST_BE_UNINSTALLED = 'Survey setting record Community Name field must be uninstalled after post install script execution.';
     
     @isTest
     static void testInstallScriptForSurveySettingFirstVersion() {
         PostInstallConfig postinstall = new PostInstallConfig();
         Test.testInstall(postinstall, null);
         List<Survey_Setting__c> settings = [Select ID, Name, Max_Question_Amount__c, Min_Question_Amount__c, 
-                                            Max_Trigger_Rule_Amount__c, Page_Question_Amount__c, Background_Color__c 
+                                            Max_Trigger_Rule_Amount__c, Page_Question_Amount__c, 
+                                            Background_Color__c, Community_Name__c
                                             FROM Survey_Setting__c];
         System.assertEquals(1, settings.size(), SURVEY_SETTING_WASNT_INSTALLED);
         System.assertEquals(PostInstallConfig.CUSTOM_SETTING_RECORD_NAME, settings[0].Name, SURVEY_SETTING_FIELD_WASNT_INSTALLED);
@@ -20,13 +22,15 @@ public with sharing class PostInstallConfigTest {
         System.assertEquals(PostInstallConfig.DEFAULT_MAX_TRIGGER_RULE_AMOUNT, settings[0].Max_Trigger_Rule_Amount__c, SURVEY_SETTING_FIELD_WASNT_INSTALLED);
         System.assertEquals(PostInstallConfig.DEFAULT_PAGE_QUESTION_AMOUNT, settings[0].Page_Question_Amount__c, SURVEY_SETTING_FIELD_WASNT_INSTALLED);
         System.assertEquals(PostInstallConfig.DEFAULT_BACKGROUND_COLOR, settings[0].Background_Color__c, SURVEY_SETTING_FIELD_WASNT_INSTALLED);
+        System.assertEquals(null, settings[0].Community_Name__c, SURVEY_SETTING_FIELD_MUST_BE_UNINSTALLED);
     }
     
     @isTest
     static void testInstallScriptForEmailSettingFirstVersion() {
         PostInstallConfig postinstall = new PostInstallConfig();
         Test.testInstall(postinstall, null);
-        List<SurveyEmailConfig__c> settings = [Select ID, Name, Display_Name__c, Template_Name__c FROM SurveyEmailConfig__c];
+        List<SurveyEmailConfig__c> settings = [Select ID, Name, Display_Name__c, Template_Name__c 
+                                               FROM SurveyEmailConfig__c];
         System.assertEquals(1, settings.size(), SURVEY_SETTING_WASNT_INSTALLED);
         System.assertEquals(PostInstallConfig.CUSTOM_SETTING_RECORD_NAME, settings[0].Name, EMAIL_SETTING_FIELD_WASNT_INSTALLED);
         System.assertEquals(PostInstallConfig.DEFAULT_DISPLAY_NAME, settings[0].Display_Name__c, EMAIL_SETTING_FIELD_WASNT_INSTALLED);
@@ -39,7 +43,8 @@ public with sharing class PostInstallConfigTest {
         Version version = new Version(2, 0);
         Test.testInstall(postinstall, version);
         List<Survey_Setting__c> settings = [Select ID, Name, Max_Question_Amount__c, Min_Question_Amount__c, 
-                                            Max_Trigger_Rule_Amount__c, Page_Question_Amount__c, Background_Color__c 
+                                            Max_Trigger_Rule_Amount__c, Page_Question_Amount__c, 
+                                            Background_Color__c, Community_Name__c
                                             FROM Survey_Setting__c];
         System.assertEquals(1, settings.size(), SURVEY_SETTING_WASNT_INSTALLED);
         System.assertEquals(PostInstallConfig.CUSTOM_SETTING_RECORD_NAME, settings[0].Name, SURVEY_SETTING_FIELD_WASNT_INSTALLED);
@@ -48,6 +53,7 @@ public with sharing class PostInstallConfigTest {
         System.assertEquals(PostInstallConfig.DEFAULT_MAX_TRIGGER_RULE_AMOUNT, settings[0].Max_Trigger_Rule_Amount__c, SURVEY_SETTING_FIELD_WASNT_INSTALLED);
         System.assertEquals(PostInstallConfig.DEFAULT_PAGE_QUESTION_AMOUNT, settings[0].Page_Question_Amount__c, SURVEY_SETTING_FIELD_WASNT_INSTALLED);
         System.assertEquals(PostInstallConfig.DEFAULT_BACKGROUND_COLOR, settings[0].Background_Color__c, SURVEY_SETTING_FIELD_WASNT_INSTALLED);
+        System.assertEquals(null, settings[0].Community_Name__c, SURVEY_SETTING_FIELD_MUST_BE_UNINSTALLED);
     }
     
     @isTest
@@ -55,7 +61,8 @@ public with sharing class PostInstallConfigTest {
         PostInstallConfig postinstall = new PostInstallConfig();
         Version version = new Version(2, 0);
         Test.testInstall(postinstall, version);
-        List<SurveyEmailConfig__c> settings = [Select ID, Name, Display_Name__c, Template_Name__c FROM SurveyEmailConfig__c];
+        List<SurveyEmailConfig__c> settings = [Select ID, Name, Display_Name__c, Template_Name__c 
+                                               FROM SurveyEmailConfig__c];
         System.assertEquals(1, settings.size(), SURVEY_SETTING_WASNT_INSTALLED);
         System.assertEquals(PostInstallConfig.CUSTOM_SETTING_RECORD_NAME, settings[0].Name, EMAIL_SETTING_FIELD_WASNT_INSTALLED);
         System.assertEquals(PostInstallConfig.DEFAULT_DISPLAY_NAME, settings[0].Display_Name__c, EMAIL_SETTING_FIELD_WASNT_INSTALLED);
@@ -86,7 +93,8 @@ public with sharing class PostInstallConfigTest {
         PostInstallConfig.createEmailCustomSettingRecord();
         Version version = new Version(2, 0);
         Test.testInstall(postinstall, version);
-        List<SurveyEmailConfig__c> settings = [Select ID, Name, Display_Name__c, Template_Name__c FROM SurveyEmailConfig__c];
+        List<SurveyEmailConfig__c> settings = [Select ID, Name, Display_Name__c, Template_Name__c 
+                                               FROM SurveyEmailConfig__c];
         System.assertEquals(1, settings.size(), SURVEY_SETTING_WASNT_INSTALLED);
         System.assertEquals(PostInstallConfig.CUSTOM_SETTING_RECORD_NAME, settings[0].Name, EMAIL_SETTING_FIELD_WASNT_INSTALLED);
         System.assertEquals(PostInstallConfig.DEFAULT_DISPLAY_NAME, settings[0].Display_Name__c, EMAIL_SETTING_FIELD_WASNT_INSTALLED);
