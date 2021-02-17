@@ -1,8 +1,12 @@
 public with sharing class RelatedObjectController {
 
+    private static final String RELATED_OBJECT_API_NAME = 'Related_Object__c';
+
     private static final String RECORD_NOT_FOUND = 'Given standard record doesn\'t exist.';
     private static final String RELATED_OBJECT_IS_NOT_CREATEABLE = 'Related_Object__c is\'t createable.';
     private static final String RELATED_OBJECT_IS_NOT_ACCESSIBLE = 'Related_Object__c is\'t accessible.';
+    private static final String GET_RELATED_OBJECT_EXCEPTION = 'GetRelatedObjectException';
+    private static final String CREATE_RELATED_OBJECT_EXCEPTION = 'CreateRelatedObjectException';
 
     @AuraEnabled(cacheable=true)
     public static Id getRelatedObjectIdByStandardObjectId(Id standardObjectId) { 
@@ -27,12 +31,12 @@ public with sharing class RelatedObjectController {
     private static Id getRelatedObjectIdByRelatedStandardObject(String relatedStandardObjectApiName, Id relatedStandardObjectId) {
         Id result;        
         if(!Related_Object__c.SObjectType.getDescribe().isAccessible()) {
-            CustomExceptionData excData = new CustomExceptionData('GetRelatedObjectException', RELATED_OBJECT_IS_NOT_ACCESSIBLE);
+            CustomExceptionData excData = new CustomExceptionData(GET_RELATED_OBJECT_EXCEPTION, RELATED_OBJECT_IS_NOT_ACCESSIBLE);
             throw new AuraHandledException(JSON.serialize(excData));
         }
         String namespacePrefix = NamespaceService.namespacePrefix;
         List<Related_Object__c> res = Database.query(
-          'SELECT ' + String.escapeSingleQuotes(namespacePrefix) + 'Id FROM ' + String.escapeSingleQuotes(namespacePrefix) + 'Related_Object__c' +
+          'SELECT ' + String.escapeSingleQuotes(namespacePrefix) + 'Id FROM ' + String.escapeSingleQuotes(namespacePrefix) + RELATED_OBJECT_API_NAME +
           ' WHERE ' + String.escapeSingleQuotes(namespacePrefix) + 'Related_' + String.escapeSingleQuotes(relatedStandardObjectApiName) + '__c =: relatedStandardObjectId' +
           ' WITH SECURITY_ENFORCED LIMIT 1'
         );
@@ -49,7 +53,7 @@ public with sharing class RelatedObjectController {
     private static Id createRelatedObjectWithRelatedStandardObjectId(String standardObjectApiName, Id relatedObjectId) {
         if(!Related_Object__c.SObjectType.getDescribe().isCreateable() || !Schema.SObjectType.Related_Object__c.fields.Related_Case__c.isAccessible()
         || !Schema.SObjectType.Related_Object__c.fields.Related_Contact__c.isAccessible() || !Schema.SObjectType.Related_Object__c.fields.Related_Lead__c.isAccessible()) {
-            CustomExceptionData excData = new CustomExceptionData('CreateRelatedObjectException', RELATED_OBJECT_IS_NOT_CREATEABLE);
+            CustomExceptionData excData = new CustomExceptionData(CREATE_RELATED_OBJECT_EXCEPTION, RELATED_OBJECT_IS_NOT_CREATEABLE);
             throw new AuraHandledException(JSON.serialize(excData));
         }
         Related_Object__c relatedObjectToInsert = new Related_Object__c();
@@ -63,7 +67,7 @@ public with sharing class RelatedObjectController {
     private static boolean checkStandardObjectRecordExisting(String standardObjectApiName, Id recordId) { 
         boolean objectExists = false;
         if(!Related_Object__c.SObjectType.getDescribe().isAccessible()) {
-            CustomExceptionData excData = new CustomExceptionData('GetRelatedObjectException', RELATED_OBJECT_IS_NOT_ACCESSIBLE);
+            CustomExceptionData excData = new CustomExceptionData(GET_RELATED_OBJECT_EXCEPTION, RELATED_OBJECT_IS_NOT_ACCESSIBLE);
             throw new AuraHandledException(JSON.serialize(excData));
         }
         List<SObject> res = Database.query(
@@ -74,7 +78,7 @@ public with sharing class RelatedObjectController {
         if(res != null && res.size() > 0) {
             objectExists = true;
         } else {
-            CustomExceptionData excData = new CustomExceptionData('GetRelatedObjectException', RECORD_NOT_FOUND);
+            CustomExceptionData excData = new CustomExceptionData(GET_RELATED_OBJECT_EXCEPTION, RECORD_NOT_FOUND);
             throw new AuraHandledException(JSON.serialize(excData));
         }
         return objectExists;

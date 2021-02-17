@@ -1,4 +1,6 @@
 public with sharing class AnswerController {
+
+    private static final String SAVE_ANSWERS_EXCEPTION = 'SaveAnswersException';
     
     @AuraEnabled
     public static void saveAnswersPartially(List<Answer__c> answers) {
@@ -11,7 +13,7 @@ public with sharing class AnswerController {
         try {
             insert answers;
         } catch(DmlException e) {
-            CustomExceptionData excData = new CustomExceptionData('SaveAnswersException', e.getMessage());
+            CustomExceptionData excData = new CustomExceptionData(SAVE_ANSWERS_EXCEPTION, e.getMessage());
             throw new AuraHandledException(JSON.serialize(excData));
         }
     }

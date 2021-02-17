@@ -1,5 +1,8 @@
 @IsTest
 public with sharing class SendEmailLogicTest {
+
+    private static final String EMAIL_CUSTOM_SETTING_RECORD_NAME = 'Main';
+    private static final String TEST_NAME = 'Test';
     
     private static final String TEST_EMAIL = 'test@gmail.ru';
     private static final String TEST_GROUP_NAME = 'UniqueTestGroup';
@@ -86,7 +89,7 @@ public with sharing class SendEmailLogicTest {
     
     @IsTest
     static void testCreateSingleEmail(){
-        SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues('Main');
+        SurveyEmailConfig__c config = SurveyEmailConfig__c.getValues(EMAIL_CUSTOM_SETTING_RECORD_NAME);
         Contact currentContact = [SELECT Id FROM Contact LIMIT 1];
         Survey__c survey = [SELECT Id FROM Survey__c LIMIT 1];
         EmailTemplate template = SendEmailLogicHelper.getEmailTemplate();
@@ -115,7 +118,7 @@ public with sharing class SendEmailLogicTest {
         List<Id> userByGroupIds = SendEmailLogicHelper.getUserByGroup(groupMembers, groupIds[0]);
         System.assertEquals(1, userByGroupIds.size(), AMOUNT_ERROR);        
         
-        List<Campaign> campaignList = [SELECT Id, Name FROM Campaign WHERE Name ='Test'];
+        List<Campaign> campaignList = [SELECT Id, Name FROM Campaign WHERE Name = :TEST_NAME];
         List<Id> campaignIds = new List<Id>();
         for(Campaign cmItem: campaignList){
             campaignIds.add(cmItem.Id);
