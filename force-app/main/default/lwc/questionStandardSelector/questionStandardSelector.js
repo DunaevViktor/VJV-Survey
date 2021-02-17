@@ -91,7 +91,7 @@ export default class QuestionStandardSelector extends LightningElement {
   resolveQuestiosOnPage() {
     this.questionsPage = this.displayedQuestions.slice(
       this.currentPage *  (this.amountItems.data * this.MULTIPLIER), 
-      (this.currentPage + this.ONE)*  (this.amountItems.data * this.MULTIPLIER)
+      (this.currentPage + this.ONE) * (this.amountItems.data * this.MULTIPLIER)
     );
   }
 }
