@@ -7,6 +7,7 @@ public with sharing class SearchHelper {
                 FIND :searchTerm
                 IN NAME FIELDS 
                 RETURNING User (Id, Name), Contact (Id, Name), Lead (Id, Name)
+                LIMIT 2000
             ];
             members = searchResults;
         }

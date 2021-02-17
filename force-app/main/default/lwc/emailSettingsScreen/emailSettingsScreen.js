@@ -12,7 +12,14 @@ import { receiverFields } from "c/fieldService";
 
 export default class EmailSettingsScreen extends LightningElement {
 
-    MULTIPLIER = 1;
+    ONE = 1;
+    EMPTY_STRING = '';
+    EMPTY_ARRAY = [];
+    ENTER_KEYCODE = 13;
+    MULTIPLIER = 2;
+    DELETE_ROW_ACTION = 'delete';
+    ERROR_VARIANT = 'error';
+
     SINGLE_RECORD_VARIANT = "Record";
     GROUP_VARIANT = "User Group";
     CAMPAIGN_VARIAN = "Campaign";
@@ -40,9 +47,9 @@ export default class EmailSettingsScreen extends LightningElement {
     @track isNeedPagination = false;
     @track currentPage = 0;
 
-    groupId = "";
-    campaignId = "";
-    queryTerm = "";
+    groupId = this.EMPTY_STRING;
+    campaignId = this.EMPTY_STRING;
+    queryTerm = this.EMPTY_STRING;
     memberList = [];
 
     get surveyReceivers() {
@@ -84,8 +91,8 @@ export default class EmailSettingsScreen extends LightningElement {
         this.setIsHasMembers();
 
         this.isFirstRun = true;
-        this.isHasGroups = this.displayedGroups.length > 0;
-        this.isHasCampaigns = this.displayedCampaigns.length > 0;
+        this.isHasGroups = !!this.displayedGroups.length;
+        this.isHasCampaigns = !!this.displayedCampaigns.length;
     }
 
     renderedCallback() {
@@ -99,11 +106,11 @@ export default class EmailSettingsScreen extends LightningElement {
     }
 
     initGroups() {
-        if (this.displayedGroups.length === 0) {
+        if (!this.displayedGroups.length) {
             getGroups()
                 .then((result) => {
-                    this.displayedGroups = result.length > 0 ? result : [];
-                    this.isHasGroups = this.displayedGroups.length > 0;
+                    this.displayedGroups = result.length ? result : [];
+                    this.isHasGroups = !!this.displayedGroups.length;
                 })
                 .catch(() => {
                     this.getGroupError = true;
@@ -112,11 +119,11 @@ export default class EmailSettingsScreen extends LightningElement {
     }
 
     initCampaigns() {
-        if (this.displayedCampaigns.length === 0) {
+        if (!this.displayedCampaigns.length) {
             getCampaigns()
                 .then((result) => {
-                    this.displayedCampaigns = result.length > 0 ? result : [];
-                    this.isHasCampaigns = this.displayedCampaigns.length > 0;
+                    this.displayedCampaigns = result.length ? result : [];
+                    this.isHasCampaigns = !!this.displayedCampaigns.length;
                 })
                 .catch(() => {
                     this.getCampaignsError = true;
@@ -130,10 +137,10 @@ export default class EmailSettingsScreen extends LightningElement {
 
     handleKeyUp(evt) {
         this.isFirstRun = false;
-        const isEnterKey = evt.keyCode === 13;
+        const isEnterKey = evt.keyCode === this.ENTER_KEYCODE;
         if (!isEnterKey) { return; }
         this.queryTerm = evt.target.value;
-        if (!(this.queryTerm && this.queryTerm.trim().length > 1)) { return; }
+        if (!(this.queryTerm && this.queryTerm.trim().length > this.ONE)) { return; }
         this.searchError = false;
         searchMembers({ searchTerm: this.queryTerm })
             .then((result) => {
@@ -148,52 +155,52 @@ export default class EmailSettingsScreen extends LightningElement {
     }
 
     resolveMembersPage() {
-      this.isNeedPagination = this.memberList.length > (this.amountItems.data * this.MULTIPLIER);
-      if(this.isNeedPagination) {
-        this.memberPage = this.memberList.slice(
-          this.currentPage *  (this.amountItems.data * this.MULTIPLIER), 
-          (this.currentPage + 1 )*  (this.amountItems.data * this.MULTIPLIER)
-        );
-      } else {
-        this.memberPage = [...this.memberList];
-      }
+        this.isNeedPagination = this.memberList.length > (this.amountItems.data * this.MULTIPLIER);
+        if(this.isNeedPagination) {
+            this.memberPage = this.memberList.slice(
+            this.currentPage *  (this.amountItems.data * this.MULTIPLIER), 
+            (this.currentPage + this.ONE )*  (this.amountItems.data * this.MULTIPLIER)
+            );
+        } else {
+            this.memberPage = [...this.memberList];
+        }
     }
 
     get isPreviousDisabled() {
-      return this.currentPage === 0;
+        return !!this.currentPage;
     }
     
     get isNextDisabled() {
-      return this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER));
+        return this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER));
     }
 
     clickPreviousTableButton() {
-      if(this.currentPage === 0) return;
-    
-      this.currentPage--;
-      this.resolveMembersPage();
+        if(!this.currentPage) return;
+        
+        this.currentPage--;
+        this.resolveMembersPage();
     }
     
     clickNextTableButton() {
-      if(this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER))) return;
-    
-      this.currentPage++;
-      this.resolveMembersPage();
+        if(this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER))) return;
+        
+        this.currentPage++;
+        this.resolveMembersPage();
     }
 
     setIsHasMembers() {
-        this.hasMembers = this.memberList && this.memberList.length > 0;
+        this.hasMembers = this.memberList && this.memberList.length;
     }
 
     setIsHasReseivers() {
-        this.hasReceivers = this.receivers && this.receivers.length > 0;
+        this.hasReceivers = this.receivers && this.receivers.length;
     }
 
     handleRowAction(event) {
         const actionName = event.detail.action.name;
         const row = event.detail.row;
         switch (actionName){
-            case 'delete' :
+            case this.DELETE_ROW_ACTION:
                 this.deleteRow(row);
                 break;
             default: this.handleAddRecordReceiver(row);
@@ -225,12 +232,12 @@ export default class EmailSettingsScreen extends LightningElement {
         
         this.receivers = [...this.receivers, receiver];
 
-        callReportValidity(combobox, "");
+        callReportValidity(combobox, this.EMPTY_STRING);
         this.setIsHasReseivers();
     }
 
     isGroupValid(combobox) {
-        if (this.groupId.localeCompare("") === 0) {
+        if (!this.groupId.localeCompare(this.EMPTY_STRING)) {
             callReportValidity(combobox, label.error_choose_some_group);
             return false;
         }
@@ -271,7 +278,7 @@ export default class EmailSettingsScreen extends LightningElement {
         const event = new ShowToastEvent({
             title: label.error,
             message: label.duplicate_record,
-            variant: 'error'
+            variant: this.ERROR_VARIANT
         });
         this.dispatchEvent(event);
     }
@@ -295,12 +302,12 @@ export default class EmailSettingsScreen extends LightningElement {
         
         this.receivers = [...this.receivers, receiver];
 
-        callReportValidity(combobox, "");
+        callReportValidity(combobox, this.EMPTY_STRING);
         this.setIsHasReseivers();
     }
 
     isCampaignValid(combobox) {
-        if (this.campaignId.localeCompare("") === 0) {
+        if (!this.campaignId.localeCompare(this.EMPTY_STRING)) {
             callReportValidity(combobox, label.error_choose_some_campaign);
             return false;
         }

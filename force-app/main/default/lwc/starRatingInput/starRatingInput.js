@@ -3,6 +3,9 @@ import completeThisField from "@salesforce/label/c.complete_this_field";
 import { questionFields } from "c/fieldService";
 
 export default class StarRatingInput extends LightningElement {
+  MIN_RATING_VALUE = 1;
+  MAX_RATING_VALUE = 10;
+
   isInvalid = false;
   invalidMessage = completeThisField;
 
@@ -33,7 +36,7 @@ export default class StarRatingInput extends LightningElement {
   }
 
   initRating() {
-    for (let i = 1; i <= 10; i++) {
+    for (let i = this.MIN_RATING_VALUE; i <= this.MAX_RATING_VALUE; i++) {
       this.rating.push({ rate: i, filled: false });
     }
   }
