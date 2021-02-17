@@ -8,7 +8,7 @@ import SURVEY_LOGO_FIELD from '@salesforce/schema/Survey__c.Logo__c';
 import SURVEY_DESCRIPTION_FIELD from '@salesforce/schema/Survey__c.Description__c';
 import SURVEY_RELATED_FIELD from '@salesforce/schema/Survey__c.Related_To__c';
 import SURVEY_STANDARD_FIELD from '@salesforce/schema/Survey__c.IsStandard__c';
-import SURVEY_URL_FIELD from '@salesforce/schema/Survey__c.Url__c';
+import SURVEY_URL_FIELD from '@salesforce/schema/Survey__c.URL__c';
 
 import QUESTION_ID_FIELD from '@salesforce/schema/Question__c.Id';
 import QUESTION_REUSABLE_FIELD from '@salesforce/schema/Question__c.IsReusable__c';

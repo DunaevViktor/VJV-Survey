@@ -3,6 +3,7 @@ import { receiverFields } from "c/fieldService";
 
 const TYPE_TEXT = "text";
 const FIELD_NAME = "Name";
+const FIELD_DISPLAYED_NAME = "DisplayedName";
 const FIELD_STANDARD_TYPE = "Type";
 const RECORD_TYPE_CONTACT = "Contact";
 const RECORD_TYPE_USER = "User";
@@ -17,7 +18,7 @@ const LEAD_PREFIX = '00Q';
 
 const columns = [
     { label: label.type, fieldName: receiverFields.TYPE, type: TYPE_TEXT },
-    { label: label.Name, fieldName: FIELD_NAME, type: TYPE_TEXT },
+    { label: label.Name, fieldName: FIELD_DISPLAYED_NAME, type: TYPE_TEXT },
     {
         type: "button",
         initialWidth: BUTTON_WIDTH,

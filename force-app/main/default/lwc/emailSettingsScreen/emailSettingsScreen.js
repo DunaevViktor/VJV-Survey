@@ -40,7 +40,7 @@ export default class EmailSettingsScreen extends LightningElement {
     @track isHasCampaigns = false;
     @track hasMembers = false;
     @track searchError = false;
-    @track copyReceivers = [];
+    @track isFirstRun = false;
 
     @track memberPage;
     @track isNeedPagination = false;
@@ -53,10 +53,6 @@ export default class EmailSettingsScreen extends LightningElement {
 
     get surveyReceivers() {
         return this.receivers;
-    }
-
-    get copySurveyReceivers() {
-        return this.copyReceivers;
     }
 
     get groups() {
@@ -78,10 +74,6 @@ export default class EmailSettingsScreen extends LightningElement {
     @api set surveyReceivers(value) {
         this.receivers = JSON.parse(JSON.stringify(value));
     }
-    
-    @api set copySurveyReceivers(value) {
-        this.copyReceivers = JSON.parse(JSON.stringify(value));
-    }
 
     @api set groups(value) {
         this.displayedGroups = JSON.parse(JSON.stringify(value));
@@ -97,6 +89,7 @@ export default class EmailSettingsScreen extends LightningElement {
         this.setIsHasReseivers();
         this.setIsHasMembers();
 
+        this.isFirstRun = true;
         this.isHasGroups = this.displayedGroups.length > this.ZERO;
         this.isHasCampaigns = this.displayedCampaigns.length > this.ZERO;
     }
@@ -142,6 +135,7 @@ export default class EmailSettingsScreen extends LightningElement {
     }
 
     handleKeyUp(evt) {
+        this.isFirstRun = false;
         const isEnterKey = evt.keyCode === this.ENTER_KEYCODE;
         if (!isEnterKey) { return; }
         this.queryTerm = evt.target.value;
@@ -214,15 +208,8 @@ export default class EmailSettingsScreen extends LightningElement {
 
     deleteRow(row) {
         const value = row[receiverFields.VALUE];
-        this.copyReceivers = deleteReceiver(this.copyReceivers, value);
         this.receivers = deleteReceiver(this.receivers, value);
         this.setIsHasReseivers();
-    }
-
-    createCopyReceiver(receiver, nameValue){
-        let copyReceiver = {...receiver};
-        copyReceiver.Name = nameValue;
-        this.copyReceivers = [...this.copyReceivers, copyReceiver];
     }
 
     handleGroupChange(event) {
@@ -236,12 +223,12 @@ export default class EmailSettingsScreen extends LightningElement {
             return;
         }
 
+        let groupName = getObjectName(this.displayedGroups, this.groupId);
         const receiver = {};
         receiver[receiverFields.TYPE] = this.GROUP_VARIANT;
         receiver[receiverFields.VALUE] = this.groupId;
-
-        let groupName = getObjectName(this.displayedGroups, this.groupId);
-        this.createCopyReceiver(receiver, groupName);
+        receiver.DisplayedName = groupName;
+        
         this.receivers = [...this.receivers, receiver];
 
         callReportValidity(combobox, this.EMPTY_STRING);
@@ -271,8 +258,8 @@ export default class EmailSettingsScreen extends LightningElement {
         const receiver = {};
         receiver[receiverFields.TYPE] = this.SINGLE_RECORD_VARIANT;
         receiver[receiverFields.VALUE] = Id;
+        receiver.DisplayedName = Name;
 
-        this.createCopyReceiver(receiver, Name);
         this.receivers = [...this.receivers, receiver];
 
         this.setIsHasReseivers();
@@ -306,12 +293,12 @@ export default class EmailSettingsScreen extends LightningElement {
             return;
         }
 
+        let campaignName = getObjectName(this.displayedCampaigns, this.campaignId);
         const receiver = {};
         receiver[receiverFields.TYPE] = this.CAMPAIGN_VARIAN;
         receiver[receiverFields.VALUE] = this.campaignId;
-
-        let campaignName = getObjectName(this.displayedCampaigns, this.campaignId);
-        this.createCopyReceiver(receiver, campaignName);
+        receiver.DisplayedName = campaignName;
+        
         this.receivers = [...this.receivers, receiver];
 
         callReportValidity(combobox, this.EMPTY_STRING);
