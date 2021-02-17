@@ -83,6 +83,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Trigger_Rule__c.Field_Value__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Validation__c.Related_Question__c</field>
         <readable>false</readable>
     </fieldPermissions>

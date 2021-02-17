@@ -103,7 +103,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Template</shortDescription>
-        <value>Add Survey To Templates</value>
+        <value>Add Survey to Templates</value>
     </labels>
     <labels>
         <fullName>add</fullName>
@@ -551,7 +551,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>no public groups on org</shortDescription>
-        <value>No public groups found!</value>
+        <value>No public groups found.</value>
     </labels>
     <labels>
         <fullName>next</fullName>
@@ -579,7 +579,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>no campaigns</shortDescription>
-        <value>Don&apos;t have campaigns</value>
+        <value>No campaigns found.</value>
     </labels>
     <labels>
         <fullName>no_questions</fullName>
@@ -593,7 +593,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>No records found</shortDescription>
-        <value>No records found</value>
+        <value>No records found.</value>
     </labels>
     <labels>
         <fullName>no_standard_questions</fullName>
