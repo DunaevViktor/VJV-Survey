@@ -2,15 +2,11 @@ import { questionTypes } from "c/formUtil";
 import { questionFields, optionFields } from "c/fieldService";
 import { label } from "./labels.js";
 
-const LEFT_BRACKET = " (";
-const RIGHT_BRACKET = ")";
-const LABEL_IS = "is";
-
 const initQuestionFields = (data) => {
   let questions = [];
   data.forEach((question) => {
     if (question[questionFields.VISIBLE] === false) {
-      question[questionFields.LABEL] += LEFT_BRACKET + label.dependentQuestion + RIGHT_BRACKET;
+      question[questionFields.LABEL] += ` (${label.dependentQuestion})`;
     }
     question[questionFields.VISIBLE] = true;
     question.IsDisabled = true;
@@ -18,7 +14,7 @@ const initQuestionFields = (data) => {
   });
 
   questions.forEach((question) => {
-    let fieldType = LABEL_IS + question[questionFields.TYPE];
+    let fieldType = `is${question[questionFields.TYPE]}`;
     question[fieldType] = true;
     question.Key = question[questionFields.POSITION]
     let options = [];
