@@ -1,6 +1,8 @@
 @isTest
 public with sharing class RelatedObjectControllerTest {
     
+    private static final String CASE_OBJECT_API_NAME = 'Case';
+
     private static final String INVALID_STANDARD_OBJECT_API_NAMES_AMOUNT = 'Invalid standard object api name amount.';
     private static final String INVALID_RELATED_OBJECT_ID_RESULT = 'Invalid related object id result.';
     private static final String INVALID_STANDARD_OBJECT_CHECK_RESULT = 'Invalid standard object record check result.';
@@ -51,13 +53,13 @@ public with sharing class RelatedObjectControllerTest {
     @isTest
     static void testFirstGetRelatedObjectIdByRelatedStandardObject() {
         Id testCaseId = getFirstTestCaseId();
-        Id result = RelatedObjectController.getRelatedObjectIdByRelatedStandardObject('Case', testCaseId);
+        Id result = RelatedObjectController.getRelatedObjectIdByRelatedStandardObject(CASE_OBJECT_API_NAME, testCaseId);
         System.assertNotEquals(null, result, INVALID_RELATED_OBJECT_ID_RESULT);
     }
     
     @isTest
     static void testPositiveCreateRelatedObjectWithRelatedStandardObjectId() {
-        Id relatedObjectId = RelatedObjectController.createRelatedObjectWithRelatedStandardObjectId('Case', getSecondTestCaseId());
+        Id relatedObjectId = RelatedObjectController.createRelatedObjectWithRelatedStandardObjectId(CASE_OBJECT_API_NAME, getSecondTestCaseId());
         System.assertNotEquals(null, relatedObjectId, INVALID_RELATED_OBJECT_CREATION_RESULT);
     }
     
@@ -68,7 +70,7 @@ public with sharing class RelatedObjectControllerTest {
         AuraHandledException auraExc = null;
         System.runAs(testUser) { 
             try {
-                Id res = RelatedObjectController.createRelatedObjectWithRelatedStandardObjectId('Case', secondTestCaseId);
+                Id res = RelatedObjectController.createRelatedObjectWithRelatedStandardObjectId(CASE_OBJECT_API_NAME, secondTestCaseId);
             } catch(AuraHandledException exc) {
                 auraExc = exc;
             }
@@ -119,7 +121,7 @@ public with sharing class RelatedObjectControllerTest {
         Exception auraExc = null;
         System.runAs(testUser) { 
             try {
-                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(TestDataFactory.getFakeId('Case'));
+                Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(TestDataFactory.getFakeId(CASE_OBJECT_API_NAME));
             } catch(Exception exc) {
                 auraExc = exc;
             }
@@ -134,7 +136,7 @@ public with sharing class RelatedObjectControllerTest {
         Exception auraExc = null;
         System.runAs(testUser) { 
             try {
-                Id res = RelatedObjectController.getRelatedObjectIdByRelatedStandardObject('Case', secondTestCaseId);
+                Id res = RelatedObjectController.getRelatedObjectIdByRelatedStandardObject(CASE_OBJECT_API_NAME, secondTestCaseId);
             } catch(Exception exc) {
                 auraExc = exc;
             }
@@ -146,7 +148,7 @@ public with sharing class RelatedObjectControllerTest {
     static void testSecondNegativeGetRelatedObjectIdByStandardObjectId() {
         AuraHandledException auraExc = null;
         try {
-            Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(TestDataFactory.getFakeId('Case'));
+            Id res = RelatedObjectController.getRelatedObjectIdByStandardObjectId(TestDataFactory.getFakeId(CASE_OBJECT_API_NAME));
         } catch(AuraHandledException exc) {
             auraExc = exc;
         }

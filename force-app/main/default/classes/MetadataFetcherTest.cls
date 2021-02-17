@@ -7,6 +7,8 @@ public with sharing class MetadataFetcherTest {
     private static final String CONTACT_OBJECT_API_NAME  = 'Contact';
     private static final String NON_EXISTENT_FIELD = 'Test__c';
     private static final String NAME_FIELD = 'Name';
+    private static final Integer MIN_TRIGGER_RULE_STANDARD_OBJECTS_COUNT = 3;
+    private static final Integer MIN_CONTACT_OBJECT_FIELDS_COUNT = 29;
     
     private static final String INVALID_OBJECT_API_NAMES_AMOUNT = 'Actual length of object api names is less than expected.';
     private static final String INVALID_OBJECT_FIELD_AMOUNT = 'Actual amount of object fields is less than expected.';
@@ -17,7 +19,7 @@ public with sharing class MetadataFetcherTest {
     @isTest
     static void testPositiveGetPicklistValues() {
         Map<String, String> result = MetadataFetcher.getPicklistValues(TRIGGER_RULE_OBJECT_API_NAME, OBJECT_API_NAME_FIELD);
-        System.assert(result.size() >= 3, INVALID_OBJECT_API_NAMES_AMOUNT);
+        System.assert(result.size() >= MIN_TRIGGER_RULE_STANDARD_OBJECTS_COUNT, INVALID_OBJECT_API_NAMES_AMOUNT);
     }
     
     @isTest
@@ -38,6 +40,6 @@ public with sharing class MetadataFetcherTest {
                 System.assertNotEquals(0, fieldDescription.referencedObjects.size(), INVALID_OBJECT_FIELD_DESCRIPTION_RESULT);
             }
         }
-        System.assert(result.size() >= 29, INVALID_OBJECT_FIELD_AMOUNT);
+        System.assert(result.size() >= MIN_CONTACT_OBJECT_FIELDS_COUNT, INVALID_OBJECT_FIELD_AMOUNT);
     }
 }

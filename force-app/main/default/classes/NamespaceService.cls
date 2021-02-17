@@ -6,8 +6,8 @@ public with sharing class NamespaceService {
     static {
         Integer indexOfToken = -1;
         String namespsacePref = '';
-        for ( Schema.SObjectType typ : Schema.getGlobalDescribe().values() ) {
-            String sobjName = String.valueOf(typ);
+        for ( Schema.SObjectType type : Schema.getGlobalDescribe().values() ) {
+            String sobjName = String.valueOf(type);
             if (sobjName != null) {
                 indexOfToken = sobjName.indexOf(TOKEN_SOBJECT_NAME);
             }
