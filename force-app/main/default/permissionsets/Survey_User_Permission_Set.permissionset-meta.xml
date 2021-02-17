@@ -86,11 +86,6 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
-        <field>Trigger_Rule__c.Field_Value__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
         <editable>false</editable>
         <field>Validation__c.Related_Question__c</field>
         <readable>true</readable>
@@ -162,7 +157,7 @@
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
     <objectPermissions>
-        <allowCreate>false</allowCreate>
+        <allowCreate>true</allowCreate>
         <allowDelete>false</allowDelete>
         <allowEdit>false</allowEdit>
         <allowRead>true</allowRead>
@@ -190,10 +185,6 @@
     </objectPermissions>
     <tabSettings>
         <tab>Survey_Answer_Form</tab>
-        <visibility>Visible</visibility>
-    </tabSettings>
-    <tabSettings>
-        <tab>Survey__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
     <userPermissions>
