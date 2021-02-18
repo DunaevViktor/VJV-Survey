@@ -4,5 +4,5 @@
     <description>A set of default settings for creating a Survey.</description>
     <enableFeeds>false</enableFeeds>
     <label>Survey Setting</label>
-    <visibility>Protected</visibility>
+    <visibility>Public</visibility>
 </CustomObject>

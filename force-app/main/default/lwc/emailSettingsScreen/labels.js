@@ -4,11 +4,9 @@ import type from "@salesforce/label/c.type";
 import error_choose_some_group from "@salesforce/label/c.error_choose_some_group";
 import error_already_added_this_group from "@salesforce/label/c.error_already_added_this_group";
 import user_groups from "@salesforce/label/c.user_groups";
-import select_survey_for_connect from "@salesforce/label/c.Select_survey_for_connect";
 import msg_no_public_groups_found from "@salesforce/label/c.msg_no_public_groups_found";
 import previous from "@salesforce/label/c.previous";
 import next from "@salesforce/label/c.next";
-import error_loading_surveys from "@salesforce/label/c.error_loading_surveys";
 import add_immediate_dispatch from "@salesforce/label/c.add_immediate_dispatch";
 import Single_Record from "@salesforce/label/c.Single_Record";
 import Single_Record_Label from "@salesforce/label/c.Single_Record_Label";
@@ -54,7 +52,6 @@ const label = {
     Single_Record_Label,
     Single_Record,
     add_immediate_dispatch,
-    error_loading_surveys,
     type,
     delete_button,
     error_choose_some_group,
@@ -64,7 +61,6 @@ const label = {
     msg_no_public_groups_found,
     previous,
     next,
-    select_survey_for_connect,
     search_result,
     previous_page,
     next_page

@@ -32,7 +32,9 @@
                 </div>
               </template>
               <template if:false={hasMembers}>
-                <div class="text">{label.no_records_found}</div>
+                <template if:false={isFirstRun}>
+                    <div class="text">{label.no_records_found}</div>
+                </template>
               </template>
             </template>
             <template if:true={searchError}>
@@ -92,7 +94,7 @@
                 <lightning-icon icon-name="action:email" size="x-small" class="emailIcon"></lightning-icon>
                 <span class="slds-m-left_xx-small">{label.Email_Receiver}</span>
             </div>
-             <lightning-datatable key-field={receiversKeyField} data={copyReceivers} columns={columns} onrowaction={handleRowAction}
+             <lightning-datatable key-field={receiversKeyField} data={receivers} columns={columns} onrowaction={handleRowAction}
                 class="slds-scrollable_none emailTable" hide-checkbox-column>
               </lightning-datatable>
           </div>

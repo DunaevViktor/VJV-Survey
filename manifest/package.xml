@@ -77,10 +77,6 @@
         <name>EmailTemplate</name>
     </types>
     <types>
-        <members>Survey_Analysis_Team</members>
-        <name>Role</name>
-    </types>
-    <types>
         <members>SurveyReport</members>
         <members>SurveyReport/Surveys_Report</members>
         <members>SurveyReport/Surveys_with_QA_Report</members>

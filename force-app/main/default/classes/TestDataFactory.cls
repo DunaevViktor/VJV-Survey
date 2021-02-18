@@ -1,24 +1,52 @@
 @isTest
 public class TestDataFactory {
+
+    public static final String EMAIL_SETTING_RECORD_NAME = 'Main';
+    public static final String DISPLAY_NAME = 'Display Name';
+    public static final String MAIN_TEMPLATE = 'Main Template';
+    public static final String GROUP_TYPE_REGULAR = 'Regular';
+    public static final String INDUSTRY_APPAREL = 'Apparel';
     
     public static final String TEST_VALUE = 'Test';
+    private static final String TEST_NAME = 'Test Name';
     public static final String TEST_EMAIL_VALUE = 'test@mail.com';
     public static final String TEST_EMAIL_RECEIVER_VALUE = '00G1y000001v5quEA';
     public static final String TEST_POSITION = '1';
+
+    private static final String STANDARD_USER_PROFILE_NAME = 'Standard User';
+    private static final String DATE_TYPE = 'DATE';
+    private static final String DATETIME_TYPE = 'DATETIME';
+    private static final String DOUBLE_TYPE = 'DOUBLE';
+    private static final String TEXT_TYPE = 'TEXT';
     
     private static final Integer AMOUNT = 5;
     private static final String TEST_QUESTION_TYPE = 'Picklist';
     private static final String TEST_VALIDATION_OPERATOR = 'CONTAINS';
-    private static final String TEST_OBJECT_API_NAME = 'Contact';
+    private static final String CONTACT_OBJECT_API_NAME = 'Contact';
+    private static final String CASE_OBJECT_API_NAME = 'Case';
     
     private static final String EMAIL_RECEIVER_TYPE_GROUP = 'User Group';
     private static final String EMAIL_RECEIVER_TYPE_CAMPAIGN = 'Campaign';
     private static final String EMAIL_RECEIVER_TYPE_RECORD = 'Record';
+
+    private static final String IS_NULL = 'IS NULL';
+    private static final String EQUALS = 'EQUALS';
+    private static final String NOT_EQUALS = 'NOT EQUALS';
+    private static final String LESS_THAN = 'LESS THAN';
+    private static final String GREATER_THAN = 'GREATER THAN';
+    private static final String CONTAINS = 'CONTAINS';
+    private static final String NOT_CONTAINS = 'NOT CONTAINS';
+
+    private static final String BIRTHDATE = 'Birthdate';
+    private static final String EMAIL_BOUNCED_DATE = 'EmailBouncedDate';
+    private static final String  MAILING_LATITUDE= 'MailingLatitude';
+    private static final String SUPPLIED_EMAIL = 'SuppliedEmail';
+
     
     private static Integer sNum = 1;
     
-    static final List<String> NUMBER_DATE_OPERATORS = new List<String>{'IS NULL', 'EQUALS', 'NOT EQUALS', 'LESS THAN', 'GREATER THAN'};
-        static final List<String> OTHER_FIELD_OPERATORS = new List<String>{'IS NULL', 'EQUALS', 'NOT EQUALS', 'CONTAINS', 'NOT CONTAINS'};
+    static final List<String> NUMBER_DATE_OPERATORS = new List<String>{IS_NULL, EQUALS, NOT_EQUALS, LESS_THAN, GREATER_THAN};
+        static final List<String> OTHER_FIELD_OPERATORS = new List<String>{IS_NULL, EQUALS, NOT_EQUALS, CONTAINS, NOT_CONTAINS};
             
             public static Survey__c createSurvey() {
                 Survey__c survey = new Survey__c();
@@ -88,7 +116,7 @@ public class TestDataFactory {
     }
     
     public static Profile getStandardProfile() {
-        Profile profile = [SELECT Id FROM Profile WHERE Name = 'Standard User' WITH SECURITY_ENFORCED];
+        Profile profile = [SELECT Id FROM Profile WHERE Name = :STANDARD_USER_PROFILE_NAME WITH SECURITY_ENFORCED];
         return profile;
     }
     
@@ -108,9 +136,9 @@ public class TestDataFactory {
     
     public static SurveyEmailConfig__c createSurveyEmailConfig() {
         SurveyEmailConfig__c config = new SurveyEmailConfig__c();
-        config.Name = 'Main';
-        config.Display_Name__c = 'Display Name';
-        config.Template_Name__c = 'Main Template';
+        config.Name = EMAIL_SETTING_RECORD_NAME;
+        config.Display_Name__c = DISPLAY_NAME;
+        config.Template_Name__c = MAIN_TEMPLATE;
         return config;
     }
     
@@ -118,7 +146,7 @@ public class TestDataFactory {
         Group testGroup = new Group();
         testGroup.Name = name;
         testGroup.DeveloperName = developerName;
-        testGroup.Type = 'Regular';
+        testGroup.Type = GROUP_TYPE_REGULAR;
         return testGroup;
     }
     
@@ -169,7 +197,7 @@ public class TestDataFactory {
         
         for(Integer i = 0; i < AMOUNT; i++){
             Lead testLead = TestDataFactory.createLead();
-            testLead.Industry= 'Apparel';
+            testLead.Industry= INDUSTRY_APPAREL;
             testLead.Email = TEST_EMAIL_VALUE;
             leadList.add(testLead);
         }
@@ -185,7 +213,7 @@ public class TestDataFactory {
         
         for(Integer i = 0; i < AMOUNT; i++){
             Contact testContact = new Contact();
-            testContact.LastName = 'Test Name';
+            testContact.LastName = TEST_NAME;
             testContact.Birthdate = testBirthdate;
             testContact.EmailBouncedDate = testEmailBouncedDate;
             testContact.MailingLongitude = 15;
@@ -200,32 +228,32 @@ public class TestDataFactory {
     public static List<Trigger_Rule__c> createTriggerRules(Id surveyId) {
         Map<String, List<String>> fieldTypeOperators = new Map<String, List<String>>();
         
-        fieldTypeOperators.put('DATE', NUMBER_DATE_OPERATORS);
-        fieldTypeOperators.put('DATETIME', NUMBER_DATE_OPERATORS);
-        fieldTypeOperators.put('DOUBLE', NUMBER_DATE_OPERATORS);
-        fieldTypeOperators.put('TEXT', OTHER_FIELD_OPERATORS);
+        fieldTypeOperators.put(DATE_TYPE, NUMBER_DATE_OPERATORS);
+        fieldTypeOperators.put(DATETIME_TYPE, NUMBER_DATE_OPERATORS);
+        fieldTypeOperators.put(DOUBLE_TYPE, NUMBER_DATE_OPERATORS);
+        fieldTypeOperators.put(TEXT_TYPE, OTHER_FIELD_OPERATORS);
         
         List<Trigger_Rule__c> triggerRules = new List<Trigger_Rule__c>();
         
         for(String fieldType: fieldTypeOperators.keySet()){
             for(String operator: fieldTypeOperators.get(fieldType)){
                 Trigger_Rule__c triggerRule;
-                switch on fieldType{
-                    when 'DATE'{
-                        triggerRule = TestDataFactory.createTriggerRule('Birthdate', operator,  '4/28/2020');
+                switch on fieldType {
+                    when 'DATE' {
+                        triggerRule = TestDataFactory.createTriggerRule(BIRTHDATE, operator,  '4/28/2020');
                         triggerRule.Survey__c = surveyId;
                     }
-                    when 'DATETIME'{
-                        triggerRule = TestDataFactory.createTriggerRule('EmailBouncedDate', operator,  '10/14/2019, 11:46 AM');
+                    when 'DATETIME' {
+                        triggerRule = TestDataFactory.createTriggerRule(EMAIL_BOUNCED_DATE, operator,  '10/14/2019, 11:46 AM');
                         triggerRule.Survey__c = surveyId;
                     }
-                    when 'DOUBLE'{
-                        triggerRule = TestDataFactory.createTriggerRule('MailingLatitude', operator,  '12345');
+                    when 'DOUBLE' {
+                        triggerRule = TestDataFactory.createTriggerRule(MAILING_LATITUDE, operator,  '12345');
                         triggerRule.Survey__c = surveyId;
                     }
-                    when else{
-                        triggerRule = TestDataFactory.createTriggerRule('SuppliedEmail', operator,  'Test Email');
-                        triggerRule.Object_Api_Name__c = 'Case';
+                    when else {
+                        triggerRule = TestDataFactory.createTriggerRule(SUPPLIED_EMAIL, operator,  'Test Email');
+                        triggerRule.Object_Api_Name__c = CASE_OBJECT_API_NAME;
                         triggerRule.Survey__c = surveyId;
                     }
                 }
@@ -241,7 +269,7 @@ public class TestDataFactory {
         rule.Field_Name__c = fieldName;
         rule.Operator__c = operator;
         rule.Field_Value__c = value;
-        rule.Object_Api_Name__c = TEST_OBJECT_API_NAME;
+        rule.Object_Api_Name__c = CONTACT_OBJECT_API_NAME;
         return rule;
     }
     

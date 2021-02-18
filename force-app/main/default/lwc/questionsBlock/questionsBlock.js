@@ -14,6 +14,10 @@ import {
 import { findQuestionByPosition } from "c/formUtil";
 
 export default class QuestionsBlock extends LightningElement {
+  EMPTY_STRING = '';
+  ZERO = 0;
+  ONE = 1;
+
   label = label;
 
   @wire(getMaxQuestionAmount) maxQuestionsAmount;
@@ -67,16 +71,14 @@ export default class QuestionsBlock extends LightningElement {
 
   get labelOfAvailableItems() {
     switch(this.availableQuestionsAmount) {
-      case 1: return this.label.you_can_create + " " 
-        + this.availableQuestionsAmount + " " + this.label.more + " " + this.label.question;
-      case 0: return this.label.can_no_longer_create_questions;
-      default: return this.label.you_can_create + " " 
-        + this.availableQuestionsAmount + " " + this.label.more + " " + this.label.questions;
+      case this.ONE: return `${this.label.you_can_create} ${this.availableQuestionsAmount} ${this.label.more} ${this.label.question}`;
+      case this.ZERO: return this.label.can_no_longer_create_questions;
+      default: return `${this.label.you_can_create} ${this.availableQuestionsAmount} ${this.label.more} ${this.label.questions}`;
     }
   }
 
   get labelOfSearchedItems() {
-    return label.number_of_found_items + ': ' + this.displayedQuestions.length;
+    return `${label.number_of_found_items}: ${this.displayedQuestions.length}`;
   }
 
   get availableQuestionsAmount() {
@@ -100,11 +102,11 @@ export default class QuestionsBlock extends LightningElement {
   }
 
   resolveQuestionsSubinfo() {
-    this.hasQuestions = (this.displayedQuestions.length > 0) || (this.isSearchMode);
+    this.hasQuestions = this.displayedQuestions.length || (this.isSearchMode);
 
-    if(this.amountPages > 1 && 
+    if(this.amountPages > this.ONE && 
       this.currentPage === this.amountPages && 
-      this.filteredDisplayedQuestions.length === 0) {
+      !this.filteredDisplayedQuestions.length) {
       this.currentPage--;
       this.resolveDisplayedQuestions();
     }
@@ -138,7 +140,7 @@ export default class QuestionsBlock extends LightningElement {
   deleteQuestion(event) {
     this.displayedQuestions = filterQuestionsByPosition(this.displayedQuestions, event.detail);
 
-    if(this.isSearchMode && this.displayedQuestions.length === 0) {
+    if(this.isSearchMode && !this.displayedQuestions.length) {
       this.displayedQuestionsCopy = filterQuestionsByPosition(
         this.displayedQuestionsCopy, event.detail);
       this.handleClearQuestionSearch();
@@ -167,7 +169,7 @@ export default class QuestionsBlock extends LightningElement {
   }
 
   clickFirstPage() {
-    this.currentPage = 1;
+    this.currentPage = this.ONE;
     this.resolveDisplayedQuestions();
   }
 
@@ -178,7 +180,7 @@ export default class QuestionsBlock extends LightningElement {
   }
 
   clickPreviousPage() {
-    if(this.currentPage === 1) return;
+    if(this.currentPage === this.ONE) return;
     this.currentPage--;
     this.resolveDisplayedQuestions();
   }
@@ -189,7 +191,7 @@ export default class QuestionsBlock extends LightningElement {
   }
 
   repaintPaginationButtons() {
-    if(this.currentPage === 1) {
+    if(this.currentPage === this.ONE) {
       this.isFirstDisabled = true;
       this.isPreviousDisabled = true;
     } else {
@@ -211,13 +213,13 @@ export default class QuestionsBlock extends LightningElement {
     const keyword = input.value;
 
     if(isEmpty(keyword)) {
-      input.value = "";
+      input.value = this.EMPTY_STRING;
       setInputValidation(input, label.search_keyword_cant_be_empty);
       return;
     }
 
-    setInputValidation(input, "");
-    this.currentPage = 1;
+    setInputValidation(input, this.EMPTY_STRING);
+    this.currentPage = this.ONE;
 
     if(!this.isSearchMode) {
       this.displayedQuestionsCopy = [...this.displayedQuestions];
@@ -232,12 +234,12 @@ export default class QuestionsBlock extends LightningElement {
 
   handleClearQuestionSearch() {
     const input = this.template.querySelector('lightning-input[data-my-id="keyword"]');
-    setInputValidation(input, "");
-    input.value = "";
+    setInputValidation(input, this.EMPTY_STRING);
+    input.value = this.EMPTY_STRING;
 
     if(this.isSearchMode) {
       this.isSearchMode = false;
-      this.currentPage = 1;
+      this.currentPage = this.ONE;
       this.displayedQuestions = [...this.displayedQuestionsCopy];
       this.resolveDisplayedQuestions();
     }

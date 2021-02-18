@@ -11,6 +11,9 @@ const emptySurvey = {
   [surveyFields.RELATED]: undefined
 };
 
+const BASE_SENSETIVITY = 'base';
+const EMPTY_STRING = '';
+
 const initQuestionFields = (questions, data) => {
   questions = [];
   data.forEach((question) => {
@@ -23,7 +26,7 @@ const initQuestionFields = (questions, data) => {
   });
 
   questions.forEach((question) => {
-    let fieldType = "is" + question[questionFields.TYPE];
+    let fieldType = `is${question[questionFields.TYPE]}`;
     question[fieldType] = true;
     let options = [];
 
@@ -53,7 +56,7 @@ const sortQuestionsByPosition = (questions) => {
   questions.sort(function (a, b) {
     return a[questionFields.POSITION].localeCompare(b[questionFields.POSITION], undefined, {
       numeric: true,
-      sensitivity: "base"
+      sensitivity: BASE_SENSETIVITY
     });
   });
   return questions;
@@ -65,7 +68,7 @@ const compareValues = (answerValue, operator, validationValue) => {
     case operatorTypes.NULL:
       isConditionMet =
         String(
-          answerValue == null || answerValue === undefined || answerValue === ""
+          answerValue == null || answerValue === undefined || answerValue === EMPTY_STRING
         ) === validationValue;
       break;
     case operatorTypes.EQUALS:
@@ -115,7 +118,7 @@ const checkDependentQuestion = (event, questions) => {
   const answer = event.detail.answer;
 
   const questionWithChangedAnswer = questions.find(
-    (question) => question[questionFields.ID] === answeredQuestionId
+    ( question ) => question[questionFields.ID] === answeredQuestionId
   );
   const questionIndex = questions.findIndex(
     ( question ) => question[questionFields.ID] === answeredQuestionId

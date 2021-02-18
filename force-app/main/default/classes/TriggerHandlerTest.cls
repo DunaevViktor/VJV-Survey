@@ -1,5 +1,10 @@
 @isTest
 class TriggerHandlerTest {
+
+    private static final String NEW_TITLE = 'New Title';
+    private static final String ENERGY_INDUSTRY = 'Energy';
+    private static final String CONTACT_OBJECT_API_NAME = 'Contact';
+    private static final String TEST_SUPPLIED_EMAIL = 'NewEmail@vjv.com';
     
     private static final String INVALID_TRIGGER_RULES_AMOUNT = 'Actual length of trigger rules list doesn\'t equal to expected.';
     private static final String INVALID_EMAIL_RECEIVERS_AMOUNT = 'Actual length of email receivers list doesn\'t equal to expected.';
@@ -29,7 +34,7 @@ class TriggerHandlerTest {
         contact.Birthdate = contact.Birthdate.addDays(1);
         contact.EmailBouncedDate = contact.EmailBouncedDate.addDays(1);
         contact.MailingLatitude = contact.MailingLatitude + 5;
-        contact.Title = 'New Title';
+        contact.Title = NEW_TITLE;
         
         try{
             update contact;
@@ -42,7 +47,7 @@ class TriggerHandlerTest {
     static void testProcessCaseChanges(){
         List<Case> caseList = [SELECT Id, SuppliedEmail FROM Case];
         Case testCase = caseList[0];
-        testCase.SuppliedEmail = 'NewEmail@vjv.com';
+        testCase.SuppliedEmail = TEST_SUPPLIED_EMAIL;
         
         try{
             update testCase;
@@ -55,7 +60,7 @@ class TriggerHandlerTest {
     static void testProcessLeadChanges(){
         List<Lead> leadList = [SELECT Id, Industry FROM Lead];
         Lead testLead = leadList[0];
-        testLead.Industry = 'Energy';
+        testLead.Industry = ENERGY_INDUSTRY;
         
         try{
             update testLead;
@@ -66,7 +71,7 @@ class TriggerHandlerTest {
     
     @isTest
     static void testGetTriggerRules(){
-        List<Trigger_Rule__c> actualTriggerRules = TriggerRulesHandler.getTriggerRules('Contact');
+        List<Trigger_Rule__c> actualTriggerRules = TriggerRulesHandler.getTriggerRules(CONTACT_OBJECT_API_NAME);
         System.assertEquals(15, actualTriggerRules.size(), INVALID_TRIGGER_RULES_AMOUNT);
     }
 }
