@@ -26,6 +26,10 @@ import { transformRules,
 import {label} from "./labels.js";
 
 export default class SaverScreen extends NavigationMixin(LightningElement) {
+  ONE = 1;
+  S_END = '__S';
+  UNDERSCORE = '__';
+  C_CHARACTER = 'c';
 
   label = label;
 
@@ -67,7 +71,7 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
 
         this.increaseProgress();
 
-        if(!this.triggerRules || this.triggerRules.length === 0) {
+        if(!this.triggerRules || !this.triggerRules.length) {
           this.increaseProgress();
           this.sendSaveQuestionsRequest();
           return;
@@ -112,7 +116,7 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
   sendSaveOptionsRequest() {
     const tranformedOptions = transformOptions(this.questions, this.savedQuestions);
 
-    if(tranformedOptions.length === 0) {
+    if(!tranformedOptions.length) {
       this.increaseProgress();
       this.sendSaveValidationsRequest();
       return;
@@ -132,7 +136,7 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
   sendSaveValidationsRequest() {
     const transformedValidations = transformValidations(this.validations, this.savedQuestions);
 
-    if(transformedValidations.length === 0) {
+    if(!transformedValidations.length) {
       this.increaseProgress();
       this.sendSaveEmailReceiversRequest();
       return;
@@ -152,7 +156,7 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
   sendSaveEmailReceiversRequest() {
     const transformedEmailReceivers = transformEmailReceivers(this.emailReceivers, this.surveyId);
 
-    if(!transformedEmailReceivers || transformedEmailReceivers.length === 0) {
+    if(!transformedEmailReceivers || !transformedEmailReceivers.length) {
       this.increaseProgress();
       return;
     }
@@ -192,9 +196,9 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
   }
 
   getSurveyUrl(_surveyId){
-    if(surveyObject.split("__S").length > 1){
-        this.ANSWER_PAGE_API_NAME = surveyObject.split("__S")[0] + '__' +  this.ANSWER_PAGE_API_NAME;
-        this.SURVEY_URL_PARAMETER_NAME = this.SURVEY_URL_PARAMETER_NAME.replace('c', surveyObject.split("__S")[0]);
+    if(surveyObject.split(this.S_END).length > this.ONE){
+        this.ANSWER_PAGE_API_NAME = surveyObject.split(this.S_END)[0] + this.UNDERSCORE +  this.ANSWER_PAGE_API_NAME;
+        this.SURVEY_URL_PARAMETER_NAME = this.SURVEY_URL_PARAMETER_NAME.replace(this.C_CHARACTER, surveyObject.split(this.S_END)[0]);
     }
 
     this[NavigationMixin.GenerateUrl]({
@@ -204,7 +208,7 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
         }
     })
     .then((url) => {
-        url = url + '?' + this.SURVEY_URL_PARAMETER_NAME + '=' + _surveyId;
+        url = `${url}?${this.SURVEY_URL_PARAMETER_NAME}=${_surveyId}`;
         saveSurveyUrl({surveyId : this.surveyId, surveyUrl : url})
         .catch(() => {
             this.isError = true;

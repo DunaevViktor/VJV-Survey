@@ -3,20 +3,31 @@ import { receiverFields } from "c/fieldService";
 
 const TYPE_TEXT = "text";
 const FIELD_NAME = "Name";
+const FIELD_DISPLAYED_NAME = "DisplayedName";
 const FIELD_STANDARD_TYPE = "Type";
 const RECORD_TYPE_CONTACT = "Contact";
 const RECORD_TYPE_USER = "User";
 const RECORD_TYPE_LEAD = "Lead";
 
+const BUTTON_WIDTH = 100;
+const ZERO = 0;
+const EMPTY_STRING = '';
+const PREFIX_LENGTH = 3;
+const USER_PREFIX = '005';
+const LEAD_PREFIX = '00Q';
+
+const DELETE_ROW_ACTION = 'delete';
+const ADD_ROW_ACTION = 'add';
+
 const columns = [
     { label: label.type, fieldName: receiverFields.TYPE, type: TYPE_TEXT },
-    { label: label.Name, fieldName: FIELD_NAME, type: TYPE_TEXT },
+    { label: label.Name, fieldName: FIELD_DISPLAYED_NAME, type: TYPE_TEXT },
     {
         type: "button",
-        initialWidth: 100,
+        initialWidth: BUTTON_WIDTH,
         typeAttributes: {
             label: label.delete_button,
-            name: "delete"
+            name: DELETE_ROW_ACTION
         }
     }
 ];
@@ -26,10 +37,10 @@ const columnsMember = [
     { label: label.Name, fieldName: FIELD_NAME, type: TYPE_TEXT },
     {
         type: "button",
-        initialWidth: 100,
+        initialWidth: BUTTON_WIDTH,
         typeAttributes: {
             label: label.add,
-            name: "add"
+            name: ADD_ROW_ACTION
         }
     }
 ];
@@ -52,7 +63,7 @@ const getReceiversTableStyle = () => {
 
 const isReceiverExist = (receivers, value) => {
     return receivers.find((receiver) => {
-        return receiver[receiverFields.VALUE].localeCompare(value) === 0
+        return !receiver[receiverFields.VALUE].localeCompare(value)
     });
 };
 
@@ -89,14 +100,14 @@ const isUser = (recordId) => {
 const createMemberList = (result) => {
     let memberList = [];
     result.forEach(memberListByType => {
-        let recordType = "";
-        if(memberListByType.length > 0){
-            let uniquePrefix = memberListByType[0].Id.substr(0,3);
+        let recordType = EMPTY_STRING;
+        if(memberListByType.length){
+            let uniquePrefix = memberListByType[0].Id.substr(ZERO, PREFIX_LENGTH);
             switch (uniquePrefix){
-                case '005' :
+                case USER_PREFIX :
                     recordType = RECORD_TYPE_USER;
                     break;
-                case '00Q' :
+                case LEAD_PREFIX :
                     recordType = RECORD_TYPE_LEAD;
                     break;
                 default: recordType = RECORD_TYPE_CONTACT;

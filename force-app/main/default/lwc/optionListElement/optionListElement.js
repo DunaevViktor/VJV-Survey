@@ -12,7 +12,7 @@ export default class OptionListElement extends LightningElement {
   }
 
   get optionValue() {
-    return this.option[optionFields.VALUE];
+      return this.option[optionFields.VALUE];
   }
 
   deleteOption() {

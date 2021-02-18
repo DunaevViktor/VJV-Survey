@@ -27,8 +27,8 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
 
   label = label;
 
-  NAVIGATION_TYPE = "standard__namedPage";
-  REDIRECT_PAGE_NAME = "home";
+  NAVIGATION_TYPE = 'standard__namedPage';
+  REDIRECT_PAGE_NAME = 'home';
   ERROR_STATE = 'error';
   SUCCESS_STATE = 'success';
 
@@ -83,11 +83,7 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
   }
 
   get backgroundColor() {
-    return (
-      "background-color: " +
-      this.survey[surveyFields.BACKGROUND] +
-      ";"
-    );
+    return `background-color: ${this.survey.data.fields[surveyFields.BACKGROUND].value};`;
   }
 
   get relatedSurveyId() {
@@ -99,9 +95,10 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
       this.surveyId = this.relatedSurveyId;
       return true;
     } 
-      this.showSurvey = false;
-      this.closeTab();
-      return false;
+    this.showSurvey = false;
+    this.closeTab();
+    this.navigateToHomePage();
+    return false;
   }
 
   setParametersBasedOnUrl() {
@@ -180,7 +177,7 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
 
   validateFields() {
     const allValid = [
-      ...this.template.querySelectorAll("c-single-question")
+      ...this.template.querySelectorAll('c-single-question')
     ].reduce(function (validSoFar, inputCmp) {
       const isValid = inputCmp.validate();
       return validSoFar && isValid;

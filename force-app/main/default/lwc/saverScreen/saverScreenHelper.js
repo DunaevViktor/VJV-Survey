@@ -23,7 +23,7 @@ const transformOptions = (questions, savedQuestions) => {
   for(let i = 0; i < questions.length; i++) {
     const question = questions[i];
      
-    if(!question.Question_Options__r || question.Question_Options__r.length === 0) continue;
+    if(!question.Question_Options__r || !question.Question_Options__r.length) continue;
 
     const savedQuestion = findQuestionByPosition(savedQuestions, question[questionFields.POSITION]);
 
@@ -38,7 +38,7 @@ const transformOptions = (questions, savedQuestions) => {
 }
 
 const transformValidations = (validations, savedQuestions) => {
-  if(validations === null || validations.length === 0) return [];
+  if(validations === null || !validations.length) return [];
 
   const transformedValidations = [];
 

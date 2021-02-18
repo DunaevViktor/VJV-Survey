@@ -28,6 +28,11 @@ import {
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 
 export default class QuestionScreen extends LightningElement {
+  ONE = 1;
+  NOT_INCLUDE = -1;
+  DOWN_DIRECTION = -1;
+  UP_DIRECTION = 1;
+
   QUESTION_BLOCK = 'Question block';
   FORM_BLOCK = 'Form block';
   STANDARD_SELECTOR_BLOCK = 'Standard selector block';
@@ -111,14 +116,14 @@ export default class QuestionScreen extends LightningElement {
   @track currentMode = this.QUESTION_BLOCK;
 
   connectedCallback() {
-    this.hasStandardQuestions = this.standardQuestions.length > 0;
+    this.hasStandardQuestions = !!this.standardQuestions.length;
     
     this.initTemplates();
     this.initStandardQuestions();
   }
 
   initTemplates() {
-    if(this.displayedTemplates.length === 0) {
+    if(!this.displayedTemplates.length) {
       getTemplateSurveys()
       .then((result) => {
         this.displayedTemplates = result;
@@ -149,7 +154,7 @@ export default class QuestionScreen extends LightningElement {
       getStandardQuestions()
       .then((result) => {
         this.displayedStandardQuestions = trasnformResult(result);
-        this.hasStandardQuestions = this.standardQuestions.length > 0;
+        this.hasStandardQuestions = !!this.standardQuestions.length;
       })
       .catch(() => {
         this.setError();
@@ -182,7 +187,7 @@ export default class QuestionScreen extends LightningElement {
   }
 
   handleTemplateChange(event) {
-    if (this.templateOptionsValue.localeCompare(event.detail) === 0) {
+    if (!this.templateOptionsValue.localeCompare(event.detail)) {
       return;
     }
 
@@ -317,7 +322,7 @@ export default class QuestionScreen extends LightningElement {
   downQuestion(event) {
     const position = event.detail;
 
-    const downQuestionIndex = findSwapIndex(this.questions, position, -1);
+    const downQuestionIndex = findSwapIndex(this.questions, position, this.DOWN_DIRECTION);
     if(!downQuestionIndex) {
       return;
     }
@@ -333,11 +338,11 @@ export default class QuestionScreen extends LightningElement {
   upQuestion(event) {
     const position = event.detail;
 
-    if(+position.slice(-1) === 1) {
+    if(+position.slice(this.NOT_INCLUDE) === this.ONE) {
       return;
     }
 
-    const upperQuestionIndex = findSwapIndex(this.questions, position, 1);
+    const upperQuestionIndex = findSwapIndex(this.questions, position, this.UP_DIRECTION);
     const upperPosition = this.questions[upperQuestionIndex][questionFields.POSITION];
 
     this.displayedQuestions = swapQuestions(this.questions, upperPosition, position);
@@ -353,7 +358,7 @@ export default class QuestionScreen extends LightningElement {
 
   clickNextButton() {
     if(this.displayedQuestions.length < +this.minQuestionsAmount.data) {
-      const errorMessage = label.you_must_have_at_least + " " + this.minQuestionsAmount.data + " " +label.questions;
+      const errorMessage = `${label.you_must_have_at_least} ${this.minQuestionsAmount.data} ${label.questions}`;
       this.showToastMessage(label.unable_to_continue, errorMessage, this.ERROR_VARIANT);
       return;
     } 

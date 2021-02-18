@@ -4,5 +4,5 @@
     <description>A set of settings for creating and sending email.</description>
     <enableFeeds>false</enableFeeds>
     <label>SurveyEmailConfig</label>
-    <visibility>Protected</visibility>
+    <visibility>Public</visibility>
 </CustomObject>

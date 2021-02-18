@@ -101,7 +101,8 @@ public with sharing class TriggerRulesHandler {
         return [SELECT Id, Name, Field_Name__c, Operator__c, Field_Value__c, Survey__c, Object_Api_Name__c
                 FROM Trigger_Rule__c 
                 WHERE Object_Api_Name__c =: objectApiName
-                WITH SECURITY_ENFORCED];
+                WITH SECURITY_ENFORCED
+                LIMIT 50000];
     }
 
     private static Survey__c getSurveyUrlFields(Id surveyId) {

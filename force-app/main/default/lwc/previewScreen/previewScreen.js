@@ -41,7 +41,7 @@ export default class PreviewScreen extends LightningElement {
   }
 
   get backgroundColor() {
-    return "background-color: " + this.survey[surveyFields.BACKGROUND] + ";";
+    return `background-color: ${this.survey[surveyFields.BACKGROUND]};`;
   }
 
   clickPreviousButton() {

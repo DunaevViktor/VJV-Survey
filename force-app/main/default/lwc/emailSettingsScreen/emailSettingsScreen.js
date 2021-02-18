@@ -17,7 +17,14 @@ import { receiverFields, surveyObject } from "c/fieldService";
 
 export default class EmailSettingsScreen extends NavigationMixin(LightningElement) {
 
-    MULTIPLIER = 1;
+    ONE = 1;
+    EMPTY_STRING = '';
+    EMPTY_ARRAY = [];
+    ENTER_KEYCODE = 13;
+    MULTIPLIER = 2;
+    DELETE_ROW_ACTION = 'delete';
+    ERROR_VARIANT = 'error';
+
     SINGLE_RECORD_VARIANT = "Record";
     GROUP_VARIANT = "User Group";
     CAMPAIGN_VARIAN = "Campaign";
@@ -39,15 +46,15 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
     @track isHasCampaigns = false;
     @track hasMembers = false;
     @track searchError = false;
-    @track copyReceivers = [];
+    @track isFirstRun = false;
 
     @track memberPage;
     @track isNeedPagination = false;
     @track currentPage = 0;
 
-    groupId = "";
-    campaignId = "";
-    queryTerm = "";
+    groupId = this.EMPTY_STRING;
+    campaignId = this.EMPTY_STRING;
+    queryTerm = this.EMPTY_STRING;
     memberList = [];
 
     communityUrl;
@@ -58,10 +65,6 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
 
     get surveyReceivers() {
         return this.receivers;
-    }
-
-    get copySurveyReceivers() {
-        return this.copyReceivers;
     }
 
     get groups() {
@@ -83,10 +86,6 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
     @api set surveyReceivers(value) {
         this.receivers = JSON.parse(JSON.stringify(value));
     }
-    
-    @api set copySurveyReceivers(value) {
-        this.copyReceivers = JSON.parse(JSON.stringify(value));
-    }
 
     @api set groups(value) {
         this.displayedGroups = JSON.parse(JSON.stringify(value));
@@ -104,8 +103,9 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
         this.setSurveyUrl();
         this.setCommunityUrl();
 
-        this.isHasGroups = this.displayedGroups.length > 0;
-        this.isHasCampaigns = this.displayedCampaigns.length > 0;
+        this.isFirstRun = true;
+        this.isHasGroups = !!this.displayedGroups.length;
+        this.isHasCampaigns = !!this.displayedCampaigns.length;
     }
 
     renderedCallback() {
@@ -119,11 +119,11 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
     }
 
     initGroups() {
-        if (this.displayedGroups.length === 0) {
+        if (!this.displayedGroups.length) {
             getGroups()
                 .then((result) => {
-                    this.displayedGroups = result.length > 0 ? result : [];
-                    this.isHasGroups = this.displayedGroups.length > 0;
+                    this.displayedGroups = result.length ? result : [];
+                    this.isHasGroups = !!this.displayedGroups.length;
                 })
                 .catch(() => {
                     this.getGroupError = true;
@@ -132,11 +132,11 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
     }
 
     initCampaigns() {
-        if (this.displayedCampaigns.length === 0) {
+        if (!this.displayedCampaigns.length) {
             getCampaigns()
                 .then((result) => {
-                    this.displayedCampaigns = result.length > 0 ? result : [];
-                    this.isHasCampaigns = this.displayedCampaigns.length > 0;
+                    this.displayedCampaigns = result.length ? result : [];
+                    this.isHasCampaigns = !!this.displayedCampaigns.length;
                 })
                 .catch(() => {
                     this.getCampaignsError = true;
@@ -149,10 +149,11 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
     }
 
     handleKeyUp(evt) {
-        const isEnterKey = evt.keyCode === 13;
+        this.isFirstRun = false;
+        const isEnterKey = evt.keyCode === this.ENTER_KEYCODE;
         if (!isEnterKey) { return; }
         this.queryTerm = evt.target.value;
-        if (!(this.queryTerm && this.queryTerm.trim().length > 1)) { return; }
+        if (!(this.queryTerm && this.queryTerm.trim().length > this.ONE)) { return; }
         this.searchError = false;
         searchMembers({ searchTerm: this.queryTerm })
             .then((result) => {
@@ -167,52 +168,52 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
     }
 
     resolveMembersPage() {
-      this.isNeedPagination = this.memberList.length > (this.amountItems.data * this.MULTIPLIER);
-      if(this.isNeedPagination) {
-        this.memberPage = this.memberList.slice(
-          this.currentPage *  (this.amountItems.data * this.MULTIPLIER), 
-          (this.currentPage + 1 )*  (this.amountItems.data * this.MULTIPLIER)
-        );
-      } else {
-        this.memberPage = [...this.memberList];
-      }
+        this.isNeedPagination = this.memberList.length > (this.amountItems.data * this.MULTIPLIER);
+        if(this.isNeedPagination) {
+            this.memberPage = this.memberList.slice(
+            this.currentPage *  (this.amountItems.data * this.MULTIPLIER), 
+            (this.currentPage + this.ONE )*  (this.amountItems.data * this.MULTIPLIER)
+            );
+        } else {
+            this.memberPage = [...this.memberList];
+        }
     }
 
     get isPreviousDisabled() {
-      return this.currentPage === 0;
+        return !!this.currentPage;
     }
     
     get isNextDisabled() {
-      return this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER));
+        return this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER));
     }
 
     clickPreviousTableButton() {
-      if(this.currentPage === 0) return;
-    
-      this.currentPage--;
-      this.resolveMembersPage();
+        if(!this.currentPage) return;
+        
+        this.currentPage--;
+        this.resolveMembersPage();
     }
     
     clickNextTableButton() {
-      if(this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER))) return;
-    
-      this.currentPage++;
-      this.resolveMembersPage();
+        if(this.currentPage >= Math.floor(this.memberList.length /  (this.amountItems.data * this.MULTIPLIER))) return;
+        
+        this.currentPage++;
+        this.resolveMembersPage();
     }
 
     setIsHasMembers() {
-        this.hasMembers = this.memberList && this.memberList.length > 0;
+        this.hasMembers = this.memberList && this.memberList.length;
     }
 
     setIsHasReseivers() {
-        this.hasReceivers = this.receivers && this.receivers.length > 0;
+        this.hasReceivers = this.receivers && this.receivers.length;
     }
 
     handleRowAction(event) {
         const actionName = event.detail.action.name;
         const row = event.detail.row;
         switch (actionName){
-            case 'delete' :
+            case this.DELETE_ROW_ACTION:
                 this.deleteRow(row);
                 break;
             default: this.handleAddRecordReceiver(row);
@@ -221,15 +222,8 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
 
     deleteRow(row) {
         const value = row[receiverFields.VALUE];
-        this.copyReceivers = deleteReceiver(this.copyReceivers, value);
         this.receivers = deleteReceiver(this.receivers, value);
         this.setIsHasReseivers();
-    }
-
-    createCopyReceiver(receiver, nameValue){
-        let copyReceiver = {...receiver};
-        copyReceiver.Name = nameValue;
-        this.copyReceivers = [...this.copyReceivers, copyReceiver];
     }
 
     handleGroupChange(event) {
@@ -243,21 +237,23 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
             return;
         }
 
+        let groupName = getObjectName(this.displayedGroups, this.groupId);
         const receiver = {};
         receiver[receiverFields.TYPE] = this.GROUP_VARIANT;
         receiver[receiverFields.VALUE] = this.groupId;
         receiver[receiverFields.URL] = this.surveyUrl;
 
-        let groupName = getObjectName(this.displayedGroups, this.groupId);
         this.createCopyReceiver(receiver, groupName);
+        receiver.DisplayedName = groupName;
+        
         this.receivers = [...this.receivers, receiver];
 
-        callReportValidity(combobox, "");
+        callReportValidity(combobox, this.EMPTY_STRING);
         this.setIsHasReseivers();
     }
 
     isGroupValid(combobox) {
-        if (this.groupId.localeCompare("") === 0) {
+        if (!this.groupId.localeCompare(this.EMPTY_STRING)) {
             callReportValidity(combobox, label.error_choose_some_group);
             return false;
         }
@@ -280,8 +276,8 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
         receiver[receiverFields.TYPE] = this.SINGLE_RECORD_VARIANT;
         receiver[receiverFields.VALUE] = Id;
         receiver[receiverFields.URL] = isUser(Id) ? this.surveyUrl : this.communityUrl;
+        receiver.DisplayedName = Name;
 
-        this.createCopyReceiver(receiver, Name);
         this.receivers = [...this.receivers, receiver];
 
         this.setIsHasReseivers();
@@ -299,7 +295,7 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
         const event = new ShowToastEvent({
             title: label.error,
             message: label.duplicate_record,
-            variant: 'error'
+            variant: this.ERROR_VARIANT
         });
         this.dispatchEvent(event);
     }
@@ -315,21 +311,23 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
             return;
         }
 
+        let campaignName = getObjectName(this.displayedCampaigns, this.campaignId);
         const receiver = {};
         receiver[receiverFields.TYPE] = this.CAMPAIGN_VARIAN;
         receiver[receiverFields.VALUE] = this.campaignId;
         receiver[receiverFields.URL] = this.communityUrl;
 
-        let campaignName = getObjectName(this.displayedCampaigns, this.campaignId);
         this.createCopyReceiver(receiver, campaignName);
+        receiver.DisplayedName = campaignName;
+        
         this.receivers = [...this.receivers, receiver];
 
-        callReportValidity(combobox, "");
+        callReportValidity(combobox, this.EMPTY_STRING);
         this.setIsHasReseivers();
     }
 
     isCampaignValid(combobox) {
-        if (this.campaignId.localeCompare("") === 0) {
+        if (!this.campaignId.localeCompare(this.EMPTY_STRING)) {
             callReportValidity(combobox, label.error_choose_some_campaign);
             return false;
         }

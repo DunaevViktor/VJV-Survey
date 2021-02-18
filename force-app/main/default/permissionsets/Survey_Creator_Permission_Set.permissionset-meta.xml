@@ -235,6 +235,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Group_Answer__c.Related_To__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Lead.Address</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -406,6 +411,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Survey__c.URL__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Trigger_Rule__c.Field_Value__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

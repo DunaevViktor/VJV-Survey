@@ -6,7 +6,7 @@ const initQuestionFields = (data) => {
   let questions = [];
   data.forEach((question) => {
     if (question[questionFields.VISIBLE] === false) {
-      question[questionFields.LABEL] += " (" + label.dependentQuestion + ")";
+      question[questionFields.LABEL] += ` (${label.dependentQuestion})`;
     }
     question[questionFields.VISIBLE] = true;
     question.IsDisabled = true;
@@ -14,7 +14,7 @@ const initQuestionFields = (data) => {
   });
 
   questions.forEach((question) => {
-    let fieldType = "is" + question[questionFields.TYPE];
+    let fieldType = `is${question[questionFields.TYPE]}`;
     question[fieldType] = true;
     question.Key = question[questionFields.POSITION]
     let options = [];
