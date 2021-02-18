@@ -3,6 +3,7 @@ public with sharing class SaverControllerTest {
     
     private static final Integer TEST_AMOUNT = 5;
     private static final String TEST_TAB_URL = '/Survey_Test_Url';
+    private static final String TEST_COMMUNITY_URL = 'https://something.test';
     
     private static final String EXPECTED_NOT_BE_NULL = 'The value was not expected to be null.';
     private static final String INVALID_SURVEY_ID = 'Actual survey id doesn\'t equal to expected.';
@@ -13,6 +14,7 @@ public with sharing class SaverControllerTest {
     private static final String INVALID_VALIDATIONS_AMOUNT = 'Actual amount of validations doesn\'t equal to expected.';
     private static final String INVALID_RECEIVERS_AMOUNT = 'Actual amount of email receivers doesn\'t equal to expected.';
     private static final String INVALID_SURVEY_URL = 'Actual survey url doesn\'t equal to expected.';
+    private static final String INVALID_SURVEY_GUEST_URL = 'Actual survey guest url doesn\'t equal to expected.';
 
     
     @IsTest  
@@ -127,5 +129,14 @@ public with sharing class SaverControllerTest {
         
         List<Email_Receiver__c> databaseReceivers = [SELECT Id FROM Email_Receiver__c];
         System.assertEquals(TEST_AMOUNT, databaseReceivers.size(), INVALID_RECEIVERS_AMOUNT);
+    }
+    
+    @IsTest  
+    static void testSaveCommunityUrl() {
+		Survey__c survey = TestDataFactory.createSurvey();
+        insert survey;
+        
+        SaverController.saveCommunityUrl(survey.Id, TEST_COMMUNITY_URL);
+        System.assertEquals(TEST_COMMUNITY_URL, survey.Guest_URL__c, INVALID_SURVEY_GUEST_URL);
     }
 }

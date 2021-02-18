@@ -14,7 +14,7 @@ import saveCommunityUrl from "@salesforce/apex/SaverController.saveCommunityUrl"
 import getCommunityUrl from "@salesforce/apex/CommunityController.getCommunityUrl";
 import getCommunityName from "@salesforce/apex/SurveySettingController.getCommunityName";
 
-import { surveyObject } from "c/fieldService";
+import { surveyObject, receiverFields } from "c/fieldService";
 
 import { transformRules,  
          transformQuestions,
@@ -157,6 +157,12 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
       return;
     }
 
+    transformedEmailReceivers.forEach(receiver => {
+      if (receiver[receiverFields.URL]) {
+        receiver[receiverFields.URL] += this.getSurveyUrlAttributeId(this.surveyId);
+      }
+    })
+
     saveEmailReceivers({receivers : transformedEmailReceivers})
       .then((receiverList) => {
         this.increaseProgress();
@@ -179,6 +185,10 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
   increaseProgress() {
     this.stepsOfSave[this.currentStep].isDone = true;
     this.currentStep++;
+  }
+
+  getSurveyUrlAttributeId(_surveyId){
+    return `?${this.SURVEY_URL_PARAMETER_NAME}=${_surveyId}`;
   }
 
   getSurveyUrl(_surveyId){

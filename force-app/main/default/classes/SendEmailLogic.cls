@@ -4,15 +4,13 @@ public with sharing class SendEmailLogic {
 
     @AuraEnabled(cacheable=true)
     public static void sendEmails(List<Email_Receiver__c> emailReceiverList){
-        Map<Id, Survey__c> surveyMap = SendEmailLogicHelper.createSurveyMap();
- 
-        List<Messaging.SingleEmailMessage> emailsForSend = createEmailMessages(emailReceiverList, surveyMap);
+        List<Messaging.SingleEmailMessage> emailsForSend = createEmailMessages(emailReceiverList);
         if(emailsForSend.size() > 0){
             Messaging.sendEmail(emailsForSend);
         }
     }
     
-    public static List<Messaging.SingleEmailMessage> createEmailMessages(List<Email_Receiver__c> receiverList, Map<Id, Survey__c> surveyMap){
+    public static List<Messaging.SingleEmailMessage> createEmailMessages(List<Email_Receiver__c> receiverList){
         List<Id> allCurrentGroup = SendEmailLogicHelper.getCurrentGroups(receiverList);
         List<Id> allCurrentCampaign = SendEmailLogicHelper.gerCurrentCampaigns(receiverList);
         List<GroupMember> currentGroupMember = SendEmailLogicHelper.getGroupMemeber(allCurrentGroup);
@@ -22,8 +20,7 @@ public with sharing class SendEmailLogic {
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
         
         for(Email_Receiver__c receiver: receiverList){
-            Survey__c survey = surveyMap.get(receiver.Survey__c);
-            List<Id> currentSurveyAndTemplateId = new List<Id>{survey.Id, template.Id};
+            List<Id> currentSurveyAndTemplateId = new List<Id>{receiver.Id, template.Id};
             Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
 
             switch on receiver.Type__c {

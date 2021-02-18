@@ -110,7 +110,7 @@ public with sharing class SendEmailLogicHelper {
     }
 
     public static List<Survey__c> getSurvey(){
-        return [SELECT Id, Name, URL__c 
+        return [SELECT Id, Name, URL__c, Guest_URL__c
                 FROM Survey__c 
                 WITH SECURITY_ENFORCED
                 LIMIT 50000];

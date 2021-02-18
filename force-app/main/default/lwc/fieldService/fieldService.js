@@ -9,6 +9,7 @@ import SURVEY_DESCRIPTION_FIELD from '@salesforce/schema/Survey__c.Description__
 import SURVEY_RELATED_FIELD from '@salesforce/schema/Survey__c.Related_To__c';
 import SURVEY_STANDARD_FIELD from '@salesforce/schema/Survey__c.IsStandard__c';
 import SURVEY_URL_FIELD from '@salesforce/schema/Survey__c.Url__c';
+import SURVEY_GUEST_URL_FIELD from '@salesforce/schema/Survey__c.Guest_Url__c';
 
 import QUESTION_ID_FIELD from '@salesforce/schema/Question__c.Id';
 import QUESTION_REUSABLE_FIELD from '@salesforce/schema/Question__c.IsReusable__c';
@@ -44,6 +45,7 @@ import RECEIVER_NAME_FIELD from '@salesforce/schema/Email_Receiver__c.Name';
 import RECEIVER_TYPE_FIELD from '@salesforce/schema/Email_Receiver__c.Type__c';
 import RECEIVER_VALUE_FIELD from '@salesforce/schema/Email_Receiver__c.Value__c';
 import RECEIVER_SURVEY_FIELD from '@salesforce/schema/Email_Receiver__c.Survey__c';
+import RECEIVER_SURVEY_URL from '@salesforce/schema/Email_Receiver__c.Survey_URL__C';
 
 import ANSWER_ID_FIELD from '@salesforce/schema/Answer__c.Id';
 import ANSWER_GROUP_FIELD from '@salesforce/schema/Answer__c.Group_Answer__c';
@@ -67,6 +69,7 @@ const surveyFields = {
     RELATED: SURVEY_RELATED_FIELD.fieldApiName,
     STANDARD: SURVEY_STANDARD_FIELD.fieldApiName,
     URL: SURVEY_URL_FIELD.fieldApiName,
+    GUEST_URL: SURVEY_GUEST_URL_FIELD.fieldApiName
 }
 
 const questionFields = {
@@ -112,6 +115,7 @@ const receiverFields = {
     TYPE: RECEIVER_TYPE_FIELD.fieldApiName,
     VALUE: RECEIVER_VALUE_FIELD.fieldApiName,
     SURVEY: RECEIVER_SURVEY_FIELD.fieldApiName,
+    URL: RECEIVER_SURVEY_URL.fieldApiName
 }
 
 const answerFields = {

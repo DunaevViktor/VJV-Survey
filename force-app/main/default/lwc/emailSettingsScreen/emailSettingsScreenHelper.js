@@ -79,6 +79,13 @@ const callReportValidity = (input, message) => {
     input.reportValidity();
 }
 
+const isUser = (recordId) => {
+  if (recordId.substr(0,3) === '005') {
+    return true;
+  }
+  return false;
+}
+
 const createMemberList = (result) => {
     let memberList = [];
     result.forEach(memberListByType => {
@@ -114,5 +121,6 @@ export {
     createDisplayedMap,
     getObjectName,
     callReportValidity,
-    createMemberList
+    createMemberList,
+    isUser
 };

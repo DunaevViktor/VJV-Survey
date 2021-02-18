@@ -28,9 +28,12 @@ public with sharing class TriggerRulesHandler {
     
     public static Email_Receiver__c createReceiver(String sObjectName, ChangedFieldWrapper recordFields, String surveyId){
         Id receiverId = SObjectName == CASE_OBJECT_NAME ? recordFields.ownerId : recordFields.recordId;
+        Survey__c survey = getSurveyUrlFields(surveyId);
+        String surveyUrl = SObjectName == CASE_OBJECT_NAME ? survey.URL__c : survey.Guest_URL__c;
         Email_Receiver__c receiver = new Email_Receiver__c(Type__c = RECEIVER_RECORD_TYPE,
                                                             Survey__c = surveyId,
-                                                            Value__c = receiverId);
+                                                            Value__c = receiverId,
+                                                            Survey_URL__c = surveyUrl);
         return receiver;
     }
     
@@ -99,5 +102,13 @@ public with sharing class TriggerRulesHandler {
                 FROM Trigger_Rule__c 
                 WHERE Object_Api_Name__c =: objectApiName
                 WITH SECURITY_ENFORCED];
+    }
+
+    private static Survey__c getSurveyUrlFields(Id surveyId) {
+      return [SELECt URL__c, Guest_URL__c
+              FROM Survey__c
+              WHERE Id = :surveyId
+              WITH SECURITY_ENFORCED
+              LIMIT 1];
     }
 }

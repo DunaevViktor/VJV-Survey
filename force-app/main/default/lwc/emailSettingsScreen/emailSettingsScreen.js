@@ -1,16 +1,21 @@
 import { LightningElement, track, api, wire } from "lwc";
+import { NavigationMixin } from 'lightning/navigation';
+import { navigationType } from './constants.js';
 import { label } from "./labels.js";
 import { columns, columnsMember, getResultTableStyle, getReceiversTableStyle, isReceiverExist, deleteReceiver, createDisplayedMap,
-        getObjectName, callReportValidity, createMemberList } from "./emailSettingsScreenHelper.js";
+        getObjectName, callReportValidity, createMemberList, isUser } from "./emailSettingsScreenHelper.js";
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getGroups from "@salesforce/apex/GroupController.getGroups";
 import getCampaigns from "@salesforce/apex/CampaignController.getCampaigns";
 import searchMembers from "@salesforce/apex/SearchHelper.searchMembers";
 import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getPageQuestionAmount";
-import { receiverFields } from "c/fieldService";
+import getCommunityUrl from "@salesforce/apex/CommunityController.getCommunityUrl";
+import getCommunityName from "@salesforce/apex/SurveySettingController.getCommunityName";
+import updateFullSurveyUrl from "@salesforce/apex/SaverController.updateFullSurveyUrl";
+import { receiverFields, surveyObject } from "c/fieldService";
 
-export default class EmailSettingsScreen extends LightningElement {
+export default class EmailSettingsScreen extends NavigationMixin(LightningElement) {
 
     MULTIPLIER = 1;
     SINGLE_RECORD_VARIANT = "Record";
@@ -44,6 +49,12 @@ export default class EmailSettingsScreen extends LightningElement {
     campaignId = "";
     queryTerm = "";
     memberList = [];
+
+    communityUrl;
+    surveyUrl;
+
+    ANSWER_PAGE_API_NAME = 'Survey_Answer_Form';
+    SURVEY_URL_PARAMETER_NAME = 'c__surveyId';
 
     get surveyReceivers() {
         return this.receivers;
@@ -90,6 +101,8 @@ export default class EmailSettingsScreen extends LightningElement {
         this.initCampaigns();
         this.setIsHasReseivers();
         this.setIsHasMembers();
+        this.setSurveyUrl();
+        this.setCommunityUrl();
 
         this.isHasGroups = this.displayedGroups.length > 0;
         this.isHasCampaigns = this.displayedCampaigns.length > 0;
@@ -233,6 +246,7 @@ export default class EmailSettingsScreen extends LightningElement {
         const receiver = {};
         receiver[receiverFields.TYPE] = this.GROUP_VARIANT;
         receiver[receiverFields.VALUE] = this.groupId;
+        receiver[receiverFields.URL] = this.surveyUrl;
 
         let groupName = getObjectName(this.displayedGroups, this.groupId);
         this.createCopyReceiver(receiver, groupName);
@@ -265,6 +279,7 @@ export default class EmailSettingsScreen extends LightningElement {
         const receiver = {};
         receiver[receiverFields.TYPE] = this.SINGLE_RECORD_VARIANT;
         receiver[receiverFields.VALUE] = Id;
+        receiver[receiverFields.URL] = isUser(Id) ? this.surveyUrl : this.communityUrl;
 
         this.createCopyReceiver(receiver, Name);
         this.receivers = [...this.receivers, receiver];
@@ -303,6 +318,7 @@ export default class EmailSettingsScreen extends LightningElement {
         const receiver = {};
         receiver[receiverFields.TYPE] = this.CAMPAIGN_VARIAN;
         receiver[receiverFields.VALUE] = this.campaignId;
+        receiver[receiverFields.URL] = this.communityUrl;
 
         let campaignName = getObjectName(this.displayedCampaigns, this.campaignId);
         this.createCopyReceiver(receiver, campaignName);
@@ -333,5 +349,45 @@ export default class EmailSettingsScreen extends LightningElement {
     clickNextButton() {
         const nextNavigationEvent = new FlowNavigationNextEvent();
         this.dispatchEvent(nextNavigationEvent);
+    }
+
+    setSurveyUrl(){
+      if(surveyObject.split("__S").length > 1){
+        this.ANSWER_PAGE_API_NAME = surveyObject.split("__S")[0] + '__' +  this.ANSWER_PAGE_API_NAME;
+        this.SURVEY_URL_PARAMETER_NAME = this.SURVEY_URL_PARAMETER_NAME.replace('c', surveyObject.split("__S")[0]);
+      }
+      this[NavigationMixin.GenerateUrl]({
+          type: navigationType,
+          attributes: {
+              apiName: this.ANSWER_PAGE_API_NAME
+          }
+      })
+        .then((url) => {
+          return updateFullSurveyUrl({surveyUrl : url});
+        })
+        .then((url) => {
+          this.surveyUrl = url;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  
+    setCommunityUrl(){
+      getCommunityName()
+        .then((data) => {
+          if (data) {
+            return getCommunityUrl({communityName: data})
+          }
+        })
+        .then((url) => {
+          if (url) {
+            this.communityUrl = `${url}/s/`;
+          }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+      
     }
 }

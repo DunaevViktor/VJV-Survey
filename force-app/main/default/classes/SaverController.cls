@@ -17,6 +17,14 @@ public with sharing class SaverController {
 
     return survey.URL__c;
   }
+
+  @AuraEnabled
+  public static String updateFullSurveyUrl(String surveyUrl){
+    String baseUrl = System.Url.getSalesforceBaseURL().toExternalForm();
+    String url = baseUrl + surveyUrl;
+
+    return url;
+  }
   
   @AuraEnabled
   public static String saveCommunityUrl(Id surveyId, String communityUrl){
