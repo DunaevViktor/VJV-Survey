@@ -12,7 +12,7 @@ import sendEmails from "@salesforce/apex/SendEmailLogic.sendEmails";
 import saveSurveyUrl from "@salesforce/apex/SaverController.saveSurveyUrl";
 import saveCommunityUrl from "@salesforce/apex/SaverController.saveCommunityUrl";
 import getCommunityUrl from "@salesforce/apex/CommunityController.getCommunityUrl";
-import getCommunityName from "@salesforce/apex/SurveySettingController.getCommunityName";
+import getCommunityName from "@salesforce/apex/SurveySettingController.getDefaultCommunityName";
 
 import { surveyObject, receiverFields } from "c/fieldService";
 

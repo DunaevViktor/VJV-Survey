@@ -11,7 +11,7 @@ import getCampaigns from "@salesforce/apex/CampaignController.getCampaigns";
 import searchMembers from "@salesforce/apex/SearchHelper.searchMembers";
 import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getPageQuestionAmount";
 import getCommunityUrl from "@salesforce/apex/CommunityController.getCommunityUrl";
-import getCommunityName from "@salesforce/apex/SurveySettingController.getCommunityName";
+import getCommunityName from "@salesforce/apex/SurveySettingController.getDefaultCommunityName";
 import updateFullSurveyUrl from "@salesforce/apex/SaverController.updateFullSurveyUrl";
 import { receiverFields, surveyObject } from "c/fieldService";
 
