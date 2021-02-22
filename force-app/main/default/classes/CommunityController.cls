@@ -1,16 +1,23 @@
-public inherited sharing class CommunityController {
+public with sharing class CommunityController {
+
+  private static final String NETWORK_OBJECT_NAME = 'Network';
+
   @AuraEnabled
   public static String getCommunityUrl(String communityName){
-    Site communitySite = [SELECT Id 
-                          FROM Site 
-                          WHERE Name = :communityName
-                          WITH SECURITY_ENFORCED
-                          LIMIT 1];
-    SiteDetail communitySiteDetail = [SELECT SecureURL 
-                                      FROM SiteDetail 
-                                      WHERE DurableId = :communitySite.Id
-                                      WITH SECURITY_ENFORCED
-                                      LIMIT 1];
-    return communitySiteDetail.SecureURL;
+    try {
+        SObject site = Database.query('SELECT Id, Name' +
+                                      + 'FROM Network' +
+                                      + 'WHERE Name = ' + communityName +
+                                      + 'WITH SECURITY_ENFORCED' +
+                                      + 'LIMIT 1');
+    
+      ConnectApi.Community community = ConnectApi.Communities.getCommunity(site.Id);
+      String pageUrl = community.siteUrl;
+      pageUrl += community.siteAsContainerEnabled ? '/s/' : '';
+      return pageUrl;
+    } catch(QueryException e) {
+        System.debug(e);
+    }
+    return null;
   }
 }

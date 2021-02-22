@@ -2,11 +2,14 @@ public with sharing class TriggerRulesHandler {
 
     private static final String RECEIVER_RECORD_TYPE = 'Record';
     private static final String CASE_OBJECT_NAME = 'Case';
+
+    private static Map<Id, Survey__c> surveyMap;
     
     public static void checkRuleCriterias(String sObjectName, List<ChangedFieldWrapper> changedFields){
         List<Trigger_Rule__c> triggerRules = getTriggerRules(sObjectName);
         List<Email_Receiver__c> receiverList = new List<Email_Receiver__c>();
-  
+        surveyMap = getSurveysMap();
+
         for(ChangedFieldWrapper recordFields: changedFields){
             for(Trigger_Rule__c rule: triggerRules){
                 String ruleFieldName = rule.Field_Name__c.tolowercase();
@@ -15,7 +18,7 @@ public with sharing class TriggerRulesHandler {
                     if(compareFieldValues(recordFields, rule.Operator__c, rule.Field_Value__c)){
                         Email_Receiver__c receiver = createReceiver(SObjectName, recordFields, rule.Survey__c);
                         receiverList.add(receiver);
-                    }  
+                    }
                 }
             }
         }
@@ -28,7 +31,7 @@ public with sharing class TriggerRulesHandler {
     
     public static Email_Receiver__c createReceiver(String sObjectName, ChangedFieldWrapper recordFields, String surveyId){
         Id receiverId = SObjectName == CASE_OBJECT_NAME ? recordFields.ownerId : recordFields.recordId;
-        Survey__c survey = getSurveyUrlFields(surveyId);
+        Survey__c survey = surveyMap.get(surveyId);
         String surveyUrl = SObjectName == CASE_OBJECT_NAME ? survey.URL__c : survey.Guest_URL__c;
         Email_Receiver__c receiver = new Email_Receiver__c(Type__c = RECEIVER_RECORD_TYPE,
                                                             Survey__c = surveyId,
@@ -105,11 +108,15 @@ public with sharing class TriggerRulesHandler {
                 LIMIT 50000];
     }
 
-    private static Survey__c getSurveyUrlFields(Id surveyId) {
-      return [SELECt URL__c, Guest_URL__c
-              FROM Survey__c
-              WHERE Id = :surveyId
-              WITH SECURITY_ENFORCED
-              LIMIT 1];
+    private static Map<Id, Survey__c> getSurveysMap() {
+      List<Survey__c> surveyList = [SELECt URL__c, Guest_URL__c
+                                    FROM Survey__c
+                                    WITH SECURITY_ENFORCED
+                                    LIMIT 50000];
+      Map<Id, Survey__c> surveyMap = new Map<Id, Survey__c>();
+      for (Survey__c survey : surveyList) {
+        surveyMap.put(survey.Id, survey);
+      }
+      return surveyMap;
     }
 }

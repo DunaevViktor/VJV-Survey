@@ -12,7 +12,7 @@ import sendEmails from "@salesforce/apex/SendEmailLogic.sendEmails";
 import saveSurveyUrl from "@salesforce/apex/SaverController.saveSurveyUrl";
 import saveCommunityUrl from "@salesforce/apex/SaverController.saveCommunityUrl";
 import getCommunityUrl from "@salesforce/apex/CommunityController.getCommunityUrl";
-import getCommunityName from "@salesforce/apex/SurveySettingController.getCommunityName";
+import getCommunityName from "@salesforce/apex/SurveySettingController.getDefaultCommunityName";
 
 import { surveyObject, receiverFields } from "c/fieldService";
 
@@ -79,8 +79,8 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
 
         this.sendSaveTriggerRulesRequest();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((e) => {
+        console.log(e)
         this.isError = true;
       })
   }
@@ -93,8 +93,8 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
         this.increaseProgress();
         this.sendSaveQuestionsRequest();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((e) => {
+        console.log(e);
         this.isError = true;
       })
   }
@@ -107,8 +107,8 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
         this.savedQuestions = result;
         this.sendSaveOptionsRequest();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((e) => {
+        console.log(e);
         this.isError = true;
       })
   }
@@ -127,8 +127,8 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
         this.increaseProgress();
         this.sendSaveValidationsRequest();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((e) => {
+        console.log(e);
         this.isError = true;
       })
   }
@@ -147,41 +147,42 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
         this.increaseProgress();
         this.sendSaveEmailReceiversRequest();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((e) => {
+        console.log(e);
         this.isError = true;
       })
   }
 
   sendSaveEmailReceiversRequest() {
     const transformedEmailReceivers = transformEmailReceivers(this.emailReceivers, this.surveyId);
-
-    if(!transformedEmailReceivers || !transformedEmailReceivers.length) {
+    if(!transformedEmailReceivers && !transformedEmailReceivers.length) {
       this.increaseProgress();
       return;
     }
-
     transformedEmailReceivers.forEach(receiver => {
       if (receiver[receiverFields.URL]) {
         receiver[receiverFields.URL] += this.getSurveyUrlAttributeId(this.surveyId);
+        console.log('transformedEmailReceivers');
       }
     })
-
     saveEmailReceivers({receivers : transformedEmailReceivers})
       .then((receiverList) => {
         this.increaseProgress();
         this.sendImmediatelyEmails(receiverList);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((e) => {
+        console.log(e);
         this.isError = true;
       })
   }
 
   sendImmediatelyEmails(receiverList){
     sendEmails({emailReceiverList: receiverList})
-    .catch((error) => {
-        console.log(error);
+    .then(() => {
+      console.log(receiverList);
+    })
+    .catch((e) => {
+      console.log(e);
         this.isError = true;
     })
   }
@@ -210,7 +211,8 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
     .then((url) => {
         url = `${url}?${this.SURVEY_URL_PARAMETER_NAME}=${_surveyId}`;
         saveSurveyUrl({surveyId : this.surveyId, surveyUrl : url})
-        .catch(() => {
+        .catch((e) => {
+          console.log(e);
             this.isError = true;
         })
     });
@@ -225,11 +227,12 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
       })
       .then((url) => {
         if (url) {
-          url = `${url}/s/?${this.SURVEY_URL_PARAMETER_NAME}=${_surveyId}`;
+          url = `${url}?${this.SURVEY_URL_PARAMETER_NAME}=${_surveyId}`;
           saveCommunityUrl({surveyId : this.surveyId, communityUrl : url});
         }
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log(e);
           this.isError = true;
       });
     

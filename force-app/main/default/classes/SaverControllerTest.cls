@@ -135,8 +135,16 @@ public with sharing class SaverControllerTest {
     static void testSaveCommunityUrl() {
 		Survey__c survey = TestDataFactory.createSurvey();
         insert survey;
-        
-        SaverController.saveCommunityUrl(survey.Id, TEST_COMMUNITY_URL);
-        System.assertEquals(TEST_COMMUNITY_URL, survey.Guest_URL__c, INVALID_SURVEY_GUEST_URL);
+        String surveyUrl = SaverController.saveCommunityUrl(survey.Id, TEST_COMMUNITY_URL);
+        System.assertEquals(TEST_COMMUNITY_URL, surveyUrl, INVALID_SURVEY_GUEST_URL);
+    }
+    
+    @IsTest
+    static void testUpdateFullSurveyUrl() {
+        String baseUrl = System.Url.getSalesforceBaseURL().toExternalForm();
+        String expectedUrl = baseUrl + TEST_TAB_URL;
+
+        String actualUrl = SaverController.updateFullSurveyUrl(TEST_TAB_URL);
+        System.assertEquals(expectedUrl, actualUrl, INVALID_SURVEY_URL);
     }
 }

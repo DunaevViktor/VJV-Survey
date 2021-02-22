@@ -56,7 +56,7 @@ public with sharing class SurveySettingControllerTest {
     }
 
     @IsTest
-    static void testGetDefaultCommunityName() {    
+    static void testGetDefaultCommunityName() {
         String fetchedValue = SurveySettingController.getDefaultCommunityName();
         System.assertEquals(null, fetchedValue, INVALID_COMMUNITY_NAME_SETTING_VALUE);
     }

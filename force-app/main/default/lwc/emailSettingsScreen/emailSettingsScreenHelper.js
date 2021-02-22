@@ -91,7 +91,7 @@ const callReportValidity = (input, message) => {
 }
 
 const isUser = (recordId) => {
-  if (recordId.substr(0,3) === '005') {
+  if (recordId.substr(0,3) === USER_PREFIX) {
     return true;
   }
   return false;

@@ -6,7 +6,7 @@ public with sharing class SendEmailLogic {
     public static void sendEmails(List<Email_Receiver__c> emailReceiverList){
         List<Messaging.SingleEmailMessage> emailsForSend = createEmailMessages(emailReceiverList);
         if(emailsForSend.size() > 0){
-            Messaging.sendEmail(emailsForSend);
+          List<Messaging.SendEmailResult> results = Messaging.sendEmail(emailsForSend);
         }
     }
     
@@ -20,7 +20,7 @@ public with sharing class SendEmailLogic {
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
         
         for(Email_Receiver__c receiver: receiverList){
-            List<Id> currentSurveyAndTemplateId = new List<Id>{receiver.Id, template.Id};
+            List<Id> currentReceiverAndTemplateId = new List<Id>{receiver.Id, template.Id};
             Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
 
             switch on receiver.Type__c {
@@ -28,7 +28,7 @@ public with sharing class SendEmailLogic {
                     Id groupId = receiver.Value__c;
                     List<Id> userForSend = SendEmailLogicHelper.getUserByGroup(currentGroupMember, groupId);
                     for(Id userId: userForSend){
-                        mail = createSingleEmail(userId, config, currentSurveyAndTemplateId);
+                        mail = createSingleEmail(userId, config, currentReceiverAndTemplateId);
                         emails.add(mail);
                     }
                 }
@@ -38,17 +38,17 @@ public with sharing class SendEmailLogic {
                     List<Id> leadForSend = SendEmailLogicHelper.getLeadByCampaign(currentCampaignMember, campaignId);
 
                     for(Id contactId: contactForSend){
-                        mail = createSingleEmail(contactId, config, currentSurveyAndTemplateId);
+                        mail = createSingleEmail(contactId, config, currentReceiverAndTemplateId);
                         emails.add(mail);
                     }
 
                     for(Id leadId: leadForSend){
-                        mail = createSingleEmail(leadId, config, currentSurveyAndTemplateId);
+                        mail = createSingleEmail(leadId, config, currentReceiverAndTemplateId);
                         emails.add(mail);
                     }
                 }
                 when 'Record'{
-                    mail = createSingleEmail(receiver.Value__c, config, currentSurveyAndTemplateId);
+                    mail = createSingleEmail(receiver.Value__c, config, currentReceiverAndTemplateId);
                     emails.add(mail);
                 }
             }

@@ -229,6 +229,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>true</editable>
+        <field>Email_Receiver__c.Survey_URL__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>Group_Answer__c.IsLinked__c</field>
         <readable>true</readable>
@@ -391,6 +396,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Survey__c.Description__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Survey__c.Guest_URL__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

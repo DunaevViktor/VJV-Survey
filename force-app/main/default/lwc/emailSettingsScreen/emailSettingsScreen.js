@@ -11,7 +11,7 @@ import getCampaigns from "@salesforce/apex/CampaignController.getCampaigns";
 import searchMembers from "@salesforce/apex/SearchHelper.searchMembers";
 import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getPageQuestionAmount";
 import getCommunityUrl from "@salesforce/apex/CommunityController.getCommunityUrl";
-import getCommunityName from "@salesforce/apex/SurveySettingController.getCommunityName";
+import getCommunityName from "@salesforce/apex/SurveySettingController.getDefaultCommunityName";
 import updateFullSurveyUrl from "@salesforce/apex/SaverController.updateFullSurveyUrl";
 import { receiverFields, surveyObject } from "c/fieldService";
 
@@ -24,6 +24,9 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
     MULTIPLIER = 2;
     DELETE_ROW_ACTION = 'delete';
     ERROR_VARIANT = 'error';
+    S_END = '__S';
+    UNDERSCORE = '__';
+    C_CHARACTER = 'c';
 
     SINGLE_RECORD_VARIANT = "Record";
     GROUP_VARIANT = "User Group";
@@ -285,16 +288,16 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
 
     isRecordValid(value){
         if (isReceiverExist(this.receivers, value)) {
-            this.showToast();
+            this.showToastError(label.duplicate_record);
             return false;
         }
         return true;
     }
 
-    showToast() {
+    showToastError(message) {
         const event = new ShowToastEvent({
             title: label.error,
-            message: label.duplicate_record,
+            message: message,
             variant: this.ERROR_VARIANT
         });
         this.dispatchEvent(event);
@@ -350,9 +353,9 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
     }
 
     setSurveyUrl(){
-      if(surveyObject.split("__S").length > 1){
-        this.ANSWER_PAGE_API_NAME = surveyObject.split("__S")[0] + '__' +  this.ANSWER_PAGE_API_NAME;
-        this.SURVEY_URL_PARAMETER_NAME = this.SURVEY_URL_PARAMETER_NAME.replace('c', surveyObject.split("__S")[0]);
+      if(surveyObject.split(S_END).length > 1){
+        this.ANSWER_PAGE_API_NAME = `${surveyObject.split(S_END)[0]}${UNDERSCORE}${this.ANSWER_PAGE_API_NAME}`;
+        this.SURVEY_URL_PARAMETER_NAME = this.SURVEY_URL_PARAMETER_NAME.replace(C_CHARACTER, surveyObject.split(S_END)[0]);
       }
       this[NavigationMixin.GenerateUrl]({
           type: navigationType,
@@ -366,8 +369,8 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
         .then((url) => {
           this.surveyUrl = url;
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          this.showToastError(label.error)
         });
     }
   
@@ -380,11 +383,11 @@ export default class EmailSettingsScreen extends NavigationMixin(LightningElemen
         })
         .then((url) => {
           if (url) {
-            this.communityUrl = `${url}/s/`;
+            this.communityUrl = url;
           }
         })
-        .catch((error) => {
-            console.log(error);
+        .catch(() => {
+            this.showToastError(label.error);
         });
       
     }

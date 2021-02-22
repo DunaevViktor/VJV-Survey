@@ -11,7 +11,6 @@ import saveAnswers from "@salesforce/apex/SurveyUserController.saveAnswers";
 import { surveyFields, groupAnswerFields } from "c/fieldService";
 
 import {
-  emptySurvey,
   sortQuestionsByPosition,
   checkDependentQuestion,
   initQuestionFields,
@@ -34,7 +33,7 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
 
   @track showSurvey = true;
   @track answerInputs = [];
-  @track survey = { ...emptySurvey };
+  @track survey = {};
 
   @wire(CurrentPageReference)
   getStateParameters(currentPageReference) {
@@ -83,7 +82,7 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
   }
 
   get backgroundColor() {
-    return `background-color: ${this.survey.data.fields[surveyFields.BACKGROUND].value};`;
+    return `background-color: ${this.survey[surveyFields.BACKGROUND]};`;
   }
 
   get relatedSurveyId() {
@@ -97,7 +96,6 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
     }
     this.showSurvey = false;
     this.closeTab();
-    this.navigateToHomePage();
     return false;
   }
 
@@ -120,9 +118,6 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
         }else{
             this.showToast(label.successfulAnswerSave, this.SUCCESS_STATE);
         }
-      })
-      .then(() => {
-        this.navigateToHomePage();
       })
       .catch(() => {
         this.showToast(label.errorMessage, this.ERROR_STATE);

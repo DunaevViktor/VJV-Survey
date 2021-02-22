@@ -64,7 +64,7 @@ public with sharing class SurveyUserControllerTest {
     static void testSaveAnswers() {
         AuraHandledException auraExc = null;
         try {
-            Answer__c testAnswer = new Answer__c(Group_Answer__c = getTestGroupAnswerId(), Question__c = getTestQuestionId(), Value__c = 'Test Value');
+            Answer__c testAnswer = TestDataFactory.createTestAnswer();
             List<Answer__c> answers = new List<Answer__c>();
             answers.add(testAnswer);
             SurveyUserController.saveAnswers(answers);

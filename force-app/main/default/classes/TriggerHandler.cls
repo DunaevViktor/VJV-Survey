@@ -40,8 +40,8 @@ public with sharing class TriggerHandler {
                                                  WHERE Id IN :newRecievers
                                                  WITH SECURITY_ENFORCED];
         for (Email_Receiver__c receiver : recieversCopy) {
-          
-          String sObjectName = newRecievers.getSObjectType().getDescribe().getName();
+          Id sObjectId = receiver.Value__c;
+          String sObjectName = sObjectId.getSObjectType().getDescribe().getName();
           if (OBJECT_NAMES.contains(sObjectName)) {
             receiver.Survey_URL__c += '&' + LINKED_RECORD_PARAMETER_NAME + '=' + receiver.Value__c;
           }
@@ -49,8 +49,6 @@ public with sharing class TriggerHandler {
         
         if (Schema.sObjectType.Email_Receiver__c.fields.Survey_URL__c.isUpdateable()) {
           update recieversCopy;
-        } else {
-          throw new DmlException();
         }
     }
 }

@@ -2,15 +2,6 @@ import { operatorTypes, questionTypes } from "c/formUtil";
 import { surveyFields, questionFields, optionFields, validationFields, answerFields } from "c/fieldService";
 import { label } from "./labels.js";
 
-const emptySurvey = {
-  [surveyFields.ID]: undefined,
-  [surveyFields.NAME]: undefined,
-  [surveyFields.DESCRIPTION]: undefined,
-  [surveyFields.LOGO]: undefined,
-  [surveyFields.BACKGROUND]: undefined,
-  [surveyFields.RELATED]: undefined
-};
-
 const BASE_SENSETIVITY = 'base';
 const EMPTY_STRING = '';
 
@@ -180,7 +171,6 @@ const createAnswers = (questions, groupAnswerId) => {
 };
 
 export {
-  emptySurvey,
   sortQuestionsByPosition,
   hideAnswerChain,
   compareValues,
