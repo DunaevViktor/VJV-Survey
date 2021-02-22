@@ -1,5 +1,5 @@
 import { operatorTypes, questionTypes } from "c/formUtil";
-import { surveyFields, questionFields, optionFields, validationFields, answerFields } from "c/fieldService";
+import { questionFields, optionFields, validationFields, answerFields } from "c/fieldService";
 import { label } from "./labels.js";
 
 const BASE_SENSETIVITY = 'base';
