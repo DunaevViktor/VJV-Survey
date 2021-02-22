@@ -79,15 +79,6 @@ public with sharing class SendEmailLogicHelper {
         }
         return leadIds;
     }
- 
-    public static Map<Id, Survey__c> createSurveyMap(){
-        List<Survey__c> surveyList = getSurvey();
-        Map<Id, Survey__c> surveyMap = new Map<Id, Survey__c>();
-        for(Survey__c surveyItem: surveyList){
-            surveyMap.put(surveyItem.Id, surveyItem);
-        }
-        return surveyMap;
-    }
 
     public static List<Id> getCurrentGroups(List<Email_Receiver__c> receiverList){
         List<Id> allCurrentGroup = new List<Id>();
@@ -110,7 +101,7 @@ public with sharing class SendEmailLogicHelper {
     }
 
     public static List<Survey__c> getSurvey(){
-        return [SELECT Id, Name, URL__c 
+        return [SELECT Id, Name, URL__c, Guest_URL__c
                 FROM Survey__c 
                 WITH SECURITY_ENFORCED
                 LIMIT 50000];

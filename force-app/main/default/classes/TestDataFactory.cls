@@ -191,6 +191,28 @@ public class TestDataFactory {
         
         return caseList;
     }
+
+    public static Group_Answer__c createTestGroupAnswer(Survey__c survey) {
+      Group_Answer__c groupAnswer = new Group_Answer__c();
+      groupAnswer.Survey__c = survey.Id;
+      return groupAnswer;
+    }
+
+
+    public static Answer__c createTestAnswer() {
+      Survey__c survey = createSurvey();
+      insert survey;
+      Question__c question = createQuestion(survey.Id);
+      insert question;
+      Question_Option__c option = createQuestionOption(question.Id);
+      insert option;
+      Group_Answer__c groupAnswer = createTestGroupAnswer(survey);
+      insert groupAnswer;
+      Answer__c answer = new Answer__c();
+      answer.Value__c = TEST_VALUE;
+      answer.Group_Answer__c = groupAnswer.Id;
+      return answer;
+    }
     
     public static List<Lead> createLeads(){
         List<Lead> leadList = new List<Lead>();

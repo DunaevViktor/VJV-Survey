@@ -1,16 +1,21 @@
 import { LightningElement, track, api, wire } from "lwc";
+import { NavigationMixin } from 'lightning/navigation';
+import { navigationType } from './constants.js';
 import { label } from "./labels.js";
 import { columns, columnsMember, getResultTableStyle, getReceiversTableStyle, isReceiverExist, deleteReceiver, createDisplayedMap,
-        getObjectName, callReportValidity, createMemberList } from "./emailSettingsScreenHelper.js";
+        getObjectName, callReportValidity, createMemberList, isUser } from "./emailSettingsScreenHelper.js";
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getGroups from "@salesforce/apex/GroupController.getGroups";
 import getCampaigns from "@salesforce/apex/CampaignController.getCampaigns";
 import searchMembers from "@salesforce/apex/SearchHelper.searchMembers";
 import getPageQuestionAmount from "@salesforce/apex/SurveySettingController.getPageQuestionAmount";
-import { receiverFields } from "c/fieldService";
+import getCommunityUrl from "@salesforce/apex/CommunityController.getCommunityUrl";
+import getCommunityName from "@salesforce/apex/SurveySettingController.getDefaultCommunityName";
+import updateFullSurveyUrl from "@salesforce/apex/SaverController.updateFullSurveyUrl";
+import { receiverFields, surveyObject } from "c/fieldService";
 
-export default class EmailSettingsScreen extends LightningElement {
+export default class EmailSettingsScreen extends NavigationMixin(LightningElement) {
 
     ONE = 1;
     EMPTY_STRING = '';
@@ -19,6 +24,9 @@ export default class EmailSettingsScreen extends LightningElement {
     MULTIPLIER = 2;
     DELETE_ROW_ACTION = 'delete';
     ERROR_VARIANT = 'error';
+    S_END = '__S';
+    UNDERSCORE = '__';
+    C_CHARACTER = 'c';
 
     SINGLE_RECORD_VARIANT = "Record";
     GROUP_VARIANT = "User Group";
@@ -51,6 +59,12 @@ export default class EmailSettingsScreen extends LightningElement {
     campaignId = this.EMPTY_STRING;
     queryTerm = this.EMPTY_STRING;
     memberList = [];
+
+    communityUrl;
+    surveyUrl;
+
+    ANSWER_PAGE_API_NAME = 'Survey_Answer_Form';
+    SURVEY_URL_PARAMETER_NAME = 'c__surveyId';
 
     get surveyReceivers() {
         return this.receivers;
@@ -89,6 +103,8 @@ export default class EmailSettingsScreen extends LightningElement {
         this.initCampaigns();
         this.setIsHasReseivers();
         this.setIsHasMembers();
+        this.setSurveyUrl();
+        this.setCommunityUrl();
 
         this.isFirstRun = true;
         this.isHasGroups = !!this.displayedGroups.length;
@@ -228,6 +244,9 @@ export default class EmailSettingsScreen extends LightningElement {
         const receiver = {};
         receiver[receiverFields.TYPE] = this.GROUP_VARIANT;
         receiver[receiverFields.VALUE] = this.groupId;
+        receiver[receiverFields.URL] = this.surveyUrl;
+
+        this.createCopyReceiver(receiver, groupName);
         receiver.DisplayedName = groupName;
         
         this.receivers = [...this.receivers, receiver];
@@ -259,6 +278,7 @@ export default class EmailSettingsScreen extends LightningElement {
         const receiver = {};
         receiver[receiverFields.TYPE] = this.SINGLE_RECORD_VARIANT;
         receiver[receiverFields.VALUE] = Id;
+        receiver[receiverFields.URL] = isUser(Id) ? this.surveyUrl : this.communityUrl;
         receiver.DisplayedName = Name;
 
         this.receivers = [...this.receivers, receiver];
@@ -268,16 +288,16 @@ export default class EmailSettingsScreen extends LightningElement {
 
     isRecordValid(value){
         if (isReceiverExist(this.receivers, value)) {
-            this.showToast();
+            this.showToastError(label.duplicate_record);
             return false;
         }
         return true;
     }
 
-    showToast() {
+    showToastError(message) {
         const event = new ShowToastEvent({
             title: label.error,
-            message: label.duplicate_record,
+            message: message,
             variant: this.ERROR_VARIANT
         });
         this.dispatchEvent(event);
@@ -298,6 +318,9 @@ export default class EmailSettingsScreen extends LightningElement {
         const receiver = {};
         receiver[receiverFields.TYPE] = this.CAMPAIGN_VARIAN;
         receiver[receiverFields.VALUE] = this.campaignId;
+        receiver[receiverFields.URL] = this.communityUrl;
+
+        this.createCopyReceiver(receiver, campaignName);
         receiver.DisplayedName = campaignName;
         
         this.receivers = [...this.receivers, receiver];
@@ -327,5 +350,45 @@ export default class EmailSettingsScreen extends LightningElement {
     clickNextButton() {
         const nextNavigationEvent = new FlowNavigationNextEvent();
         this.dispatchEvent(nextNavigationEvent);
+    }
+
+    setSurveyUrl(){
+      if(surveyObject.split(S_END).length > 1){
+        this.ANSWER_PAGE_API_NAME = `${surveyObject.split(S_END)[0]}${UNDERSCORE}${this.ANSWER_PAGE_API_NAME}`;
+        this.SURVEY_URL_PARAMETER_NAME = this.SURVEY_URL_PARAMETER_NAME.replace(C_CHARACTER, surveyObject.split(S_END)[0]);
+      }
+      this[NavigationMixin.GenerateUrl]({
+          type: navigationType,
+          attributes: {
+              apiName: this.ANSWER_PAGE_API_NAME
+          }
+      })
+        .then((url) => {
+          return updateFullSurveyUrl({surveyUrl : url});
+        })
+        .then((url) => {
+          this.surveyUrl = url;
+        })
+        .catch(() => {
+          this.showToastError(label.error)
+        });
+    }
+  
+    setCommunityUrl(){
+      getCommunityName()
+        .then((data) => {
+          if (data) {
+            return getCommunityUrl({communityName: data})
+          }
+        })
+        .then((url) => {
+          if (url) {
+            this.communityUrl = url;
+          }
+        })
+        .catch(() => {
+            this.showToastError(label.error);
+        });
+      
     }
 }

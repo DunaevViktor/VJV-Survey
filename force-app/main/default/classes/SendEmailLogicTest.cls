@@ -81,9 +81,8 @@ public with sharing class SendEmailLogicTest {
     @IsTest
     static void testCreateEmailMessages() {
         List<Email_Receiver__c> receiverList = [SELECT Id, Type__c, Value__c, Survey__c FROM Email_Receiver__c];
-        Map<Id, Survey__c> surveyMap = SendEmailLogicHelper.createSurveyMap();
         
-        List<Messaging.SingleEmailMessage> messageList = SendEmailLogic.createEmailMessages(receiverList, surveyMap);
+        List<Messaging.SingleEmailMessage> messageList = SendEmailLogic.createEmailMessages(receiverList);
         System.assertEquals(4, messageList.size(), AMOUNT_ERROR);
     }
     
@@ -139,11 +138,5 @@ public with sharing class SendEmailLogicTest {
         
         List<Id> currentCampaigns = SendEmailLogicHelper.gerCurrentCampaigns(receiverList);
         System.assertEquals(1, currentCampaigns.size(), AMOUNT_ERROR);
-    }
-    
-    @IsTest
-    static void testCreateMapMethods(){
-        Map<Id, Survey__c> surveyMap = SendEmailLogicHelper.createSurveyMap();
-        System.assertEquals(1, surveyMap.size(), AMOUNT_ERROR);
     }
 }

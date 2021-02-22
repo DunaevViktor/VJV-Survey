@@ -1,4 +1,4 @@
-public with sharing class AnswerController {
+public inherited sharing class AnswerController {
 
     private static final String SAVE_ANSWERS_EXCEPTION = 'SaveAnswersException';
     

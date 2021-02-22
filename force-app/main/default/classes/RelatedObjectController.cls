@@ -1,4 +1,4 @@
-public with sharing class RelatedObjectController {
+public inherited sharing class RelatedObjectController {
 
     private static final String RELATED_OBJECT_API_NAME = 'Related_Object__c';
 
@@ -8,7 +8,7 @@ public with sharing class RelatedObjectController {
     private static final String GET_RELATED_OBJECT_EXCEPTION = 'GetRelatedObjectException';
     private static final String CREATE_RELATED_OBJECT_EXCEPTION = 'CreateRelatedObjectException';
 
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static Id getRelatedObjectIdByStandardObjectId(Id standardObjectId) { 
         try {
 

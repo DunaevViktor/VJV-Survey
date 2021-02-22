@@ -19,6 +19,26 @@ public with sharing class SaverController {
   }
 
   @AuraEnabled
+  public static String updateFullSurveyUrl(String surveyUrl){
+    String baseUrl = System.Url.getSalesforceBaseURL().toExternalForm();
+    String url = baseUrl + surveyUrl;
+
+    return url;
+  }
+  
+  @AuraEnabled
+  public static String saveCommunityUrl(Id surveyId, String communityUrl){
+    Survey__c survey = [SELECT Id, Guest_URL__c FROM Survey__c WHERE Id =: surveyId WITH SECURITY_ENFORCED];
+    survey.Guest_URL__c = communityUrl;
+
+    if(Schema.sObjectType.Survey__c.isUpdateable()){
+        update survey;
+    }
+
+    return survey.Guest_URL__c;
+  }
+
+  @AuraEnabled
   public static List<Trigger_Rule__c> saveTriggerRules(List<Trigger_Rule__c> rules) {
     insert rules;
     return rules;

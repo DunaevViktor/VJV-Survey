@@ -38,4 +38,12 @@ public with sharing class SurveyControllerTest {
             System.assertEquals(TestDataFactory.TEST_VALUE, survey.Name, INVALID_SURVEY_NAME);
         }
     } 
+    
+    @IsTest
+    static void testGetSurveyById() {
+		    Survey__c survey = TestDataFactory.createSurvey();
+        insert survey;
+        Survey__c savedSurvey = SurveyController.getSurveyById(survey.Id);
+        System.assertEquals(TestDataFactory.TEST_VALUE, savedSurvey.Name, INVALID_SURVEY_NAME);
+    }
 }

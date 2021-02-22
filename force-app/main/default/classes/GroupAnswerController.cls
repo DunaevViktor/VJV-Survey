@@ -1,4 +1,4 @@
-public with sharing class GroupAnswerController {
+public inherited sharing class GroupAnswerController {
 
     private static final String SAVE_GROUP_ANSWER_EXCEPTION = 'SaveGroupAnswerException';
     

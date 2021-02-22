@@ -44,7 +44,7 @@
                             <p style="margin: 0;">You have received an invitation to take a survey. Please
                                 use the link:
                                 <center>
-                                    <a href="{!Survey__c.URL__c}" class="button">Go to Survey</a>
+                                    <a href="https://google.com" class="button">Go to Survey</a>
                                 </center>
                             <p
                                 style="margin: 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 24px;">

@@ -1,4 +1,8 @@
 public with sharing class TriggerHandler {
+
+    private static final Set<String> OBJECT_NAMES = new Set<String>{'Case', 'Lead', 'Contact'};
+    private static final String LINKED_RECORD_PARAMETER_NAME = 'c__linkedRecordId';
+
     public static List<ChangedFieldWrapper> getChangedFields(Map<Id,SObject> oldRecords, List<SObject> newRecords){
         List<ChangedFieldWrapper> changedRecordsFields = new List<ChangedFieldWrapper>();
         
@@ -27,6 +31,24 @@ public with sharing class TriggerHandler {
         
         if(changedRecordsFields.size() > 0){
             TriggerRulesHandler.checkRuleCriterias(sObjectName, changedRecordsFields);
+        }
+    }
+
+    public static void updateSurveyUrl(List<Email_Receiver__c> newRecievers) {
+        List<Email_Receiver__c> recieversCopy = [SELECT Id, Value__c, Survey_URL__c
+                                                 FROM Email_Receiver__c
+                                                 WHERE Id IN :newRecievers
+                                                 WITH SECURITY_ENFORCED];
+        for (Email_Receiver__c receiver : recieversCopy) {
+          Id sObjectId = receiver.Value__c;
+          String sObjectName = sObjectId.getSObjectType().getDescribe().getName();
+          if (OBJECT_NAMES.contains(sObjectName)) {
+            receiver.Survey_URL__c += '&' + LINKED_RECORD_PARAMETER_NAME + '=' + receiver.Value__c;
+          }
+        }
+        
+        if (Schema.sObjectType.Email_Receiver__c.fields.Survey_URL__c.isUpdateable()) {
+          update recieversCopy;
         }
     }
 }

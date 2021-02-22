@@ -10,8 +10,11 @@ import saveValidations from "@salesforce/apex/SaverController.saveValidations";
 import saveEmailReceivers from "@salesforce/apex/SaverController.saveEmailReceivers";
 import sendEmails from "@salesforce/apex/SendEmailLogic.sendEmails";
 import saveSurveyUrl from "@salesforce/apex/SaverController.saveSurveyUrl";
+import saveCommunityUrl from "@salesforce/apex/SaverController.saveCommunityUrl";
+import getCommunityUrl from "@salesforce/apex/CommunityController.getCommunityUrl";
+import getCommunityName from "@salesforce/apex/SurveySettingController.getDefaultCommunityName";
 
-import { surveyObject } from "c/fieldService";
+import { surveyObject, receiverFields } from "c/fieldService";
 
 import { transformRules,  
          transformQuestions,
@@ -64,6 +67,7 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
       .then((result) => {
         this.surveyId = result;
         this.getSurveyUrl(this.surveyId);
+        this.getCommunityUrl(this.surveyId);
 
         this.increaseProgress();
 
@@ -75,8 +79,8 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
 
         this.sendSaveTriggerRulesRequest();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((e) => {
+        console.log(e)
         this.isError = true;
       })
   }
@@ -89,8 +93,8 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
         this.increaseProgress();
         this.sendSaveQuestionsRequest();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((e) => {
+        console.log(e);
         this.isError = true;
       })
   }
@@ -103,8 +107,8 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
         this.savedQuestions = result;
         this.sendSaveOptionsRequest();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((e) => {
+        console.log(e);
         this.isError = true;
       })
   }
@@ -123,8 +127,8 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
         this.increaseProgress();
         this.sendSaveValidationsRequest();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((e) => {
+        console.log(e);
         this.isError = true;
       })
   }
@@ -143,35 +147,42 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
         this.increaseProgress();
         this.sendSaveEmailReceiversRequest();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((e) => {
+        console.log(e);
         this.isError = true;
       })
   }
 
   sendSaveEmailReceiversRequest() {
     const transformedEmailReceivers = transformEmailReceivers(this.emailReceivers, this.surveyId);
-
-    if(!transformedEmailReceivers || !transformedEmailReceivers.length) {
+    if(!transformedEmailReceivers && !transformedEmailReceivers.length) {
       this.increaseProgress();
       return;
     }
-
+    transformedEmailReceivers.forEach(receiver => {
+      if (receiver[receiverFields.URL]) {
+        receiver[receiverFields.URL] += this.getSurveyUrlAttributeId(this.surveyId);
+        console.log('transformedEmailReceivers');
+      }
+    })
     saveEmailReceivers({receivers : transformedEmailReceivers})
       .then((receiverList) => {
         this.increaseProgress();
         this.sendImmediatelyEmails(receiverList);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((e) => {
+        console.log(e);
         this.isError = true;
       })
   }
 
   sendImmediatelyEmails(receiverList){
     sendEmails({emailReceiverList: receiverList})
-    .catch((error) => {
-        console.log(error);
+    .then(() => {
+      console.log(receiverList);
+    })
+    .catch((e) => {
+      console.log(e);
         this.isError = true;
     })
   }
@@ -179,6 +190,10 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
   increaseProgress() {
     this.stepsOfSave[this.currentStep].isDone = true;
     this.currentStep++;
+  }
+
+  getSurveyUrlAttributeId(_surveyId){
+    return `?${this.SURVEY_URL_PARAMETER_NAME}=${_surveyId}`;
   }
 
   getSurveyUrl(_surveyId){
@@ -196,9 +211,30 @@ export default class SaverScreen extends NavigationMixin(LightningElement) {
     .then((url) => {
         url = `${url}?${this.SURVEY_URL_PARAMETER_NAME}=${_surveyId}`;
         saveSurveyUrl({surveyId : this.surveyId, surveyUrl : url})
-        .catch(() => {
+        .catch((e) => {
+          console.log(e);
             this.isError = true;
         })
     });
+  }
+
+  getCommunityUrl(_surveyId){
+    getCommunityName()
+      .then((data) => {
+        if (data) {
+          return getCommunityUrl({communityName: data})
+        }
+      })
+      .then((url) => {
+        if (url) {
+          url = `${url}?${this.SURVEY_URL_PARAMETER_NAME}=${_surveyId}`;
+          saveCommunityUrl({surveyId : this.surveyId, communityUrl : url});
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+          this.isError = true;
+      });
+    
   }
 }

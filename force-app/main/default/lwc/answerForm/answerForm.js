@@ -1,17 +1,16 @@
 import { LightningElement, wire, track } from "lwc";
-import { getRecord } from "lightning/uiRecordApi";
 import { CurrentPageReference } from "lightning/navigation";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { NavigationMixin } from "lightning/navigation";
 import { label } from "./labels.js";
-import getRelatedObjectId from "@salesforce/apex/RelatedObjectController.getRelatedObjectIdByStandardObjectId";
-import getQuestions from "@salesforce/apex/AnswerFormController.getQuestions";
-import saveGroupAnswer from "@salesforce/apex/GroupAnswerController.saveGroupAnswer";
-import saveAnswers from "@salesforce/apex/AnswerController.saveAnswers";
+import getSurvey from "@salesforce/apex/SurveyUserController.getSurveyById";
+import getRelatedObjectId from "@salesforce/apex/SurveyUserController.getRelatedObjectIdByStandardObjectId";
+import getQuestions from "@salesforce/apex/SurveyUserController.getQuestions";
+import saveGroupAnswer from "@salesforce/apex/SurveyUserController.saveGroupAnswer";
+import saveAnswers from "@salesforce/apex/SurveyUserController.saveAnswers";
 import { surveyFields, groupAnswerFields } from "c/fieldService";
 
 import {
-  FIELDS,
   sortQuestionsByPosition,
   checkDependentQuestion,
   initQuestionFields,
@@ -34,6 +33,7 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
 
   @track showSurvey = true;
   @track answerInputs = [];
+  @track survey = {};
 
   @wire(CurrentPageReference)
   getStateParameters(currentPageReference) {
@@ -43,48 +43,59 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
     }
   }
 
-  @wire(getRecord, { recordId: "$surveyId", fields: FIELDS })
-  survey;
+  connectedCallback() {
+    this.getSurveyData();
+    this.getSurveyQuestions();
+  }
 
-  @wire(getQuestions, { surveyId: "$surveyId" })
-  questions({ data, error }) {
-    if (data) {
-      this.answerInputs = initQuestionFields(this.answerInputs, data);
-      this.answerInputs = sortQuestionsByPosition(this.answerInputs);
-    }
-    if (error) {
-      this.showToast(label.errorMessage, this.ERROR_STATE);
-    }
+  getSurveyData() {
+    getSurvey({surveyId: this.surveyId})
+      .then(data => {
+        this.survey = data;
+      })
+      .catch(() => {
+        this.showToast(label.errorMessage, this.ERROR_STATE);
+      });
+  }
+
+  getSurveyQuestions() {
+    getQuestions({surveyId: this.surveyId})
+      .then(data => {
+        this.answerInputs = initQuestionFields(this.answerInputs, data);
+        this.answerInputs = sortQuestionsByPosition(this.answerInputs);
+      })
+      .catch(() => {
+        this.showToast(label.errorMessage, this.ERROR_STATE);
+      });
   }
 
   get surveyTitle() {
-    return this.survey.data.fields[surveyFields.NAME].value;
+    return this.survey[surveyFields.NAME];
   }
 
   get surveyDescription() {
-    return this.survey.data.fields[surveyFields.DESCRIPTION].value;
+    return this.survey[surveyFields.DESCRIPTION];
   }
 
   get surveyLogo() {
-    return this.survey.data.fields[surveyFields.LOGO].value;
+    return this.survey[surveyFields.LOGO];
   }
 
   get backgroundColor() {
-    return `background-color: ${this.survey.data.fields[surveyFields.BACKGROUND].value};`;
+    return `background-color: ${this.survey[surveyFields.BACKGROUND]};`;
   }
 
   get relatedSurveyId() {
-    return this.survey.data.fields[surveyFields.RELATED].value;
+    return this.survey[surveyFields.RELATED];
   }
 
   getConnectedSurveyId() {
     if (this.relatedSurveyId) {
       this.surveyId = this.relatedSurveyId;
       return true;
-    } 
+    }
     this.showSurvey = false;
     this.closeTab();
-    this.navigateToHomePage();
     return false;
   }
 
@@ -116,7 +127,7 @@ export default class AnswerForm extends NavigationMixin(LightningElement) {
   createGroupAnswer() {
     if (this.validateFields()) {
       const groupAnswer = {};
-      const surveyId = this.survey.data.fields[surveyFields.ID].value;
+      const surveyId = this.survey[surveyFields.ID];
       groupAnswer[groupAnswerFields.SURVEY] = surveyId;
 
       this.getRelatedObject(groupAnswer);

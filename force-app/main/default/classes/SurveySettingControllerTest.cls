@@ -2,6 +2,7 @@
 public with sharing class SurveySettingControllerTest {
     private static final Integer TEST_AMOUNT = 5;
     private static final String TEST_COLOR = '#5E8AC0';
+    private static final String TEST_NAME = 'Test Community';
     
     private static final String SURVEY_SETTING_RECORD_NAME = 'Main';
     private static final String INVALID_MAX_TRIGGER_RULE_AMOUNT_SETTING_VALUE = 'Actual value of max trigger rule amount setting doesn\'t equal to expected.';
@@ -20,6 +21,7 @@ public with sharing class SurveySettingControllerTest {
         setting.Min_Question_Amount__c = TEST_AMOUNT;
         setting.Page_Question_Amount__c = TEST_AMOUNT;
         setting.Background_Color__c = TEST_COLOR;
+        setting.Community_Name__c = TEST_NAME;
         insert setting;
     }
     
@@ -54,7 +56,7 @@ public with sharing class SurveySettingControllerTest {
     }
 
     @IsTest
-    static void testGetDefaultCommunityName() {    
+    static void testGetDefaultCommunityName() {
         String fetchedValue = SurveySettingController.getDefaultCommunityName();
         System.assertEquals(null, fetchedValue, INVALID_COMMUNITY_NAME_SETTING_VALUE);
     }

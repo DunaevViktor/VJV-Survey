@@ -136,8 +136,8 @@ export default class BasicScreen extends LightningElement {
       .then(result => {
         this.survey[surveyFields.BACKGROUND] = result;
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        this.showToastEvent(this.label.errorMessage, this.errorVariant, this.errorMessage)
       });
   }
 
